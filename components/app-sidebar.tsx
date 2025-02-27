@@ -45,7 +45,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" variant="sidebar" >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Ideaboard</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

@@ -1,5 +1,19 @@
+import AnalyzeProducts from "./_components/analyze-products";
+import TopFeedback from "./_components/top-feedback";
+
 const Home = () => {
-    return ( <div>Home</div> );
-}
- 
+  return (
+    <div className="w-full">
+      <div className="flex flex-col gap-4">
+        <h2 className="text-3xl font-bold">Recent Feedback</h2>
+        <TopFeedback />
+      </div>
+      <div className="flex flex-col gap-4">
+        <h2 className="text-3xl font-bold">Analyze Products</h2>
+        <AnalyzeProducts />
+      </div>
+    </div>
+  );
+};
+
 export default Home;
