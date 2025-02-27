@@ -1,4 +1,4 @@
-import AuthButton from "@/app/components/authbutton";
+import AuthButton from "@/components/ui/auth-button";
 
 const Navbar = () => {
   return (

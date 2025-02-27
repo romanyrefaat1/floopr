@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Define a schema for sign‑up using Zod
 const signUpSchema = z
@@ -34,6 +36,7 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 export function SignUpForm() {
+  const [error, setError] = useState(null);
   const form = useForm<SignUpFormValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -43,10 +46,45 @@ export function SignUpForm() {
       confirmPassword: "",
     },
   });
+  const router = useRouter();
 
-  const onSubmit = (data: SignUpFormValues) => {
+  const removeErrorMess = () => {
+    setTimeout(() => {
+      setError(null);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (error) {
+      removeErrorMess();
+    }
+  }, [error]);
+
+  const onSubmit = async (data: SignUpFormValues) => {
     console.log("Sign Up Data:", data);
-    // Add your sign-up logic here (e.g., API call)
+    setError(null);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_LINK}/api/auth/signup`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      // Handle error responses (400, 500, etc.)
+      setError(result.error);
+      console.error("Error:", result.error);
+      return;
+    }
+
+    console.log("Successfully signed up:", result);
+    router.push(`/home`);
   };
 
   return (
@@ -108,7 +146,10 @@ export function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Sign Up</Button>
+        <p className="text-red-500">{error ? error : ``}</p>
+        <div className="flex justify-end w-full">
+          <Button type="submit">Sign Up</Button>
+        </div>
       </form>
     </Form>
   );

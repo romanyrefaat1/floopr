@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Define a schema with Zod
 const signInSchema = z.object({
@@ -24,14 +26,51 @@ const signInSchema = z.object({
 type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInForm() {
+  const [error, setError] = useState(null)
   const form = useForm<SignInFormValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
   });
+  const router = useRouter();
+  
+    const removeErrorMess = () => {
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
+    };
+  
+    useEffect(() => {
+      if (error) {
+        removeErrorMess();
+      }
+    }, [error]);
+  
 
-  const onSubmit = (data: SignInFormValues) => {
+  const onSubmit = async (data: SignInFormValues) => {
     console.log("Sign In Data:", data);
-    // Your sign-in logic here
+    setError(null);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_LINK}/api/auth/signin`,
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      // Handle error responses (400, 500, etc.)
+      setError(result.error);
+      console.error("Error:", result.error);
+      return;
+    }
+
+    console.log("Successfully signed in:", result);
+    router.push(`/home`);
   };
 
   return (
@@ -63,7 +102,9 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Sign In</Button>
+        <div className="flex justify-end w-full">
+          <Button type="submit">Sign In</Button>
+        </div>
       </form>
     </Form>
   );
