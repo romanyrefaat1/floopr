@@ -10,7 +10,7 @@ export type ProductStyle = {
   accentColor: string;
   backgroundColor: string;
   textColor: string;
-  
+
   // Typography
   fontFamily: string;
   fontSize: string;
@@ -104,11 +104,11 @@ export function ProductFormContextProvider({ children }: ProductFormContextProvi
   useEffect(() => {
     // Create a new URLSearchParams object
     const params = new URLSearchParams(searchParams.toString());
-    
+
     // Update the formData parameter
     const serialized = serializeFormData(product);
     params.set('formData', serialized);
-    
+
     // Use replace to avoid creating new history entries
     window.history.replaceState({}, '', `${pathname}?${params.toString()}`);
   }, [product, pathname, searchParams]);

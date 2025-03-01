@@ -13,6 +13,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { tracingChannel } from "diagnostics_channel";
+import createUserWithEmailAndPassword from "@/actions/createUserWithEmailAndPassword";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Define a schema for sign‑up using Zod
 const signUpSchema = z
@@ -43,10 +47,18 @@ export function SignUpForm() {
       confirmPassword: "",
     },
   });
+  const router = useRouter()
 
-  const onSubmit = (data: SignUpFormValues) => {
+  const onSubmit = async (data: SignUpFormValues) => {
     console.log("Sign Up Data:", data);
-    // Add your sign-up logic here (e.g., API call)
+    const response = await createUserWithEmailAndPassword(data)
+    
+    if (!response.ok) {
+      toast.error(`Response is not ok, please try again.`)
+      return;
+    }
+    
+    router.push(`/home`)
   };
 
   return (
