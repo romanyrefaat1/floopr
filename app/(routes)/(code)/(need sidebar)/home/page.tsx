@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="w-full">
       <div className="flex flex-col gap-4">
-        <h2 className="text-3xl font-bold">Recent Feedback</h2>
+        <h2 className="text-3xl font-bold">Top Feedback</h2>
         <TopFeedback />
       </div>
       <div className="flex flex-col gap-4">
