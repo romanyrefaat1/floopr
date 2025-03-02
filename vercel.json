@@ -1,0 +1,9 @@
+{
+  "routes": [
+    {
+      "src": "/waitlist",
+      "dest": "/waitlist"
+    }
+  ],
+  "ignoredBuildSteps": "touch .vercel/output/ignore"
+}
