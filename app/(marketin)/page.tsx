@@ -8,6 +8,7 @@ export default function Home() {
     { name: `current`, to: `/` },
     { name: `signin`, to: `/signin` },
     { name: `signup`, to: `/signup` },
+    { name: `waitlist`, to: `/waitlist` },
   ];
   return (
     <div>

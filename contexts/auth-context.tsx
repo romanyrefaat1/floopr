@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState } from 'react';
-import { 
-  onAuthStateChanged, 
+import { auth } from "@/lib/firebase";
+import {
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
   updateProfile,
   GoogleAuthProvider,
-  signInWithPopup
-} from 'firebase/auth';
-import { auth } from '@/firebase';
+  signInWithPopup,
+} from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext({});
 
@@ -22,7 +22,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const userId = currentUser?.uid
+  const userId = currentUser?.uid;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -72,7 +72,7 @@ export function AuthProvider({ children }) {
     logout,
     resetPassword,
     updateUserProfile,
-    googleSignIn
+    googleSignIn,
   };
 
   return (
