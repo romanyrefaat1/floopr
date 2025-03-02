@@ -3,7 +3,7 @@ import AuthButton from "@/components/ui/auth-button";
 const Navbar = () => {
   return (
     <nav className="flex justify-between">
-      <h4 className="font-medium">Ideaboard</h4>
+      <h4 className="font-medium">Deaboard</h4>
       <ul className="flex gap-2">
         <li>
           <AuthButton to={`signup`} text={`Sign Up`} variant={`link`}/>

@@ -1,13 +1,10 @@
-// Create a file at app/waitlist/page.tsx (for App Router)
-// OR pages/waitlist.tsx (for Pages Router)
-
 "use client";
 
 import Head from "next/head";
 import { useState } from "react";
 
 export default function Waitlist() {
-  const [email, setEmail] = useState("doctorspte@gmail.com");
+  const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false);
@@ -54,8 +51,8 @@ export default function Waitlist() {
             Join Ideaboard&apos;s Waitlist.
           </h1>
           <p className="text-gray-600">
-            We&apos;re working hard to bring you something amazing. Join our
-            waitlist to be the first to know when we launch.
+            We&apos;re working hard to help you make your side project earn money. Join our
+            waitlist to be the first to know when we launch, and earn 2 weeks free trial.
           </p>
         </div>
 
@@ -82,7 +79,7 @@ export default function Waitlist() {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+              className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-[#122] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[black]-500 ${
                 loading ? "opacity-75 cursor-not-allowed" : ""
               }`}
             >
@@ -109,7 +106,7 @@ export default function Waitlist() {
               Thank you!
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              You've been added to our waitlist. We'll notify you when we
+              You&apos;ve been added to our waitlist. We&apos;ll notify you when we
               launch!
             </p>
           </div>

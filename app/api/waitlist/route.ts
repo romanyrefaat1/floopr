@@ -31,25 +31,25 @@ export async function POST(req: Request) {
     // Email options for confirmation email to the user
     const confirmationEmail = {
       to: email,
-      from: process.env.SENDGRID_FROM_EMAIL, // Verified sender in SendGrid
-      subject: "Welcome to the Ideaboard Waitlist!",
+      from: process.env.SENDGRID_FROM_EMAIL,
+      subject: "Welcome to the Deaboard Waitlist!",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-          <h1 style="color: #4f46e5; text-align: center; margin-bottom: 20px;">Thank You for Joining Our Waitlist!</h1>
+          <h1 style="color: black; margin-bottom: 20px;">Thank You for Joining Our Waitlist!</h1>
           <p style="color: #374151; line-height: 1.5;">
             Hi there,
           </p>
           <p style="color: #374151; line-height: 1.5;">
-            Thank you for joining the Ideaboard waitlist. We're excited to have you on board!
+            Thank you for joining the Deaboard waitlist. We're excited to have you on board!
           </p>
           <p style="color: #374151; line-height: 1.5;">
-            We're working hard to bring you something amazing. You'll be among the first to know when we launch.
+            We're working hard to bring you something amazing. You'll be among the first to know when we launch, and the one of our especial users who will earn a free 14 day trail.
           </p>
           <p style="color: #374151; line-height: 1.5;">
             Stay tuned!
           </p>
           <p style="color: #374151; line-height: 1.5;">
-            The Ideaboard Team
+            The Deaboard Team
           </p>
         </div>
       `,
@@ -59,10 +59,10 @@ export async function POST(req: Request) {
     const adminNotification = {
       to: process.env.ADMIN_EMAIL || process.env.SENDGRID_FROM_EMAIL,
       from: process.env.SENDGRID_FROM_EMAIL,
-      subject: "New Ideaboard Waitlist Signup",
+      subject: "New Deaboard Waitlist Signup",
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px;">
-          <h1 style="color: #4f46e5; text-align: center; margin-bottom: 20px;">New Waitlist Signup</h1>
+          <h1 style="color: #4f46e5; text-align: center; margin-bottom: 20px;">New Deaboard Waitlist Signup</h1>
           <p style="color: #374151; line-height: 1.5;">
             A new user has joined the waitlist:
           </p>
@@ -76,14 +76,14 @@ export async function POST(req: Request) {
       `,
     };
 
+    let resp;
     // Send emails
     try {
-      await sgMail.send(confirmationEmail);
-      await sgMail.send(adminNotification);
+     resp = await sgMail.send(confirmationEmail);
+     await sgMail.send(adminNotification);
     } catch (emailError) {
       console.error("SendGrid error:", emailError);
       // Still return success if Firebase save worked but email failed
-      // You might want to log this to a monitoring service
       return NextResponse.json({
         success: true,
         warning:
