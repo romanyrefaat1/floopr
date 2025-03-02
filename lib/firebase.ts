@@ -16,7 +16,6 @@ const firebaseConfig = {
 
 // Initialize Firebase (ensure it is not initialized multiple times)
 const app = initializeApp(firebaseConfig);
-const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export default app;
