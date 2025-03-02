@@ -1,9 +1,8 @@
-import myAuth from "@/lib/my-auth";
+import { getAuth } from "@/contexts/auth-context";
 
-export default async function createNewProduct(data: object) {
+export default async function createNewProduct(data: object, userId: string) {
   try {
-    const {userId} = myAuth();
-    // console.log(`userData`, user)
+    console.log(`userData`, userId);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_APP_LINK}/api/new-product`,
       {
@@ -14,7 +13,7 @@ export default async function createNewProduct(data: object) {
         body: JSON.stringify({ productData: data, userId }),
       }
     );
-    console.log(`createNewProduct response`, response)
+    console.log(`createNewProduct response`, response);
 
     return response;
   } catch (error) {
