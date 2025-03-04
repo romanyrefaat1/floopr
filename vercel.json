@@ -5,7 +5,7 @@
       "dest": "/waitlist"
     }
   ],
-  "buildCommand": "next build",
-  "ignoreCommand": "next lint",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
   "framework": "nextjs"
 }
