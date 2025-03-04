@@ -1,14 +1,19 @@
 "use client";
 
 import { getLatestProducts } from "@/actions/getLatestProducts";
-import LatestProductItem from "@/components/latest-product-item";
+import LatestProductItem, { LatestProductItemProps } from "@/components/latest-product-item";
 import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";
+
+// Use the existing LatestProductItemProps interface
+type ProductItem = Omit<LatestProductItemProps, 'docId'> & {
+  id: string;
+};
 
 const LatestProducts = () => {
   const { userId } = useAuth();
   console.log(userId)
-  const [latestProducts, setLatestProducts] = useState([]);
+  const [latestProducts, setLatestProducts] = useState<ProductItem[]>([]);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +21,8 @@ const LatestProducts = () => {
       if (!userId) return;
       try {
         const data = await getLatestProducts(userId);
-        setLatestProducts(data);
+        // Type assertion here since we've ensured the data has the correct shape in getLatestProducts
+        setLatestProducts(data as ProductItem[]);
       } catch (error) {
         console.error("Error fetching latest products:", error);
       } finally {
@@ -34,7 +40,8 @@ const LatestProducts = () => {
       ) : latestProducts.length > 0 ? (
         latestProducts.map((product) => (
           <LatestProductItem
-          key={product.docId}
+            key={product.id}
+            docId={product.id}
             {...product}
           />
         ))

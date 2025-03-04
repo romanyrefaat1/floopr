@@ -43,7 +43,7 @@ export async function POST(req: Request) {
             Thank you for joining the Deaboard waitlist. We're excited to have you on board!
           </p>
           <p style="color: #374151; line-height: 1.5;">
-            We're working hard to bring you something amazing. You'll be among the first to know when we launch, and the one of our especial users who will earn a free 14 day trail.
+            We&apos;re working hard to bring you something amazing. You'll be among the first to know when we launch, and the one of our especial users who will earn a free 14 day trail.
           </p>
           <p style="color: #374151; line-height: 1.5;">
             Stay tuned!

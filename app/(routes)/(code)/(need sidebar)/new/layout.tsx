@@ -1,6 +1,11 @@
 import { ProductFormContextProvider } from "@/contexts/multistep-form-context";
+import { ReactNode } from "react";
 
-const NewProductLayout = ({ children }) => {
+interface NewProductLayoutProps {
+  children: ReactNode;
+}
+
+const NewProductLayout = ({ children }: NewProductLayoutProps) => {
   return (
     <main>
       <ProductFormContextProvider>

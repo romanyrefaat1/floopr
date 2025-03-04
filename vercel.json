@@ -4,5 +4,8 @@
       "src": "/waitlist",
       "dest": "/waitlist"
     }
-  ]
+  ],
+  "buildCommand": "next build",
+  "ignoreCommand": "next lint",
+  "framework": "nextjs"
 }
