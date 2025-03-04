@@ -25,7 +25,6 @@ export default function EmailForm() {
 
     const onSubmit = async (
         values: z.infer<typeof formSchema>, 
-        event?: React.BaseSyntheticEvent
     ) => {
         try {
             setLoading(true);
@@ -80,7 +79,7 @@ export default function EmailForm() {
 
     return (
         <form 
-            onSubmit={(event) => void form.handleSubmit(onSubmit)(event)} 
+            onSubmit={form.handleSubmit(onSubmit)} 
             className="flex flex- space-y-2 sm:space-y-0 sm:space-x-2 w-full max-w-md"
         >
             <div className="flex-1">

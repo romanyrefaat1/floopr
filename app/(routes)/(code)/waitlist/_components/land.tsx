@@ -1,13 +1,13 @@
 import SpecialBackgroundText from "@/components/special-background-text";
 import EmailForm from "./email-form";
 
-const features = [
-    `Scale your startup fast, and easy`,
-    `Get feedback from your users`,
-    `Analyze feedback to improve products, based on metrics`,
-    `Access component library`,
-    `Apply badges to the hottest features your users need`
-]
+// const features = [
+//     `Scale your startup fast, and easy`,
+//     `Get feedback from your users`,
+//     `Analyze feedback to improve products, based on metrics`,
+//     `Access component library`,
+//     `Apply badges to the hottest features your users need`
+// ]
 
 export default function Land() {
     return (
@@ -16,8 +16,8 @@ export default function Land() {
                 <h1 className="text-3xl font-bold ">Join DeaBoard Waitlist</h1>
                 <p className="text-lg text-gray-600 p-4 md:px-[142px]">
                     Scale your startup with feedback, analytics, and 
-                    components. Be the first to join DeaBoard, and 
-                    {/* <SpecialBackgroundText>earn a free 14-day trial.</SpecialBackgroundText> */}
+                    components. Be the first to join DeaBoard
+                    <SpecialBackgroundText text=", and earn a free 14-day trial."></SpecialBackgroundText>
                 </p>
             </article>
             

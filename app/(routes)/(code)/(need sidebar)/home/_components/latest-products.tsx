@@ -1,7 +1,6 @@
 "use client";
 
 import { getLatestProducts } from "@/actions/getLatestProducts";
-import FeedbackItem from "@/components/feedback-item";
 import LatestProductItem from "@/components/latest-product-item";
 import { useAuth } from "@/contexts/auth-context";
 import { useEffect, useState } from "react";

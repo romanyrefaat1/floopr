@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
     if (!querySnap.empty) {
       return NextResponse.json(
-        { error: "Email already exists in waitlist." },
+        { error: "Email already 0exists in waitlist." },
         { status: 400 }
       );
     }
@@ -76,10 +76,9 @@ export async function POST(req: Request) {
       `,
     };
 
-    let resp;
     // Send emails
     try {
-     resp = await sgMail.send(confirmationEmail);
+     await sgMail.send(confirmationEmail);
      await sgMail.send(adminNotification);
     } catch (emailError) {
       console.error("SendGrid error:", emailError);

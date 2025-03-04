@@ -9,7 +9,6 @@ export default async function saveEmail(email: string) {
             },
             body: JSON.stringify({ email }),
         });
-        console.log(`saveEmail response`, response);
 
         if (!response.ok) {
             console.error(`Error saving email: ${response.statusText}`)
@@ -17,7 +16,6 @@ export default async function saveEmail(email: string) {
         }
 
         const data = await response.json()
-        console.log(data)
 
         if (data.error) {
             return { error: data.error };

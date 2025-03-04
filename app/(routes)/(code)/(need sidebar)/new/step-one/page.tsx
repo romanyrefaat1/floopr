@@ -30,7 +30,6 @@ type NewProductForm = z.infer<typeof newProductFormSchema>;
 const Step1NewProduct = () => {
   const { productForm, updateProductForm } = useNewProductFormContext();
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   const form = useForm<NewProductForm>({
     resolver: zodResolver(newProductFormSchema),
