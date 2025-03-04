@@ -1,4 +1,4 @@
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 export default function myAuth(){

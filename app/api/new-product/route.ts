@@ -1,4 +1,4 @@
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 import { randomUUID } from "crypto";
 import { doc, setDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
