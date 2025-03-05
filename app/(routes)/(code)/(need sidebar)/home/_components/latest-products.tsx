@@ -21,8 +21,9 @@ const LatestProducts = () => {
       if (!userId) return;
       try {
         const data = await getLatestProducts(userId);
+        console.log(`useffect data`, data)
         // Type assertion here since we've ensured the data has the correct shape in getLatestProducts
-        setLatestProducts(data as ProductItem[]);
+        setLatestProducts(data);
       } catch (error) {
         console.error("Error fetching latest products:", error);
       } finally {
@@ -39,13 +40,15 @@ const LatestProducts = () => {
         <p>Loading...</p>
       ) : latestProducts.length > 0 ? (
         latestProducts.map((product) => (
+          <>
           <LatestProductItem
             key={product.id}
             docId={product.id}
             {...product}
           />
+           {/* <p>{latestProducts.length}</p> */}
+          </>
         ))
-        // <p>{latestProducts.length}</p>
       ) : (
         <p>No products found.</p>
       )}

@@ -4,6 +4,7 @@ import {
   query,
   where,
   getDocs,
+  limit,
 } from "firebase/firestore";
 
 // Ensure your Firestore instance is exported as "db"
@@ -14,9 +15,9 @@ export async function getLatestProducts(userId: string) {
 
     const q = query(
       productsRef,
-      where("ownerId", "==", userId),
+      // where("ownerId", "==", userId),
     //   orderBy("createdAt", "desc"),
-    //   limit(4)
+      // limit(4)
     );
 
     const querySnapshot = await getDocs(q);
@@ -38,7 +39,6 @@ export async function getLatestProducts(userId: string) {
         ...data, // Include any other properties from the document
       };
     });
-    console.log(products)
 
     return products;
   } catch (error) {
