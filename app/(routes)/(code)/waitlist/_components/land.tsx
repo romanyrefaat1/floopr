@@ -14,7 +14,7 @@ export default function Land() {
         <main className="flex flex-col justify-center w-fit items-center w-full h-[100vh] px-4 max-w-4xl mx-auto">
             <article className="text-center mb-4">
                 <h1 className="text-3xl font-bold">Join DeaBoard Waitlist</h1>
-                <p className="text-lg text-gray-600 p-4 md:px-[142px]">
+                <p className="text-md text-gray-600 p-4 md:px-[142px]">
                     Scale your startup with feedback, analytics, and 
                     components. Be the first to join DeaBoard
                     <SpecialBackgroundText text=", and earn a free 14-day trial."></SpecialBackgroundText>
