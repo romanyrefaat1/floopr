@@ -1,11 +1,4 @@
 {
-  "routes": [
-    {
-      "src": "/waitlist",
-      "dest": "/waitlist"
-    }
-  ],
-  "buildCommand": "npm run build",
-  "installCommand": "npm install",
-  "framework": "nextjs"
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm install"
 }
