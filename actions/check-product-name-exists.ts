@@ -1,30 +1,20 @@
-import { doc } from "firebase/firestore";
+import { useAuth } from "@/contexts/auth-context"
+import { db } from "@/lib/firebase"
+import { collection, getDocs, query, where } from "firebase/firestore"
 
-export default async function POST(req: Request) {
-  const { name } = await req.json();
-  console.log(`name`, name);
-
+export async function checkProductNameExists(productName) {
+  // User id handling
+  // const {userId} = useAuth()
   try {
-    const docRef = doc(db, `products`, name);
-    const docSnap = await getDo(docRef);
+    const q = query(collection(db, `products`), where("name", "==", productName));
+    const querySnap = await getDocs(q);
 
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      return NextResponse.json(
-        { error: `Product name already exists.`, success: false },
-        { status: 400 }
-      );
-    } else {
-      console.log("No such document!");
-      return NextResponse.json(
-        { error: `Product name is available.`, success: true },
-        { status: 200 }
-      );
+    if (querySnap.empty) {
+      return false
     }
+      return true
+    
   } catch (error) {
-    return NextResponse.json(
-      { error: `Server error in new-product route: ${error}`, success: false },
-      { status: 500 }
-    );
+    console.log(error)
   }
 }

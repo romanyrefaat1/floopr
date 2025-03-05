@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNewProductFormContext } from "@/contexts/multistep-form-context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { checkProductNameExists } from "@/actions/check-product-name-exists";
+import LoaderSpinner from "@/components/loader-spinner";
 
 const newProductFormSchema = z.object({
   name: z.string().min(1, "Product name is required"),
@@ -30,6 +32,8 @@ type NewProductForm = z.infer<typeof newProductFormSchema>;
 const Step1NewProduct = () => {
   const { productForm, updateProductForm } = useNewProductFormContext();
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<NewProductForm>({
     resolver: zodResolver(newProductFormSchema),
@@ -55,8 +59,15 @@ const Step1NewProduct = () => {
     }
   }, [watchedValues, updateProductForm, productForm.name, productForm.description]);
 
-  function onSubmit(values: NewProductForm) {    
-    
+ async function onSubmit(values: NewProductForm) {    
+  setLoading(true);
+  const productNameExists = await checkProductNameExists(values.name)
+    if (productNameExists) {
+        setErrorMessage("Product name already exists. Please choose a different name.");
+        setLoading(false)
+        return;
+    }
+    setLoading(false)
     
     // Ensure we're pushing to the correct path
     router.push(`/new/step-two?`);
@@ -90,6 +101,7 @@ const Step1NewProduct = () => {
                       Give your product a clear, descriptive name
                     </FormDescription>
                     <FormMessage />
+                    {errorMessage && <FormMessage className={"text-destructive transition"}>{errorMessage}</FormMessage>}
                   </FormItem>
                 )}
               />
@@ -119,7 +131,7 @@ const Step1NewProduct = () => {
               />
               
               <div className="flex justify-end pt-4">
-                <Button type="submit">Next</Button>
+                <Button type="submit" disabled={loading}>{loading ? <LoaderSpinner /> : `Next`}</Button>
               </div>
             </form>
           </Form>

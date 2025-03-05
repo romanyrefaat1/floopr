@@ -1,3 +1,4 @@
+
 import LatestProducts from "../(need sidebar)/home/_components/latest-products";
 
 const ProductsPa = () => {
