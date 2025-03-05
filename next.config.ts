@@ -1,7 +1,24 @@
-import type { NextConfig } from "next";
+// next.config.js
 
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  // Configure redirects to ensure all routes go to the waitlist page
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        destination: '/waitlist',
+        permanent: false,
+        has: [
+          {
+            type: 'header',
+            key: 'x-middleware-skip',
+            value: 'true',
+          },
+        ],
+      },
+    ];
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

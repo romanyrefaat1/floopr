@@ -3,7 +3,6 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
-
 export async function POST(req: Request) {
   try {
     const {

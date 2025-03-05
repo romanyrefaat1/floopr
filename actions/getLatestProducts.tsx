@@ -16,19 +16,19 @@ export async function getLatestProducts(userId: string) {
 
     const q = query(
       productsRef,
-      where("ownerId", "==", userId),
-    //   orderBy("createdAt", "desc"),
-    //   limit(4)
+      where("ownerId", "==", userId)
+      //   orderBy("createdAt", "desc"),
+      //   limit(4)
     );
 
     const querySnapshot = await getDocs(q);
-    console.log(querySnapshot)
+    console.log(querySnapshot);
 
     const products = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
-    console.log(products)
+    console.log(products);
 
     return products;
   } catch (error) {

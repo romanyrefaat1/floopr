@@ -32,6 +32,7 @@ export async function POST(req: Request) {
     await setDoc(docRef, {
       ...productData,
       ownerId: userId,
+      createdAt: new Date(),
       docId: productDocId,
     });
 
