@@ -77,7 +77,7 @@ export default function EmailForm() {
     return (
         <form 
             onSubmit={form.handleSubmit(onSubmit)} 
-            className="flex flex- space-y-2 sm:space-y-0 sm:space-x-2 w-full max-w-md"
+            className="flex flex- mb-[0px] space-y-2 sm:space-y-0 sm:space-x-2 w-full max-w-md"
         >
             <div className="flex-1">
                 <Input 

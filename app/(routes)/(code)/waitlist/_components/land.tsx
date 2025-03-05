@@ -12,8 +12,8 @@ import EmailForm from "./email-form";
 export default function Land() {
     return (
         <main className="flex flex-col justify-center w-fit items-center w-full h-[100vh] px-4 max-w-4xl mx-auto">
-            <article className="text-center mb-8">
-                <h1 className="text-3xl font-bold ">Join DeaBoard Waitlist</h1>
+            <article className="text-center mb-4">
+                <h1 className="text-3xl font-bold">Join DeaBoard Waitlist</h1>
                 <p className="text-lg text-gray-600 p-4 md:px-[142px]">
                     Scale your startup with feedback, analytics, and 
                     components. Be the first to join DeaBoard
@@ -21,10 +21,13 @@ export default function Land() {
                 </p>
             </article>
             
-            <div className="w-full max-w-md mb-8">
+            <div className="w-full mb-0 max-w-md">
                 <EmailForm />
             </div>
-            
+            <p className="text-sm text-gray-500 p-4 md:px-[142px]">
+                    We are working hard to bring DeaBoard to life.
+                </p>
+
             {/* <article className="w-full">
                 <h3 className="text-2xl font-semibold mb-4 text-center">Features you will love</h3>
                 <ul className="space-y-2 max-w-md mx-auto">
