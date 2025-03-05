@@ -1,8 +1,5 @@
-import { getAuth } from "@/contexts/auth-context";
-
-export default async function createNewProduct(data: object, userId: string) {
+export default async function createNewProduct(data: object) {
   try {
-    console.log(`userData`, userId);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_APP_LINK}/api/new-product`,
       {
@@ -10,7 +7,7 @@ export default async function createNewProduct(data: object, userId: string) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ productData: data, userId }),
+        body: JSON.stringify({ productData: data }),
       }
     );
     console.log(`createNewProduct response`, response);

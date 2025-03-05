@@ -55,15 +55,8 @@ const Step1NewProduct = () => {
     }
   }, [watchedValues, updateProductForm, productForm.name, productForm.description]);
 
-  function onSubmit(values: NewProductForm) {
-    // Update the form context first
-    // updateProductForm({
-    //   name: values.name,
-    //   description: values.description
-    // });
+  function onSubmit(values: NewProductForm) {    
     
-    // // Get current URL search params to preserve them during navigation
-    // const currentParams = new URLSearchParams(searchParams.toString());
     
     // Ensure we're pushing to the correct path
     router.push(`/new/step-two?`);

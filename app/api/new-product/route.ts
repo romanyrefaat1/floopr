@@ -4,11 +4,12 @@ import { doc, setDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  let productDocId;
   try {
-    const { productData, userId } = await req.json();
+    const { productData } = await req.json();
     console.log(`productData`, productData);
 
-    if (!productData || !userId) {
+    if (!productData) {
       return NextResponse.json(
         {
           error: `productData and userId are not provided to new-product`,
@@ -27,17 +28,17 @@ export async function POST(req: Request) {
 
     console.log(`firebase code will start`);
     // Firebase Code
-    const productDocId = randomUUID();
+    productDocId = randomUUID();
     const docRef = doc(db, `products`, productDocId);
     await setDoc(docRef, {
       ...productData,
-      ownerId: userId,
+      // ownerId: userId,
       docId: productDocId,
     });
 
     console.log(`code is successfull`);
     return NextResponse.json(
-      { mess: `Product created successfully.`, success: true },
+      { mess: `Product created successfully.`, success: true, productDocId },
       { status: 200 }
     );
   } catch (error) {
