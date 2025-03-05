@@ -10,9 +10,11 @@ import {
   updateProfile,
   GoogleAuthProvider,
   signInWithPopup,
-  User
+  User,
+  getIdToken
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import Cookies from 'js-cookie';
 
 // Define the interface for the auth context
 interface AuthContextType {
@@ -24,6 +26,8 @@ interface AuthContextType {
   resetPassword?: (email: string) => Promise<void>;
   updateUserProfile?: (user: User, data: any) => Promise<void>;
   googleSignIn?: () => Promise<any>;
+  isUserSignedIn?: () => boolean;
+  getToken?: () => Promise<string | null>;
 }
 
 const AuthContext = createContext<AuthContextType>({ currentUser: null });
@@ -35,11 +39,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const userId = currentUser?.uid
+  const userId = currentUser?.uid;
+
+  // Manage authentication token
+  const manageToken = async (user: User | null) => {
+    if (user) {
+      try {
+        // Get the Firebase ID token
+        const token = await getIdToken(user);
+        
+        // Set token in an HTTP-only cookie (requires server-side setup)
+        Cookies.set('authToken', token, { 
+          expires: 7, // 7 days
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict'
+        });
+
+        return token;
+      } catch (error) {
+        console.error('Error getting token:', error);
+        return null;
+      }
+    } else {
+      // Remove token when user logs out
+      Cookies.remove('authToken');
+      return null;
+    }
+  };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
+      
+      // Manage token on auth state change
+      await manageToken(user);
+      
       setLoading(false);
     });
 
@@ -47,18 +81,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // Sign up function
-  const signup = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
+  const signup = async (email: string, password: string) => {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    await manageToken(userCredential.user);
+    return userCredential;
   };
 
   // Login function
-  const login = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
+  const login = async (email: string, password: string) => {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    await manageToken(userCredential.user);
+    return userCredential;
   };
 
   // Logout function
-  const logout = () => {
+  const logout = async () => {
+    await manageToken(null);
     return signOut(auth);
+  };
+
+  // Get current user's token
+  const getToken = async () => {
+    if (currentUser) {
+      try {
+        return await getIdToken(currentUser);
+      } catch (error) {
+        console.error('Error getting token:', error);
+        return null;
+      }
+    }
+    return null;
   };
 
   // Reset password
@@ -72,9 +124,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Google sign-in
-  const googleSignIn = () => {
+  const googleSignIn = async () => {
     const provider = new GoogleAuthProvider();
-    return signInWithPopup(auth, provider);
+    const userCredential = await signInWithPopup(auth, provider);
+    await manageToken(userCredential.user);
+    return userCredential;
+  };
+
+  const isUserSignedIn = () => {
+    return !!currentUser;
   };
 
   const value: AuthContextType = {
@@ -85,7 +143,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     logout,
     resetPassword,
     updateUserProfile,
-    googleSignIn
+    googleSignIn,
+    isUserSignedIn,
+    getToken
   };
 
   return (

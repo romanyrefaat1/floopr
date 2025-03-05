@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Define a schema for sign‑up using Zod
 const signUpSchema = z
@@ -51,7 +52,7 @@ export function SignUpForm() {
   const removeErrorMess = () => {
     setTimeout(() => {
       setError(null);
-    }, 3000);
+    }, 5000);
   };
 
   useEffect(() => {
@@ -64,7 +65,7 @@ export function SignUpForm() {
     console.log("Sign Up Data:", data);
     setError(null);
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_LINK}/api/auth/signup`,
+      `/api/auth/signup`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -78,6 +79,7 @@ export function SignUpForm() {
 
     if (!response.ok) {
       // Handle error responses (400, 500, etc.)
+      toast.error(`Please try again with a different email address.\n${result.error}`)
       setError(result.error);
       console.error("Error:", result.error);
       return;

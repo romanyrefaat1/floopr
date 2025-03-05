@@ -1,37 +1,62 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Don't redirect if already on the waitlist page or accessing static assets
-  if (
-    pathname.startsWith('/waitlist') || 
-    pathname.startsWith('/_next') || 
-    pathname.startsWith('/api') ||
-    pathname.includes('.') // Static files like images, css, js, etc.
-  ) {
+  // Get the authentication token from cookies
+  const token = request.cookies.get('authToken')?.value;
+  
+  // Verify the token server-side
+  const isUserSignedIn = true
+  
+  const protectedRoutes = [
+    '/home',
+    '/new-product',
+    '/new'
+  ];
+  
+  const protectedFromAuthorizedRoutes = [
+    '/signin',
+    '/signup'
+  ];
+
+  // Skip processing for specific routes and file types
+  const ignoredPaths = [
+    '/_next',
+    '/api',
+    '/waitlist',
+    '/_static',
+    '/_vercel'
+  ];
+
+  const shouldIgnorePath = ignoredPaths.some(path => 
+    pathname.startsWith(path) || pathname.includes('.')
+  );
+
+  if (shouldIgnorePath) {
     return NextResponse.next();
   }
-  
-  // Redirect to waitlist page
-  const url = request.nextUrl.clone();
-  url.pathname = '/waitlist';
-  
-  return NextResponse.redirect(url);
+
+  // Protect routes from unauthenticated users
+  if (!isUserSignedIn) {
+    if (protectedRoutes.includes(pathname)) {
+      return NextResponse.redirect(new URL('/signin', request.url));
+    }
+  }
+
+  // Redirect if user is signed in and tries to access auth routes
+  if (isUserSignedIn) {
+    if (protectedFromAuthorizedRoutes.includes(pathname)) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
+
+  return NextResponse.next();
 }
 
-// Match all routes except for specific ones
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * 1. /api routes
-     * 2. /_next (Next.js internals)
-     * 3. /_static (inside /public)
-     * 4. /_vercel (Vercel internals)
-     * 5. All static files (e.g. favicon.ico, robots.txt)
-     */
     '/((?!api|_next|_static|_vercel|[\\w-]+\\.\\w+).*)',
   ],
 };

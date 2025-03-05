@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Define a schema with Zod
 const signInSchema = z.object({
@@ -50,7 +51,7 @@ export default function SignInForm() {
     console.log("Sign In Data:", data);
     setError(null);
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_LINK}/api/auth/signin`,
+      `/api/auth/signin`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -65,11 +66,13 @@ export default function SignInForm() {
     if (!response.ok) {
       // Handle error responses (400, 500, etc.)
       setError(result.error);
+      toast.error(result.error)
       console.error("Error:", result.error);
       return;
     }
 
     console.log("Successfully signed in:", result);
+    toast.success("Successfully signed in!")
     router.push(`/home`);
   };
 
