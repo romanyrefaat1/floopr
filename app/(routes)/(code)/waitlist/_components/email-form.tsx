@@ -41,8 +41,7 @@ export default function EmailForm() {
             
             if (response.error) {
                 // Handle error
-                toast.error(response.error, {
-                    description: 'Please try again with a different email address.',
+                toast.error(`Please try again with a different email address.\n${response.error}`, {
                     duration: 5000,
                 });
                 return;
@@ -50,8 +49,7 @@ export default function EmailForm() {
             
             if (response.warning) {
                 // Handle warning
-                toast.warning(response.warning, {
-                    description: 'Your email was saved, but there might be an issue with notifications.',
+                toast.warning(`Your email was saved, but there might be an issue with notifications.\n${response.warning}`, {
                     duration: 5000,
                 });
                 form.reset(); // Clear the form since email was saved
@@ -59,8 +57,7 @@ export default function EmailForm() {
             }
             
             // Handle success
-            toast.success('Success!', {
-                description: 'Your email has been added to the waitlist.',
+            toast.success('Success! Your email has been added to the waitlist.', {
                 duration: 5000,
             });
             

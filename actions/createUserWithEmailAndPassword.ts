@@ -19,7 +19,6 @@ export default async function createUserWithEmailAndPassword(
         body: JSON.stringify(data),
       }
     );
-    console.log(`response from createuserwitemail and password`, response)
 
     if (!response.ok) {
       const errorData = await response.json();

@@ -1,7 +1,6 @@
 
 export default async function saveEmail(email: string) {
     try {
-        console.log(`email`, email)
         const response = await fetch(`${process.env.NEXT_PUBLIC_APP_LINK}/api/waitlist`, {
             method: "POST",
             headers: {
