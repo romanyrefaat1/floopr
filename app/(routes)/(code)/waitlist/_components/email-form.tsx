@@ -77,15 +77,15 @@ export default function EmailForm() {
     return (
         <form 
             onSubmit={form.handleSubmit(onSubmit)} 
-            className="flex flex- mb-[0px] space-y-2 sm:space-y-0 sm:space-x-2 w-full max-w-md"
+            className="flex flex-col sm:flex-row h-full mb-[0px] space-y-2 sm:space-y-0 sm:space-x-2 w-full max-w-md"
         >
-            <div className="flex-1">
+            <div className="flex-1 h-full">
                 <Input 
                     {...form.register('email')}
                     placeholder="Enter your email"
                     type="email"
                     disabled={loading}
-                    className="w-full"
+                    className="w-full h-full"
                 />
                 {form.formState.errors.email && (
                     <p className="text-sm text-red-500 mt-1">

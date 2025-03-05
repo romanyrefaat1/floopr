@@ -24,7 +24,7 @@ export default function Land() {
             <div className="w-full mb-0 max-w-md">
                 <EmailForm />
             </div>
-            <p className="text-sm text-gray-500 p-4 md:px-[142px]">
+            <p className="text-sm text-center text-gray-500 p-4 md:px-[142px]">
                     We are working hard to bring DeaBoard to life.
                 </p>
 
