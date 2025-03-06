@@ -119,3 +119,7 @@ button, a {
     --chart-5: 340 75% 55%;
   }
 }
+
+h1 {
+  @apply text-3xl font-bold
+}
