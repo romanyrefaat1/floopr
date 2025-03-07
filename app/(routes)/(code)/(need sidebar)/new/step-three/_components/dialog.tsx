@@ -44,13 +44,13 @@ export default function DialogNotice() {
         try {
             const formData = {...productForm, ownerId: userId};
             console.log("Form data before submission:", formData);
-            const response = await createNewProduct(formData);
+            const response = await createNewProduct(formData, userId);
+            const responseData = await response.json()
 
             if (!response.ok) {
-                const errorData = await response.json();
-                setError(errorData.error);
+                setError(responseData.error);
             }
-            const responseData = await response.json()
+            
             console.log(responseData)
             console.log("Product created, attempting to navigate");
             router.push(`../products/${responseData.productDocId}`);

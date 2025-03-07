@@ -7,17 +7,15 @@ import {
   limit,
 } from "firebase/firestore";
 
-// Ensure your Firestore instance is exported as "db"
-
 export async function getLatestProducts(userId: string) {
   try {
     const productsRef = collection(db, "products");
 
     const q = query(
       productsRef,
-      // where("ownerId", "==", userId),
+      where("ownerId", "==", userId),
     //   orderBy("createdAt", "desc"),
-      // limit(4)
+      limit(4)
     );
 
     const querySnapshot = await getDocs(q);

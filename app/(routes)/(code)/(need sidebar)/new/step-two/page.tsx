@@ -1,6 +1,5 @@
 "use client";
 
-import createNewProduct from "@/actions/createNewProduct";
 import LoaderSpinner from "@/components/loader-spinner";
 import ProductPreview from "@/components/product-preview";
 import { Button } from "@/components/ui/button";
@@ -23,12 +22,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAuth } from "@/contexts/auth-context";
 import { useNewProductFormContext } from "@/contexts/multistep-form-context";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const productStyleSchema = z.object({
@@ -188,9 +187,13 @@ const Step2StyleProduct = () => {
     });
   };
 
-  async function onSubmit(values: ProductStyleForm) {
+  async function onSubmit(values: ProductStyleForm, event: React.FormEvent) {
+    if (event) {
+      event.preventDefault();
+    }
     try {
-      router.push("/new/step-three");
+      console.log(`onsubmit start`)
+      toast.success("Updating product...");
 
       setSubmitLoadin(true);
       if (debounceTimerRef.current) {
@@ -199,16 +202,13 @@ const Step2StyleProduct = () => {
       }
 
       // Make sure all values are saved in context
-      updateProductForm({ style: values });
-      const data = productForm;
-      console.log("Form data before submission:", data);
-      // const response = await createNewProduct(data);
-      // if (response.ok) {
-      //   console.log("Product created, attempting to navigate");
-      //   router.push("/new/step-three/");
-      // }
+      await updateProductForm({ style: values });
       
       setSubmitLoadin(false);
+      
+      console.log(`onsubmit end`)
+      toast.success("Product updated successfully");
+      router.push("/new/step-three");
     } catch (error) {
       setSubmitLoadin(false);
       console.error("Error in form submission:", error);
@@ -226,7 +226,11 @@ const Step2StyleProduct = () => {
         {/* Left side: the style form */}
         <div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit(onSubmit)(e);
+            }}
+            className="space-y-6">
               <Tabs defaultValue="colors" className="w-full">
                 <TabsList className="grid grid-cols-4 mb-4">
                   <TabsTrigger value="colors">Colors</TabsTrigger>

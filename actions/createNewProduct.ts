@@ -1,5 +1,5 @@
-export default async function createNewProduct(dataProps: object) {
-  const data = { ...dataProps };
+export default async function createNewProduct(dataProps: object, ownerId: string) {
+  const data = { ...dataProps, ownerId: ownerId };
   
   try {
     const response = await fetch(
