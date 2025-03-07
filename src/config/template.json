@@ -1,0 +1,35 @@
+{
+  "brand": {
+    "name": "MainFocus",
+    "tagline": "Focus with no distractions",
+    "description": "Track your focus, earn points, and compete with friends"
+  },
+  "hero": {
+    "headline": "Fowith no distractions",
+    "explanation": "A short, impactful headline highlighting the core value proposition",
+    "example": "Transform Your Workflow",
+    "subheadline": "Track your focus, earn points, and compete with friends in a unique productivity experience",
+    "explanation": "Detailed description of the main benefit, focusing on user outcomes",
+    "example": "Streamline your work, boost efficiency, and achieve more with our intuitive tools"
+  },
+  "features": {
+    "title": "Increase your productivity, with no distractions",
+    "explanation": "Section headline that combines benefit with unique selling proposition",
+    "example": "Powerful Features, Seamless Experience",
+    "items": [
+      {
+        "title": "AI-Powered Insights",
+        "description": "Get personalized recommendations based on your performance patterns",
+        "icon": "PieChart"
+      }
+    ]
+  },
+
+  "cta": {
+    "title": "Drive your focus to the moon",
+    "explanation": "Compelling call-to-action that motivates user action",
+    "example": "Start Your Journey Today",
+    "buttonText": "Join us"
+  }
+}
+

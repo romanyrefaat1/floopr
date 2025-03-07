@@ -1,0 +1,371 @@
+{
+  "brand": {
+    "name": "MainFocus",
+    "tagline": "Focus with no distractions",
+    "description": "Track your focus, earn points, and compete with friends",
+    "describtionExplainaition": "This description is used as a meta description for your website. It helps search engines understand your page's content, so make it concise and meaningful."
+  },
+  "navbar": {
+    "links": [
+      { "name": "Home", "url": "#", "special": false },
+      { "name": "Features", "url": "#features", "special": false },
+      { "name": "Testimonials", "url": "#testimonials", "special": false },
+      { "name": "Benefits", "url": "#benefits", "special": false },
+      { "name": "Founder", "url": "#founder", "special": false },
+      { "name": "Demo", "url": "#demo", "special": false },
+      { "name": "FAQ", "url": "#faq", "special": false },
+      { "name": "Join Us", "url": "#join-us", "special": true }
+    ],
+    "explainaition": "This is your website's main navigation bar. Each 'name' represents a section title that appears in the navigation menu, and 'url' is the anchor link that scrolls to the corresponding section. If a section is special (like a button or important), set 'special' to true. Less links is more value(1-3 links is recommeneded)"
+  },
+  "hero": {
+    "headline": "Focus with no distractions",
+    "subheadline": "Track your focus, earn points, and compete with friends in a unique productivity experience",
+    "img": "/hero-mockup.png",
+
+    "explainaition": "The 'headline' is the big, bold text on the landing page that grabs attention. 'Subheadline' gives more detail underneath the headline. 'Img' is the visual that showcases your app. The email signup is at the end of this json file."
+  },
+  "featuredBrands": {
+    "title": "Featured On",
+    "brands": [{ "name": "Product Hunt", "icon": "FaProductHunt" }, { "name": "Reddit", "icon": "FaReddit" }],
+    "explainaition": "This section highlights the platforms where you've been featured. 'Title' is the section heading. 'Brands' are the logos of the platforms, and 'icon' refers to the brand's logo (get icons from https://lucide.dev/icons)."
+  },
+  "features": {
+    "title": "Increase your productivity, with no distractions",
+    "subtitle": "Tools designed to enhance your productivity and keep you focused",
+    "items": [
+      {
+        "icon": "PieChart",
+        "component": "ai",
+        "title": "AI",
+        "info": {
+          "title": "AI Focus State",
+          "list": [
+            {
+              "name": "AI Focus State",
+              "special": false
+            },
+            {
+              "name": "Analyze Focus Patterns",
+              "special": false
+            },
+            {
+              "name": "Adjust in Real-Time",
+              "special": false
+            },
+            {
+              "name": "Time Saved",
+              "special": false
+            },
+            {
+              "name": "Personalized Recommendations",
+              "special": true
+            }
+          ]
+        }
+      },
+
+      {
+        "icon": "Timer",
+        "component": "timer",
+        "title": "Customizable Sessions",
+        "info": {
+          "title": "Customizable Sessions",
+          "list": [
+            {
+              "name": "Track Your Progress",
+              "special": false
+            },
+            {
+              "name": "Optimize Breaks",
+              "special": false
+            },
+            {
+              "name": "Personalize Settings",
+              "special": false
+            },
+            {
+              "name": "Set Custom Intervals",
+              "special": true
+            }
+          ]
+        }
+      },
+      {
+        "icon": "Trophy",
+        "component": "achievement",
+        "title": "Achievement System",
+        "info": {
+          "title": "Achievement System",
+          "list": [
+            {
+              "name": "Earn points for every milestone you reach",
+              "special": false
+            },
+            {
+              "name": "Increase your score with smarter productivity strategies",
+              "special": false
+            },
+            {
+              "name": "Buy themes to make your app look unique",
+              "special": true
+            }
+          ]
+        }
+      },
+      {
+        "icon": "Users",
+        "component": "leaderboard",
+        "title": "Leaderboard",
+        "info": {
+          "title": "Beat your friends",
+          "list": [
+            {
+              "name": "Beat your personal best",
+              "special": false
+            },
+            {
+              "name": "Challenge your friends to stay focused",
+              "special": false
+            },
+            {
+              "name": "Track who stays focused the longest",
+              "special": true
+            }
+          ]
+        }
+      },
+      {
+        "icon": "Users",
+        "component": "analyze",
+        "title": "Analytics",
+        "info": {
+          "title": "Detailed Analysis",
+          "list": [
+            {
+              "name": "Analyze focus levels in real-time",
+              "special": false
+            },
+            {
+              "name": "Use AI to detect focus states",
+              "special": false
+            },
+            {
+              "name": "Enhance productivity with accurate insights",
+              "special": false
+            },
+            {
+              "name": "Optimize workflow efficiency effortlessly",
+              "special": true
+            }
+          ]
+        }
+      }
+    ],
+    "explainaition": "This section showcases the features of your app. The 'title' is the headline of the section. 'Subtitle' offers a quick explanation. Each 'item' lists a feature: the 'icon' is the feature's logo, 'component' is the underlying functionality, and 'title' is the name of the feature. Don't forget to make each feature sound valuable and engaging!"
+  },
+  "testimonials": {
+    "title": { "text": "Loved by", "special": "Professionals" },
+    "subtitle": "See what our users are saying about MainFocus",
+    "items": [
+      {
+        "name": "Sarah Johnson",
+        "role": "Software Engineer",
+        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
+        "quote": "MainFocus has transformed how I manage my work day. The AI insights are incredibly helpful.",
+        "rating": 5
+      },
+      {
+        "name": "Michael Chen",
+        "role": "Product Designer",
+        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
+        "quote": "The gamification aspect makes staying focused actually fun. I've improved my productivity by 40%.",
+        "rating": 5
+      }
+    ],
+    "explainaition": "Here, you display customer testimonials. The 'title' is the section header, 'subtitle' provides extra context. Each 'item' represents a testimonial: 'name' is the person giving the feedback, 'role' is their position, 'image' is their photo, 'quote' is their feedback, and 'rating' is how they rated the app. Testimonials help build trust!"
+  },
+  "benefits": {
+    "section": {
+      "id": "benefits",
+      "heading": {
+        "title": "Why Choose",
+        "highlight": "MainFocus",
+        "description": "Experience a new way of working that combines focus, fun, and results"
+      }
+    },
+    "items": [
+      {
+        "icon": "LineChart",
+        "title": "Track Real Progress",
+        "description": "Monitor your focus trends and productivity patterns with detailed analytics."
+      },
+      {
+        "icon": "Zap",
+        "title": "Boost Productivity",
+        "description": "Leverage AI insights to optimize your work sessions and achieve more."
+      },
+      {
+        "icon": "Target",
+        "title": "Achieve Goals",
+        "description": "Set and accomplish your objectives with our structured approach to focus."
+      }
+    ],
+    "explainaition": "This section explains the benefits of using your app. The 'heading' includes the main title, with a highlighted phrase to stand out. The 'items' list the benefits, each with an icon (from https://lucide.dev/icons), a title, and a brief description. Focus on making each benefit clear and motivating!"
+  },
+  "focus": {
+    "title": "Drive your focus to the moon",
+    "subtitle": "Turn your goals into achievements with MainFocus, it's trained to keep you in the zone",
+    "emoji": "🌚",
+    "explainaition": "This is a special section that celebrates high productivity! The 'title' is catchy and motivating, while the 'subtitle' explains how the app helps. The 'emoji' adds a fun touch to make it feel more playful!"
+  },
+  "founder": {
+    "name": "Romany",
+    "role": "Founder of MainFocus",
+    "image": "/romany-cristams.jpg",
+    "story": {
+      "intro": "Hey, I'm Romany 👋",
+      "description": "In 2024, I started building MainFocus—a platform designed to help people like you focus on what truly matters and get through those tough tasks faster and more efficiently.",
+      "background": "Like many of us, I've faced the struggles of managing overwhelming workloads and staying productive. I've been there—working late nights, balancing multiple responsibilities, and pushing through tough projects. That's when I knew I needed a better way to stay focused and get things done.",
+      "mission": {
+        "title": "So I built MainFocus for 3 reasons:",
+        "points": [
+          "Reduce friction with my phone during focus sessions, helping me stay in the zone",
+          "Stay in the zone and crush my goals with zero distractions",
+          "Simplify workflows, making it easier to achieve meaningful outcomes effortlessly"
+        ]
+      },
+      "conclusion": "MainFocus is for those who hustle hard and are ready to take control of their productivity. Let's work smarter, not harder, together."
+    },
+    "explainaition": "This is the founder's story, where you introduce yourself and explain why you built MainFocus. It helps users connect with you personally. Include your photo, name, background, and the mission behind the app. Make it relatable and inspiring!"
+  },
+  "demo": {
+    "title": "See MainFocus in action 😉",
+    "videoSrc": "/demo.mp4",
+    "explainaition": "This section is like a demo or a 'show and tell.' You share a video to show how the app works, so users can see it in action before signing up. A good demo video builds excitement!"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "contact": {
+      "text": "Have another question? Contact me by",
+      "email": "support@main-focus.app"
+    },
+    "items": [
+      {
+        "question": "What is MainFocus?",
+        "answer": "MainFocus is an app that helps you improve your productivity using Pomodoro timers and AI to track your focus. It awards points for staying focused and lets you compete with friends."
+      },
+      {
+        "question": "How does MainFocus track my focus?",
+        "answer": "MainFocus uses your camera to track your focus level during Pomodoro sessions. It measures your attention span and helps you improve your focus over time."
+      }
+    ],
+    "explainaition": "The FAQ section answers common questions about your app. Each item has a 'question' and an 'answer' to clarify any confusion users might have. Include your contact info if they need more help!"
+  },
+  "footer": {
+    "social": [
+      {
+        "name": "Twitter",
+        "url": "#",
+        "icon": "Twitter"
+      },
+      {
+        "name": "LinkedIn",
+        "url": "#",
+        "icon": "Linkedin"
+      },
+      {
+        "name": "Instagram",
+        "url": "#",
+        "icon": "Instagram"
+      }
+    ],
+    "links": [
+      {
+        "name": "Contact",
+        "url": "#"
+      },
+      {
+        "name": "Privacy Policy",
+        "url": "#"
+      },
+      {
+        "name": "Terms of Service",
+        "url": "#"
+      }
+    ],
+    "explainaition": "This is like the bottom of a letter! It has all the ways you can find us on the internet and important information - like when your parents write their phone number at the bottom of a note!"
+  },
+  "earlyAdoptersModal": {
+    "icons": {
+      "close": "X",
+      "header": "Target",
+      "steps": {
+        "section": "ArrowRight",
+        "items": "CheckCircle"
+      },
+      "rewards": {
+        "section": "Gift",
+        "items": "CheckCircle"
+      }
+    },
+    "title": "Attention, Focus Warriors!",
+    "subtitle": "Are you ready to supercharge your productivity and claim some epic rewards?",
+    "steps": {
+      "title": "Here's how it works:",
+      "items": [
+        {
+          "text": "Be one of the first 200 people to join our waitlist",
+          "className": "text-text"
+        },
+        {
+          "text": "Use MainFocus to earn Focus Points by crushing your goals",
+          "className": "text-text"
+        },
+        {
+          "text": "Compete with fellow early adopters on the leaderboard",
+          "className": "text-text"
+        }
+      ]
+    },
+    "rewards": {
+      "title": "Epic Rewards Await:",
+      "items": [
+        {
+          "text": "50% off Lifetime Subscription",
+          "className": "text-text"
+        },
+        {
+          "text": "Exclusive EarlyWarrior Status Badge",
+          "className": "text-text"
+        },
+        {
+          "text": "Limited Edition MainFocus T-shirt",
+          "className": "text-text"
+        }
+      ]
+    },
+    "conclusion": {
+      "text": "This is your chance to shape the future of focus and be part of something groundbreaking. Let's make productivity fun, rewarding, and competitive!",
+      "callout": "Spots are limited to 200 early adopters. Join the waitlist today and secure your place! Ready, set... FOCUS!"
+    },
+    "explainaition": "This is like a special invitation to a fun party! It tells you how to join, what cool prizes you can win, and how many friends can come - just like when you get invited to a birthday party!"
+  },
+  "emailSignup": {
+    "title": "Join the waitlist",
+    "subtitle": {
+      "text": "Join the waitlist and become one of our",
+      "highlightPrize": "exclusive early adopters"
+    },
+    "placeholder": "Enter your email",
+    "buttonStatus": {
+      "default": "Join",
+      "loading": "Loading...",
+      "disabled": "Loading...",
+      "success": "Success! 🎉",
+      "error": "Error! 😢"
+    },
+    "explainaition": "This is like signing up for a special club! You put in your email address (like writing your name on a list), and the button tells you if you got in - just like when you sign up for a fun activity at school!"
+  }
+}
+

@@ -1,0 +1,315 @@
+{
+  "brand": {
+    "name": "DeaBoard",
+    "tagline": "The way Indie Developers scale their businesses",
+    "description": "DeaBoard is a platform that helps indie developers scale their businesses by providing tools and resources to help them know their users better.",
+    "describtionExplainaition": "This description is used as a meta description for your website. It helps search engines understand your page's content, so make it concise and meaningful."
+  },
+  "navbar": {
+    "links": [
+      { "name": "Home", "url": "#", "special": false },
+      { "name": "Features", "url": "#features", "special": false },
+      { "name": "Founder", "url": "#founder", "special": false },
+      { "name": "FAQ", "url": "#faq", "special": false },
+      { "name": "Join Us", "url": "#join-us", "special": true }
+    ],
+    "explainaition": "This is your website's main navigation bar. Each 'name' represents a section title that appears in the navigation menu, and 'url' is the anchor link that scrolls to the corresponding section. If a section is special (like a button or important), set 'special' to true. Less links is more value(1-3 links is recommeneded)"
+  },
+  "hero": {
+    "headline": "The way Developers scale their businesses",
+    "subheadline": "Gather feedback from your audience, analyze it, mark as done, iterate.",
+    "img": "/hero-mockup.png",
+    "explainaition": "The 'headline' is the big, bold text on the landing page that grabs attention. 'Subheadline' gives more detail underneath the headline. 'Img' is the visual that showcases your app. The email signup is at the end of this json file."
+  },
+  "featuredBrands": {
+    "title": "Featured On",
+    "brands": [{ "name": "X", "icon": "Twitter", "link": "https://x.com/romanyrefaat_" }],
+    "explainaition": "This section highlights the platforms where you've been featured. 'Title' is the section heading. 'Brands' are the logos of the platforms, and 'icon' refers to the brand's logo (get icons from https://lucide.dev/icons)."
+  },
+  "features": {
+    "title": "Add features your users actually need",
+    "subtitle": "Listen to what your users have to say",
+    "items": [
+      {
+        "icon": "Timer",
+        "component": "ai",
+        "title": "Create and iterate fast",
+        "info": {
+          "title": "Create, iterate",
+          "list": [
+            {
+              "name": "Create account",
+              "special": false
+            },
+            {
+              "name": "Click 'Create Product'",
+              "special": false
+            },
+            {
+              "name": "Type your product name",
+              "special": false
+            },
+            {
+              "name": "And you are ready to go!",
+              "special": true
+            }
+          ]
+        }
+      },
+      {
+        "icon": "Trophy",
+        "component": "achievement",
+        "title": "Understand your users",
+        "info": {
+          "title": "Understand your users",
+          "list": [
+            {
+              "name": "Know your users needs",
+              "special": false
+            },
+            {
+              "name": "Understand their pain points",
+              "special": false
+            },
+            {
+              "name": "Solve their problems",
+              "special": true
+            }
+          ]
+        }
+      },
+      {
+        "icon": "PieChart",
+        "component": "analyze",
+        "title": "Analyze what your users need",
+        "info": {
+          "title": "Analyze what your users need",
+          "list": [
+            {
+              "name": "Analyze important metrics",
+              "special": false
+            },
+            {
+              "name": "Find the useful features, your users need",
+              "special": false
+            },
+            {
+              "name": "Find bugs, needy-features, quickly",
+              "special": false
+            },
+            {
+              "name": "Make data-driven decisions",
+              "special": true
+            }
+          ]
+        }
+      },
+      {
+        "icon": "LineChart",
+        "component": "timer",
+        "title": "Make Data Driven decisions",
+        "info": {
+          "title": "Make Data Driven decisions",
+          "list": [
+            {
+              "name": "React/NextJS Components",
+              "special": false
+            },
+            {
+              "name": "No redirection to a new page, all in your site",
+              "special": false
+            },
+            {
+              "name": "API integration",
+              "special": true
+            },
+            {
+              "name": "Reward your users",
+              "special": true
+            }
+            
+          ]
+        }
+      }
+    ],
+    "explainaition": "This section showcases the features of your app. The 'title' is the headline of the section. 'Subtitle' offers a quick explanation. Each 'item' lists a feature: the 'icon' is the feature's logo, 'component' is the underlying functionality, and 'title' is the name of the feature. Don't forget to make each feature sound valuable and engaging!"
+  },
+  "testimonials": {
+    "title": { "text": "Loved by", "special": "Professionals" },
+    "subtitle": "See what our users are saying about MainFocus",
+    "items": [
+      {
+        "name": "Sarah Johnson",
+        "role": "Software Engineer",
+        "image": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
+        "quote": "MainFocus has transformed how I manage my work day. The AI insights are incredibly helpful.",
+        "rating": 5
+      },
+      {
+        "name": "Michael Chen",
+        "role": "Product Designer",
+        "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
+        "quote": "The gamification aspect makes staying focused actually fun. I've improved my productivity by 40%.",
+        "rating": 5
+      }
+    ],
+    "explainaition": "Here, you display customer testimonials. The 'title' is the section header, 'subtitle' provides extra context. Each 'item' represents a testimonial: 'name' is the person giving the feedback, 'role' is their position, 'image' is their photo, 'quote' is their feedback, and 'rating' is how they rated the app. Testimonials help build trust!"
+  },
+  "benefits": {
+    "section": {
+      "id": "benefits",
+      "heading": {
+        "title": "Why Choose",
+        "highlight": "DeaBoard",
+        "description": "Ex"
+      }
+    },
+    "items": [
+      {
+        "icon": "LineChart",
+        "title": "Track Real Progress",
+        "description": "Monitor your focus trends and productivity patterns with detailed analytics."
+      },
+      {
+        "icon": "Zap",
+        "title": "Boost Productivity",
+        "description": "Leverage AI insights to optimize your work sessions and achieve more."
+      },
+      {
+        "icon": "Target",
+        "title": "Achieve Goals",
+        "description": "Set and accomplish your objectives with our structured approach to focus."
+      }
+    ],
+    "explainaition": "This section explains the benefits of using your app. The 'heading' includes the main title, with a highlighted phrase to stand out. The 'items' list the benefits, each with an icon (from https://lucide.dev/icons), a title, and a brief description. Focus on making each benefit clear and motivating!"
+  },
+  "focus": {
+    "title": "Fix the right bugs",
+    "subtitle": "Don't let users crash out from your app",
+    "emoji": "🐛",
+    "explainaition": "This is a special section that celebrates high productivity! The 'title' is catchy and motivating, while the 'subtitle' explains how the app helps. The 'emoji' adds a fun touch to make it feel more playful!"
+  },
+  "founder": {
+    "name": "Romany",
+    "role": "Founder of MainFocus",
+    "image": "/romany-x.jpg",
+    "story": {
+      "intro": "Hey, I'm Romany 👋",
+      "description": "In February 2025, I got a message from a churned user complaining that I don't listen to user feedback.",
+      "mission": {
+        "title": "So I decided to builed DeaBoard, to listen to what she(and my users) needs:",
+        "points": [
+          "Fix what bother users most",
+          "Prioritize what matters most",
+          "Automate tracking user requests to save time",
+          "Remove the embarassing bugs"
+        ]
+      },
+      "conclusion": "DeaBoard is for those who want to focus on what matters, not just what they can do. Let's work smarter, not harder, together."
+    },
+    "explainaition": "This is the founder's story, where you introduce yourself and explain why you built MainFocus. It helps users connect with you personally. Include your photo, name, background, and the mission behind the app. Make it relatable and inspiring!"
+  },
+  "demo": {
+    "title": "See MainFocus in action 😉",
+    "videoSrc": "/demo.mp4",
+    "explainaition": "This section is like a demo or a 'show and tell.' You share a video to show how the app works, so users can see it in action before signing up. A good demo video builds excitement!"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "contact": {
+      "text": "Have another question? Contact me by",
+      "email": "support@main-focus.app"
+    },
+    "items": [
+      {
+        "question": "What is DeaBoard?",
+        "answer": "DeaBoard is a developer-first tool that helps you gather user feedback, analyze it, and manage it. Without the headache of creating a full system."
+      },
+      {
+        "question": "Is DeaBoard Ready Launched yet?",
+        "answer": "No, DeaBoard is not launched yet. We are building it from the ground up with best practices in mind. Join the waitlist to get notified when it is ready."
+      }
+    ],
+    "explainaition": "The FAQ section answers common questions about your app. Each item has a 'question' and an 'answer' to clarify any confusion users might have. Include your contact info if they need more help!"
+  },
+  "footer": {
+    "social": [
+      {
+        "name": "Twitter",
+        "url": "https://x.com/romanyrefaat_",
+        "icon": "Twitter"
+      }
+     ],
+    "links": [
+      {
+        "name": "Contact",
+        "url": "#"
+      },
+      {
+        "name": "Privacy Policy",
+        "url": "#"
+      },
+      {
+        "name": "Terms of Service",
+        "url": "#"
+      }
+    ],
+    "explainaition": "This is like the bottom of a letter! It has all the ways you can find us on the internet and important information - like when your parents write their phone number at the bottom of a note!"
+  },
+  "earlyAdoptersModal": {
+    "icons": {
+      "close": "X",
+      "header": "Target",
+      "steps": {
+        "section": "ArrowRight",
+        "items": "CheckCircle"
+      },
+      "rewards": {
+        "section": "Gift",
+        "items": "CheckCircle"
+      }
+    },
+    "title": "Attention, Focus Warriors!",
+    "subtitle": "Are you ready to supercharge your productivity and claim some epic rewards?",
+    "steps": {
+      "title": "Here's how it works:",
+      "items": [
+        {
+          "text": "Be one of the first 200 people to join our waitlist",
+          "className": "text-text"
+        },
+        {
+          "text": "Use MainFocus to earn Focus Points by crushing your goals",
+          "className": "text-text"
+        },
+        {
+          "text": "Compete with fellow early adopters on the leaderboard",
+          "className": "text-text"
+        }
+      ]
+    },
+    "rewards": {
+      "title": "Epic Rewards Await:",
+      "items": [
+        {
+          "text": "50% off Lifetime Subscription",
+          "className": "text-text"
+        },
+        {
+          "text": "Exclusive EarlyWarrior Status Badge",
+          "className": "text-text"
+        },
+        {
+          "text": "Limited Edition MainFocus T-shirt",
+          "className": "text-text"
+        }
+      ]
+    },
+    "conclusion": {
+      "text": "This is your chance to shape the future of focus and be part of something groundbreaking. Let's make productivity fun, rewarding, and competitive!",
+      "callout": "Spots are limited to 200 early adopters. Join the waitlist today and secure your place! Ready, set... FOCUS!"
+    },
+    "explainaition": "This is like a special invitation to a fun party! It tells you how to join, what cool prizes you can win, and how many friends can come - just like when you get invited to a birthday party!"
+  }
+}
+

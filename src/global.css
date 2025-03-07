@@ -4,34 +4,12 @@
 
 :root {
   --color-primary: #212121;
-  --color-secondary: #8ff530;
+  --color-secondary: #ffd700;
   --color-background: #1f1f1f;
   --color-background-light: #42424250;
 
   --color-text: #b3c7cf;
   --color-text-muted: #a0a0a0;
-
-  /* shadcn variables mapped to our custom colors */
-  --background: 0 0% 12%;
-  --foreground: 196 18% 75%;
-  --card: 0 0% 13%;
-  --card-foreground: 196 18% 75%;
-  --popover: 0 0% 13%;
-  --popover-foreground: 196 18% 75%;
-  --primary: 0 0% 13%;
-  --primary-foreground: 196 18% 75%;
-  --secondary: 50 100% 50%;
-  --secondary-foreground: 0 0% 13%;
-  --muted: 0 0% 25%;
-  --muted-foreground: 0 0% 63%;
-  --accent: 0 0% 25%;
-  --accent-foreground: 196 18% 75%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 0 0% 25%;
-  --input: 0 0% 25%;
-  --ring: 50 100% 50%;
-  --radius: 0.5rem;
 }
 
 /* Customizing text selection */
@@ -52,23 +30,6 @@ h3 {
 
 * {
   color: inherit;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll 40s linear infinite;
 }
 
 /* Tailwind CSS */
