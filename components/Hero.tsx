@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useContent } from "@/hooks/useContent"
-import Image from "next/image"
 import { useContext } from "react"
 import { ModalContext } from "@/contexts/modalContext"
 import EarlyAdoptersModal from "@/components/EarlyAdoptersModal"
@@ -14,9 +13,9 @@ export default function Hero() {
   const { changeModal } = useContext(ModalContext)
   const [email, setEmail] = useState<string>("")
 
-  const handleJoinClick = () => {
-    changeModal(<EarlyAdoptersModal />)
-  }
+  // const handleJoinClick = () => {
+  //   changeModal(<EarlyAdoptersModal />)
+  // }
 
   return (
     <div className="relative bg-primary flex items-center justify-center overflow-hidden min-h-[calc(100vh-60px)] py-12 pt-20">
