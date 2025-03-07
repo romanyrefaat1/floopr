@@ -1,15 +1,15 @@
+import { auth } from "@clerk/nextjs/server";
 import { Product } from "../page";
-import FeedbackContent from "./feedback-content";
+import FeedbackNotOwner from "./feedback-not-owner";
 import FeedbackTabs from "./feedback-tabs";
 
-export default function FeedbackMain({productData}: {productData: Product}) {
+export default async function FeedbackMain({productData}: {productData: Product}) {
      // See if user is owner of product
-     const isOwner = true;
-     console.log(productData.docId)
+     const {userId} = await auth()
+     const isOwner = userId === productData.ownerId
      return (
         <div>
-            {isOwner && <FeedbackTabs productData={productData}/>}
-            {!isOwner && <FeedbackContent productId={productData.docId} productData={productData}/>}
+            <FeedbackTabs productData={productData} isOwner={isOwner}/>
         </div>
      )
 }

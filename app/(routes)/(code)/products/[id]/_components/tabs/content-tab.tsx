@@ -9,7 +9,6 @@ import {
   import {
     TabsContent,
   } from "@/components/ui/tabs";
-  import { Button } from "@/components/ui/button";
 import { Product } from "../../page";
 import FeedbackContentItems from "../feedback-content-items";
 
@@ -17,7 +16,6 @@ export default function ContentTab({productData}: {productData: Product}) {
     const productId = productData.docId
 
     return (
-        <TabsContent value="feedback-content">
         <Card>
           <CardHeader>
             <CardTitle>Feedback Content</CardTitle>
@@ -32,6 +30,5 @@ export default function ContentTab({productData}: {productData: Product}) {
             <Button>Save changes</Button>
           </CardFooter> */}
         </Card>
-      </TabsContent>
     )
 }

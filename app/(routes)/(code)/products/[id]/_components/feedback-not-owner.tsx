@@ -1,6 +1,6 @@
 import { Product } from "../page";
 
-export default function FeedbackContent({productData}: {productData: Product}) {
+export default function FeedbackNotOwner({productData}: {productData: Product}) {
     return (
         <div>
             Feedback Content

@@ -21,26 +21,26 @@ import ContentTab from "./tabs/content-tab";
 import { Product } from "../page";
 
 type FeedbackTabsClientProps = {
-  defaultFeedbackTab: string;
   productData: Product;
+  isOwner: boolean;
 };
 
-export function FeedbackTabsClient({ defaultFeedbackTab, productData }: FeedbackTabsClientProps) {
-  // Manage the active tab state on the client.
-  
-
+export function FeedbackTabsClient({ productData, isOwner=false }: FeedbackTabsClientProps) {
   return (
     <Tabs
-      defaultValue={defaultFeedbackTab}
-      // onValueChange={(val) => setActiveTab(val)}
       className="w-full"
     >
       <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger className="max-w-fit]"  value="feedback-content">Content</TabsTrigger>
-        <TabsTrigger value="feedback-analytics">Analytics</TabsTrigger>
+        <TabsTrigger className="max-w-fit]" value="feedback-content">Content</TabsTrigger>
+        {isOwner && <><TabsTrigger value="feedback-analytics">Analytics</TabsTrigger>
         <TabsTrigger value="feedback-settings">Settings</TabsTrigger>
+        </>}
       </TabsList>
+      <TabsContent value="feedback-content">
       <ContentTab productData={productData} />
+      </TabsContent>
+      {
+      isOwner && <>
       <TabsContent value="feedback-analytics">
         <Card>
           <CardHeader>
@@ -83,7 +83,8 @@ export function FeedbackTabsClient({ defaultFeedbackTab, productData }: Feedback
             <Button>Save password</Button>
           </CardFooter>
         </Card>
-      </TabsContent>
+      </TabsContent></>
+      }
     </Tabs>
   );
 }

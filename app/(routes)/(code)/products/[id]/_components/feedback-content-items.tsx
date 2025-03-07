@@ -1,4 +1,3 @@
-// FeedbackContentItems.tsx (Server Component)
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { Product } from "../page";
 import FeedbackItem from "./feedback-item";

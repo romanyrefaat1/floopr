@@ -19,9 +19,9 @@ export default function FeedbackItem({productData, feedbackData, isSimple=true, 
         <Link href={`/products/${productId}/feedback/${feedbackId}`}>
         <Card>
             <CardHeader>
-                {!isSimple &&<> <CardTitle className="truncate max-w-[50ch]">{feedbackData.title}</CardTitle>
+                {!isSimple &&<> <CardTitle className="truncate max-w-[1030ch]">{feedbackData.title}</CardTitle>
                 <CardDescription>{feedbackData.username}</CardDescription></>}
-                {isSimple && <CardTitle className="truncate max-w-[50ch]">{feedbackData.content}</CardTitle>}
+                {isSimple && <CardTitle className="truncate max-w-[20ch]">{feedbackData.content}</CardTitle>}
             </CardHeader>
             <CardDescription className="px-6 truncate max-w-[100ch]">
                 {feedbackData.description}
