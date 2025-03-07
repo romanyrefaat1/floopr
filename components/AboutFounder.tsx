@@ -31,7 +31,7 @@ export default function AboutFounder() {
           </div>
 
           <div className="prose prose-invert mx-auto mt-8">
-            <p className="text-text-muted leading-relaxed">{founder.story.background}</p>
+            {/* <p className="text-text-muted leading-relaxed">{founder.story.background}</p> */}
             <p className="text-text-muted leading-relaxed mt-4 font-medium">{founder.story.mission.title}</p>
             <ol className="text-text-muted list-decimal text-left pl-6 mt-4 space-y-2">
               {founder.story.mission.points.map((point, index) => (
