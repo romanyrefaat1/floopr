@@ -1,5 +1,8 @@
 
 const nextConfig = {
+  images: {
+    domains: ["img.clerk.com"],
+  },
   eslint: {
     // Skip ESLint during builds
     ignoreDuringBuilds: true,

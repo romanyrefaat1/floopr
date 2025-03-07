@@ -3,7 +3,6 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 import { MessageCircleIcon, ThumbsUpIcon } from "lucide-react";
 import Link from "next/link";
 import { Product } from "../page";
-import { string } from "zod";
 import { AdvancedFeedbackItemDataProps, SimpleFeedbackItemDataProps } from "@/actions/add-feedback";
 
 type FeedbackDataProps = {

@@ -9,6 +9,7 @@ import { useState } from "react";
 import LoaderSpinner from "@/components/loader-spinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 export default function AddFeedbackForm({
   primaryColor,
@@ -25,6 +26,8 @@ export default function AddFeedbackForm({
     const router = useRouter()
     const [content, setContent] = useState("d")
     const lightendPrimaryColor = lightenColor(primaryColor, 0)
+    const {user} = useUser()
+    console.log(user)
     const handleAddFeedback = async() => {
         // Add feedback logic here
         if (content.length < 10){
@@ -32,14 +35,17 @@ export default function AddFeedbackForm({
             return
         }
         setLoading(true)
-        const result = await addSimpleFeedback(productId, {
+        const result = await addSimpleFeedback({
             content: content,
-            userId: `userId`,
-            username: `username`
+            userId: user.id,
+            username: user.fullName,
+            profilePicture: user.imageUrl,
+            productId,
+            productName
         })
         if (result.success){
         toast.success(`Your feedback was added successfully!`)
-        router.push(`/products/${productId}/feedbacks/${result.feedbackId}`)
+        router.push(`/products/${productId}/feedback/${result.feedbackId}`)
         return;
         }
         toast.error(`Failed to add feedback.`)
