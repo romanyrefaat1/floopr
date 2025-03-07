@@ -52,8 +52,9 @@ export default function Hero() {
             >
               {hero.subheadline}
             </motion.p>
-
-            <EmailForm />
+            <div className="flex justify-center items-center">
+              <EmailForm />
+            </div>
           </motion.div>
 {/* 
           <motion.div

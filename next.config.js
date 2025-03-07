@@ -1,6 +1,11 @@
 const nextConfig = {
   images: {
-    domains: ["images.unsplash.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
   },
   eslint: {
     // Allows production builds to complete even if there are lint errors
