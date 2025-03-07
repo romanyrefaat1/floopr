@@ -6,6 +6,8 @@
 .env.local
 .env*.local
 
+firebase-admins-service-private-keys.json
+
 # dependencies
 /node_modules
 /.pnp

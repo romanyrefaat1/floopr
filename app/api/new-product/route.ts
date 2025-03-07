@@ -32,7 +32,7 @@ export async function POST(req: Request) {
     const docRef = doc(db, `products`, productDocId);
     await setDoc(docRef, {
       ...productData,
-      // ownerId: userId,
+      ownerId: userId,
       docId: productDocId,
     });
 

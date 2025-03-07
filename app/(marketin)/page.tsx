@@ -6,8 +6,10 @@ export default function Home() {
   const links = [
     { name: `home`, to: `/home` },
     { name: `current`, to: `/` },
-    { name: `signin`, to: `/signin` },
-    { name: `signup`, to: `/signup` },
+    { name: `sign-in`, to: `/sign-in` },
+    { name: `sign-up`, to: `/sign-up` },
+    { name: `products`, to: `/products` },
+    { name: `new product`, to: `/new` },
   ];
   return (
     <div>

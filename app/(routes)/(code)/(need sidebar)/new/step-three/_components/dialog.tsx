@@ -10,10 +10,12 @@ import {
     DialogDescription,
     DialogFooter,
   } from "@/components/ui/dialog";
-import { useAuth } from "@/contexts/auth-context";
 import { useNewProductFormContext } from "@/contexts/multistep-form-context";
+import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function DialogNotice() {
     const router = useRouter()
@@ -22,11 +24,25 @@ export default function DialogNotice() {
     const [submitLoadin, setSubmitLoadin] = useState(false);
     const [error, setError] = useState(null);
 
+    const {userId} = useAuth();
+
+    if (!userId) {
+      toast.error("User is not authenticated");
+      return null;
+    }
 
     const handleNext = async () => {
         setSubmitLoadin(true);
+
+        if (productForm.name.length === 0) {
+            toast.error("Error: Product name is required, you will be redirected to add a name.");
+            router.push("/new/step-one/");
+            setSubmitLoadin(false);
+            return;
+        }
+        
         try {
-            const formData = productForm;
+            const formData = {...productForm, ownerId: userId};
             console.log("Form data before submission:", formData);
             const response = await createNewProduct(formData);
 

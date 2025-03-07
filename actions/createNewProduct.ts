@@ -1,4 +1,6 @@
-export default async function createNewProduct(data: object) {
+export default async function createNewProduct(dataProps: object) {
+  const data = { ...dataProps };
+  
   try {
     const response = await fetch(
       `/api/new-product`,

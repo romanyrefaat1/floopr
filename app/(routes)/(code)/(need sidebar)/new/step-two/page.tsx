@@ -118,7 +118,6 @@ const animationOptions = [
 const Step2StyleProduct = () => {
   const { productForm, updateProductForm } = useNewProductFormContext();
   const router = useRouter();
-  const {userId} = useAuth()
   const [localPreview, setLocalPreview] = useState(null);
   const [isSubmitLoadin, setSubmitLoadin] = useState(false);
 
@@ -191,7 +190,8 @@ const Step2StyleProduct = () => {
 
   async function onSubmit(values: ProductStyleForm) {
     try {
-      // Clear any pending debounce timer
+      router.push("/new/step-three");
+
       setSubmitLoadin(true);
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
@@ -202,11 +202,11 @@ const Step2StyleProduct = () => {
       updateProductForm({ style: values });
       const data = productForm;
       console.log("Form data before submission:", data);
-      const response = await createNewProduct(data, userId);
-      if (response.ok) {
-        console.log("Product created, attempting to navigate");
-        router.push("/new/step-three/");
-      }
+      // const response = await createNewProduct(data);
+      // if (response.ok) {
+      //   console.log("Product created, attempting to navigate");
+      //   router.push("/new/step-three/");
+      // }
       
       setSubmitLoadin(false);
     } catch (error) {
