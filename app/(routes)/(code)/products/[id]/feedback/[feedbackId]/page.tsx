@@ -1,15 +1,18 @@
 import LoaderSpinner from "@/components/loader-spinner";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { addLikeToFeedbackItem } from "@/lib/feedback-item/like-to-feedback-item";
 import { db } from "@/lib/firebase";
 import { doc, getDoc, getDocs, query } from "firebase/firestore";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MessageCircleIcon, ThumbsUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import LikeButton from "./_components/like-button";
 
 export default async function FeedbackSpecialPage({params}: {params: {id: string}}) {
-    const {feedbackId, id: productId} = params;
+    const {feedbackId, id: productId} = await params;
     const feedbackRef = doc(db, "products", productId, "feedbacks", feedbackId);
     const feedbackSnap = await getDoc(feedbackRef);
     if (!feedbackSnap.exists()) {
@@ -18,7 +21,7 @@ export default async function FeedbackSpecialPage({params}: {params: {id: string
 
     const feedbackData = feedbackSnap.data();
 
-
+        
     return (
         <main>
             {/* User Data */}
@@ -49,7 +52,18 @@ export default async function FeedbackSpecialPage({params}: {params: {id: string
                 <p>{feedbackData.description}</p>
             </article>}
             </Suspense>
-            
+            <div className="flex gap-2">
+                <div>
+                <LikeButton likesCount={feedbackData.socialData.likes.count}productId={productId} feedbackId={feedbackId}/>
+                 </div>
+                <div>
+                <Button variant="outline" className="p-2 border-none">
+                    <MessageCircleIcon />
+                    {` `}
+                    <Suspense fallback={<Skeleton className="h-[20px] w-[20px] rounded" />}><span>{feedbackData.socialData.comments.count}</span></Suspense>
+                </Button>
+                </div>
+            </div>
         </main>
     )
 }

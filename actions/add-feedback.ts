@@ -40,6 +40,16 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
       doc(db, "products", productId, "feedbacks", feedbackId),
       {
         type: `simple`,
+        socialData: {
+          likes: {
+            count: 0,
+            data: []
+          },
+          comments: {
+            count: 0,
+            data: []
+          }
+        },
         content,
         userId,
         username,
