@@ -83,8 +83,8 @@ export default function FAQ() {
           <h1 className="text-4xl font-bold text-text mb-4">{faq.title}</h1>
           <p className="text-text-muted">
             {faq.contact.text}{" "}
-            <a className="text-text underline" href={`mailto:${faq.contact.email}`}>
-              Email
+            <a className="text-text underline" href={`x.com/romanyrefaat_`}>
+              X
             </a>
           </p>
         </motion.div>
