@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import ProgressBar from "./progress-bar"
 
 export default function EmailForm() {
 
@@ -23,7 +24,8 @@ export default function EmailForm() {
     }
 
   return (
-    <form className="flex w-full md:w-[500px] items-center gap-x-2" onSubmit={(e)=>handleJoinClick(e)}>
+    <div className="flex flex-col  w-full md:w-fit">
+    <form className="flex mb-4 w-full md:w-[500px] items-center gap-x-2" onSubmit={(e)=>handleJoinClick(e)}>
         <input type="email" onChange={(e) => setEmail(e.target.value)} value={email} placeholder="Email Address" className="w-full text-text flex-1 px-6 py-3 border border-secondary rounded-md text-sm font-semibold bg-background text-primary hover:bg-secondary/90" />
       <button
             className="px-6 py-3 w-fit rounded-md text-sm font-semibold bg-secondary text-primary hover:bg-secondary/40"
@@ -32,5 +34,7 @@ export default function EmailForm() {
             Join Waitlist
           </button>
     </form>
+          <ProgressBar />
+    </div>
   )
 }

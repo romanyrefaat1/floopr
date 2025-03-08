@@ -20,7 +20,7 @@ const DetailedFeature = ({
   return (
     <motion.div className="p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <motion.h3
-        className="text-2xl font-semibold text-text mb-4"
+        className="text-2xl leading-8 font-semibold text-text mb-4"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -80,7 +80,7 @@ export default function Features() {
 
   return (
     <section className="bg-primary py-12 md:py-24" id="features">
-      <div className="container mx-auto max-w-7xl">
+      <div className="container mx-auto max-w-9xl">
         <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
