@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/lib/firebase"; // Ensure your Firestore is properly initialized
 
 export default function ProgressBar() {
-  const [num, setNum] = useState(60);
+  const [num, setNum] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
