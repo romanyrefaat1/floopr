@@ -26,6 +26,7 @@ export default function RootLayout({
           <ModalProvider>{children}</ModalProvider>
         </ContentProvider>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
