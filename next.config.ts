@@ -12,10 +12,6 @@ const nextConfig: NextConfig = {
     // Skip type checking during builds
     ignoreBuildErrors: true,
   },
-  experimental: {
-    // Enable App directory routing
-    appDir: true,
-  },
   output: 'standalone',
   // Configure redirects for compatibility
   // async redirects() {

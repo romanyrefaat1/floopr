@@ -3,7 +3,7 @@ import { Product } from "../page";
 import FeedbackItem from "./feedback-item";
 import { db } from "@/lib/firebase";
 
-export default async function FeedbackContentItems({productData, productId}: {productData: Product, productId: string}) {
+export default async function FeedbackContentItems({productData, productId, isOwner=false}: {productData: Product, productId: string, isOwner: boolean}) {
   const response = query(
     collection(db, `products`, productId, `feedbacks`)
     // where("createdAt", ">", 0)
@@ -20,7 +20,7 @@ export default async function FeedbackContentItems({productData, productId}: {pr
       <ul>
         {feedbacksSnap.docs.map((doc) => (
           <li key={doc.id}>
-            <FeedbackItem productData={productData} feedbackData={doc.data()} isSimple={true} feedbackId={doc.id} />
+            <FeedbackItem isOwner={isOwner} productData={productData} feedbackData={doc.data()} isSimple={true} feedbackId={doc.id} />
           </li>
         ))}
       </ul>

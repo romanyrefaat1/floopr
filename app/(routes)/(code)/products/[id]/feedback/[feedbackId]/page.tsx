@@ -10,6 +10,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import LikeButton from "./_components/like-button";
+import CommentButton from "./_components/comment-button";
+import CommentInput from "./_components/comment-input";
+import RepliesList from "./_components/replies-list";
 
 export default async function FeedbackSpecialPage({params}: {params: {id: string}}) {
     const {feedbackId, id: productId} = await params;
@@ -53,17 +56,17 @@ export default async function FeedbackSpecialPage({params}: {params: {id: string
             </article>}
             </Suspense>
             <div className="flex gap-2">
-                <div>
-                <LikeButton likesCount={feedbackData.socialData.likes.count}productId={productId} feedbackId={feedbackId}/>
+                <div>   
+                    <LikeButton likesCount={feedbackData.socialData?.likes?.count}productId={productId} feedbackId={feedbackId}/>
                  </div>
                 <div>
-                <Button variant="outline" className="p-2 border-none">
-                    <MessageCircleIcon />
-                    {` `}
-                    <Suspense fallback={<Skeleton className="h-[20px] w-[20px] rounded" />}><span>{feedbackData.socialData.comments.count}</span></Suspense>
-                </Button>
+                    <CommentButton feedbackId={feedbackId} productId={productId} />
                 </div>
             </div>
+                <div>
+                    <CommentInput productId={productId} feedbackId={feedbackId}/>
+                    <RepliesList productId={productId} feedbackId={feedbackId}/>
+                </div>
         </main>
     )
 }

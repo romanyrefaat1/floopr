@@ -29,6 +29,7 @@ export function FeedbackTabsClient({ productData, isOwner=false }: FeedbackTabsC
   return (
     <Tabs
       className="w-full"
+      defaultValue="feedback-content"
     >
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger className="max-w-fit]" value="feedback-content">Content</TabsTrigger>
@@ -37,7 +38,7 @@ export function FeedbackTabsClient({ productData, isOwner=false }: FeedbackTabsC
         </>}
       </TabsList>
       <TabsContent value="feedback-content">
-      <ContentTab productData={productData} />
+      <ContentTab isOwner={isOwner} productData={productData} />
       </TabsContent>
       {
       isOwner && <>
