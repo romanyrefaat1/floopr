@@ -49,8 +49,30 @@ export type Product = {
 }
     */}
 
-const ProductPaSpecial = async({params}) => {
-    const {id} = await params
+    export type FilterData = {
+        filter: string | null;
+        quick: string | null;
+        specifiedDate: string | null;
+    };
+    
+const ProductPaSpecial = async ({params, searchParams}: {params: {id: string}, searchParams: {filter: string | null, quick: string | null, date: string | null}}) => {
+    const { id } = params;
+    const filter = searchParams.filter || null;
+    const quick = searchParams.quick || null;
+    const date = searchParams.date || null;
+
+    // For server-side debugging, use console.log on the server
+    // console.log("Request parameters:", { id, filter, quick, date });
+    console.log("filter from params:", filter);
+console.log("quick from params:", quick);
+console.log("date from params:", date);
+
+    const filterData = {
+        filter,
+        quick,
+        specifiedDate: date,
+    };
+    console.log("filterData:", JSON.stringify(filterData));
 
     const productDataFromServer = await getProductData(id)
     const secondaryTextColor = lightenColor(productDataFromServer.style.textColor, 20);
@@ -79,7 +101,7 @@ const ProductPaSpecial = async({params}) => {
         primaryColor={productData.style.primaryColor}
         productName={productData.name} />
         </div>
-        <FeedbackMain productData={productData} />
+        <FeedbackMain filter={filterData} productData={productData} />
         </main>)
 }
 

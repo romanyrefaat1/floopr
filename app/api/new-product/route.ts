@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   let productDocId;
   try {
     const { productData } = await req.json();
-    console.log(`productData`, productData);
+    // console.log(`productData`, productData);
 
     if (!productData) {
       return NextResponse.json(

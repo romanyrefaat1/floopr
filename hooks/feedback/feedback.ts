@@ -51,7 +51,7 @@ export function useFeedbackItem(productId: string, feedbackId: string) {
         // Cleanup listener on unmount
         return () => unsubscribe();
     }, [productId, feedbackId]);
-    console.log(`feeback ook`, feedback)
+    // console.log(`feeback ook`, feedback)
 
     return { feedback, loading, error };
 }

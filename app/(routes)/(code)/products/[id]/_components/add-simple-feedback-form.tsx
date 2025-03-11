@@ -27,7 +27,7 @@ export default function AddFeedbackForm({
     const [content, setContent] = useState("d")
     const lightendPrimaryColor = lightenColor(primaryColor, 0)
     const {user} = useUser()
-    console.log(user)
+    // console.log(user)
     const handleAddFeedback = async() => {
         // Add feedback logic here
         if (content.length < 10){

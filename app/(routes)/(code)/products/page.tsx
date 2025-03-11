@@ -12,7 +12,7 @@ const ProductsPa = async () => {
 
   return (
     <SidebarProvider defaultOpen={defaultOpen}>
-      <div className="border-[red] flex bg-red-500">
+      <div className="border-[red] flex">
         <AppSidebar />
       <div className="z-[999]">
         <SidebarTrigger />

@@ -21,7 +21,7 @@ export default function useProductItemData(productId: string) {
         };
         fetchProductData();
     },[productId])
-    console.log(`productData`, productData)
+    // console.log(`productData`, productData)
 
     return { productData, loading }
 }

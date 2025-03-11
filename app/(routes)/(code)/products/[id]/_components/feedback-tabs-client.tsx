@@ -18,14 +18,15 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import ContentTab from "./tabs/content-tab";
-import { Product } from "../page";
+import { FilterData, Product } from "../page";
 
 type FeedbackTabsClientProps = {
   productData: Product;
   isOwner: boolean;
+  filter: FilterData;
 };
 
-export function FeedbackTabsClient({ productData, isOwner=false }: FeedbackTabsClientProps) {
+export function FeedbackTabsClient({ productData, isOwner=false, filter }: FeedbackTabsClientProps) {
   return (
     <Tabs
       className="w-full"
@@ -38,7 +39,7 @@ export function FeedbackTabsClient({ productData, isOwner=false }: FeedbackTabsC
         </>}
       </TabsList>
       <TabsContent value="feedback-content">
-      <ContentTab isOwner={isOwner} productData={productData} />
+      <ContentTab isOwner={isOwner} productData={productData} filterData={filter} />
       </TabsContent>
       {
       isOwner && <>
