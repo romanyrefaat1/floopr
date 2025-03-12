@@ -57,6 +57,11 @@ export type Product = {
     
 const ProductPaSpecial = async ({params, searchParams}: {params: {id: string}, searchParams: {filter: string | null, quick: string | null, date: string | null}}) => {
     const { id } = params;
+
+    // Check if product exists
+    const productDataFromServer = await getProductData(id)
+    if (!productDataFromServer) notFound()
+    
     const filter = searchParams.filter || null;
     const quick = searchParams.quick || null;
     const date = searchParams.date || null;
@@ -74,7 +79,6 @@ console.log("date from params:", date);
     };
     console.log("filterData:", JSON.stringify(filterData));
 
-    const productDataFromServer = await getProductData(id)
     const secondaryTextColor = lightenColor(productDataFromServer.style.textColor, 20);
     const productData = {
         ...productDataFromServer,

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/tabs";
 import ContentTab from "./tabs/content-tab";
 import { FilterData, Product } from "../page";
+import FeedbackIntegrationsTab from "./tabs/feedback-integrations-tab";
 
 type FeedbackTabsClientProps = {
   productData: Product;
@@ -34,7 +35,9 @@ export function FeedbackTabsClient({ productData, isOwner=false, filter }: Feedb
     >
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger className="max-w-fit]" value="feedback-content">Content</TabsTrigger>
-        {isOwner && <><TabsTrigger value="feedback-analytics">Analytics</TabsTrigger>
+        {isOwner && <>
+        {/* <TabsTrigger value="feedback-analytics">Analytics</TabsTrigger> */}
+        <TabsTrigger value="feedback-integrations">Integrations</TabsTrigger>
         <TabsTrigger value="feedback-settings">Settings</TabsTrigger>
         </>}
       </TabsList>
@@ -62,6 +65,9 @@ export function FeedbackTabsClient({ productData, isOwner=false, filter }: Feedb
             </div>
           </CardContent>
         </Card>
+      </TabsContent>
+      <TabsContent value="feedback-integrations" className="p-4">
+        <FeedbackIntegrationsTab productData={productData} />
       </TabsContent>
       <TabsContent value="feedback-settings">
         <Card>

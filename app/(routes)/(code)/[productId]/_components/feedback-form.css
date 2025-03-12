@@ -1,0 +1,110 @@
+/* feedback-form.css */
+
+.product-style-root {
+  /* All CSS variables are defined in the root element by the provider */
+}
+
+.feedback-form-container {
+  background-color: var(--product-bg-color);
+  font-family: var(--product-font-family);
+  color: var(--product-text-color);
+  font-size: var(--product-font-size);
+  border-radius: var(--product-border-radius);
+  padding: var(--product-spacing, 1rem);
+  box-shadow: var(--product-shadow, none);
+}
+
+.feedback-form {
+  display: var(--product-layout, grid);
+  gap: var(--product-spacing, 1rem);
+}
+
+.feedback-form-title {
+  font-weight: var(--product-heading-style, bold);
+  color: var(--product-primary-color);
+  margin-bottom: calc(var(--product-spacing, 1rem) * 1.5);
+}
+
+.feedback-form-item {
+  margin-bottom: var(--product-spacing, 1rem);
+}
+
+.feedback-form-label {
+  color: var(--product-text-color);
+  display: block;
+  margin-bottom: calc(var(--product-spacing, 1rem) * 0.5);
+}
+
+.feedback-form-input,
+.feedback-form-textarea,
+.feedback-form-select {
+  background-color: var(--product-bg-color);
+  color: var(--product-text-color);
+  border: 1px solid var(--product-secondary-color);
+  border-radius: var(--product-border-radius);
+  padding: calc(var(--product-spacing, 1rem) * 0.5);
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.feedback-form-input:focus,
+.feedback-form-textarea:focus,
+.feedback-form-select:focus {
+  border-color: var(--product-primary-color);
+  box-shadow: 0 0 0 2px var(--product-primary-color, #0000ff33);
+  outline: none;
+}
+
+.feedback-form-textarea {
+  min-height: 100px;
+}
+
+.feedback-form-select-content {
+  background-color: var(--product-bg-color);
+  color: var(--product-text-color);
+  border-radius: var(--product-border-radius);
+  border: 1px solid var(--product-secondary-color);
+}
+
+.feedback-form-select-item {
+  color: var(--product-text-color);
+}
+
+.feedback-form-select-item:hover {
+  background-color: var(--product-secondary-color);
+}
+
+.feedback-form-submit-button {
+  background-color: var(--product-primary-color);
+  color: white; /* Use a contrasting color for button text */
+  border: none;
+  border-radius: var(--product-border-radius);
+  padding: calc(var(--product-spacing, 1rem) * 0.5) var(--product-spacing, 1rem);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: var(--product-shadow, none);
+}
+
+.feedback-form-submit-button:hover {
+  background-color: var(--product-accent-color);
+  box-shadow: 0 0 0 2px var(--product-accent-color, #0000ff33);
+}
+
+/* Add animation if specified */
+.feedback-form-container[style*="--product-animation:fade"] {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.feedback-form-container[style*="--product-animation:slide"] {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
