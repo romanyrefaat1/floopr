@@ -1,67 +1,62 @@
 
-import { 
-  MessageSquare, 
-  Layout, 
-  Zap, 
-  Settings, 
-  Star, 
-  Shield 
-} from 'lucide-react';
-import FeatureCard from './ui/FeatureCard';
+import React from 'react';
+import Feature from './Feature';
+import FeedbackWidget from './ui/illustrations/FeedbackWidget';
+import FeedbackBoard from './ui/illustrations/FeedbackBoard';
+import ProductRoadmap from './ui/illustrations/ProductRoadmap';
+import Changelog from './ui/illustrations/Changelog';
 
 const Features = () => {
   const features = [
     {
-      title: "Collect Feedback",
-      description: "Gather user feedback and feature requests through customizable forms and widgets.",
-      icon: MessageSquare
+      title: "Feedback Boards",
+      description: "Gather user feedback and upvotes. Know what to build next. Let users submit feedback or upvote on posts on your own personalized boards.",
+      image: <FeedbackBoard />,
+      reversed: false
     },
     {
-      title: "Embeddable Components",
-      description: "Add feedback forms to your website or app with just a few lines of code.",
-      icon: Layout
+      title: "Feedback Widget",
+      description: "Collect user feedback from everywhere. Embed it on your website, within your product, or anywhere you want! Users can describe problems with screenshots and more.",
+      image: <FeedbackWidget />,
+      reversed: true
     },
     {
-      title: "API Rewards",
-      description: "Reward users automatically after they submit feedback with our simple API.",
-      icon: Zap
+      title: "Product Roadmap",
+      description: "Share your progress in one single overview. Show users what you're working on and what they can expect next. Keep them informed about every step of your development process.",
+      image: <ProductRoadmap />,
+      reversed: false
     },
     {
-      title: "Highly Customizable",
-      description: "Create and host feedback pages that match your brand's look and feel.",
-      icon: Settings
-    },
-    {
-      title: "User Voting",
-      description: "Let users vote on features to help you prioritize your roadmap.",
-      icon: Star
-    },
-    {
-      title: "Moderation",
-      description: "Approve content before it goes public to maintain quality.",
-      icon: Shield
+      title: "Changelog",
+      description: "Share all of your releases and updates in one single overview. Instantly notify users when new releases are added to the Changelog and keep them engaged with your product journey.",
+      image: <Changelog />,
+      reversed: true
     }
   ];
 
   return (
     <section id="features" className="section-container">
       <div className="text-center mb-16 animate-on-scroll">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Everything you need to collect <span className="highlight-text">actionable feedback</span>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 relative inline-block">
+          Features
+          <svg className="absolute -right-10 -top-10 w-24 h-24 opacity-20 text-floopr-purple" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,10 Q50,5 70,20 Q90,40 80,70 Q70,90 40,85 Q10,80 10,50 Q10,20 30,10" stroke="currentColor" strokeWidth="4" fill="none" />
+          </svg>
         </h2>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-          Floopr provides all the tools you need to gather, organize, and analyze user feedback.
+        <p className="text-xl text-black max-w-3xl mx-auto">
+          Powerful tools to collect, organize, and act on user feedback
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="space-y-20">
         {features.map((feature, index) => (
-          <FeatureCard
+          <Feature
             key={index}
             title={feature.title}
             description={feature.description}
-            icon={feature.icon}
-            delay={index * 100}
+            image={feature.image}
+            reversed={feature.reversed}
+            index={index}
           />
         ))}
       </div>

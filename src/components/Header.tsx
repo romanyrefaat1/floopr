@@ -18,6 +18,10 @@ const Header = () => {
     };
   }, []);
 
+  const handleWaitlistClick = () => {
+    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -40,6 +44,9 @@ const Header = () => {
             <a href="#features" className="text-sm font-medium hover:text-floopr-purple transition-colors">
               Features
             </a>
+            <a href="#benefits" className="text-sm font-medium hover:text-floopr-purple transition-colors">
+              Benefits
+            </a>
             <a href="#how-it-works" className="text-sm font-medium hover:text-floopr-purple transition-colors">
               How it works
             </a>
@@ -52,6 +59,7 @@ const Header = () => {
             <Button 
               variant="default" 
               className="bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full"
+              onClick={handleWaitlistClick}
             >
               Join Waitlist
             </Button>
@@ -84,6 +92,13 @@ const Header = () => {
               Features
             </a>
             <a
+              href="#benefits"
+              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Benefits
+            </a>
+            <a
               href="#how-it-works"
               className="block px-3 py-2 rounded-md text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple"
               onClick={() => setIsMobileMenuOpen(false)}
@@ -101,6 +116,10 @@ const Header = () => {
               <Button 
                 variant="default" 
                 className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleWaitlistClick();
+                }}
               >
                 Join Waitlist
               </Button>

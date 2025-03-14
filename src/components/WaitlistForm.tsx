@@ -30,6 +30,9 @@ const WaitlistForm = () => {
       });
       setEmail('');
       setIsSubmitting(false);
+      
+      // Scroll to features section
+      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
     }, 1000);
   };
   
@@ -55,7 +58,7 @@ const WaitlistForm = () => {
           {isSubmitting ? 'Joining...' : 'Join Waitlist'}
         </Button>
       </div>
-      <p className="text-xs text-gray-500 mt-2 text-center sm:text-left">
+      <p className="text-xs text-black mt-2 text-center sm:text-left">
         We'll keep you updated on our launch. No spam, we promise!
       </p>
     </form>

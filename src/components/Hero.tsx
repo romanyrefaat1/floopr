@@ -1,6 +1,8 @@
 
 import { ArrowRight, Sparkles } from 'lucide-react';
 import WaitlistForm from './WaitlistForm';
+import ScribbleHighlight from './ui/ScribbleHighlight';
+import CircleScribble from './ui/CircleScribble';
 
 const Hero = () => {
   return (
@@ -18,17 +20,20 @@ const Hero = () => {
             <span className="text-sm font-medium text-floopr-purple-dark">Early waitlist open</span>
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 max-w-4xl">
-            Collect and manage feedback <span className="highlight-underline">effortlessly</span>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-4xl">
+            Collect and manage feedback <span className="relative">
+              <ScribbleHighlight>effortlessly</ScribbleHighlight>
+              <CircleScribble className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-20 opacity-10" />
+            </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mb-8">
+          <p className="text-xl md:text-2xl text-black max-w-3xl mb-8">
             The all-in-one platform to collect, organize, and act on user feedback
           </p>
           
           <WaitlistForm />
           
-          <div className="flex items-center justify-center mt-8 text-sm text-gray-500">
+          <div className="flex items-center justify-center mt-8 text-sm text-black">
             <div className="flex -space-x-2 mr-3">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-medium">
@@ -55,7 +60,7 @@ const Hero = () => {
       <div className="flex justify-center mt-16">
         <a 
           href="#features" 
-          className="inline-flex items-center text-sm font-medium text-floopr-purple hover:text-floopr-purple-dark transition-colors"
+          className="inline-flex items-center text-base font-medium text-floopr-purple hover:text-floopr-purple-dark transition-colors"
         >
           <span>Discover features</span>
           <ArrowRight className="ml-2 h-4 w-4" />

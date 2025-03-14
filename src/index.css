@@ -68,6 +68,14 @@
   body, html {
     @apply overflow-x-hidden;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-black tracking-tight;
+  }
+
+  p {
+    @apply text-black;
+  }
 }
 
 @layer components {
