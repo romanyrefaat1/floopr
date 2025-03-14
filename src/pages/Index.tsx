@@ -23,7 +23,7 @@ const Index = () => {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
     );
 
     // Observe all elements with animate-on-scroll class
@@ -31,7 +31,9 @@ const Index = () => {
     animatedElements?.forEach((el) => observer.observe(el));
 
     return () => {
-      animatedElements?.forEach((el) => observer.unobserve(el));
+      if (animatedElements) {
+        animatedElements.forEach((el) => observer.unobserve(el));
+      }
     };
   }, []);
 

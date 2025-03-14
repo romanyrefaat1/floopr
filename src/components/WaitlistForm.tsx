@@ -58,7 +58,7 @@ const WaitlistForm = () => {
           {isSubmitting ? 'Joining...' : 'Join Waitlist'}
         </Button>
       </div>
-      <p className="text-xs text-black mt-2 text-center sm:text-left">
+      <p className="text-xs text-black mt-2 text-center sm:text-center">
         We'll keep you updated on our launch. No spam, we promise!
       </p>
     </form>

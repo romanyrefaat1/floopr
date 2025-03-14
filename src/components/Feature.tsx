@@ -1,8 +1,5 @@
 
 import React from 'react';
-import ScribbleHighlight from './ui/ScribbleHighlight';
-import CircleScribble from './ui/CircleScribble';
-import DoobleArrow from './ui/DoobleArrow';
 
 interface FeatureProps {
   title: string;
@@ -10,35 +7,30 @@ interface FeatureProps {
   image: React.ReactNode;
   reversed?: boolean;
   index: number;
+  callout?: string;
 }
 
-const Feature = ({ title, description, image, reversed = false, index }: FeatureProps) => {
+const Feature = ({ title, description, image, reversed = false, index, callout }: FeatureProps) => {
   return (
     <div 
-      className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-10 lg:gap-16 py-16 animate-on-scroll`} 
-      style={{ animationDelay: `${index * 100}ms` }}
+      className={`flex flex-col ${reversed ? 'md:flex-row-reverse' : 'md:flex-row'} gap-8 md:gap-12 items-center animate-on-scroll`}
+      style={{ animationDelay: `${index * 0.2}s` }}
     >
-      <div className="flex-1">
-        <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 relative">
-          <ScribbleHighlight>{title}</ScribbleHighlight>
-          <CircleScribble className={`-z-10 opacity-20 ${reversed ? '-right-10 top-1/2 -translate-y-1/2' : '-left-10 top-1/2 -translate-y-1/2'}`} />
-        </h3>
-        <p className="text-lg text-black leading-relaxed mb-8">{description}</p>
-        
-        <div className="flex items-center">
-          <a href="#" className="font-medium text-floopr-purple flex items-center">
-            Learn more
-            <DoobleArrow className="ml-2 w-8 h-5" />
-          </a>
+      <div className="w-full md:w-1/2">
+        <div className="max-w-lg">
+          <h3 className="text-3xl font-bold mb-4 text-black">{title}</h3>
+          <p className="text-lg text-black mb-6">{description}</p>
+          
+          {callout && (
+            <div className="inline-block rounded-xl bg-floopr-purple/10 px-4 py-2 font-medium text-floopr-purple border border-floopr-purple/20 mt-4">
+              {callout}
+            </div>
+          )}
         </div>
       </div>
       
-      <div className="flex-1 relative">
+      <div className="w-full md:w-1/2 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg">
         {image}
-        <DoobleArrow 
-          className={`absolute ${reversed ? '-left-12 top-1/2 -translate-y-1/2' : '-right-12 top-1/2 -translate-y-1/2'} hidden md:block`} 
-          direction={reversed ? 'left' : 'right'}
-        />
       </div>
     </div>
   );

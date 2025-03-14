@@ -19,7 +19,7 @@ const Header = () => {
   }, []);
 
   const handleWaitlistClick = () => {
-    document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -68,7 +68,8 @@ const Header = () => {
           <div className="flex md:hidden">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-700 hover:text-floopr-purple transition-colors p-2 rounded-full hover:bg-floopr-purple-bg"
+              aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -83,39 +84,39 @@ const Header = () => {
       {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-xl rounded-b-xl border-t border-gray-100">
             <a
               href="#features"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple"
+              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Features
             </a>
             <a
               href="#benefits"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple"
+              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Benefits
             </a>
             <a
               href="#how-it-works"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple"
+              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               How it works
             </a>
             <a
               href="#testimonials"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple"
+              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Testimonials
             </a>
-            <div className="px-3 py-2">
+            <div className="p-4">
               <Button 
                 variant="default" 
-                className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full"
+                className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full py-6 h-auto"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   handleWaitlistClick();

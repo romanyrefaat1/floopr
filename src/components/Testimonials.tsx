@@ -3,19 +3,22 @@ import { useEffect, useRef } from 'react';
 
 const testimonials = [
   {
-    quote: "Floopr has transformed how we collect feedback. It's intuitive, beautiful, and our users love it!",
-    author: "Sarah Johnson",
-    role: "Product Manager at Acme"
+    quote: "I just love how the Floopr feedback widget helps us proactively gather feedback.",
+    author: "Matthias",
+    role: "CountdownTimer",
+    avatar: "/lovable-uploads/d7f871f8-474a-41b1-ac00-838455185d85.png"
   },
   {
-    quote: "Setting up our feedback portal took less than 10 minutes. Now we're getting insights we never had before.",
-    author: "Michael Chen",
-    role: "Founder of StartupX"
+    quote: "The feedback started rolling in almost immediately, which feels like I'm directly chatting with my users.",
+    author: "Robin Delta",
+    role: "ShortMagic",
+    avatar: "/lovable-uploads/e7a3d9a5-7887-47e8-a393-e9759f4ddcd2.png"
   },
   {
-    quote: "The embeddable widgets are a game-changer. Our user engagement has increased by 40% since implementation.",
-    author: "Emily Rodriguez",
-    role: "UX Director at TechCorp"
+    quote: "Simple yet powerful. Exactly the no-frills feedback tool I needed.",
+    author: "Peter",
+    role: "IndieCourse",
+    avatar: "/lovable-uploads/134bb789-6f30-4816-aba0-0ac863415f3d.png"
   }
 ];
 
@@ -44,38 +47,53 @@ const Testimonials = () => {
   }, []);
 
   return (
-    <section id="testimonials" className="bg-floopr-purple-bg py-20" ref={sectionRef}>
+    <section id="testimonials" className="py-24 relative" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 animate-on-scroll">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="text-center mb-16 animate-on-scroll">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 relative inline-block">
             Loved by product teams
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-black max-w-2xl mx-auto font-medium">
             See what our early users are saying about Floopr
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <div 
-              key={index} 
-              className="glass-card p-8 animate-on-scroll"
-              style={{ animationDelay: `${index * 150}ms` }}
-            >
-              <div className="flex mb-6">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400" />
-                ))}
+        <div className="relative max-w-5xl mx-auto p-8 border border-gray-100 rounded-2xl bg-white shadow-xl animate-on-scroll">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div 
+                key={index} 
+                className="flex flex-col items-center text-center"
+                style={{ animationDelay: `${index * 150}ms` }}
+              >
+                <div className="w-24 h-24 rounded-full overflow-hidden mb-6 border-2 border-floopr-purple/20">
+                  <img 
+                    src={testimonial.avatar} 
+                    alt={testimonial.author} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                
+                <div className="flex mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-yellow-400" />
+                  ))}
+                </div>
+                
+                <p className="text-black font-medium mb-6">"{testimonial.quote}"</p>
+                
+                <div>
+                  <p className="font-bold text-lg">{testimonial.author}</p>
+                  <p className="text-gray-600">{testimonial.role}</p>
+                </div>
               </div>
-              <p className="text-gray-700 mb-6">"{testimonial.quote}"</p>
-              <div>
-                <p className="font-medium">{testimonial.author}</p>
-                <p className="text-sm text-gray-500">{testimonial.role}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
+      
+      <div className="absolute top-1/4 left-0 w-64 h-64 bg-floopr-purple/5 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-1/4 right-0 w-64 h-64 bg-floopr-purple/5 rounded-full blur-3xl -z-10"></div>
     </section>
   );
 };

@@ -1,14 +1,43 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import CircleScribble from './ui/CircleScribble';
 import DoobleArrow from './ui/DoobleArrow';
+import { toast } from '@/components/ui/use-toast';
 
 const CallToAction = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "Please enter a valid email",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+      toast({
+        title: "Success!",
+        description: "You've been added to our waitlist. We'll keep you updated!",
+      });
+      setEmail('');
+      setIsSubmitting(false);
+    }, 1000);
+  };
+
   return (
     <section className="py-20 md:py-32 overflow-hidden relative" id="cta">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 relative inline-block">
+        <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 relative inline-block">
           Start Building 
           <br />
           Things Your Users
@@ -19,24 +48,32 @@ const CallToAction = () => {
           </span>
         </h2>
         
-        <div className="relative inline-block mt-10 md:mt-14">
-          <Button 
-            size="lg"
-            className="bg-floopr-purple hover:bg-floopr-purple-dark text-white text-lg px-10 py-6 h-auto rounded-full relative z-10"
-            onClick={() => {
-              document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
-            START YOUR FREE TRIAL
-          </Button>
+        <div className="max-w-md mx-auto mt-10 md:mt-14">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+            <div className="relative flex items-center">
+              <DoobleArrow className="absolute -left-16 top-1/2 -translate-y-1/2 hidden md:block" />
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-14 rounded-full bg-white border-gray-200 focus:border-floopr-purple focus:ring-2 focus:ring-floopr-purple pr-36 text-base shadow-lg"
+              />
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="absolute right-1 bg-floopr-purple hover:bg-floopr-purple-dark text-white font-medium h-12 px-6 rounded-full text-base"
+              >
+                {isSubmitting ? 'Joining...' : 'Join Waitlist'}
+              </Button>
+              <DoobleArrow className="absolute -right-16 top-1/2 -translate-y-1/2 hidden md:block" direction="left" />
+            </div>
+          </form>
           
-          <DoobleArrow className="absolute -left-16 top-1/2 -translate-y-1/2" />
-          <DoobleArrow className="absolute -right-16 top-1/2 -translate-y-1/2" direction="left" />
+          <p className="mt-4 text-black font-medium">
+            Join our exclusive waitlist — No credit card required
+          </p>
         </div>
-        
-        <p className="mt-6 text-black font-medium">
-          No Credit Card Needed - 14-day free trial
-        </p>
       </div>
       
       {/* Background elements */}

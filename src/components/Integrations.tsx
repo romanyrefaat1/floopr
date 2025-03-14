@@ -36,17 +36,17 @@ const Integrations = () => {
   return (
     <section id="how-it-works" className="section-container" ref={sectionRef}>
       <div className="text-center mb-16 animate-on-scroll">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Integrates with your <span className="highlight-text">workflow</span>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 relative inline-block">
+          Seamlessly <span className="highlight-text">integrates</span> with your workflow
         </h2>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-xl text-black max-w-3xl mx-auto font-medium">
           Connect Floopr with your favorite tools and automate your feedback workflow
         </p>
       </div>
       
       <div className="relative max-w-3xl mx-auto">
         <div className="glass-card p-8 md:p-10 animate-on-scroll">
-          <div className="grid grid-cols-3 md:grid-cols-5 gap-6 items-center">
+          <div className="grid grid-cols-3 md:grid-cols-5 gap-6 place-items-center">
             {integrations.map((integration, index) => (
               <div 
                 key={index}
@@ -68,30 +68,30 @@ const Integrations = () => {
           </div>
           
           <div className="mt-10 pt-8 border-t border-gray-100">
-            <h3 className="text-xl font-semibold mb-4">How it works</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="flex flex-col">
-                <div className="w-10 h-10 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-3">
-                  <span className="font-medium text-floopr-purple">1</span>
+            <h3 className="text-2xl font-bold mb-6 text-center">How it works</h3>
+            <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4">
+                  <span className="font-bold text-lg text-floopr-purple">1</span>
                 </div>
-                <h4 className="font-medium mb-1">Collect feedback</h4>
-                <p className="text-sm text-gray-600">Embed forms on your site or app</p>
+                <h4 className="font-bold text-lg mb-2">Collect feedback</h4>
+                <p className="text-black">Embed forms on your site or app</p>
               </div>
               
-              <div className="flex flex-col">
-                <div className="w-10 h-10 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-3">
-                  <span className="font-medium text-floopr-purple">2</span>
+              <div className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4">
+                  <span className="font-bold text-lg text-floopr-purple">2</span>
                 </div>
-                <h4 className="font-medium mb-1">Organize & prioritize</h4>
-                <p className="text-sm text-gray-600">Group feedback by categories</p>
+                <h4 className="font-bold text-lg mb-2">Organize & prioritize</h4>
+                <p className="text-black">Group feedback by categories</p>
               </div>
               
-              <div className="flex flex-col">
-                <div className="w-10 h-10 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-3">
-                  <span className="font-medium text-floopr-purple">3</span>
+              <div className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4">
+                  <span className="font-bold text-lg text-floopr-purple">3</span>
                 </div>
-                <h4 className="font-medium mb-1">Take action</h4>
-                <p className="text-sm text-gray-600">Integrate with your dev workflow</p>
+                <h4 className="font-bold text-lg mb-2">Take action</h4>
+                <p className="text-black">Integrate with your dev workflow</p>
               </div>
             </div>
           </div>
