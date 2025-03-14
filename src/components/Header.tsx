@@ -68,7 +68,7 @@ const Header = () => {
           <div className="flex md:hidden">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="text-gray-700 hover:text-floopr-purple transition-colors p-2 rounded-full hover:bg-floopr-purple-bg"
+              className="text-gray-700 hover:text-floopr-purple transition-colors p-2 rounded-full hover:bg-floopr-purple-bg z-50"
               aria-label="Toggle menu"
             >
               {isMobileMenuOpen ? (
@@ -81,10 +81,14 @@ const Header = () => {
         </div>
       </div>
       
-      {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-xl rounded-b-xl border-t border-gray-100">
+      {/* Mobile menu with improved animation */}
+      <div 
+        className={`fixed inset-y-0 right-0 md:hidden bg-white shadow-2xl w-3/4 max-w-xs z-40 transform transition-transform duration-300 ease-in-out ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex flex-col h-full pt-20 pb-6 px-6 overflow-y-auto">
+          <nav className="space-y-4 mt-4">
             <a
               href="#features"
               className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
@@ -113,20 +117,29 @@ const Header = () => {
             >
               Testimonials
             </a>
-            <div className="p-4">
-              <Button 
-                variant="default" 
-                className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full py-6 h-auto"
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  handleWaitlistClick();
-                }}
-              >
-                Join Waitlist
-              </Button>
-            </div>
+          </nav>
+          
+          <div className="mt-8 px-4">
+            <Button 
+              variant="default" 
+              className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full py-6 h-auto"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                handleWaitlistClick();
+              }}
+            >
+              Join Waitlist
+            </Button>
           </div>
         </div>
+      </div>
+      
+      {/* Overlay to close the menu when clicking outside */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
       )}
     </header>
   );

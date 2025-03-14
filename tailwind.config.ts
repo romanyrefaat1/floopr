@@ -78,6 +78,10 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			backgroundImage: {
+				'radial-gradient': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
@@ -125,6 +129,14 @@ export default {
 						transform: 'translateY(0)'
 					}
 				},
+				'slide-in-right': {
+					from: {
+						transform: 'translateX(100%)'
+					},
+					to: {
+						transform: 'translateX(0)'
+					}
+				},
 				'highlight': {
 					'0%, 100%': {
 						'background-size': '200% 200%',
@@ -142,6 +154,7 @@ export default {
 				'fade-in': 'fade-in 0.5s ease-out forwards',
 				'fade-out': 'fade-out 0.5s ease-out forwards',
 				'slide-in': 'slide-in 0.6s ease-out forwards',
+				'slide-in-right': 'slide-in-right 0.3s ease-out',
 				'highlight': 'highlight 3s ease-in-out infinite'
 			}
 		}

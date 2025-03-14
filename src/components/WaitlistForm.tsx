@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,18 +21,29 @@ const WaitlistForm = () => {
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // The actual Firebase integration will be implemented once API keys are provided
+      // For now, we'll keep the simulation
+      setTimeout(() => {
+        toast({
+          title: "Success!",
+          description: "You've been added to our waitlist. We'll keep you updated!",
+        });
+        setEmail('');
+        setIsSubmitting(false);
+        
+        // Scroll to features section
+        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+      }, 1000);
+    } catch (error) {
+      console.error("Error adding to waitlist:", error);
       toast({
-        title: "Success!",
-        description: "You've been added to our waitlist. We'll keep you updated!",
+        title: "Something went wrong",
+        description: "We couldn't add you to the waitlist. Please try again.",
+        variant: "destructive",
       });
-      setEmail('');
       setIsSubmitting(false);
-      
-      // Scroll to features section
-      document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-    }, 1000);
+    }
   };
   
   return (

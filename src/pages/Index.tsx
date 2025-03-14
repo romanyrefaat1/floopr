@@ -42,10 +42,22 @@ const Index = () => {
       <Header />
       <main>
         <Hero />
-        <Features />
+        <div className="relative overflow-hidden">
+          {/* Subtle radial gradient for Features section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1000px] max-h-[1000px] bg-gradient-radial from-floopr-purple/5 to-transparent opacity-70 -z-10"></div>
+          <Features />
+        </div>
         <Integrations />
-        <Benefits />
-        <Testimonials />
+        <div className="relative overflow-hidden">
+          {/* Subtle radial gradient for Benefits section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1000px] max-h-[1000px] bg-gradient-radial from-floopr-purple/5 to-transparent opacity-70 -z-10"></div>
+          <Benefits />
+        </div>
+        <div className="relative overflow-hidden">
+          {/* Subtle radial gradient for Testimonials section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1000px] max-h-[1000px] bg-gradient-radial from-floopr-purple/5 to-transparent opacity-70 -z-10"></div>
+          <Testimonials />
+        </div>
         <CallToAction />
       </main>
       <Footer />
