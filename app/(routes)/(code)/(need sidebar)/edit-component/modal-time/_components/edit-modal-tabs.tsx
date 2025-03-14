@@ -423,7 +423,7 @@ export default function FeedbackModalConfigurator({productId}: {productId: strin
           className="preview relative flex items-center justify-center w-full lg:w-1/2 min-h-[400px] border rounded-lg bg-gray-100"
         >
           {!inContainerModalOpen && (
-            <p className="text-gray-500">Preview area - modal will appear here</p>
+            <p className="text-gray-500 text-center">Preview area - if modal doesn't appear here, click on <span className='text-black'>Preview Step>Preview In container</span> check timeout duration</p>
           )}
           
           {/* Modal inside the container */}
