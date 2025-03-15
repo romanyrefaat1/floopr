@@ -1,12 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, LayoutDashboard, MessageSquare, PieChart } from 'lucide-react';
 import WaitlistForm from './WaitlistForm';
 import ScribbleHighlight from './ui/ScribbleHighlight';
-import CircleScribble from './ui/CircleScribble';
 import { getWaitlistCount } from '@/lib/firebase';
 
-const Hero = () => {
+const NoImagesHero = () => {
   const [waitlistCount, setWaitlistCount] = useState(120); // Default fallback
   
   useEffect(() => {
@@ -24,7 +23,7 @@ const Hero = () => {
 
   return (
     <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-      {/* Background elements */}
+      {/* Gradient backgrounds instead of images */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-floopr-purple-bg opacity-50 blur-3xl"></div>
         <div className="absolute top-1/3 -left-40 w-[400px] h-[400px] rounded-full bg-floopr-purple-bg opacity-40 blur-3xl"></div>
@@ -38,10 +37,7 @@ const Hero = () => {
           </div>
           
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-4xl">
-            Collect and manage feedback <span className="relative">
-              <ScribbleHighlight>effortlessly</ScribbleHighlight>
-              <CircleScribble className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-20 opacity-10" />
-            </span>
+            Collect and manage feedback <span className="relative text-floopr-purple">effortlessly</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-black max-w-3xl mb-8">
@@ -62,25 +58,26 @@ const Hero = () => {
           </div>
         </div>
         
+        {/* Text-based representation instead of screenshot */}
         <div className="rounded-2xl overflow-hidden shadow-xl shadow-floopr-purple/5 bg-white border border-gray-100 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <div className="aspect-[16/9] w-full bg-gray-100 relative overflow-hidden">
-            {/* Simplified placeholder for the no-images branch */}
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-floopr-purple-bg to-white p-8">
-              <div className="glass-card p-8 w-full max-w-3xl">
-                <h3 className="text-2xl font-bold mb-4">Floopr Dashboard Preview</h3>
-                <p className="mb-4">Organize feedback, prioritize features, and keep your users in the loop - all in one place.</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <h4 className="font-medium">Feature Requests</h4>
-                    <div className="h-4 w-3/4 bg-gray-200 rounded mt-2"></div>
-                    <div className="h-4 w-1/2 bg-gray-200 rounded mt-2"></div>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <h4 className="font-medium">User Feedback</h4>
-                    <div className="h-4 w-3/4 bg-gray-200 rounded mt-2"></div>
-                    <div className="h-4 w-1/2 bg-gray-200 rounded mt-2"></div>
-                  </div>
-                </div>
+          <div className="aspect-[16/9] w-full bg-gradient-to-br from-floopr-purple-bg to-white p-8 flex items-center justify-center">
+            <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="glass-card p-6 flex flex-col items-center text-center">
+                <LayoutDashboard className="h-12 w-12 text-floopr-purple mb-4" />
+                <h3 className="text-xl font-bold mb-2">Intuitive Dashboard</h3>
+                <p>Organize and prioritize feedback in a clean, intuitive interface designed for productivity.</p>
+              </div>
+              
+              <div className="glass-card p-6 flex flex-col items-center text-center">
+                <MessageSquare className="h-12 w-12 text-floopr-purple mb-4" />
+                <h3 className="text-xl font-bold mb-2">Feedback Collection</h3>
+                <p>Multiple channels to collect, categorize and respond to user feedback efficiently.</p>
+              </div>
+              
+              <div className="glass-card p-6 flex flex-col items-center text-center">
+                <PieChart className="h-12 w-12 text-floopr-purple mb-4" />
+                <h3 className="text-xl font-bold mb-2">Actionable Insights</h3>
+                <p>Turn feedback into actionable insights with powerful analytics and prioritization tools.</p>
               </div>
             </div>
           </div>
@@ -100,4 +97,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default NoImagesHero;

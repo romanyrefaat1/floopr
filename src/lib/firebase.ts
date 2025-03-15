@@ -1,7 +1,6 @@
-
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp, getCountFromServer } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -57,6 +56,18 @@ export const addToWaitlist = async (email: string) => {
       success: false,
       message: "Failed to join waitlist. Please try again."
     };
+  }
+};
+
+// Function to get the waitlist count
+export const getWaitlistCount = async () => {
+  try {
+    const waitlistRef = collection(db, "waitlist-emails");
+    const snapshot = await getCountFromServer(waitlistRef);
+    return snapshot.data().count;
+  } catch (error) {
+    console.error("Error getting waitlist count:", error);
+    return 120; // Fallback to default number
   }
 };
 
