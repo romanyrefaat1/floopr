@@ -33,15 +33,17 @@ const Header = () => {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-5 bg-transparent`}
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-0 bg-transparent`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center backdrop-blur-sm rounded-lg">
           <div className="flex items-center">
             <a href="/" className="flex items-center">
-              <span className="text-2xl font-bold bg-gradient-to-r from-floopr-purple to-floopr-purple-dark bg-clip-text text-transparent">
+              {/* <span className="text-2xl font-bold bg-gradient-to-r from-floopr-purple to-floopr-purple-dark bg-clip-text text-transparent">
                 floopr
-              </span>
+              </span> */}
+              <img src="/floopr-logo-no-bg-svg.svg" alt="Floopr Logo" className="w-20 h-20" />
+
             </a>
           </div>
           
@@ -103,9 +105,10 @@ const Header = () => {
             <nav className="flex flex-col space-y-8 w-full">
               <div className="flex justify-center items-center">
                 <a href="/" className="flex justify-center items-center">
-                  <span className="text-2xl text-center font-bold bg-gradient-to-r from-floopr-purple to-floopr-purple-dark bg-clip-text text-transparent">
+                  {/* <span className="text-2xl text-center font-bold bg-gradient-to-r from-floopr-purple to-floopr-purple-dark bg-clip-text text-transparent">
                     floopr
-                  </span>
+                  </span> */}
+                  <img src="/floopr-logo-no-bg-svg.svg" alt="Floopr Logo" className="w-24 h-24" />
                 </a>
               </div>
               <a
