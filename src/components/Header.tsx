@@ -99,7 +99,7 @@ const Header = () => {
       </div>
       
       {/* Mobile menu - slide in from right */}
-      <div className={`slide-in-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+      <div className={`fixed inset-y-0 right-0 w-full sm:w-3/4 max-w-sm bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-8">
             <span className="text-2xl font-bold text-floopr-purple">Floopr</span>
