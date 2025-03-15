@@ -16,9 +16,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-let analytics: any = null;
 
-// Only initialize analytics on the client side
+// Initialize Analytics
+let analytics: any = null;
 if (typeof window !== 'undefined') {
   analytics = getAnalytics(app);
 }
@@ -26,12 +26,12 @@ if (typeof window !== 'undefined') {
 // Initialize Firestore
 const db = getFirestore(app);
 
-// Function to add an email to the waitlist
+// Function to add a user to the waitlist
 export const addToWaitlist = async (email: string) => {
   try {
     // Check if email already exists
-    const emailsRef = collection(db, "waitlist-emails");
-    const q = query(emailsRef, where("email", "==", email));
+    const waitlistRef = collection(db, "waitlist-emails");
+    const q = query(waitlistRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
     
     if (!querySnapshot.empty) {
@@ -41,21 +41,21 @@ export const addToWaitlist = async (email: string) => {
       };
     }
     
-    // Add email to waitlist
-    await addDoc(collection(db, "waitlist-emails"), {
+    // Add new email to waitlist
+    await addDoc(waitlistRef, {
       email,
       createdAt: serverTimestamp()
     });
     
     return {
       success: true,
-      message: "You've been added to our waitlist!"
+      message: "Successfully added to waitlist!"
     };
   } catch (error) {
     console.error("Error adding to waitlist:", error);
     return {
       success: false,
-      message: "Something went wrong. Please try again."
+      message: "Failed to join waitlist. Please try again."
     };
   }
 };

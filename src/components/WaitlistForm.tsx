@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
 import { addToWaitlist } from '@/lib/firebase';
+import { Loader2 } from 'lucide-react';
 
 const WaitlistForm = () => {
   const [email, setEmail] = useState('');
@@ -63,6 +64,8 @@ const WaitlistForm = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="h-12 rounded-full border-gray-200 focus:border-floopr-purple focus:ring-1 focus:ring-floopr-purple"
+            disabled={isSubmitting}
+            aria-label="Email address"
           />
         </div>
         <Button 
@@ -72,7 +75,12 @@ const WaitlistForm = () => {
             ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`
           }
         >
-          {isSubmitting ? 'Joining...' : 'Join Waitlist'}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Joining...
+            </>
+          ) : 'Join Waitlist'}
         </Button>
       </div>
       <p className="text-xs text-black mt-2 text-center">

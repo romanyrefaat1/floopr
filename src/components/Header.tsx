@@ -1,145 +1,163 @@
 
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { X, Menu } from 'lucide-react';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      if (window.scrollY > 20) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
+    
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
-  const handleWaitlistClick = () => {
-    document.getElementById('cta')?.scrollIntoView({ behavior: 'smooth' });
-  };
+  useEffect(() => {
+    // Prevent scrolling when mobile menu is open
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
 
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  const navLinks = [
+    { name: 'Features', href: '#features' },
+    { name: 'Integrations', href: '#integrations' },
+    { name: 'Benefits', href: '#benefits' },
+    { name: 'Testimonials', href: '#testimonials' }
+  ];
+  
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'py-3 bg-white/90 backdrop-blur-md shadow-sm' 
-          : 'py-5 bg-transparent'
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
-            <a href="/" className="flex items-center">
-              <span className="text-2xl font-bold bg-gradient-to-r from-floopr-purple to-floopr-purple-dark bg-clip-text text-transparent">
-                floopr
-              </span>
-            </a>
+            <Link href="/" className="text-2xl font-bold text-floopr-purple">
+              Floopr
+            </Link>
           </div>
           
-          <nav className="hidden md:flex space-x-8 items-center">
-            <a href="#features" className="text-sm font-medium hover:text-floopr-purple transition-colors">
-              Features
-            </a>
-            <a href="#benefits" className="text-sm font-medium hover:text-floopr-purple transition-colors">
-              Benefits
-            </a>
-            <a href="#how-it-works" className="text-sm font-medium hover:text-floopr-purple transition-colors">
-              How it works
-            </a>
-            <a href="#testimonials" className="text-sm font-medium hover:text-floopr-purple transition-colors">
-              Testimonials
-            </a>
-          </nav>
-          
-          <div className="hidden md:flex items-center space-x-4">
+          <nav className="hidden md:flex items-center space-x-8">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-gray-800 hover:text-floopr-purple font-medium transition-colors duration-200"
+              >
+                {link.name}
+              </a>
+            ))}
+            
             <Button 
-              variant="default" 
-              className="bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full"
-              onClick={handleWaitlistClick}
+              asChild
+              variant="outline" 
+              className="border-floopr-purple text-floopr-purple hover:bg-floopr-purple/5 hover:text-floopr-purple-dark"
             >
-              Join Waitlist
+              <a href="https://app.floopr.io/login">
+                Log In
+              </a>
             </Button>
-          </div>
-          
-          <div className="flex md:hidden">
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="text-gray-700 hover:text-floopr-purple transition-colors p-2 rounded-full hover:bg-floopr-purple-bg z-50"
-              aria-label="Toggle menu"
+            
+            <Button
+              asChild
+              className="bg-floopr-purple hover:bg-floopr-purple-dark text-white"
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      {/* Mobile menu with improved animation */}
-      <div 
-        className={`fixed inset-y-0 right-0 md:hidden bg-white shadow-2xl w-3/4 max-w-xs z-40 transform transition-transform duration-300 ease-in-out ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex flex-col h-full pt-20 pb-6 px-6 overflow-y-auto">
-          <nav className="space-y-4 mt-4">
-            <a
-              href="#features"
-              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Features
-            </a>
-            <a
-              href="#benefits"
-              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Benefits
-            </a>
-            <a
-              href="#how-it-works"
-              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              How it works
-            </a>
-            <a
-              href="#testimonials"
-              className="block px-4 py-3 rounded-lg text-base font-medium hover:bg-floopr-purple-bg hover:text-floopr-purple transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Testimonials
-            </a>
+              <a href="#cta">
+                Join Waitlist
+              </a>
+            </Button>
           </nav>
           
-          <div className="mt-8 px-4">
-            <Button 
-              variant="default" 
-              className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white rounded-full py-6 h-auto"
-              onClick={() => {
-                setIsMobileMenuOpen(false);
-                handleWaitlistClick();
-              }}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open mobile menu"
             >
-              Join Waitlist
+              <Menu className="h-6 w-6" />
             </Button>
           </div>
         </div>
       </div>
       
-      {/* Overlay to close the menu when clicking outside */}
+      {/* Mobile menu - slide in from right */}
+      <div className={`slide-in-menu ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div className="p-6 h-full flex flex-col">
+          <div className="flex justify-between items-center mb-8">
+            <span className="text-2xl font-bold text-floopr-purple">Floopr</span>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Close mobile menu"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+          
+          <nav className="flex flex-col space-y-6 flex-grow">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-xl font-medium text-gray-800 hover:text-floopr-purple"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
+          
+          <div className="flex flex-col space-y-4 mt-auto">
+            <Button 
+              asChild
+              variant="outline" 
+              className="w-full justify-center border-floopr-purple text-floopr-purple hover:bg-floopr-purple/5"
+            >
+              <a href="https://app.floopr.io/login">
+                Log In
+              </a>
+            </Button>
+            
+            <Button
+              asChild
+              className="w-full justify-center bg-floopr-purple hover:bg-floopr-purple-dark text-white"
+            >
+              <a 
+                href="#cta"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Join Waitlist
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Overlay for mobile menu */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 md:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm md:hidden z-40"
           onClick={() => setIsMobileMenuOpen(false)}
-        ></div>
+        />
       )}
     </header>
   );
