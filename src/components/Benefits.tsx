@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   MessageSquare, 
@@ -11,6 +10,7 @@ import {
 import FeatureCard from './ui/FeatureCard';
 import SectionTitle from './ui/SectionTitle';
 import BenefitCard from './ui/BenefitCard';
+import ScribbleHighlight from './ui/ScribbleHighlight';
 
 const Benefits = () => {
   const benefits = [

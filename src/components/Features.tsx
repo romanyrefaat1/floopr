@@ -1,8 +1,8 @@
-
 import React from 'react';
 import Feature from './Feature';
 import FeatureCard from './ui/FeatureCard';
 import SectionTitle from './ui/SectionTitle';
+import ScribbleHighlight from './ui/ScribbleHighlight';
 import FeedbackWidget from './ui/illustrations/FeedbackWidget';
 import FeedbackBoard from './ui/illustrations/FeedbackBoard';
 import ProductRoadmap from './ui/illustrations/ProductRoadmap';
