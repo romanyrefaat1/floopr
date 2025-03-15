@@ -48,12 +48,14 @@ const Header = () => {
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
+          {/* Left - Logo */}
           <div className="flex items-center">
             <Link href="/" className="text-2xl font-bold text-floopr-purple">
               Floopr
             </Link>
           </div>
           
+          {/* Center - Navigation Links */}
           <nav className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <a
@@ -64,17 +66,10 @@ const Header = () => {
                 {link.name}
               </a>
             ))}
-            
-            <Button 
-              asChild
-              variant="outline" 
-              className="border-floopr-purple text-floopr-purple hover:bg-floopr-purple/5 hover:text-floopr-purple-dark"
-            >
-              <a href="https://app.floopr.io/login">
-                Log In
-              </a>
-            </Button>
-            
+          </nav>
+          
+          {/* Right - CTA Button */}
+          <div className="hidden md:block">
             <Button
               asChild
               className="bg-floopr-purple hover:bg-floopr-purple-dark text-white"
@@ -83,7 +78,7 @@ const Header = () => {
                 Join Waitlist
               </a>
             </Button>
-          </nav>
+          </div>
           
           <div className="md:hidden">
             <Button
@@ -127,16 +122,6 @@ const Header = () => {
           </nav>
           
           <div className="flex flex-col space-y-4 mt-auto">
-            <Button 
-              asChild
-              variant="outline" 
-              className="w-full justify-center border-floopr-purple text-floopr-purple hover:bg-floopr-purple/5"
-            >
-              <a href="https://app.floopr.io/login">
-                Log In
-              </a>
-            </Button>
-            
             <Button
               asChild
               className="w-full justify-center bg-floopr-purple hover:bg-floopr-purple-dark text-white"
