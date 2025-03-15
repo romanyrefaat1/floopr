@@ -5,12 +5,13 @@ import { Input } from '@/components/ui/input';
 import CircleScribble from './ui/CircleScribble';
 import DoobleArrow from './ui/DoobleArrow';
 import { toast } from '@/components/ui/use-toast';
+import { addToWaitlist } from '@/lib/firebase';
 
 const CallToAction = () => {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || !email.includes('@')) {
@@ -23,15 +24,31 @@ const CallToAction = () => {
     
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const result = await addToWaitlist(email);
+      
+      if (result.success) {
+        toast({
+          title: "Success!",
+          description: "You've been added to our waitlist. We'll keep you updated!",
+        });
+        setEmail('');
+      } else {
+        toast({
+          title: result.message,
+          variant: result.message.includes("already") ? "default" : "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding to waitlist:", error);
       toast({
-        title: "Success!",
-        description: "You've been added to our waitlist. We'll keep you updated!",
+        title: "Something went wrong",
+        description: "We couldn't add you to the waitlist. Please try again.",
+        variant: "destructive",
       });
-      setEmail('');
+    } finally {
       setIsSubmitting(false);
-    }, 1000);
+    }
   };
 
   return (

@@ -1,7 +1,9 @@
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { addToWaitlist } from '@/lib/firebase';
 
 const WaitlistForm = () => {
   const [email, setEmail] = useState('');
@@ -22,19 +24,23 @@ const WaitlistForm = () => {
     setIsSubmitting(true);
     
     try {
-      // The actual Firebase integration will be implemented once API keys are provided
-      // For now, we'll keep the simulation
-      setTimeout(() => {
+      const result = await addToWaitlist(email);
+      
+      if (result.success) {
         toast({
           title: "Success!",
           description: "You've been added to our waitlist. We'll keep you updated!",
         });
         setEmail('');
-        setIsSubmitting(false);
         
         // Scroll to features section
         document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-      }, 1000);
+      } else {
+        toast({
+          title: result.message,
+          variant: result.message.includes("already") ? "default" : "destructive",
+        });
+      }
     } catch (error) {
       console.error("Error adding to waitlist:", error);
       toast({
@@ -42,6 +48,7 @@ const WaitlistForm = () => {
         description: "We couldn't add you to the waitlist. Please try again.",
         variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -68,7 +75,7 @@ const WaitlistForm = () => {
           {isSubmitting ? 'Joining...' : 'Join Waitlist'}
         </Button>
       </div>
-      <p className="text-xs text-black mt-2 text-center sm:text-center">
+      <p className="text-xs text-black mt-2 text-center">
         We'll keep you updated on our launch. No spam, we promise!
       </p>
     </form>
