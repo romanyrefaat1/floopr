@@ -84,37 +84,37 @@ const Benefits = () => {
           <div className="glass-card p-8 text-center flex flex-col items-center">
             <h4 className="text-2xl font-bold mb-4">Multi-Projects</h4>
             <p className="text-black">Manage all of your projects in one single dashboard.</p>
-            <div className="mt-6 h-40 w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+            {/* <div className="mt-6 h-40 w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
               <img 
                 src="/lovable-uploads/134bb789-6f30-4816-aba0-0ac863415f3d.png"
                 alt="Multi-project management" 
                 className="w-full h-full object-cover"
               />
-            </div>
+            </div> */}
           </div>
           
           <div className="glass-card p-8 text-center flex flex-col items-center">
             <h4 className="text-2xl font-bold mb-4">Moderation</h4>
             <p className="text-black">Auto-approve or manually approve new posts</p>
-            <div className="mt-6 h-40 w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+            {/* <div className="mt-6 h-40 w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
               <img 
                 src="/lovable-uploads/f0ea91ad-42a6-4213-9787-46f5223d7cb5.png"
                 alt="Content moderation" 
                 className="w-full h-full object-cover"
               />
-            </div>
+            </div> */}
           </div>
           
           <div className="glass-card p-8 text-center flex flex-col items-center">
             <h4 className="text-2xl font-bold mb-4">Custom Statuses</h4>
             <p className="text-black">Edit existing or add new custom statuses</p>
-            <div className="mt-6 h-40 w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+            {/* <div className="mt-6 h-40 w-full bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
               <img 
                 src="/lovable-uploads/06552887-5bfc-4284-8a73-760dabd5b456.png"
                 alt="Custom status configuration" 
                 className="w-full h-full object-cover"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

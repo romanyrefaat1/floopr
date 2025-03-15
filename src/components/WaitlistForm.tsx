@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { addToWaitlist } from '../../firebase';
 
 const WaitlistForm = () => {
   const [email, setEmail] = useState('');
@@ -11,40 +12,48 @@ const WaitlistForm = () => {
     e.preventDefault();
     
     // Basic validation
-    if (!email || !email.includes('@')) {
-      toast({
-        title: "Please enter a valid email",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
-    try {
-      // The actual Firebase integration will be implemented once API keys are provided
-      // For now, we'll keep the simulation
-      setTimeout(() => {
+      if (!email || !email.includes('@')) {
         toast({
-          title: "Success!",
-          description: "You've been added to our waitlist. We'll keep you updated!",
+          title: "Please enter a valid email",
+          variant: "destructive",
         });
-        setEmail('');
-        setIsSubmitting(false);
+        return;
+      }
+      
+      setIsSubmitting(true);
+      
+      try {
+        // Call the imported function to add the email to the waitlist
+        const result = await addToWaitlist(email);
         
-        // Scroll to features section
-        document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
-      }, 1000);
-    } catch (error) {
-      console.error("Error adding to waitlist:", error);
-      toast({
-        title: "Something went wrong",
-        description: "We couldn't add you to the waitlist. Please try again.",
-        variant: "destructive",
-      });
-      setIsSubmitting(false);
-    }
-  };
+        if (result.success) {
+          toast({
+            title: "Success!",
+            description: result.message,
+          });
+          setEmail('');
+          
+          // Optionally scroll to features section
+          // document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Error adding to waitlist:", error);
+        toast({
+          title: "Something went wrong",
+          description: "We couldn't add you to the waitlist. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+    
   
   return (
     <form onSubmit={handleSubmit} className="max-w-md w-full">

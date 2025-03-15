@@ -3,8 +3,27 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import WaitlistForm from './WaitlistForm';
 import ScribbleHighlight from './ui/ScribbleHighlight';
 import CircleScribble from './ui/CircleScribble';
+import { useEffect, useState } from 'react';
+import { getWaitlistCount } from '../../firebase';
 
 const Hero = () => {
+
+  const [waitlistCount, setWaitlistCount] = useState(40); // Default fallback
+  
+  useEffect(() => {
+    const fetchWaitlistCount = async () => {
+      try {
+        const count = await getWaitlistCount();
+        console.log(`count:`, count)
+        setWaitlistCount(count); 
+      } catch (error) {
+        console.error("Error fetching waitlist count:", error);
+      }
+    };
+    
+    fetchWaitlistCount();
+  }, []);
+
   return (
     <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
       {/* Background elements */}
@@ -33,7 +52,7 @@ const Hero = () => {
           
           <WaitlistForm />
           
-          <div className="flex items-center justify-center mt-8 text-sm text-black">
+          {waitlistCount > 19 && <div className="flex items-center justify-center mt-8 text-sm text-black">
             <div className="flex -space-x-2 mr-3">
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-medium">
@@ -41,20 +60,20 @@ const Hero = () => {
                 </div>
               ))}
             </div>
-            <span>Join 120+ early adopters</span>
-          </div>
+            <span>Join {waitlistCount}+ early adopters</span>
+          </div>}
         </div>
         
-        <div className="rounded-2xl overflow-hidden shadow-xl shadow-floopr-purple/5 bg-white border border-gray-100 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-          <div className="aspect-[16/9] w-full bg-gray-100 relative overflow-hidden">
-            <img 
-              src="/lovable-uploads/05f2dc13-e727-4026-9dc8-4de6d361d6db.png" 
-              alt="Floopr feedback dashboard" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-          </div>
-        </div>
+          {/* <div className="rounded-2xl overflow-hidden shadow-xl shadow-floopr-purple/5 bg-white border border-gray-100 animate-fade-in" style={{ animationDelay: '0.3s' }}>
+            <div className="aspect-[16/9] w-full bg-gray-100 relative overflow-hidden">
+              <img 
+                src="/lovable-uploads/05f2dc13-e727-4026-9dc8-4de6d361d6db.png" 
+                alt="Floopr feedback dashboard" 
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+            </div>
+          </div> */}
       </div>
       
       <div className="flex justify-center mt-16">

@@ -1,13 +1,63 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Feature from './Feature';
 import FeedbackWidget from './ui/illustrations/FeedbackWidget';
 import FeedbackBoard from './ui/illustrations/FeedbackBoard';
 import ProductRoadmap from './ui/illustrations/ProductRoadmap';
 import Changelog from './ui/illustrations/Changelog';
 import ScribbleHighlight from './ui/ScribbleHighlight';
+import { toast } from '@/components/ui/use-toast';
+import { addToWaitlist } from '../../firebase';
 
 const Features = () => {
+  const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Basic validation
+      if (!email || !email.includes('@')) {
+        toast({
+          title: "Please enter a valid email",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setIsSubmitting(true);
+      
+      try {
+        // Call the imported function to add the email to the waitlist
+        const result = await addToWaitlist(email);
+        
+        if (result.success) {
+          toast({
+            title: "Success!",
+            description: result.message,
+          });
+          setEmail('');
+          
+          // Optionally scroll to features section
+          // document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          toast({
+            title: "Error",
+            description: result.message,
+            variant: "destructive",
+          });
+        }
+      } catch (error) {
+        console.error("Error adding to waitlist:", error);
+        toast({
+          title: "Something went wrong",
+          description: "We couldn't add you to the waitlist. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+  
   const features = [
     {
       title: "Feedback Boards",
@@ -35,14 +85,16 @@ const Features = () => {
         <div className="bg-white rounded-xl border border-gray-200 shadow-lg p-5 relative z-10">
           <div className="relative">
             <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-floopr-purple text-white rounded-full px-4 py-2 flex items-center gap-2 z-20 shadow-md">
-              <form className="flex items-center space-x-2">
+              <form className="flex items-center space-x-2" onSubmit={(e)=>handleSubmit(e)}>
                 <input
                   type="email" 
                   placeholder="Enter your email"
                   className="px-3 py-1 text-sm text-black rounded-l-full border-0 focus:ring-1 focus:ring-floopr-purple"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <button className="bg-floopr-purple-dark hover:bg-floopr-purple-dark/90 text-white text-sm font-medium py-1 px-3 rounded-r-full">
-                  Join
+                  {isSubmitting ? 'Joining...' : 'Join'}
                 </button>
               </form>
             </div>
