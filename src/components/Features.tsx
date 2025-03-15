@@ -1,15 +1,14 @@
+
 import React from 'react';
 import Feature from './Feature';
-import FeatureCard from './ui/FeatureCard';
-import SectionTitle from './ui/SectionTitle';
-import ScribbleHighlight from './ui/ScribbleHighlight';
 import FeedbackWidget from './ui/illustrations/FeedbackWidget';
 import FeedbackBoard from './ui/illustrations/FeedbackBoard';
 import ProductRoadmap from './ui/illustrations/ProductRoadmap';
 import Changelog from './ui/illustrations/Changelog';
+import ScribbleHighlight from './ui/ScribbleHighlight';
 
 const Features = () => {
-  const mainFeatures = [
+  const features = [
     {
       title: "Feedback Boards",
       description: "Gather user feedback and upvotes. Know what to build next. Let users submit feedback or upvote on posts on your own personalized boards.",
@@ -98,34 +97,22 @@ const Features = () => {
     }
   ];
 
-  const additionalFeatures = [
-    {
-      title: "Feature Voting",
-      description: "Let your users, your team or any stakeholders upvote on posts.",
-      icon: "CheckCircle"
-    },
-    {
-      title: "User SSO",
-      description: "Automatically authenticate your users and give them access.",
-      icon: "Key"
-    },
-    {
-      title: "Moderation",
-      description: "Approve new posts and/or comments first.",
-      icon: "Shield"
-    }
-  ];
-
   return (
-    <section id="features" className="section-container gradient-section">
-      <SectionTitle 
-        title="Elevate Your User Experience" 
-        subtitle="Powerful tools to collect, organize, and act on user feedback"
-        circleScribble={false}
-      />
+    <section id="features" className="section-container">
+      <div className="text-center mb-16 animate-on-scroll">
+        <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 relative inline-block">
+          <ScribbleHighlight>Elevate Your User Experience</ScribbleHighlight>
+          <svg className="absolute -right-10 -top-10 w-24 h-24 opacity-20 text-floopr-purple" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M30,10 Q50,5 70,20 Q90,40 80,70 Q70,90 40,85 Q10,80 10,50 Q10,20 30,10" stroke="currentColor" strokeWidth="4" fill="none" />
+          </svg>
+        </h2>
+        <p className="text-xl text-black max-w-3xl mx-auto font-medium">
+          Powerful tools to collect, organize, and act on user feedback
+        </p>
+      </div>
       
       <div className="space-y-20">
-        {mainFeatures.map((feature, index) => (
+        {features.map((feature, index) => (
           <Feature
             key={index}
             title={feature.title}
@@ -144,21 +131,39 @@ const Features = () => {
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {additionalFeatures.map((feature, index) => (
-            <div key={index} className="glass-card p-8 text-center">
-              <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4 mx-auto">
-                <svg className="h-6 w-6 text-floopr-purple" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-              <p className="text-black">{feature.description}</p>
+          <div className="glass-card p-8 text-center">
+            <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4 mx-auto">
+              <svg className="h-6 w-6 text-floopr-purple" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </div>
-          ))}
+            <h3 className="text-xl font-bold mb-2">Feature Voting</h3>
+            <p className="text-black">Let your users, your team or any stakeholders upvote on posts.</p>
+          </div>
+          
+          <div className="glass-card p-8 text-center">
+            <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4 mx-auto">
+              <svg className="h-6 w-6 text-floopr-purple" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L9 19l-1-1-1-1 4.257-4.257A6 6 0 1119 9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold mb-2">User SSO</h3>
+            <p className="text-black">Automatically authenticate your users and give them access.</p>
+          </div>
+          
+          <div className="glass-card p-8 text-center">
+            <div className="w-12 h-12 rounded-full bg-floopr-purple-bg flex items-center justify-center mb-4 mx-auto">
+              <svg className="h-6 w-6 text-floopr-purple" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold mb-2">Moderation</h3>
+            <p className="text-black">Approve new posts and/or comments first.</p>
+          </div>
         </div>
 
         <div className="mt-16 flex justify-center">
-          <a href="#cta" className="btn-primary">
+          <a href="#cta" className="bg-floopr-purple hover:bg-floopr-purple-dark text-white font-medium px-8 py-3 rounded-full transition-all transform hover:scale-105">
             Get Started Today
           </a>
         </div>

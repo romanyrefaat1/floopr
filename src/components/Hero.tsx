@@ -1,27 +1,10 @@
 
-import { useState, useEffect } from 'react';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import WaitlistForm from './WaitlistForm';
 import ScribbleHighlight from './ui/ScribbleHighlight';
 import CircleScribble from './ui/CircleScribble';
-import { getWaitlistCount } from '@/lib/firebase';
 
 const Hero = () => {
-  const [waitlistCount, setWaitlistCount] = useState(120); // Default fallback
-  
-  useEffect(() => {
-    const fetchWaitlistCount = async () => {
-      try {
-        const count = await getWaitlistCount();
-        setWaitlistCount(Math.max(count, 120)); // Ensure at least 120 to avoid looking empty
-      } catch (error) {
-        console.error("Error fetching waitlist count:", error);
-      }
-    };
-    
-    fetchWaitlistCount();
-  }, []);
-
   return (
     <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
       {/* Background elements */}
@@ -58,31 +41,18 @@ const Hero = () => {
                 </div>
               ))}
             </div>
-            <span>Join {waitlistCount}+ early adopters</span>
+            <span>Join 120+ early adopters</span>
           </div>
         </div>
         
         <div className="rounded-2xl overflow-hidden shadow-xl shadow-floopr-purple/5 bg-white border border-gray-100 animate-fade-in" style={{ animationDelay: '0.3s' }}>
           <div className="aspect-[16/9] w-full bg-gray-100 relative overflow-hidden">
-            {/* Simplified placeholder for the no-images branch */}
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-floopr-purple-bg to-white p-8">
-              <div className="glass-card p-8 w-full max-w-3xl">
-                <h3 className="text-2xl font-bold mb-4">Floopr Dashboard Preview</h3>
-                <p className="mb-4">Organize feedback, prioritize features, and keep your users in the loop - all in one place.</p>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <h4 className="font-medium">Feature Requests</h4>
-                    <div className="h-4 w-3/4 bg-gray-200 rounded mt-2"></div>
-                    <div className="h-4 w-1/2 bg-gray-200 rounded mt-2"></div>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow-sm">
-                    <h4 className="font-medium">User Feedback</h4>
-                    <div className="h-4 w-3/4 bg-gray-200 rounded mt-2"></div>
-                    <div className="h-4 w-1/2 bg-gray-200 rounded mt-2"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <img 
+              src="/lovable-uploads/05f2dc13-e727-4026-9dc8-4de6d361d6db.png" 
+              alt="Floopr feedback dashboard" 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
           </div>
         </div>
       </div>

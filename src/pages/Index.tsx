@@ -1,6 +1,5 @@
 
 import { useEffect, useRef } from 'react';
-import Head from 'next/head';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Features from '@/components/Features';
@@ -10,11 +9,7 @@ import Integrations from '@/components/Integrations';
 import CallToAction from '@/components/CallToAction';
 import Footer from '@/components/Footer';
 
-interface IndexProps {
-  lastUpdated?: string;
-}
-
-const Index = ({ lastUpdated }: IndexProps) => {
+const Index = () => {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,50 +37,31 @@ const Index = ({ lastUpdated }: IndexProps) => {
     };
   }, []);
 
-  // Add structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "Floopr",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "The all-in-one platform to collect, organize, and act on user feedback",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-      "availability": "https://schema.org/ComingSoon"
-    },
-    "dateModified": lastUpdated || new Date().toISOString()
-  };
-
   return (
-    <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      </Head>
-      <div ref={mainRef} className="min-h-screen">
-        <Header />
-        <main>
-          <Hero />
-          <div className="gradient-section">
-            <Features />
-          </div>
-          <Integrations />
-          <div className="gradient-section">
-            <Benefits />
-          </div>
-          <div className="gradient-section">
-            <Testimonials />
-          </div>
-          <CallToAction />
-        </main>
-        <Footer />
-      </div>
-    </>
+    <div ref={mainRef} className="min-h-screen">
+      <Header />
+      <main>
+        <Hero />
+        <div className="relative overflow-hidden">
+          {/* Subtle radial gradient for Features section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1000px] max-h-[1000px] bg-gradient-radial from-floopr-purple/5 to-transparent opacity-70 -z-10"></div>
+          <Features />
+        </div>
+        <Integrations />
+        <div className="relative overflow-hidden">
+          {/* Subtle radial gradient for Benefits section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1000px] max-h-[1000px] bg-gradient-radial from-floopr-purple/5 to-transparent opacity-70 -z-10"></div>
+          <Benefits />
+        </div>
+        <div className="relative overflow-hidden">
+          {/* Subtle radial gradient for Testimonials section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-[1000px] max-h-[1000px] bg-gradient-radial from-floopr-purple/5 to-transparent opacity-70 -z-10"></div>
+          <Testimonials />
+        </div>
+        <CallToAction />
+      </main>
+      <Footer />
+    </div>
   );
 };
 
