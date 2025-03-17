@@ -16,11 +16,13 @@ export async function POST(request: Request) {
     
     // Save component in Firestore
     console.log("Start setDoc")
+    const componentApiKey = crypto.randomUUID()
     const result = await setDoc(
-      doc(db, `products/${productId}/components/${componentType}`), 
+      doc(db, `products/${productId}/components/${componentData.componentId}`), 
       {
         componentData,
         componentType,
+        apiKey: componentApiKey,
         productId
       }
     );

@@ -11,6 +11,7 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 
 import ModalTimeout from '@/components/integration/modal-timout/rating-config';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 // Type definitions
 type Rating = {
@@ -27,10 +28,14 @@ type InputField = {
 
 // Configuration and preview component
 export default function FeedbackModalConfigurator({productId}: {productId: string}) {
+  const router = useRouter()
+  
   const [currentStep, setCurrentStep] = useState('review');
+  const componentId = crypto.randomUUID();
   const [modalConfig, setModalConfig] = useState({
     title: "Got any feedback?",
     productId,
+    componentId,
     ratings: [
       { label: "Bad", value: 0, emoji: "😞" },
       { label: "Normal", value: 1, emoji: "😐" },
@@ -70,8 +75,8 @@ export default function FeedbackModalConfigurator({productId}: {productId: strin
         toast.error('Failed to save component. Please try again');
         return;
       }
-      
       toast.success('Component saved successfully');
+      router.push(`/products/${productId}/my-components/${componentId}`);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
@@ -154,7 +159,7 @@ export default function FeedbackModalConfigurator({productId}: {productId: strin
   };
 
   return (
-    <Tabs defaultValue="review" className="w-full max-w-6xl mx-auto p-4">
+    <Tabs defaultValue="review" className="max-w-full mx-auto">
       <TabsList className="mb-4">
         <TabsTrigger 
           value="review" 
@@ -392,8 +397,7 @@ export default function FeedbackModalConfigurator({productId}: {productId: strin
                 </ul>
               </div>
               
-              <div className="flex justify-between items-center mt-4">
-                
+              <div className="flex justify-between items-center flex-col md:flex-row mt-4">
                 <div className="flex gap-2">
                   <Button 
                     onClick={() => setInContainerModalOpen(true)}
@@ -418,12 +422,13 @@ export default function FeedbackModalConfigurator({productId}: {productId: strin
           </TabsContent>
         </div>
         
+        {/* Left Preview */}
         <div 
           ref={previewContainerRef} 
           className="preview relative flex items-center justify-center w-full lg:w-1/2 min-h-[400px] border rounded-lg bg-gray-100"
         >
           {!inContainerModalOpen && (
-            <p className="text-gray-500 text-center">Preview area - if modal doesn't appear here, click on <span className='text-black'>Preview Step>Preview In container</span> check timeout duration</p>
+            <p className="text-gray-500 text-center">Preview area - if modal doesn't appear here, click on <span className='text-black'>Preview Step>Preview In container</span></p>
           )}
           
           {/* Modal inside the container */}
@@ -449,7 +454,7 @@ export default function FeedbackModalConfigurator({productId}: {productId: strin
         buttonText={modalConfig.buttonText}
         isOpen={fullPageModalOpen}
         onOpenChange={setFullPageModalOpen}
-        timeoutDuration={modalConfig.timeoutDuration}
+        timeoutDuration={0}
       />
     </Tabs>
   );

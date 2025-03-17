@@ -42,7 +42,7 @@ return (
     <TabsTrigger value="popular">Popular</TabsTrigger>
     <TabsTrigger value="date">Date</TabsTrigger>
   </TabsList>
-  <TabsContent value="all" className="space-y-2">
+  <TabsContent value="all" className="space-y-2 rounded">
   <ul>
     <li role="button" className="hover:bg-gray-100 p-2 rounded cursor-pointer flex items-center gap-4" onClick={() => handleFilter(`all`)}>All</li>
     <li role="button" className="hover:bg-gray-100 p-2 rounded cursor-pointer flex items-center gap-4">
@@ -51,16 +51,16 @@ return (
     <li role="button" className="hover:bg-gray-100 p-2 rounded cursor-pointer flex items-center gap-4"><ThumbsUp size={14} /> Likes</li>
   </ul>
   </TabsContent>
-  <TabsContent value="date" className="space-y-2"><FilterTabsDate /></TabsContent>
-  <TabsContent value="popular" className="space-y-2">
+  <TabsContent value="date" className="space-y-2 rounded"><FilterTabsDate /></TabsContent>
+  <TabsContent value="popular" className="space-y-2 rounded">
     <FilterTabsReach open={open} setDialogOpen={setOpen} />
   </TabsContent>
 </Tabs>
 
         
-        <DialogFooter>
+        {/* <DialogFooter>
           <Button type="submit">Save changes</Button>
-        </DialogFooter>
+        </DialogFooter> */}
       </DialogContent>
     </Dialog>
 )}

@@ -1,6 +1,9 @@
+'use client'
 import { X } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { toast } from 'sonner';
+import { InputField, Rating } from '../modal-context';
 
 type ModalTimeoutProps = {
   title: string;
@@ -19,9 +22,8 @@ type ModalTimeoutProps = {
   onOpenChange?: (open: boolean) => void;
 };
 
-// Modal component
-export default function ModalTimeout({
-  title,
+{/*
+    title,
   parent,
   ratings,
   inputs,
@@ -29,28 +31,101 @@ export default function ModalTimeout({
   isOpen = true,
   onOpenChange,
   timeoutDuration = 0
-}) {
+    */}
+
+type ModalTimeoutProps = {
+  apiKey: string;
+  productId: string;
+  componentId: string;
+  userInfo?: object;
+};
+
+// Modal component
+export default function FeedbackModalTimeout({
+  apiKey,
+  productId,
+  componentId,
+  userInfo
+}: ModalTimeoutProps) {
+  const [isOpen, setIsOpen] = useState(true);
+
   const [selectedRating, setSelectedRating] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [animate, setAnimate] = useState(null);
 
+  const [loaded, setLoaded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [timeoutDuration, setTimeoutDuration] = useState(10);
+  const [title, setTitle] = useState('Got any feedback?');
+  const [ratings, setRatings] = useState([
+    { label: '1', emoji: '1️⃣', value: 1 },
+    { label: '2', emoji: '2️⃣', value: 2 },
+    { label: '3', emoji: '3️⃣', value: 3 },
+    { label: '4', emoji: '4️⃣', value: 4 },
+    { label: '5', emoji: '5️⃣', value: 5 },
+  ] as Rating[]);
+  const [inputs, setInputs] = useState([
+    { label: 'Your feedback', placeholder: 'Share your feedback' },
+  ] as InputField[]);
+  const [buttonText, setButtonText] = useState('Submit');
+
   // Return null early if modal shouldn't be shown
-  if (!isOpen) {
+  if (!apiKey || !productId || !componentId) {
+    toast.error('Failed to load component data: missing required parameters');
     return null;
   }
 
-  // Auto-close the modal if timeoutDuration is set
-  React.useEffect(() => {
-    if (timeoutDuration > 0 && isOpen) {
-      const timer = setTimeout(() => {
-        if (onOpenChange) {
-          onOpenChange(false);
+  // Load component data from database
+  useEffect(() => {
+    const loadComponent = async () => {
+      try {
+        const response = await fetch(`/api/imports/components/load-component`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            apiKey,
+            productId,
+            componentId
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+          toast.error('Failed to load component data:', data.error);
+          return null;
         }
-      }, timeoutDuration * 1000);
+        setLoaded(true);
+        // set new data
+        setTitle(data.title);
+        setRatings(data.ratings);
+    setInputs(data.inputs);
+    setButtonText(data.buttonText);
+    setTimeoutDuration(data.timeoutDuration);
+    console.log(`product feedback modal loaded:`, data)
+  } catch (error) {
+    console.error('Error loading component data:', error);
+    return null;
+  }
+    };
+
+    // Call the loadComponent function
+    loadComponent();
+  }, [apiKey, productId, componentId]);
+  
+  
+  // Auto-close the modal if timeoutDuration is set
+  // React.useEffect(() => {
+  //   if (timeoutDuration > 0 && isOpen) {
+  //     const timer = setTimeout(() => {
+  //       setIsOpen(false);
+  //     }, timeoutDuration * 1000);
       
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, onOpenChange, timeoutDuration]);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [isOpen, timeoutDuration]);
 
   const handleRatingClick = (value) => {
     setSelectedRating(value);
@@ -58,16 +133,46 @@ export default function ModalTimeout({
     setTimeout(() => setAnimate(null), 800);
   };
 
-  const handleSave = () => {
-    if (onOpenChange) {
-      onOpenChange(false);
+  const handleSave = async () => {
+    if (isOpen) {
+      setIsOpen(false);
+    }
+    setIsSubmitting(true);
+
+    // Save rating and feedback to database
+    try {
+      const userFeedback = {
+        productId,
+        componentId,
+        feedback,
+        rating: selectedRating,
+      } 
+      const response = await fetch(`/api/imports/components/save-data`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ...userFeedback,
+          userInfo
+        })
+      })
+      const data = await response.json();
+      if (!response.ok) {
+        toast.error('Failed to save feedback:', data.error);
+        return;
+      }
+      toast.success('Feedback saved successfully');
+    } catch (error) {
+      console.error('Error saving feedback:', error);
+      toast.error('Failed to save feedback');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleClose = () => {
-    if (onOpenChange) {
-      onOpenChange(false);
-    }
+    setIsOpen(false);
   };
 
   // Sort ratings by value to ensure they appear in the correct order
@@ -135,13 +240,22 @@ export default function ModalTimeout({
         <button
           onClick={handleSave}
           className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-md font-medium transition-colors duration-200"
+          disabled={isSubmitting}
         >
-          {buttonText}
+          {isSubmitting ? 'Submitting...' : buttonText}
         </button>
       </div>
     </div>
   );
 
+  if (!loaded) {
+    return null;
+  }
+
+  if (!isOpen) {
+    return null;
+  }
+  
   // Mode 1: In-container modal
   if (parent && parent.current) {
     return createPortal(

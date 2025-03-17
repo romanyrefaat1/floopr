@@ -3,11 +3,13 @@ import { doc, setDoc, serverTimestamp,updateDoc } from "firebase/firestore";
 
 export type SimpleFeedbackItemData = {
   content: string;
-  userId: string;
-  username: string;
-  profilePicture: string;
-  productName: string;
   productId: string;
+  componentRefId?: string;
+  userInfo?: {
+    userId?: string;
+    username?: string;
+    profilePicture?: string;
+  };
 }
 
 export type AdvancedFeedbackItemData = {
@@ -21,7 +23,7 @@ export type AdvancedFeedbackItemData = {
  * Adds a simple feedback entry to a product with real-time updates
  */
 export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
-  const { content, userId, username, profilePicture, productName, productId } = feedbackData;
+  const { content, productId, componentRefId, userInfo } = feedbackData;
   console.log(`addFeedback`, feedbackData);
 
   try {
@@ -51,15 +53,14 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
           }
         },
         content,
-        userId,
-        username,
-        profilePicture,
         feedbackId,
         productId,
-        productName,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
-        status: "active" // Adding status can help with filtering in real-time listeners
+        status: "active", // Adding status can help with filtering in real-time listeners
+        // Component
+        componentRefId,
+        userInfo,
       }
     );
 
