@@ -1,38 +1,29 @@
-import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
-import FeedbackItem from "./feedback-item";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import FeedbackItem from "./feedback-item";
+import getFilteredFeedbacks from "@/actions/filter-feedback";
 
-// USE FIREBASE SERVER SDK
-export default async function FeedbackList({ productId }) {
+// Using the Firebase client SDK on the server is okay if your environment supports it.
+// Alternatively, use the Firebase Admin SDK for pure server-side code.
+
+export default async function FeedbackList({ productId, filterData }: { productId: string }) {
   try {
-    const feedbacksRef = collection(db, "products", productId, "feedbacks");
-    const q = query(feedbacksRef, orderBy("socialData.likes.count", "desc"));
-    
-    const querySnapshot = await getDocs(q);
-    
-    const feedbacks = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    
-    if (feedbacks.length === 0) {
-      return <div>No feedbacks yet for this product.</div>;
+    const feedbacks = await getFilteredFeedbacks(productId, filterData)
+
+    if (!feedbacks[0]) {
+      <div className="text-red-500">
+        Failed to load feedback. Please try again later.
+      </div>
     }
-    
+
     return (
       <div className="space-y-4">
         {feedbacks.map((feedback) => (
-        //   <FeedbackItem 
-        //     key={feedback.id} 
-        //     feedback={feedback} 
-        //     productId={productId}
-        //   />
-        <>feedback</>
+          <FeedbackItem key={feedback.id} feedback={feedback} productId={productId} />
         ))}
       </div>
     );
   } catch (error) {
-    // Handle errors during data fetching
     console.error("Error fetching feedbacks:", error);
     return (
       <div className="text-red-500">

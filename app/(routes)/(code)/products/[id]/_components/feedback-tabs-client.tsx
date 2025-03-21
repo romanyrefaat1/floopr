@@ -59,7 +59,7 @@ export function FeedbackTabsClient({ productData, isOwner=false, filter }: Feedb
     backgroundColor: "var(--background-color)",
     borderRadius: "var(--border-radius)",
     fontSize: "var(--font-size)",
-    "&[data-state=active]": {
+    "&[dataState=active]": {
       backgroundColor: "var(--primary-color)",
       color: "var(--secondary-text-color, white)",
     },

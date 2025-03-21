@@ -11,12 +11,13 @@ import { useState } from "react";
 
 type FilterButtonProps = {
     variant?: "outline" | "secondary" | "default" | "destructive" | "ghost" | "link";
-    label: string;
+    label?: string;
 }
 
 export default function FilterButton({variant="outline", label="Filter"}: FilterButtonProps){
     const router = useRouter();
     const [open, setOpen] = useState(false);
+    const [currentTab, setCurrentTab] = useState(`all`)
     // const searchParams = useSearchParams();
     console.log(`all`)
     const handleFilter = (filter: string) => {
@@ -27,20 +28,24 @@ return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={variant}>{label}</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>{label}</DialogTitle>
+      </DialogTrigger> 
+
+<DialogContent className={`rounded-modal w-full max-w-md mx-auto text-card-foreground font-sans text-base`}>
+<div className={`rounded-modal w-full max-w-md mx-auto text-card-foreground font-sans text-base`}>
+  <DialogHeader>
+          <DialogTitle>{label || `Filter by ${currentTab}`}</DialogTitle>
           <DialogDescription>
-            Filter by Dates and likes.
+            Filter by Dates, likes, sentiment, and topic.
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="all" className="w-[400px]">
-  <TabsList>
+        <Tabs defaultValue="all" className="max-w-[400px]">
+  <TabsList onChange={(e)=> setCurrentTab(e)}>
     <TabsTrigger value="all">All</TabsTrigger>
     <TabsTrigger value="popular">Popular</TabsTrigger>
     <TabsTrigger value="date">Date</TabsTrigger>
+    <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
+    <TabsTrigger value="topic">Topic</TabsTrigger>
   </TabsList>
   <TabsContent value="all" className="space-y-2 rounded">
   <ul>
@@ -51,8 +56,17 @@ return (
     <li role="button" className="hover:bg-gray-100 p-2 rounded cursor-pointer flex items-center gap-4"><ThumbsUp size={14} /> Likes</li>
   </ul>
   </TabsContent>
-  <TabsContent value="date" className="space-y-2 rounded"><FilterTabsDate /></TabsContent>
   <TabsContent value="popular" className="space-y-2 rounded">
+  <TabsContent value="date" className="space-y-2 rounded">
+    <FilterTabsDate />
+    datee
+    </TabsContent>
+    <FilterTabsReach open={open} setDialogOpen={setOpen} />
+  </TabsContent>
+  <TabsContent value="sentiment" className="space-y-2 rounded">
+    <FilterTabsReach open={open} setDialogOpen={setOpen} />
+  </TabsContent>
+  <TabsContent value="topic" className="space-y-2 rounded">
     <FilterTabsReach open={open} setDialogOpen={setOpen} />
   </TabsContent>
 </Tabs>
@@ -61,6 +75,7 @@ return (
         {/* <DialogFooter>
           <Button type="submit">Save changes</Button>
         </DialogFooter> */}
+      </div>
       </DialogContent>
     </Dialog>
 )}

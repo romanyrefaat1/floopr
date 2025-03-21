@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Product } from "../../page";
-import FeedbackModalTimeout from "@/components/integration/modal-timout/imports/feedback-modal-timeout";
+import FeedbackModalTimeout from "@/components/floopr-integration/modal-timout/imports/feedback-modal-timeout";
 
 export default function ComponentCard({ productData, componentData, isYours }: { productData: Product; componentData: object, isYours: boolean }) {
     console.log(`my-componentData`, componentData)
@@ -20,7 +20,7 @@ export default function ComponentCard({ productData, componentData, isYours }: {
                     </div>
                 </CardHeader>
                 <FeedbackModalTimeout apiKey={componentData.apiKey} productId={productData.docId} componentId={componentData.componentData.componentId}/>
-                <Link href={`/edit-component/${componentData.componentData.name}?ref=${productData.docId}`}>
+                <Link href={`/edit-component/${componentData.componentType}/${componentData.componentData.componentId}?ref=${productData.docId}`}>
                     <Button className="w-full" variant="secondary">{isYours ? `Edit` : `Add` } Component</Button>
                 </Link>
             </div>

@@ -8,7 +8,7 @@ export default async function EditModalTimePage({searchParams}){
     return (
         <main>
             {/* <Steps inStep={1} /> */}
-            <h1 className="mb-[20px]">Edit Modal</h1>
+            <h1 className="mb-[20px]">Create Modal</h1>
             <EditModalTabs productId={ref}/>
         </main>
     )

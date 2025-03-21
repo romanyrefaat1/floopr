@@ -5,23 +5,6 @@ import { createPortal } from 'react-dom';
 import { toast } from 'sonner';
 import { InputField, Rating } from '../modal-context';
 
-type ModalTimeoutProps = {
-  title: string;
-  parent?: React.RefObject<HTMLElement>;
-  ratings: {
-    label: string;
-    emoji: string;
-    value: number;
-  }[];
-  inputs: {
-    label: string;
-    placeholder: string;
-  }[];
-  buttonText: string;
-  isOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
-};
-
 {/*
     title,
   parent,
@@ -41,7 +24,7 @@ type ModalTimeoutProps = {
 };
 
 // Modal component
-export default function FeedbackModalTimeout({
+export default function FlooprFeedbackModalTimeout({
   apiKey,
   productId,
   componentId,
@@ -65,8 +48,25 @@ export default function FeedbackModalTimeout({
     { label: '4', emoji: '4️⃣', value: 4 },
     { label: '5', emoji: '5️⃣', value: 5 },
   ] as Rating[]);
+
+  const [styles, setStyles] = useState({
+    accentColor: '#dbeafe',
+    animation: 'none',
+    backgroundColor: 'white',
+    borderRadius: '0.375rem',
+    fontFamily: 'inherit',
+    fontSize: '1rem',
+    headingStyle: 'bold',
+    layout: 'grid',
+    primaryColor: '#3b82f6',
+    secondaryColor: '#f3f4f6',
+    shadowStyle: 'soft',
+    spacing: 'comfortable',
+    textColor: '#1f2937'
+  });
+
   const [inputs, setInputs] = useState([
-    { label: 'Your feedback', placeholder: 'Share your feedback' },
+    { label: 'Your feedback', placeholder: 'Share your feedback' , id: 1, value: ""},
   ] as InputField[]);
   const [buttonText, setButtonText] = useState('Submit');
 
@@ -101,7 +101,23 @@ export default function FeedbackModalTimeout({
         // set new data
         setTitle(data.title);
         setRatings(data.ratings);
-    setInputs(data.inputs);
+        setInputs(data.inputs);
+        console.log(`style data loaded`, data.style, data)
+        if (data.style) {
+          setStyles(data.style);
+        }
+        console.log(`te inputs:`, data.inputs)
+        {/*
+      [
+        {
+          id: 1,
+          label: "Explain it here",
+          placeholder: "Write your feedback...",
+          value: ""
+        }
+      ]
+      */}
+    
     setButtonText(data.buttonText);
     setTimeoutDuration(data.timeoutDuration);
     console.log(`product feedback modal loaded:`, data)
@@ -180,7 +196,7 @@ export default function FeedbackModalTimeout({
 
   // The modal content (shared between both rendering methods)
   const modalContent = (
-    <div className="p-6 w-full h-full bg-white rounded-lg shadow-lg">
+    <div style={{backgroundColor: styles.backgroundColor, color: styles.textColor, fontFamily: styles.fontFamily, fontSize: styles.fontSize, borderRadius: styles.borderRadius, boxShadow: styles.shadowStyle}} className="p-6 w-full h-full rounded-lg shadow-lg">
       {/* Title and close button */}
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-xl font-bold text-gray-800">{title}</h2>
@@ -225,8 +241,12 @@ export default function FeedbackModalTimeout({
           <input
             type="text"
             placeholder={input.placeholder}
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
+            value={input.value}
+            onChange={(e) => setInputs((prev) => {
+              const newInputs = [...prev];
+              newInputs[index] = { ...input, value: e.target.value };
+              return newInputs;
+            })}
             className="w-full border border-gray-300 rounded-md p-3 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>

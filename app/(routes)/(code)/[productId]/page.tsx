@@ -6,6 +6,9 @@ import { notFound } from "next/navigation";
 import FeedbackForm from "./_components/feedback-form";
 import { ProductStyleProvider } from "@/contexts/product-style-context";
 import ShowFeedbacks from "./_components/show-feedbacks";
+import { Avatar } from "@/components/ui/avatar";
+import { PaDropdown } from "./_components/pa-drop-down";
+import Feedbacks from "./_components/feedbacks/feedbacks";
 
 export type ProductStyle = {
   backgroundColor: string;
@@ -50,32 +53,48 @@ export default async function UsersProductPage({ params }: { params: { productId
   const { productId } = params;
   const productDataFirebase = await getProductData(productId);
   
-  if (!productDataFirebase) {
-    return notFound();
-  }
+  // if (!productDataFirebase) {
+  //   return notFound();
+  // }
+  
+  // const productStyle: ProductStyle = {
+  //   backgroundColor: productDataFirebase.style?.backgroundColor || "#ffffff",
+  //   shadowStyle: productDataFirebase.style?.shadowStyle || "none",
+  //   headingStyle: productDataFirebase.style?.headingStyle || "normal",
+  //   layout: productDataFirebase.style?.layout || "grid",
+  //   textColor: productDataFirebase.style?.textColor || "#000000",
+  //   fontSize: productDataFirebase.style?.fontSize || "16px",
+  //   primaryColor: productDataFirebase.style?.primaryColor || "#0000ff",
+  //   animation: productDataFirebase.style?.animation || "none",
+  //   spacing: productDataFirebase.style?.spacing || "normal",
+  //   borderRadius: productDataFirebase.style?.borderRadius || "0px",
+  //   secondaryColor: productDataFirebase.style?.secondaryColor || "#cccccc",
+  //   accentColor: productDataFirebase.style?.accentColor || "#ff0000",
+  //   fontFamily: productDataFirebase.style?.fontFamily || "sans-serif"
+  // },
   
   const productData: ProductData = {
-    docId: productDataFirebase.docId,
+    docId: productId,
     name: productDataFirebase.name,
-    updatedAt: productDataFirebase.updatedAt,
+    updatedAt: productDataFirebase.updatedAt.toDate,
     lastFeedbackAt: productDataFirebase.lastFeedbackAt,
     feedbackCount: productDataFirebase.feedbackCount,
     description: productDataFirebase.description || "No description provided.",
     ownerId: productDataFirebase.ownerId,
-    style: {
-      backgroundColor: productDataFirebase.style?.backgroundColor || "#ffffff",
-      shadowStyle: productDataFirebase.style?.shadowStyle || "none",
-      headingStyle: productDataFirebase.style?.headingStyle || "normal",
-      layout: productDataFirebase.style?.layout || "grid",
-      textColor: productDataFirebase.style?.textColor || "#000000",
-      fontSize: productDataFirebase.style?.fontSize || "16px",
-      primaryColor: productDataFirebase.style?.primaryColor || "#0000ff",
-      animation: productDataFirebase.style?.animation || "none",
-      spacing: productDataFirebase.style?.spacing || "normal",
-      borderRadius: productDataFirebase.style?.borderRadius || "0px",
-      secondaryColor: productDataFirebase.style?.secondaryColor || "#cccccc",
-      accentColor: productDataFirebase.style?.accentColor || "#ff0000",
-      fontFamily: productDataFirebase.style?.fontFamily || "sans-serif"
+    productStyle: {
+        backgroundColor:"#ffffff",
+        shadowStyle: "normal",
+        headingStyle: "normal",
+        layout: "grid",
+        textColor: "#000000",
+        fontSize: "16px",
+        primaryColor: "#0000ff",
+        animation: "none",
+        spacing:  "normal",
+        borderRadius: "sm",
+        secondaryColor: "#cccccc",
+        accentColor: "#ff0000",
+        fontFamily: "sans-serif"
     },
     productId: productDataFirebase.productId,
     link: productDataFirebase.link || `/${productId}`,
@@ -94,23 +113,22 @@ export default async function UsersProductPage({ params }: { params: { productId
   console.log("productData", productData);
   
   return (
-    <ProductStyleProvider productStyle={productData.style}>
-      <main className="bg-[var(--product-background-color)] px-20">
-        <header className="py-5">
-          <nav className="w-full">
-            <Link href={productData.link}>
-              <Button variant="outline" className="flex gap-4 items-center justify-center">
-                <span>{productData.name}</span>
-                <ArrowUpRight />
-              </Button>
-            </Link>
-          </nav>
-        </header>
-        <div className="flex">
-        <FeedbackForm productData={productData} />
-        <ShowFeedbacks productId={productData.productId} />
-        </div>
-      </main>
+    <ProductStyleProvider productStyle={productData.productStyle}>
+      <main className="bg-background px-4 md:px-20 min-h-screen">
+  <header className="rounded-lg border p-4 mb-6">
+    <nav className="w-full flex justify-between items-center">
+      <Link href={productData.link} className="h-fit">
+        {productData.name}
+      </Link>
+      <PaDropdown />
+    </nav>
+  </header>
+  <div>
+    <h1 className="mb-2 text-3xl font-bold">Give us feedback</h1>
+    <Feedbacks productId={productData.productId} productData={productData} />
+  </div>
+</main>
+
     </ProductStyleProvider>
   );
 }

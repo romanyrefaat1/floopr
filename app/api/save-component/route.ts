@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -13,20 +13,29 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    
+
     // Save component in Firestore
-    console.log("Start setDoc")
     const componentApiKey = crypto.randomUUID()
-    const result = await setDoc(
-      doc(db, `products/${productId}/components/${componentData.componentId}`), 
-      {
+    const componentRef = doc(db, `products/${productId}/components/${componentData.componentId}`);
+    const docSnap = await getDoc(componentRef);
+
+    if (docSnap.exists()) {
+      console.log(`Updating existing component ${componentData.componentId}`);
+      await updateDoc(componentRef, {
         componentData,
         componentType,
         apiKey: componentApiKey,
         productId
-      }
-    );
-    console.log("End setDoc:", result)
+      });
+    } else {
+      console.log(`Creating new component ${componentData.componentId}`);
+      await setDoc(componentRef, {
+        componentData,
+        componentType,
+        apiKey: componentApiKey,
+        productId
+      });
+    }
     
     return NextResponse.json(
       { success: true },

@@ -3,16 +3,16 @@ import { db } from "@/lib/firebase";
 import { doc } from "firebase/firestore";
 
 type Data = {
-    userId: string;
-    username: string;
-    profilePicture: string;
+    userId?: string;
+    username?: string;
+    profilePicture?: string;
     productId: string;
 }
 
 export type LikeData = {
-    userId: string;
-    username: string;
-    profilePicture: string;
+    userId?: string;
+    username?: string;
+    profilePicture?: string;
 }
 
 export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
@@ -25,9 +25,9 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
         await updateDoc(docRef, {
           "socialData.likes.count": increment(-1),
           "socialData.likes.data": arrayRemove({
-            userId,
-            username,
-            profilePicture
+            userId: userId || null,
+            username: username || null,
+            profilePicture: profilePicture || ``
           })
         });
         console.log("Like removed");
@@ -37,9 +37,9 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
         await updateDoc(docRef, {
           "socialData.likes.count": increment(1),
           "socialData.likes.data": arrayUnion({
-            userId,
-            username,
-            profilePicture
+            userId: userId || null,
+            username: username || null,
+            profilePicture: profilePicture || ``
           })
         });
         console.log("Like added");
@@ -47,7 +47,7 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
     }
 }
 
-export async function isUserLiked(feedbackId: string, userId: string, productId: string) {
+export async function isUserLiked(feedbackId: string, productId: string, userId?: string) {
     const docRef = doc(db, "products", productId, "feedbacks", feedbackId);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {

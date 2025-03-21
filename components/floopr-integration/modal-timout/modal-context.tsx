@@ -12,6 +12,8 @@ export type Rating = {
 export type InputField = {
   label: string;
   placeholder: string;
+  value: string;
+  id: number;
 };
 
 export type ModalConfig = {
@@ -42,7 +44,7 @@ const defaultConfig: ModalConfig = {
     { label: "Good", value: 2, emoji: "😊" }
   ],
   inputs: [
-    { label: "Explain it here", placeholder: "Write your feedback..." }
+    { label: "Explain it here", placeholder: "Write your feedback...", value: "", id: 1 }
   ],
   buttonText: "Save",
   timeoutDuration: 0,

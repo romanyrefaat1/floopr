@@ -1,8 +1,14 @@
 import { db } from "@/lib/firebase";
-import { doc, setDoc, serverTimestamp,updateDoc } from "firebase/firestore";
+import { analyzeSentiment } from "@/services/analyze-sentiment";
+import classifyTopic from "@/services/classify-topic";
+import { doc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 export type SimpleFeedbackItemData = {
-  content: string;
+  feedback: {
+    title: string;
+    content: string;
+    type: `idea` | `feature` | `issue` | `other`
+  };
   productId: string;
   componentRefId?: string;
   userInfo?: {
@@ -10,64 +16,80 @@ export type SimpleFeedbackItemData = {
     username?: string;
     profilePicture?: string;
   };
-}
+};
 
 export type AdvancedFeedbackItemData = {
   title: string;
   description: string;
   userId: string;
   username: string;
-}
+};
 
 /**
  * Adds a simple feedback entry to a product with real-time updates
  */
 export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
-  const { content, productId, componentRefId, userInfo } = feedbackData;
+  const { feedback, productId, componentRefId, userInfo } = feedbackData;
   console.log(`addFeedback`, feedbackData);
 
   try {
+    // Example usage with default topics
+    const sintemntResult = await analyzeSentiment(
+      `${feedback.title}. ${feedback.content || ``}`
+    );
+    console.log(`sintementResult`, sintemntResult);
+    const topicClassification = await classifyTopic(
+      `${feedback.title}. ${feedback.content}`
+    );
+    console.log(`topicClassification addismeple feedback`, topicClassification);
+
     // 1. Ensure the product document exists in the "products" collection
     await setDoc(
-      doc(db, "products", productId), 
-      { 
+      doc(db, "products", productId),
+      {
         productId,
-        updatedAt: serverTimestamp() // Adding this helps with real-time sorting
-      }, 
+        updatedAt: serverTimestamp(), // Adding this helps with real-time sorting
+      },
       { merge: true }
     );
 
     const feedbackId = crypto.randomUUID();
-    await setDoc(
-      doc(db, "products", productId, "feedbacks", feedbackId),
-      {
-        type: `simple`,
-        socialData: {
-          likes: {
-            count: 0,
-            data: []
-          },
-          comments: {
-            count: 0,
-            data: []
-          }
+    await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
+      type: feedback.type | `other`,
+      sentiment: {
+        sentiment: sintemntResult.sentiment,
+        score: sintemntResult.score,
+        text: sintemntResult.text,
+      },
+      topic: topicClassification,
+      socialData: {
+        likes: {
+          count: 0,
+          data: [],
         },
-        content,
-        feedbackId,
-        productId,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        status: "active", // Adding status can help with filtering in real-time listeners
-        // Component
-        componentRefId,
-        userInfo,
-      }
-    );
+        comments: {
+          count: 0,
+          data: [],
+        },
+      },
+      feedback: {
+        title: feedback.title,
+        content: feedback.content,
+      },
+      feedbackId,
+      productId,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      status: "Sent", // Adding status can help with filtering in real-time listeners
+      // Component
+      componentRefId: componentRefId || null,
+      userInfo,
+    });
 
     const productRef = doc(db, "products", productId);
     await updateDoc(productRef, {
       feedbackCount: (await import("firebase/firestore")).increment(1),
-      lastFeedbackAt: serverTimestamp()
+      lastFeedbackAt: serverTimestamp(),
     });
 
     return { success: true, feedbackId };
@@ -80,41 +102,41 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
 /**
  * Adds an advanced feedback entry with title and description
  */
-export async function addAdvancedFeedback(productId: string, feedbackData: AdvancedFeedbackItemData) {
+export async function addAdvancedFeedback(
+  productId: string,
+  feedbackData: AdvancedFeedbackItemData
+) {
   const { title, description, userId, username } = feedbackData;
-  
+
   try {
     // 1. Ensure the product document exists in the "products" collection
     await setDoc(
-      doc(db, "products", productId), 
-      { 
+      doc(db, "products", productId),
+      {
         productId,
-        updatedAt: serverTimestamp()
-      }, 
+        updatedAt: serverTimestamp(),
+      },
       { merge: true }
     );
 
     // 2. Generate a unique ID and create a feedback document
     const feedbackId = crypto.randomUUID();
-    await setDoc(
-      doc(db, "products", productId, "feedbacks", feedbackId),
-      {
-        title,
-        description,
-        userId,
-        username,
-        feedbackId,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        status: "active"
-      }
-    );
+    await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
+      title,
+      description,
+      userId,
+      username,
+      feedbackId,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      status: "active",
+    });
 
     // 3. Update the product document with feedback count
     const productRef = doc(db, "products", productId);
     await updateDoc(productRef, {
       feedbackCount: (await import("firebase/firestore")).increment(1),
-      lastFeedbackAt: serverTimestamp()
+      lastFeedbackAt: serverTimestamp(),
     });
 
     return { success: true, feedbackId };

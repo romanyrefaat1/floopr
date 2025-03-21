@@ -1,12 +1,10 @@
 "use client"
 
 import React, { createContext, useContext, ReactNode } from 'react';
-import { ProductStyle } from '../page';
+import { ProductStyle } from '@/app/(routes)/(code)/[productId]/page';
 
-// Create a context to pass the style variables down
 const ProductStyleContext = createContext<ProductStyle | null>(null);
 
-// Hook to use the product style
 export const useProductStyle = () => {
   const context = useContext(ProductStyleContext);
   if (!context) {
@@ -15,18 +13,22 @@ export const useProductStyle = () => {
   return context;
 };
 
-// Component to provide style variables
-export function ProductStyleProvider({ 
-  children, 
-  productStyle 
-}: { 
-  children: ReactNode; 
-  productStyle: ProductStyle 
-}) {
-  // Create CSS variable style object
-  const cssVariables = {
-    '--product-bg-color': productStyle.backgroundColor,
-    '--product-shadow': productStyle.shadowStyle,
+export const ProductStyleProvider: React.FC<{
+  children: ReactNode;
+  productStyle: ProductStyle;
+}> = ({ children, productStyle }) => {
+
+  const borderRadius =
+    productStyle.borderRadius === "large"
+      ? { md: "20px", sm: "15px", lg: "25px" }
+      : productStyle.borderRadius === "sm"
+      ? { md: "15px", sm: "10px", lg: "20px" }
+      : { md: "10px", sm: "5px", lg: "15px" };
+
+  // Convert the style object to CSS variables
+  const cssVars = {
+    '--product-background-color': productStyle.backgroundColor,
+    '--product-shadow-style': productStyle.shadowStyle,
     '--product-heading-style': productStyle.headingStyle,
     '--product-layout': productStyle.layout,
     '--product-text-color': productStyle.textColor,
@@ -34,17 +36,19 @@ export function ProductStyleProvider({
     '--product-primary-color': productStyle.primaryColor,
     '--product-animation': productStyle.animation,
     '--product-spacing': productStyle.spacing,
-    '--product-border-radius': productStyle.borderRadius,
+    '--product-border-radius-sm': borderRadius.sm,
+    '--product-border-radius-md': borderRadius.md,
+    '--product-border-radius-lg': borderRadius.lg,
     '--product-secondary-color': productStyle.secondaryColor,
     '--product-accent-color': productStyle.accentColor,
-    '--product-font-family': productStyle.fontFamily,
+    '--product-font-family': productStyle.fontFamily
   } as React.CSSProperties;
 
   return (
     <ProductStyleContext.Provider value={productStyle}>
-      <div className="product-style-root" style={cssVariables}>
+      <div style={cssVars}>
         {children}
       </div>
     </ProductStyleContext.Provider>
   );
-}
+};
