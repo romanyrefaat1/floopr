@@ -7,6 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ArrowUpNarrowWide } from "lucide-react";
 import Link from "next/link";
 import { FeedbackItemInDB } from "./feedback-list";
+import FinalStatus from "./final-status";
 
 /**
  * FeedbackItem props
@@ -28,7 +29,7 @@ import { FeedbackItemInDB } from "./feedback-list";
  *   ...other fields...
  * }
  */
-export default function FeedbackItem({ feedback, productId }: { feedback: FeedbackItemInDB, productId: string }) {
+export default function FeedbackItem({ feedback, productId, isOwner }: { feedback: FeedbackItemInDB, productId: string, isOwner: boolean }) {
   const { feedback: feedbackData, status, topic, userInfo, createdAt } = feedback;
   const { title, content } = feedbackData || {};
 //   const isLiked = useIsUserLiked(productId, feedback.id, )
@@ -89,9 +90,7 @@ export default function FeedbackItem({ feedback, productId }: { feedback: Feedba
 
         {/* Status & topic side by side */}
         <div className="flex items-center space-x-2">
-          <div className="text-xs bg-gray-200 px-2 py-1 rounded">
-            {finalStatus}
-          </div>
+          <FinalStatus finalStatus={finalStatus} isOwner={isOwner} productId={productId} feedbackId={feedback.id}/>
           <div className="text-xs bg-gray-200 px-2 py-1 rounded">
             {finalTopic}
           </div>

@@ -7,7 +7,7 @@ export default function Feedbacks({ productId, productData , filterData}: { prod
   return (
     <div className="p-4 flex flex-col gap-xl2 rounded-lg bg-card text-card-foreground shadow border border-secondary">
       <TopFeedbacks />
-      <ShowFeedbacks productId={productId} filterData={filterData} />
+      <ShowFeedbacks productId={productId} isOwner={productData.isOwner} filterData={filterData} />
     </div>
   );
 }

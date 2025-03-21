@@ -6,6 +6,7 @@ import { PaDropdown } from "./_components/pa-drop-down";
 import Feedbacks from "./_components/feedbacks/feedbacks";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
 import { FilterData } from "../products/[id]/page";
+import { auth } from "@clerk/nextjs/server";
 
 export type ProductStyle = {
   backgroundColor: string;
@@ -30,6 +31,7 @@ export type ProductData = {
   lastFeedbackAt: any;
   feedbackCount: number;
   description: string;
+  isOwner: boolean;
   ownerId: string;
   style: ProductStyle;
   productId: string;
@@ -49,6 +51,9 @@ export type ProductData = {
 export default async function UsersProductPage({ params, searchParams }: { params: { productId: string }, searchParams: FilterData }) {
   const { productId } = params;
   const productDataFirebase = await getProductData(productId);
+  const {userId} = await auth();
+  const isOwner = productDataFirebase.ownerId === userId
+  console.log(`isOwner:`, isOwner, userId, productDataFirebase.ownerId);
   
   if (!productDataFirebase) {
     return notFound();
@@ -80,21 +85,7 @@ export default async function UsersProductPage({ params, searchParams }: { param
     feedbackCount: productDataFirebase.feedbackCount,
     description: productDataFirebase.description || "No description provided.",
     ownerId: productDataFirebase.ownerId,
-    productStyle: {
-        backgroundColor:"#ffffff",
-        shadowStyle: "normal",
-        headingStyle: "normal",
-        layout: "grid",
-        textColor: "#000000",
-        fontSize: "16px",
-        primaryColor: "#0000ff",
-        animation: "none",
-        spacing:  "normal",
-        borderRadius: "sm",
-        secondaryColor: "#cccccc",
-        accentColor: "#ff0000",
-        fontFamily: "sans-serif"
-    },
+    isOwner,
     productId: productDataFirebase.productId,
     link: productDataFirebase.link || `/${productId}`,
     mainTitle: productDataFirebase.mainTitle,
@@ -112,7 +103,7 @@ export default async function UsersProductPage({ params, searchParams }: { param
   console.log("productData", productData);
   
   return (
-    <ProductStyleProvider productStyle={productData.productStyle}>
+    // <ProductStyleProvider productStyle={productData.productStyle}>
       <main className="bg-background px-4 md:px-20 min-h-screen">
   <header className="rounded-lg border p-4 mb-6">
     <nav className="w-full flex justify-between items-center">
@@ -128,6 +119,6 @@ export default async function UsersProductPage({ params, searchParams }: { param
   </div>
 </main>
 
-    </ProductStyleProvider>
+    // </ProductStyleProvider>
   );
 }

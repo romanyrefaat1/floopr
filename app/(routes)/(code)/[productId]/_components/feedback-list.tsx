@@ -45,7 +45,7 @@ export type FeedbackItemInDB = {
   };
 }
 
-export default async function FeedbackList({ productId, filterData }: { productId: string, filterData: FilterData }) {
+export default async function FeedbackList({ productId, filterData, isOwner }: { productId: string, filterData: FilterData, isOwner: boolean }) {
   try {
     const feedbacks = await getFilteredFeedbacks(productId, filterData) as Array<unknown>
     console.log(`Fetched feedbacks`, feedbacks);
@@ -59,8 +59,9 @@ export default async function FeedbackList({ productId, filterData }: { productI
 
     return (
       <div className="space-y-4">
+        {isOwner ? `owner`: `not owner`}
         {feedbacks.map((feedback) => (
-          <FeedbackItem key={feedback.id} feedback={{...feedback, createdAt: feedback.createdAt?.toDate(), updatedAt: feedback.updatedAt?.toDate()}} productId={productId} />
+          <FeedbackItem key={feedback.id} isOwner={isOwner} feedback={{...feedback, createdAt: feedback.createdAt?.toDate(), updatedAt: feedback.updatedAt?.toDate()}} productId={productId} />
           // <>text</>
         ))}
       </div>
