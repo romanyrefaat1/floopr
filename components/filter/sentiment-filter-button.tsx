@@ -9,16 +9,26 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowDownIcon } from "lucide-react";
 
 export default function SentimentFilterButton() {
   const [value, setValue] = useState("All");
   const router = useRouter()
+  const searchParams = useSearchParams();
 
   useEffect(()=> {
     router.push(`?filter=sentiment&sentiment=${value.toLowerCase()}`)
   },[value])
+
+  useEffect(()=> {
+    const sentiment = searchParams.get("sentiment");
+    if (sentiment) {
+      setValue(sentiment.charAt(0).toUpperCase() + sentiment.slice(1))
+    } else {
+      setValue("All")
+    }
+  },[searchParams])
 
   return (
     <DropdownMenu>

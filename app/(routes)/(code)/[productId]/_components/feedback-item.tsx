@@ -54,11 +54,13 @@ export default function FeedbackItem({ feedback, productId }: { feedback: Feedba
 
   // 6. Time ago (if createdAt exists)
   let timeAgo = "Unknown date";
-  if (createdAt?.toDate) {
+  if (createdAt) {
     // Firestore timestamp => convert to JS Date
-    const date = createdAt.toDate();
-    timeAgo = formatDistanceToNow(date, { addSuffix: true }); 
+    // const date = createdAt.toDate();
+    timeAgo = formatDistanceToNow(createdAt, { addSuffix: true }); 
+    timeAgo = timeAgo.charAt(0).toUpperCase() + timeAgo.slice(1);
     // e.g. "3 days ago"
+    console.log(`timeAgo:`, timeAgo);
   }
 
   return (

@@ -60,7 +60,7 @@ export default async function FeedbackList({ productId, filterData }: { productI
     return (
       <div className="space-y-4">
         {feedbacks.map((feedback) => (
-          <FeedbackItem key={feedback.id} feedback={feedback} productId={productId} />
+          <FeedbackItem key={feedback.id} feedback={{...feedback, createdAt: feedback.createdAt?.toDate(), updatedAt: feedback.updatedAt?.toDate()}} productId={productId} />
           // <>text</>
         ))}
       </div>

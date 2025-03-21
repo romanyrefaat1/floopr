@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -33,6 +33,7 @@ export default function FeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const params = useParams();
   const productId = params.productId;
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,6 +66,7 @@ export default function FeedbackForm() {
       if (result.success) {
         toast("Feedback submitted");
         form.reset();
+        router.push(`/${productId}/feedbacks/${result.feedbackId}`)
       } else {
         toast("Failed to submit feedback. Please try again.");
       }
