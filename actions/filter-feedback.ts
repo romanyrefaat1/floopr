@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query, Timestamp, where } from "firebase/firestore";
 import { getFeedbacksByDate } from "./get-feedback-by-date";
-
+import { getAllFeedbacks } from "./get-all-feedbacks";
 
 export default async function getFilteredFeedbacks(productId: string, filterData) {
     // If no need for filter
@@ -16,10 +16,12 @@ export default async function getFilteredFeedbacks(productId: string, filterData
             collection(db, `products`, productId, `feedbacks`),
             orderBy("socialData.likes.count", "desc")
           );
-          // toast.success("Filtered by likes");
-          console.log(`Filtered by likes`);
-          return await getDocs(likesResponse);
-        //   break;
+          const likesData = await getDocs(likesResponse);
+          return likesData.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+
         case `date`:
           console.log(`Filtered by date`);
           if (filterData.quick !== null) {
@@ -41,14 +43,16 @@ export default async function getFilteredFeedbacks(productId: string, filterData
                 throw new Error(`Unknown quick filter: ${quickFilter}`);
             }
             console.log(`before-date after: ${before}`)
-            const response = query(
+            const dateResponse = query(
               collection(db, `products`, productId, `feedbacks`),
                 where("createdAt", ">", before)
               );
-              // toast.success(`Filtered by ${quickFilter}`);
-              console.log(`Filtered by ${quickFilter}`);
-              return await getDocs(response);
-              break;
+              const dateData = await getDocs(dateResponse);
+              return dateData.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+              }));
+
             } else if (filterData.specifiedDate !== null) {
               console.log("Raw date from URL (date filter switch):" , filterData)
               const data = await getFeedbacksByDate(productId, filterData)
@@ -58,30 +62,26 @@ export default async function getFilteredFeedbacks(productId: string, filterData
             }
           break;
         case `sentiment`:
-          switch(filterData.filter.sentiment) {
+          switch(filterData.sentiment) {
             case `all`:
+              console.log(`switch filter by all`)
               return await getAllFeedbacks(productId);
             default:
-              const sentimentType = filterData.filter.sentiment.toUpperCase()
-              const response = query(
+              const sentimentTypeUpperCase = filterData.sentiment
+              console.log(`Sentiment type: ${sentimentTypeUpperCase}`)
+              const sentimentType = sentimentTypeUpperCase.toUpperCase()
+              const sentimentResponse = query(
                 collection(db, `products`, productId, `feedbacks`),
                   where("sentiment.sentiment", "==", sentimentType)
                 );
                 console.log(`feedback by ${sentimentType}`)
-                const data = await getDocs(response)
-                console.log(`filtered data sentiment:`, data)
-              return data
+                const sentimentData = await getDocs(sentimentResponse);
+                return sentimentData.docs.map(doc => ({
+                  id: doc.id,
+                  ...doc.data()
+                }));
           }
         default:
           return await getAllFeedbacks(productId);
-          break;
       }
 }
-
-async function getAllFeedbacks(productId) {
-    const response = query(
-      collection(db, `products`, productId, `feedbacks`)
-    );
-    console.log(`Fetched all feedbacks`);
-    return await getDocs(response);
-  }

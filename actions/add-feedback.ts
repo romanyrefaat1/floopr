@@ -1,3 +1,4 @@
+import { FeedbackItemInDB } from "@/app/(routes)/(code)/[productId]/_components/feedback-list";
 import { db } from "@/lib/firebase";
 import { analyzeSentiment } from "@/services/analyze-sentiment";
 import classifyTopic from "@/services/classify-topic";
@@ -28,7 +29,7 @@ export type AdvancedFeedbackItemData = {
 /**
  * Adds a simple feedback entry to a product with real-time updates
  */
-export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
+export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
   const { feedback, productId, componentRefId, userInfo } = feedbackData;
   console.log(`addFeedback`, feedbackData);
 
@@ -55,7 +56,7 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
 
     const feedbackId = crypto.randomUUID();
     await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
-      type: feedback.type | `other`,
+      type: feedback.type || `other`,
       sentiment: {
         sentiment: sintemntResult.sentiment,
         score: sintemntResult.score,

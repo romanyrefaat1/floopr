@@ -6,6 +6,7 @@ import { addLikeToFeedbackItem, isUserLiked } from "@/lib/feedback-item/like-to-
 import { formatDistanceToNow } from "date-fns";
 import { ArrowUpNarrowWide } from "lucide-react";
 import Link from "next/link";
+import { FeedbackItemInDB } from "./feedback-list";
 
 /**
  * FeedbackItem props
@@ -27,7 +28,7 @@ import Link from "next/link";
  *   ...other fields...
  * }
  */
-export default function FeedbackItem({ feedback, productId }: { feedback: any, productId: string }) {
+export default function FeedbackItem({ feedback, productId }: { feedback: FeedbackItemInDB, productId: string }) {
   const { feedback: feedbackData, status, topic, userInfo, createdAt } = feedback;
   const { title, content } = feedbackData || {};
 //   const isLiked = useIsUserLiked(productId, feedback.id, )

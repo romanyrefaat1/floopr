@@ -1,7 +1,7 @@
 import { db } from "@/lib/firebase";
 import { collection, query, where, getDocs } from "firebase/firestore";
 
-export default async function getProductData(productId){
+export default async function getProductData(productId: string){
     try {
         const q = query(collection(db, "products"), where("docId", "==", productId));
         const querySnap = await getDocs(q);

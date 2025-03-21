@@ -2,6 +2,7 @@ import getProductData from "@/actions/get-product-data";
 import { notFound } from "next/navigation";
 import { lightenColor } from "./_utils/lighten-color";
 import SimpleTemplate from "./_components/templates/simple-template";
+import getFiltersFromParams, { FiltersFromParams } from "@/lib/get-filters-from-params";
 
 export type Product = {
   docId: string;
@@ -36,24 +37,16 @@ const ProductPaSpecial = async ({
   params,
   searchParams,
 }: {
-  params: { id: string },
-  searchParams: { filter: string | null, quick: string | null, date: string | null, sentiment: string | null }
+  params: Promise<{ id: string }>,
+  searchParams: FiltersFromParams
 }) => {
-  const { id } = params;
+  const { id } = await params;
   const productDataFromServer = await getProductData(id);
-  // if (!productDataFromServer) notFound();
 
-  const filter = searchParams.filter || null;
-  const quick = searchParams.quick || null;
-  const date = searchParams.date || null;
-  const sentiment = searchParams.sentiment || null;
+  console.log("Product data from server:", productDataFromServer);
+  if (!productDataFromServer) notFound();
 
-  const filterData = {
-    filter,
-    quick,
-    specifiedDate: date,
-    sentiment
-  };
+  const filterData = getFiltersFromParams(searchParams);
 
   // Generate secondary colors based on the primary colors
   const secondaryTextColor = lightenColor(productDataFromServer.style.textColor, 20);

@@ -1,25 +1,67 @@
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import FeedbackItem from "./feedback-item";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
+import { FilterData } from "../../products/[id]/page";
 
-// Using the Firebase client SDK on the server is okay if your environment supports it.
-// Alternatively, use the Firebase Admin SDK for pure server-side code.
+export type FeedbackItemInDB = {
+  componentRefId: string | null;
+  createdAt?: any;
+  updatedAt?: any;
+  feedbackId: string;
+  productId: string;
+  status?: string;
+  // type: `idea` | `feature` | `issue` | `other`;
+  type: string;
+  topic?: {
+    topTopic?: string;
+    text: string;
+    topScore: number;
+    labels: string[];
+    scores: number[];
+  };
+  sentiment: {
+    sentiment: string;
+    score: number;
+    text: string;
+  };
+  feedback: {
+    title: string;
+    content?: string;
+  };
+  userInfo?: {
+    username: string;
+    userId: string;
+    profilePicture?: string;
+  };
+  
+  socialData?: {
+    comments: {
+      count: number;
+      data: any[];
+    },
+    likes: {
+      count: number;
+      data: any[];
+    };
+  };
+}
 
-export default async function FeedbackList({ productId, filterData }: { productId: string }) {
+export default async function FeedbackList({ productId, filterData }: { productId: string, filterData: FilterData }) {
   try {
-    const feedbacks = await getFilteredFeedbacks(productId, filterData)
+    const feedbacks = await getFilteredFeedbacks(productId, filterData) as Array<unknown>
+    console.log(`Fetched feedbacks`, feedbacks);
 
     if (!feedbacks[0]) {
-      <div className="text-red-500">
-        Failed to load feedback. Please try again later.
+      return (<div className="text-red-500">
+        Failed to load feedback. Please try again later....
       </div>
+      )
     }
 
     return (
       <div className="space-y-4">
         {feedbacks.map((feedback) => (
           <FeedbackItem key={feedback.id} feedback={feedback} productId={productId} />
+          // <>text</>
         ))}
       </div>
     );

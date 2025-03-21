@@ -1,14 +1,11 @@
 import getProductData from "@/actions/get-product-data";
-import { Button } from "@/components/ui/button";
-import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import FeedbackForm from "./_components/feedback-form";
 import { ProductStyleProvider } from "@/contexts/product-style-context";
-import ShowFeedbacks from "./_components/show-feedbacks";
-import { Avatar } from "@/components/ui/avatar";
 import { PaDropdown } from "./_components/pa-drop-down";
 import Feedbacks from "./_components/feedbacks/feedbacks";
+import getFiltersFromParams from "@/lib/get-filters-from-params";
+import { FilterData } from "../products/[id]/page";
 
 export type ProductStyle = {
   backgroundColor: string;
@@ -49,13 +46,15 @@ export type ProductData = {
   isRange?: boolean;
 }
 
-export default async function UsersProductPage({ params }: { params: { productId: string } }) {
+export default async function UsersProductPage({ params, searchParams }: { params: { productId: string }, searchParams: FilterData }) {
   const { productId } = params;
   const productDataFirebase = await getProductData(productId);
   
-  // if (!productDataFirebase) {
-  //   return notFound();
-  // }
+  if (!productDataFirebase) {
+    return notFound();
+  }
+
+  const filterData = getFiltersFromParams(searchParams);
   
   // const productStyle: ProductStyle = {
   //   backgroundColor: productDataFirebase.style?.backgroundColor || "#ffffff",
@@ -76,8 +75,8 @@ export default async function UsersProductPage({ params }: { params: { productId
   const productData: ProductData = {
     docId: productId,
     name: productDataFirebase.name,
-    updatedAt: productDataFirebase.updatedAt.toDate,
-    lastFeedbackAt: productDataFirebase.lastFeedbackAt,
+    updatedAt: productDataFirebase.updatedAt.toDate(),
+    lastFeedbackAt: productDataFirebase.lastFeedbackAt.toDate(),
     feedbackCount: productDataFirebase.feedbackCount,
     description: productDataFirebase.description || "No description provided.",
     ownerId: productDataFirebase.ownerId,
@@ -125,7 +124,7 @@ export default async function UsersProductPage({ params }: { params: { productId
   </header>
   <div>
     <h1 className="mb-2 text-3xl font-bold">Give us feedback</h1>
-    <Feedbacks productId={productData.productId} productData={productData} />
+    <Feedbacks productId={productData.productId} productData={productData} filterData={filterData} />
   </div>
 </main>
 
