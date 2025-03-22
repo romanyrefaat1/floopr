@@ -5,5 +5,6 @@ export default function getFiltersFromParams(searchParams: FilterData) {
   const quick = searchParams.quick || null;
   const date = searchParams.date || null;
   const sentiment = searchParams.sentiment || null;
-  return { filter, quick, specifiedDate: date, sentiment };
+  const topic = searchParams.topic || null;
+  return { filter, quick, specifiedDate: date, sentiment, topic };
 }

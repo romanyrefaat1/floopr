@@ -1,12 +1,13 @@
+import { FilterData } from "../products/[id]/page";
+import Feedbacks from "./_components/feedbacks/feedbacks";
+import { PaDropdown } from "./_components/pa-drop-down";
 import getProductData from "@/actions/get-product-data";
+import { ProductStyleProvider } from "@/contexts/product-style-context";
+import getFiltersFromParams from "@/lib/get-filters-from-params";
+import { updatePageView } from "@/actions/basic-analytics/pageViews";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ProductStyleProvider } from "@/contexts/product-style-context";
-import { PaDropdown } from "./_components/pa-drop-down";
-import Feedbacks from "./_components/feedbacks/feedbacks";
-import getFiltersFromParams from "@/lib/get-filters-from-params";
-import { FilterData } from "../products/[id]/page";
-import { auth } from "@clerk/nextjs/server";
 
 export type ProductStyle = {
   backgroundColor: string;
@@ -22,14 +23,14 @@ export type ProductStyle = {
   secondaryColor: string;
   accentColor: string;
   fontFamily: string;
-}
+};
 
 export type ProductData = {
   docId: string;
   name: string;
   updatedAt: any;
+  createdAt: any;
   lastFeedbackAt: any;
-  feedbackCount: number;
   description: string;
   isOwner: boolean;
   ownerId: string;
@@ -46,21 +47,50 @@ export type ProductData = {
   types?: string[];
   defaultType?: string;
   isRange?: boolean;
-}
 
-export default async function UsersProductPage({ params, searchParams }: { params: { productId: string }, searchParams: FilterData }) {
+  // Basic analytics
+  feedbackCount: number;
+  pageViews: number;
+  likesCount: number;
+  commentsCount: number;
+  analytics: {
+    sentiment: {
+      positive: number;
+      negative: number;
+      neutral: number;
+      topSentiment:  "POSITIVE" | "NEGATIVE" | "NEUTRAL";
+      percent: number;
+    },
+    topic: {
+      allTopics: string[],
+      topTopic: string | null,
+      topTopicPercent: number;
+    }
+  }
+};
+
+export default async function UsersProductPage({
+  params,
+  searchParams,
+}: {
+  params: { productId: string };
+  searchParams: FilterData;
+}) {
   const { productId } = params;
   const productDataFirebase = await getProductData(productId);
-  const {userId} = await auth();
-  const isOwner = productDataFirebase.ownerId === userId
+  const { userId } = await auth();
+  const isOwner = productDataFirebase.ownerId === userId;
   console.log(`isOwner:`, isOwner, userId, productDataFirebase.ownerId);
-  
+
   if (!productDataFirebase) {
     return notFound();
   }
 
+  // Update page views
+  await updatePageView(productId);
+
   const filterData = getFiltersFromParams(searchParams);
-  
+
   // const productStyle: ProductStyle = {
   //   backgroundColor: productDataFirebase.style?.backgroundColor || "#ffffff",
   //   shadowStyle: productDataFirebase.style?.shadowStyle || "none",
@@ -76,12 +106,12 @@ export default async function UsersProductPage({ params, searchParams }: { param
   //   accentColor: productDataFirebase.style?.accentColor || "#ff0000",
   //   fontFamily: productDataFirebase.style?.fontFamily || "sans-serif"
   // },
-  
+
   const productData: ProductData = {
     docId: productId,
     name: productDataFirebase.name,
-    updatedAt: productDataFirebase.updatedAt.toDate(),
-    lastFeedbackAt: productDataFirebase.lastFeedbackAt.toDate(),
+    updatedAt: productDataFirebase.updatedAt ? productDataFirebase.updatedAt.toDate() : new Date(),
+    lastFeedbackAt: productDataFirebase.lastFeedbackAt ? productDataFirebase.lastFeedbackAt.toDate() : new Date(),
     feedbackCount: productDataFirebase.feedbackCount,
     description: productDataFirebase.description || "No description provided.",
     ownerId: productDataFirebase.ownerId,
@@ -97,27 +127,31 @@ export default async function UsersProductPage({ params, searchParams }: { param
     typesLabel: productDataFirebase.typesLabel,
     types: productDataFirebase.types,
     defaultType: productDataFirebase.defaultType,
-    isRange: productDataFirebase.isRange
+    isRange: productDataFirebase.isRange,
   };
-  
+
   console.log("productData", productData);
-  
+
   return (
     // <ProductStyleProvider productStyle={productData.productStyle}>
-      <main className="bg-background px-4 md:px-20 min-h-screen">
-  <header className="rounded-lg border p-4 mb-6">
-    <nav className="w-full flex justify-between items-center">
-      <Link href={productData.link} className="h-fit">
-        {productData.name}
-      </Link>
-      <PaDropdown />
-    </nav>
-  </header>
-  <div>
-    <h1 className="mb-2 text-3xl font-bold">Give us feedback</h1>
-    <Feedbacks productId={productData.productId} productData={productData} filterData={filterData} />
-  </div>
-</main>
+    <main className="bg-background px-4 md:px-20 min-h-screen">
+      <header className="rounded-lg border p-4 mb-6">
+        <nav className="w-full flex justify-between items-center">
+          <Link href={productData.link} className="h-fit">
+            {productData.name}
+          </Link>
+          <PaDropdown />
+        </nav>
+      </header>
+      <div>
+        <h1 className="mb-2 text-3xl font-bold">Give us feedback</h1>
+        <Feedbacks
+          productId={productData.productId}
+          productData={productData}
+          filterData={filterData}
+        />
+      </div>
+    </main>
 
     // </ProductStyleProvider>
   );

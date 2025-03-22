@@ -1,5 +1,6 @@
 "use client";
 import LoaderSpinner from "@/components/loader-spinner";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { SignInButton, SignUpButton, useAuth } from "@clerk/nextjs";
 
 const Navbar = () => {
@@ -13,7 +14,9 @@ const Navbar = () => {
           <SignInButton />
         </li> <li>
           <SignUpButton />
+        </li> <li>
         </li> </ul>}
+          <ThemeToggle />
     </nav>
   );
 };

@@ -33,6 +33,24 @@ export async function POST(req: Request) {
     await setDoc(docRef, {
       ...productData,
       docId: productDocId,
+      pageViews: 0,
+      commentsCount: 0,
+      feedbackCount: 0,
+      likesCount: 0,
+      analytics: {
+        sentiment: {
+          positive: 0,
+          negative: 0,
+          neutral: 0,
+          topSentiment: "neutral",
+          percent: 0
+        },
+        topic: {
+          allTopics: productData.topics || [],
+          topTopic: null,
+          percent: 0
+        }
+      }
     });
 
     console.log(`code is successfull`);

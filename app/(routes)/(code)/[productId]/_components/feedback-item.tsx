@@ -32,7 +32,9 @@ import FinalStatus from "./final-status";
 export default function FeedbackItem({ feedback, productId, isOwner }: { feedback: FeedbackItemInDB, productId: string, isOwner: boolean }) {
   const { feedback: feedbackData, status, topic, userInfo, createdAt } = feedback;
   const { title, content } = feedbackData || {};
-//   const isLiked = useIsUserLiked(productId, feedback.id, )
+  console.log(`productId from feedback-item:`, productId);
+  const isUser = !!feedback.userInfo?.userId;
+  const isLiked = useIsUserLiked(productId, feedback.feedbackId, feedback.userInfo?.userId )
 
   // 1. Title
   const finalTitle = title || "No Title";
@@ -65,14 +67,14 @@ export default function FeedbackItem({ feedback, productId, isOwner }: { feedbac
   }
 
   return (
-    <div className="border rounded-lg p-4 bg-white text-black">
+    <div className="border rounded-lg p-4 bg-secondaryBackground text-foreground">
       <div>
       <div className="flex">
         <Link href={`/${productId}/${feedback.id}`} className="mb-2 flex-1">
       {/* Title & description */}
       <div className="mb-2 flex-1">
         <h3 className="font-semibold text-lg mb-1">{finalTitle}</h3>
-        <p className="text-sm text-gray-700">{truncatedDescription}</p>
+        <p className="text-sm text-secondaryForeground">{truncatedDescription}</p>
       </div>
       </Link>
       {/* Like Button */}
@@ -91,7 +93,7 @@ export default function FeedbackItem({ feedback, productId, isOwner }: { feedbac
         {/* Status & topic side by side */}
         <div className="flex items-center space-x-2">
           <FinalStatus finalStatus={finalStatus} isOwner={isOwner} productId={productId} feedbackId={feedback.id}/>
-          <div className="text-xs bg-gray-200 px-2 py-1 rounded">
+          <div className="text-xs bg-secondaryForeground px-2 py-1 rounded">
             {finalTopic}
           </div>
         </div>

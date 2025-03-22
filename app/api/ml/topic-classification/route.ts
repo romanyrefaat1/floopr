@@ -66,7 +66,7 @@ async function getClassificationPipeline() {
   return classificationPipeline;
 }
 
-export async function POST(request) {
+export async function POST(request: Request) {
   try {
     // Parse the request body
     const body = await request.json();

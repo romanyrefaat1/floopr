@@ -10,8 +10,6 @@ export default async function getProductData(productId: string){
             return null
         }
 
-        console.log(`Product data: ${JSON.stringify(querySnap.docs[0].data())}`)
-
         const product = querySnap.docs.map((doc) => {
             return {
                 docId: doc.id,

@@ -1,55 +1,51 @@
-import getProductData from "@/actions/get-product-data";
-import { notFound } from "next/navigation";
+import DashboardTemplate from "./_components/templates/dashboard-template";
 import { lightenColor } from "./_utils/lighten-color";
-import SimpleTemplate from "./_components/templates/simple-template";
-import getFiltersFromParams, { FiltersFromParams } from "@/lib/get-filters-from-params";
+import getProductData from "@/actions/get-product-data";
+import getFiltersFromParams, {
+  FiltersFromParams,
+} from "@/lib/get-filters-from-params";
+import { notFound } from "next/navigation";
 
 export type Product = {
   docId: string;
   name: string;
   description: string;
   style?: {
-    primaryColor: string;
     textColor: string;
-    headingStyle: string;
-    fontFamily: string;
-    fontSize: string;
-    layout: string;
-    spacing: string;
-    borderRadius: string;
-    shadowStyle: string;
-    animation: string;
     backgroundColor: string;
-    secondaryColor: string;
-    secondaryTextColor: string;
+    primaryColor: string;
     accentColor: string;
-  }
-}
+    [key: string]: any;
+  };
+};
 
 export type FilterData = {
   filter: string | null;
   quick: string | null;
   specifiedDate: string | null;
   sentiment: string | null;
+  topic: string | null;
 };
 
-const ProductPaSpecial = async ({
+const ProductPage = async ({
   params,
   searchParams,
 }: {
-  params: Promise<{ id: string }>,
-  searchParams: FiltersFromParams
+  params: Promise<{ id: string }>;
+  searchParams: FiltersFromParams;
 }) => {
   const { id } = await params;
   const productDataFromServer = await getProductData(id);
 
-  console.log("Product data from server:", productDataFromServer);
   if (!productDataFromServer) notFound();
 
   const filterData = getFiltersFromParams(searchParams);
 
   // Generate secondary colors based on the primary colors
-  const secondaryTextColor = lightenColor(productDataFromServer.style.textColor, 20);
+  const secondaryTextColor = lightenColor(
+    productDataFromServer.style?.textColor || "#000000",
+    20
+  );
   const productData = {
     ...productDataFromServer,
     secondaryTextColor,
@@ -60,10 +56,10 @@ const ProductPaSpecial = async ({
   }
 
   return (
-    <div className="product-page-container min-h-screen">
-      <SimpleTemplate productData={productData} filterData={filterData} />
+    <div className="min-h-screen bg-background">
+      <DashboardTemplate productData={productData} filterData={filterData} />
     </div>
   );
-}
+};
 
-export default ProductPaSpecial;
+export default ProductPage;

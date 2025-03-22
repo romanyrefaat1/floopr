@@ -47,12 +47,13 @@ export type FeedbackItemInDB = {
 
 export default async function FeedbackList({ productId, filterData, isOwner }: { productId: string, filterData: FilterData, isOwner: boolean }) {
   try {
+    console.log(`list productId:`, productId)
     const feedbacks = await getFilteredFeedbacks(productId, filterData) as Array<unknown>
     console.log(`Fetched feedbacks`, feedbacks);
 
-    if (!feedbacks[0]) {
-      return (<div className="text-red-500">
-        Failed to load feedback. Please try again later....
+    if (feedbacks.length===0){
+      return (<div className="text-secondaryForeground flex justify-center items-center min-h-[200px]">
+        No feedbacks here yet
       </div>
       )
     }
@@ -61,15 +62,14 @@ export default async function FeedbackList({ productId, filterData, isOwner }: {
       <div className="space-y-4">
         {isOwner ? `owner`: `not owner`}
         {feedbacks.map((feedback) => (
-          <FeedbackItem key={feedback.id} isOwner={isOwner} feedback={{...feedback, createdAt: feedback.createdAt?.toDate(), updatedAt: feedback.updatedAt?.toDate()}} productId={productId} />
-          // <>text</>
+          <FeedbackItem key={feedback.feedbackId} isOwner={isOwner} feedback={{...feedback, createdAt: feedback.createdAt?.toDate(), updatedAt: feedback.updatedAt?.toDate()}} productId={productId} />
         ))}
       </div>
     );
   } catch (error) {
     console.error("Error fetching feedbacks:", error);
     return (
-      <div className="text-red-500">
+      <div className="text-red-500 flex justify-center items-center min-h-[200px]">
         Failed to load feedback. Please try again later.
       </div>
     );

@@ -18,27 +18,28 @@ module.exports = {
 			colors: {
 				// Main primary color with additional muted variants.
 				primary: {
-					DEFAULT: "#7c64f6",
-					foreground: "#ffffff",
-					muted: "#b4a7d6", // a softer version of primary
-					mutedForeground: "#e0d8f8",
+					DEFAULT: "hsl(var(--primary))",
+					foreground: "hsl(var(--primary-foreground))",
+					muted: "hsl(var(--primary-muted))",
+					mutedForeground: "hsl(var(--primary-muted-foreground))",
 				},
 				// Base colors.
-				background: "#ffffff",
-				foreground: "#000000",
-				border: "#e5e7eb",
-				input: "#f3f4f6",
-				ring: "#7c64f6",
+				background: "hsl(var(--background))",
+				secondaryBackground: "hsl(var(--secondary-background))",
+				foreground: "hsl(var(--foreground))",
+				secondaryForeground: "hsl(var(--secondary-foreground))",
+				border: "hsl(var(--border))",
+				input: "hsl(var(--input))",
+				ring: "hsl(var(--ring))",
 				// Additional muted values for text and other elements.
-				muted: "#f5f5f5",
-				mutedForeground: "#6b7280", // Tailwind gray-500 equivalent
+				muted: "hsl(var(--muted))",
+				mutedForeground: "hsl(var(--muted-foreground))",
 			},
 			// Increase borderRadius values for a more rounded UI
 			borderRadius: {
-				lg: "1rem", // increased from 0.5rem
+				lg: "1rem",
 				md: "0.75rem",
 				sm: "0.5rem",
-				// Modal
 				modal: "1rem",
 			},
 			gap: {

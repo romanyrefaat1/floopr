@@ -3,6 +3,7 @@ import { db } from "@/lib/firebase";
 import { analyzeSentiment } from "@/services/analyze-sentiment";
 import classifyTopic from "@/services/classify-topic";
 import { doc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import updateBasicAnalyticsFromNewFeedback from "./basic-analytics/update/update-basic-analytics-from-new-feedback";
 
 export type SimpleFeedbackItemData = {
   feedback: {
@@ -35,13 +36,18 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
 
   try {
     // Example usage with default topics
-    const sintemntResult = await analyzeSentiment(
+    const sentimentResult = await analyzeSentiment(
       `${feedback.title}. ${feedback.content || ``}`
     );
-    console.log(`sintementResult`, sintemntResult);
-    const topicClassification = await classifyTopic(
-      `${feedback.title}. ${feedback.content}`
-    );
+    console.log(`sentimentResult`, sentimentResult);
+    // const topicClassification = await classifyTopic(
+    //   `${feedback.title}. ${feedback.content}`
+    // );
+    const topicClassification = {
+      labels: ["User Interface"],
+      topTopic: "User Interface",
+      topScore: 1
+    }
     console.log(`topicClassification addismeple feedback`, topicClassification);
 
     // 1. Ensure the product document exists in the "products" collection
@@ -58,9 +64,9 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
     await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
       type: feedback.type || `other`,
       sentiment: {
-        sentiment: sintemntResult.sentiment,
-        score: sintemntResult.score,
-        text: sintemntResult.text,
+        sentiment: sentimentResult.sentiment,
+        score: sentimentResult.score,
+        text: sentimentResult.text,
       },
       topic: topicClassification,
       socialData: {
@@ -92,6 +98,11 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
       feedbackCount: (await import("firebase/firestore")).increment(1),
       lastFeedbackAt: serverTimestamp(),
     });
+
+    // Update basic analytics
+    console.log(`start update basic analytics`)
+    await updateBasicAnalyticsFromNewFeedback(productRef, sentimentResult, topicClassification);
+    console.log(`end update basic analytics`)
 
     return { success: true, feedbackId };
   } catch (error) {
@@ -130,11 +141,17 @@ export async function addAdvancedFeedback(
       feedbackId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      status: "active",
+      status: "Sent",
     });
 
     // 3. Update the product document with feedback count
     const productRef = doc(db, "products", productId);
+    await updateDoc(productRef, {
+      feedbackCount: (await import("firebase/firestore")).increment(1),
+      lastFeedbackAt: serverTimestamp(),
+    });
+
+    // Update basic feedback in product
     await updateDoc(productRef, {
       feedbackCount: (await import("firebase/firestore")).increment(1),
       lastFeedbackAt: serverTimestamp(),
