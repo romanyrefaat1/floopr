@@ -26,7 +26,7 @@ export default function RootLayout({
       <ThemeProvider attribute="class" defaultTheme="dark">
         <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>{children}</ClerkProvider>
         <Toaster position="top-right" />
-        <Analytics />
+        {/* <Analytics /> */}
       </ThemeProvider>
       </body>
     </html>

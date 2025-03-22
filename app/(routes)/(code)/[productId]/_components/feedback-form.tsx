@@ -100,7 +100,7 @@ export default function FeedbackForm() {
                         ${
                           field.value === type.toLowerCase()
                             ? "bg-primary text-white border-primary"
-                            : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200"
+                            : "bg-secondaryBackground text-foreground border-secondary"
                         }
                       `}
                     >
@@ -145,9 +145,13 @@ export default function FeedbackForm() {
               <FormItem>
                 <FormControl>
                   <RichTextEditor
-                    onChange={field.onChange}
-                    placeholder="Enter your description with formatting..."
+                    onChange={(content) => {
+                      console.log("Content updated:", content);
+                      field.onChange(JSON.stringify(content))}
+                    }
+                    placeholder="Enter your description(optional)"
                     className="rounded-md bg-background text-foreground border border-secondary"
+                    // style={{ color: "#000000" }}
                   />
                 </FormControl>
                 <FormMessage />

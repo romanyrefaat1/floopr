@@ -8,6 +8,7 @@ import { ArrowUpNarrowWide } from "lucide-react";
 import Link from "next/link";
 import { FeedbackItemInDB } from "./feedback-list";
 import FinalStatus from "./final-status";
+import RichTextViewer from "@/components/ui/rich-text-viewer";
 
 /**
  * FeedbackItem props
@@ -74,7 +75,8 @@ export default function FeedbackItem({ feedback, productId, isOwner }: { feedbac
       {/* Title & description */}
       <div className="mb-2 flex-1">
         <h3 className="font-semibold text-lg mb-1">{finalTitle}</h3>
-        <p className="text-sm text-secondaryForeground">{truncatedDescription}</p>
+        {/* <p className="text-sm text-secondaryForeground">{truncatedDescription}</p> */}
+        <RichTextViewer content={truncatedDescription} />
       </div>
       </Link>
       {/* Like Button */}

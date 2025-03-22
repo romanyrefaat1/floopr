@@ -11,7 +11,14 @@ import React, { useState, useRef } from "react";
 import "draft-js/dist/Draft.css";
 import { Button } from "./button";
 
-const RichTextEditor = ({ onChange, placeholder, className, style }) => {
+type RichTextEditorProps = {
+  onChange: (content: any) => void;
+  placeholder?: string;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+const RichTextEditor = ({ onChange, placeholder, className, style }: RichTextEditorProps) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const editor = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
@@ -23,7 +30,7 @@ const RichTextEditor = ({ onChange, placeholder, className, style }) => {
     }
   };
 
-  const handleEditorChange = (newEditorState) => {
+  const handleEditorChange = (newEditorState: EditorState) => {
     setEditorState(newEditorState);
     if (onChange) {
       const contentState = newEditorState.getCurrentContent();
@@ -32,7 +39,7 @@ const RichTextEditor = ({ onChange, placeholder, className, style }) => {
     }
   };
 
-  const handleKeyCommand = (command, editorState) => {
+  const handleKeyCommand = (command: string, editorState: EditorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       handleEditorChange(newState);
@@ -41,15 +48,15 @@ const RichTextEditor = ({ onChange, placeholder, className, style }) => {
     return "not-handled";
   };
 
-  const mapKeyToEditorCommand = (e) => getDefaultKeyBinding(e);
+  const mapKeyToEditorCommand = (e: React.KeyboardEvent) => getDefaultKeyBinding(e);
 
-  const toggleInlineStyle = (e, style) => {
+  const toggleInlineStyle = (e: React.MouseEvent, style: string) => {
     e.preventDefault();
     handleEditorChange(RichUtils.toggleInlineStyle(editorState, style));
     setTimeout(focusEditor, 0);
   };
 
-  const toggleBlockType = (e, blockType) => {
+  const toggleBlockType = (e: React.MouseEvent, blockType: string) => {
     e.preventDefault();
     handleEditorChange(RichUtils.toggleBlockType(editorState, blockType));
     setTimeout(focusEditor, 0);
@@ -57,7 +64,8 @@ const RichTextEditor = ({ onChange, placeholder, className, style }) => {
 
   const styleMap = {
     CODE: {
-      backgroundColor: "rgba(0, 0, 0, 0.05)",
+      backgroundColor: "var(--background, #f5f5f5)",
+      color: "var(--foreground-secondary, #eee)",
       fontFamily: "monospace",
       padding: "2px 4px",
       borderRadius: "4px",
