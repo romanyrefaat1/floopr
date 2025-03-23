@@ -9,6 +9,7 @@ import { ThumbsUp } from "lucide-react";
 import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { useFeedbackItem, useIsUserLiked } from "@/hooks/feedback/feedback";
+import { toast } from "sonner";
 
 export default function LikeButton({ feedbackId, productId }: { feedbackId: string, productId: string }) {
     const { user } = useUser();
@@ -22,9 +23,11 @@ export default function LikeButton({ feedbackId, productId }: { feedbackId: stri
     const isLoading = feedbackLoading || likeLoading;
 
     const handleFeedbackLike = async () => {
+        if (likeLoading || feedbackLoading) return;
+        
         if (!user) {
-            // Optional: redirect to sign-in or show a dialog
-            // router.push("/sign-in");
+            toast.warning("Please sign in so we can save your data");
+            router.push("/sign-in");
             return;
         }
         
@@ -34,21 +37,20 @@ export default function LikeButton({ feedbackId, productId }: { feedbackId: stri
             profilePicture: user.imageUrl,
             productId
         });
-        // No need to update state manually as real-time listener will handle it
     };
    
     return (
         <Button 
             onClick={handleFeedbackLike} 
             variant="outline" 
-            className={cn("p-2 border-none", isLiked && "text-red-500 font-bold")}
+            className={cn("p-2 border-none flex items-center justify-center", isLiked && "text-primary font-bold", (likeLoading || feedbackLoading) && "cursor-not-allowed")}
             disabled={isLoading}
         >
             <ThumbsUp />
             {` `}
             <Suspense fallback={<Skeleton className="h-[20px] w-[20px] rounded" />}>
                 {isLoading ? (
-                    <Skeleton className="h-[20px] w-[20px] rounded" />
+                    <Skeleton className="h-[15px] w-[15px] rounded-full bg-secondaryForeground" />
                 ) : (
                     <span>{likesCount}</span>
                 )}

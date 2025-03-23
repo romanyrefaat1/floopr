@@ -20,7 +20,7 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
     const docRef = doc(db, "products", productId, "feedbacks", feedbackId);
     
     // See if user already liked
-    if (await isUserLiked(feedbackId, userId, productId)) {
+    if (await isUserLiked(feedbackId, productId, userId)) {
         // User already liked - remove the like
         await updateDoc(docRef, {
           "socialData.likes.count": increment(-1),
@@ -50,10 +50,12 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
 export async function isUserLiked(feedbackId: string, productId: string, userId?: string) {
     const docRef = doc(db, "products", productId, "feedbacks", feedbackId);
     const docSnap = await getDoc(docRef);
+    let isUserLiked = false;
     if (docSnap.exists()) {
         const data = docSnap.data();
-        return data.socialData?.likes?.data?.some((like: { userId: string }) => like.userId === userId) || false;
+        isUserLiked = data.socialData?.likes?.data?.some((like: { userId: string }) => like.userId === userId) || false;
     }
-    return false;
+    console.log(`isUserLiked:`, isUserLiked);
+    return isUserLiked || false;
 }
 

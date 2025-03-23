@@ -36,6 +36,7 @@ export default async function ProjectDataSummary({productId}: {productId: string
             <LiItem>
                 <span>Sentiment Percent</span>
                 <span className="flex items-center gap-2">
+                    {/* Small circle */}
                     {topSentiment === 'Positive' && <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>}
                     {topSentiment === 'Negative' && <span className="w-1.5 h-1.5 rounded-full bg-destructive"></span>}
                     {topSentiment === 'Neutral' && <span className="w-1.5 h-1.5 rounded-full bg-muted"></span>}
@@ -45,7 +46,7 @@ export default async function ProjectDataSummary({productId}: {productId: string
             <Separator />
             <LiItem>
                 <span>Top Topic</span>
-                <span className="font-medium">{basicAnalytics.topic.topTopic} | {basicAnalytics.topic.topTopicPercent}</span>
+                <span className="font-medium">{basicAnalytics.topic.topTopic} | {basicAnalytics.topic.topTopicPercent}%</span>
             </LiItem>
         </ul>
     )

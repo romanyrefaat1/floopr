@@ -9,6 +9,7 @@ import Link from "next/link";
 import { FeedbackItemInDB } from "./feedback-list";
 import FinalStatus from "./final-status";
 import RichTextViewer from "@/components/ui/rich-text-viewer";
+import LikeButton from "../../products/[id]/feedback/[feedbackId]/_components/like-button";
 
 /**
  * FeedbackItem props
@@ -80,10 +81,7 @@ export default function FeedbackItem({ feedback, productId, isOwner }: { feedbac
       </div>
       </Link>
       {/* Like Button */}
-      <Button variant="ghost" onClick={()=> addLikeToFeedbackItem(feedback.id, {productId: productId})} className="flex border-r-[4px] flex-col items-center justify-center">
-        <ArrowUpNarrowWide />
-        {isUserLiked(feedback.id, productId) ? `liked`: `4[/fetced]`}
-      </Button>
+      <LikeButton feedbackId={feedback.feedbackId} productId={productId} />
       </div>
       {/* Bottom row with user info, status, topic, etc. */}
       <div className="flex items-center justify-between">

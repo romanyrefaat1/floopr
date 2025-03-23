@@ -40,14 +40,14 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
       `${feedback.title}. ${feedback.content || ``}`
     );
     console.log(`sentimentResult`, sentimentResult);
-    // const topicClassification = await classifyTopic(
-    //   `${feedback.title}. ${feedback.content}`
-    // );
-    const topicClassification = {
-      labels: ["User Interface"],
-      topTopic: "User Interface",
-      topScore: 1
-    }
+    const topicClassification = await classifyTopic(
+      `${feedback.title}. ${feedback.content}`
+    );
+    // const topicClassification = {
+    //   labels: ["User Interface"],
+    //   topTopic: "User Interface",
+    //   topScore: 1
+    // }
     console.log(`topicClassification addismeple feedback`, topicClassification);
 
     // 1. Ensure the product document exists in the "products" collection
@@ -101,7 +101,7 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
 
     // Update basic analytics
     console.log(`start update basic analytics`)
-    await updateBasicAnalyticsFromNewFeedback(productRef, sentimentResult, topicClassification);
+    await updateBasicAnalyticsFromNewFeedback({productId, sentimentResult, topicClassification});
     console.log(`end update basic analytics`)
 
     return { success: true, feedbackId };

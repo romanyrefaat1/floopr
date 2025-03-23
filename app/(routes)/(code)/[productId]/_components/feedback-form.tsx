@@ -66,7 +66,7 @@ export default function FeedbackForm() {
       if (result.success) {
         toast("Feedback submitted");
         form.reset();
-        router.push(`/${productId}/feedbacks/${result.feedbackId}`)
+        // router.push(`/${productId}/feedbacks/${result.feedbackId}`)
       } else {
         toast("Failed to submit feedback. Please try again.");
       }
@@ -79,7 +79,7 @@ export default function FeedbackForm() {
   }
 
   return (
-    <div className="rounded-modal w-full max-w-md mx-auto p-4 text-card-foreground font-sans text-base">
+    <div className="rounded-modal w-full min-w-[full] mx-auto p-4 text-card-foreground font-sans text-base">
       <CardTitle><h2 className="text-2xl font-bold mb-6 text-center">Add Feedback</h2>
       </CardTitle>
 

@@ -1,10 +1,29 @@
+import getFeedbacks from "@/actions/get-feedbacks";
 import { db } from "@/lib/firebase";
-import { updateDoc, serverTimestamp, increment, runTransaction } from "firebase/firestore";
+import { updateDoc, serverTimestamp, increment, runTransaction, doc } from "firebase/firestore";
 
-export default async function updateBasicAnalyticsFromNewFeedback(productRef, sentimentResult, topicClassification) {
+type SentimentResult = {
+  sentiment: string
+}
+
+type TopicClassification = {
+  labels: string[]
+  topTopic: string
+  topScore: number
+}
+
+type UpdateBasicAnalyticsFromNewFeedbackParams = {
+  sentimentResult: SentimentResult
+  topicClassification: TopicClassification
+  productId: string
+}
+
+export default async function updateBasicAnalyticsFromNewFeedback({productId, sentimentResult, topicClassification}: UpdateBasicAnalyticsFromNewFeedbackParams) {
   console.log("updateBasicAnalyticsFromNewFeedback called");
   await runTransaction(db, async (transaction) => {
     console.log("runTransaction called");
+    const productRef = doc(db, 'products', productId)
+    
     // Read current document data.
     const productDoc = await transaction.get(productRef);
     console.log("productDoc:", productDoc);
@@ -52,13 +71,27 @@ export default async function updateBasicAnalyticsFromNewFeedback(productRef, se
     }
     const topSentimentPercent = sentimentPercents[topSentiment.toLowerCase()]; // convert key to lowercase
 
+    // Find all feedback
+    const allFeedbacks = await getFeedbacks(productId);
+    console.log(`allFeedbacks`, allFeedbacks)
+    const allTopics = allFeedbacks.map(f => f.topic.labels[0]);
+
+    const topicCounts = allTopics.reduce((acc, topic) => {
+      acc[topic] = (acc[topic] || 0) + 1;
+      return acc;
+    }, {});
+    const topTopic = Object.entries(topicCounts).sort((a, b) => b[1] - a[1])[0][0];
+    const topTopicPercent = (topicCounts[topTopic] / allTopics.length || 0) * 100;
+
     // Map topic classification results to analytics.topic structure.
     const topicUpdate = {
-      allTopics: topicClassification.labels || [],
-      topTopic: topicClassification.topTopic || "Uncategorized",
-      topTopicPercent: topicClassification.topScore || 0,
+      allTopics: allTopics || [],
+      topTopic: topTopic || "Uncategorized",
+      topTopicPercent: topTopicPercent || 0,
     };
 
+    console.log(`topTopic`, topTopic)
+    console.log(`topicUpdate`, topicUpdate)
     // Build the update object.
     const updateObj = {
       feedbackCount: increment(1),
