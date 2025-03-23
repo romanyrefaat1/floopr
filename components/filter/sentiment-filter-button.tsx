@@ -58,7 +58,7 @@ export default function SentimentFilterButton() {
       <DropdownMenuContent className="w-56 bg-background">
         <DropdownMenuRadioGroup value={value} onValueChange={handleValueChange}>
           <DropdownMenuRadioItem
-            className="flex justify-between hover:bg-[#eee] transition"
+            className="flex justify-between transition"
             value="All"
           >
             <span>All</span>
@@ -66,21 +66,21 @@ export default function SentimentFilterButton() {
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Positive"
-            className="flex justify-between hover:bg-[#eee]"
+            className="flex justify-between"
           >
             <span>Positive</span>
             <span className="text-text-muted text-sm">49</span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Neutral"
-            className="flex justify-between hover:bg-[#eee]"
+            className="flex justify-between"
           >
             <span>Neutral</span>
             <span className="text-text-muted text-sm">49</span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Negative"
-            className="flex justify-between hover:bg-[#eee]"
+            className="flex justify-between"
           >
             <span>Negative</span>
             <span className="text-text-muted text-sm">40</span>

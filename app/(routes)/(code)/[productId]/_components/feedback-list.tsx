@@ -1,6 +1,6 @@
+import { FilterData } from "../../products/[id]/page";
 import FeedbackItem from "./feedback-item";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
-import { FilterData } from "../../products/[id]/page";
 
 export type FeedbackItemInDB = {
   componentRefId: string | null;
@@ -32,37 +32,58 @@ export type FeedbackItemInDB = {
     userId: string;
     profilePicture?: string;
   };
-  
+
   socialData?: {
     comments: {
       count: number;
       data: any[];
-    },
+    };
     likes: {
       count: number;
       data: any[];
     };
   };
-}
+};
 
-export default async function FeedbackList({ productId, filterData, isOwner }: { productId: string, filterData: FilterData, isOwner: boolean }) {
+export default async function FeedbackList({
+  productId,
+  filterData,
+  isOwner,
+}: {
+  productId: string;
+  filterData: FilterData;
+  isOwner: boolean;
+}) {
   try {
-    console.log(`list productId:`, productId)
-    const feedbacks = await getFilteredFeedbacks(productId, filterData) as Array<unknown>
+    console.log(`list productId:`, productId);
+    const feedbacks = (await getFilteredFeedbacks(
+      productId,
+      filterData
+    )) as Array<unknown>;
     console.log(`Fetched feedbacks`, feedbacks);
 
-    if (feedbacks.length===0){
-      return (<div className="text-secondaryForeground flex justify-center items-center min-h-[200px]">
-        No feedbacks here yet
-      </div>
-      )
+    if (feedbacks.length === 0) {
+      return (
+        <div className="text-secondaryForeground flex justify-center items-center min-h-[200px]">
+          No feedbacks here yet
+        </div>
+      );
     }
 
     return (
       <div className="space-y-4">
-        {isOwner ? `owner`: `not owner`}
+        {isOwner ? `owner` : `not owner`}
         {feedbacks.map((feedback) => (
-          <FeedbackItem key={feedback.feedbackId} isOwner={isOwner} feedback={{...feedback, createdAt: feedback.createdAt?.toDate(), updatedAt: feedback.updatedAt?.toDate()}} productId={productId} />
+          <FeedbackItem
+            key={feedback.feedbackId}
+            isOwner={isOwner}
+            feedback={{
+              ...feedback,
+              createdAt: feedback.createdAt?.toDate(),
+              updatedAt: feedback.updatedAt?.toDate(),
+            }}
+            productId={productId}
+          />
         ))}
       </div>
     );

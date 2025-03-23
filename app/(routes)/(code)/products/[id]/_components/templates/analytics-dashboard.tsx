@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 // import { LineChart, BarChart, PieChart } from "@/components/ui/chart";
+import {LineLinearChart} from "./analytics/line-linear-chart";
 
 export default function AnalyticsDashboard({
   productData,
@@ -61,7 +62,7 @@ export default function AnalyticsDashboard({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
             <CardTitle>Feedback Over Time</CardTitle>
@@ -119,7 +120,8 @@ export default function AnalyticsDashboard({
             />
           </CardContent>
         </Card>
-      </div>
+      </div> */}
+      <LineLinearChart productId={productData.docId}/>
     </div>
   );
 }

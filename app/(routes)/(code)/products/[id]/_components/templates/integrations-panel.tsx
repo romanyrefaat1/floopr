@@ -1,14 +1,16 @@
 import { Product } from "../../page";
+import AllComponents from "../tabs/feedback-integrations-tab/all-components";
+import YourComponents from "../tabs/feedback-integrations-tab/your-components";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import {
   Code,
   Copy,
@@ -24,116 +26,101 @@ export default function IntegrationsPanel({
 }: {
   productData: Product;
 }) {
+  const integrationTabs = [
+    {
+      id: "components",
+      label: "Components",
+      content: (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {componentCards.map((card) => (
+            <ComponentCard
+              key={card.title}
+              {...card}
+              productId={productData.docId}
+            />
+          ))}
+        </div>
+      ),
+    },
+    {
+      id: "api",
+      label: "API",
+      content: <ApiIntegrationCard productId={productData.docId} />,
+    },
+  ];
+
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold mb-4">Integrations</h2>
-        <p className="text-muted-foreground mb-6">
+      <div className="mb-8">
+        <h2 className="text-xl font-bold mb-2">Integrations</h2>
+        <p className="text-mutedForeground">
           Add feedback collection to your product with our pre-built components
         </p>
       </div>
 
-      <Tabs defaultValue="components">
-        <TabsList className="mb-4">
-          <TabsTrigger value="components">Components</TabsTrigger>
-          <TabsTrigger value="api">API</TabsTrigger>
+      <Tabs defaultValue="your-components" className="space-y-4">
+        <TabsList className="bg-secondaryBackground w-full">
+          <TabsTrigger
+            value="your-components"
+            className={cn(
+              "data-[state=active]:bg-primary",
+              "data-[state=active]:text-primary-foreground"
+            )}
+          >
+            Your Components
+          </TabsTrigger>
+          <TabsTrigger
+            value="all-components"
+            className={cn(
+              "data-[state=active]:bg-primary",
+              "data-[state=active]:text-primary-foreground"
+            )}
+          >
+            All Components
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="components" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ComponentCard
-              title="Modal Feedback"
-              description="Collect feedback with a modal that appears after a set time"
-              icon={<Timer className="h-8 w-8 text-primary" />}
-              productId={productData.docId}
-              componentType="modal-time"
-            />
-
-            <ComponentCard
-              title="Inline Feedback"
-              description="Embed feedback forms directly in your pages"
-              icon={<MessageSquare className="h-8 w-8 text-primary" />}
-              productId={productData.docId}
-              componentType="inline"
-            />
-
-            <ComponentCard
-              title="Website Widget"
-              description="Add a floating feedback button to your website"
-              icon={<Globe className="h-8 w-8 text-primary" />}
-              productId={productData.docId}
-              componentType="widget"
-            />
-
-            <ComponentCard
-              title="Custom Integration"
-              description="Build your own integration with our API"
-              icon={<Code className="h-8 w-8 text-primary" />}
-              productId={productData.docId}
-              componentType="custom"
-            />
-          </div>
+        <TabsContent value="your-components" className="space-y-4">
+          <YourComponents
+            productId={productData.docId}
+            productData={productData}
+          />
         </TabsContent>
 
-        <TabsContent value="api">
-          <Card>
-            <CardHeader>
-              <CardTitle>API Integration</CardTitle>
-              <CardDescription>
-                Use our API to integrate feedback collection into your
-                application
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-muted p-4 rounded-md relative mb-4">
-                <pre className="text-sm overflow-x-auto">
-                  <code>
-                    {`// Example API request
-fetch('https://api.floopr.app/v1/feedback', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_API_KEY'
-  },
-  body: JSON.stringify({
-    productId: '${productData.docId}',
-    content: 'User feedback content',
-    metadata: {
-      userId: 'user-123',
-      source: 'api'
-    }
-  })
-})`}
-                  </code>
-                </pre>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-2 right-2"
-                  onClick={() =>
-                    navigator.clipboard.writeText(`// Example code`)
-                  }
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
-              </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                Check our documentation for more details on API endpoints and
-                parameters.
-              </p>
-            </CardContent>
-            <CardFooter>
-              <Button variant="outline" className="gap-2">
-                <ExternalLink size={16} />
-                View API Documentation
-              </Button>
-            </CardFooter>
-          </Card>
+        <TabsContent value="all-components" className="space-y-4">
+          <AllComponents productData={productData} />
         </TabsContent>
       </Tabs>
     </div>
   );
 }
+
+const componentCards = [
+  {
+    title: "Modal Feedback",
+    description: "Collect feedback with a modal that appears after a set time",
+    icon: <Timer className="h-8 w-8 text-primary" />,
+    componentType: "modal-time",
+  },
+  {
+    title: "Inline Feedback",
+    description: "Embed feedback forms directly in your pages",
+    icon: <MessageSquare className="h-8 w-8 text-primary" />,
+    componentType: "inline",
+  },
+  {
+    title: "Website Widget",
+    description: "Add a floating feedback button to your website",
+    icon: <Globe className="h-8 w-8 text-primary" />,
+    componentType: "widget",
+  },
+  {
+    title: "Custom Integration",
+    description: "Build your own integration with our API",
+    icon: <Code className="h-8 w-8 text-primary" />,
+    componentType: "custom",
+  },
+];
 
 function ComponentCard({
   title,
@@ -169,6 +156,59 @@ function ComponentCard({
           </Button>
         </Link>
       </CardFooter>
+    </Card>
+  );
+}
+
+function ApiIntegrationCard({ productId }: { productId: string }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>API Integration</CardTitle>
+        <CardDescription>
+          Use our API to integrate feedback collection into your application
+        </CardDescription>
+      </CardHeader>
+      <div className="p-6">
+        <div className="bg-muted p-4 rounded-md relative mb-4">
+          <pre className="text-sm overflow-x-auto">
+            <code>
+              {`// Example API request
+fetch('https://api.floopr.app/v1/feedback', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_API_KEY'
+  },
+  body: JSON.stringify({
+    productId: '${productId}',
+    content: 'User feedback content',
+    metadata: {
+      userId: 'user-123',
+      source: 'api'
+    }
+  })
+})`}
+            </code>
+          </pre>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="absolute top-2 right-2"
+            onClick={() => navigator.clipboard.writeText(`// Example code`)}
+          >
+            <Copy className="h-4 w-4" />
+          </Button>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">
+          Check our documentation for more details on API endpoints and
+          parameters.
+        </p>
+        <Button variant="outline" className="gap-2">
+          <ExternalLink size={16} />
+          View API Documentation
+        </Button>
+      </div>
     </Card>
   );
 }

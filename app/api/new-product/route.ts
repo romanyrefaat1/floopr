@@ -1,6 +1,6 @@
 import { db } from "@/lib/firebase";
 import { randomUUID } from "crypto";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -37,6 +37,11 @@ export async function POST(req: Request) {
       commentsCount: 0,
       feedbackCount: 0,
       likesCount: 0,
+
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      lastFeedbackAt: null,
+      
       analytics: {
         sentiment: {
           positive: 0,

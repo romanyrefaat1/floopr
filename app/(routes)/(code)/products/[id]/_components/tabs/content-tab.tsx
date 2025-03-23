@@ -1,8 +1,8 @@
-import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import { FilterData, Product } from "../../page";
 import AddFeedbackForm from "../add-simple-feedback-form";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
+import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import FilterButton from "@/components/filter/filter-button";
 import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
 import LoaderSpinner from "@/components/loader-spinner";
@@ -23,13 +23,15 @@ export default function ContentTab({
   productData,
   isOwner = false,
   filterData,
+  isOwnerPa = false,
 }: {
   productData: ProductData;
   isOwner: boolean;
   filterData: FilterData;
+  isOwnerPa: boolean;
 }) {
   const productId = productData.productId;
-  console.log(`content tab productId:`, productId)
+  console.log(`content tab productId:`, productId);
   const primaryColor = productData.style?.primaryColor || "#7c64f6";
 
   // Serialize Firebase timestamps to avoid passing non-serializable objects to client components
@@ -82,7 +84,7 @@ export default function ContentTab({
             </div>
             <div className="flex gap-2">
               <SentimentFilterButton />
-              <FilterButton label="Filter" />
+              <FilterButton isOwnerPa={isOwnerPa} label="Filter" />
             </div>
           </div>
 
@@ -112,14 +114,13 @@ export default function ContentTab({
           )}
 
           {/* Feedback items */}
-         
-              <FeedbackContentWrapper
-                filterData={filterData}
-                isOwner={isOwner}
-                productData={serializedProductData}
-                productId={productId}
-              />
-           
+
+          <FeedbackContentWrapper
+            filterData={filterData}
+            isOwner={isOwner}
+            productData={serializedProductData}
+            productId={productId}
+          />
         </div>
       </div>
     </Suspense>

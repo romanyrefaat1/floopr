@@ -1,10 +1,10 @@
 import { FilterData } from "../products/[id]/page";
 import Feedbacks from "./_components/feedbacks/feedbacks";
 import { PaDropdown } from "./_components/pa-drop-down";
+import { updatePageView } from "@/actions/basic-analytics/pageViews";
 import getProductData from "@/actions/get-product-data";
 import { ProductStyleProvider } from "@/contexts/product-style-context";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
-import { updatePageView } from "@/actions/basic-analytics/pageViews";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -58,15 +58,15 @@ export type ProductData = {
       positive: number;
       negative: number;
       neutral: number;
-      topSentiment:  "POSITIVE" | "NEGATIVE" | "NEUTRAL";
+      topSentiment: "POSITIVE" | "NEGATIVE" | "NEUTRAL";
       percent: number;
-    },
+    };
     topic: {
-      allTopics: string[],
-      topTopic: string | null,
+      allTopics: string[];
+      topTopic: string | null;
       topTopicPercent: number;
-    }
-  }
+    };
+  };
 };
 
 export default async function UsersProductPage({
@@ -110,8 +110,12 @@ export default async function UsersProductPage({
   const productData: ProductData = {
     docId: productId,
     name: productDataFirebase.name,
-    updatedAt: productDataFirebase.updatedAt ? productDataFirebase.updatedAt.toDate() : new Date(),
-    lastFeedbackAt: productDataFirebase.lastFeedbackAt ? productDataFirebase.lastFeedbackAt.toDate() : new Date(),
+    updatedAt: productDataFirebase.updatedAt
+      ? productDataFirebase.updatedAt.toDate()
+      : new Date(),
+    lastFeedbackAt: productDataFirebase.lastFeedbackAt
+      ? productDataFirebase.lastFeedbackAt.toDate()
+      : new Date(),
     feedbackCount: productDataFirebase.feedbackCount,
     description: productDataFirebase.description || "No description provided.",
     ownerId: productDataFirebase.ownerId,
@@ -146,6 +150,7 @@ export default async function UsersProductPage({
       <div>
         <h1 className="mb-2 text-3xl font-bold">Give us feedback</h1>
         <Feedbacks
+          isOwnerPa={false}
           productId={productData.productId}
           productData={productData}
           filterData={filterData}

@@ -1,5 +1,6 @@
 "use client";
 
+import { ProductData } from "../../../[productId]/page";
 import { FilterData, Product } from "../page";
 import ContentTab from "./tabs/content-tab";
 import FeedbackIntegrationsTab from "./tabs/feedback-integrations-tab/feedback-integrations-tab";
@@ -18,8 +19,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings } from "lucide-react";
 
 type FeedbackTabsClientProps = {
-  productData: Product;
+  productData: ProductData;
   isOwner: boolean;
+  isOwnerPa: boolean;
   filter: FilterData;
 };
 
@@ -27,13 +29,15 @@ export function FeedbackTabsClient({
   productData,
   isOwner = false,
   filter,
+  isOwnerPa = false,
 }: FeedbackTabsClientProps) {
   return (
     <ContentTab
-          isOwner={isOwner}
-          productData={productData}
-          filterData={filter}
-        />
+      isOwner={isOwner}
+      productData={productData}
+      filterData={filter}
+      isOwnerPa={isOwnerPa}
+    />
     // <Tabs className="w-full" defaultValue="feedback-content">
     //   {/* <div className="flex justify-between items-center mb-4"> */}
     //     {/* <TabsList className="grid grid-cols-2 w-fit">
@@ -64,7 +68,7 @@ export function FeedbackTabsClient({
     //       <TabsContent value="feedback-integrations">
     //         <FeedbackIntegrationsTab productData={productData} />
     //       </TabsContent>
-          
+
     //     </> */}
     //   )}
     // </Tabs>

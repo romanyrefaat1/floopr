@@ -12,13 +12,14 @@ export default async function YourComponents({
 }) {
   // fetch components
   const response = collection(db, `products`, productId, `components`);
-  const components = await getDocs(response);
+  const componentsDocs = await getDocs(response);
+  const components = componentsDocs.docs || [];
   console.log(`components docs`, components.docs);
   return (
     <div>
       <h2 className="text-3xl font-bold mb-[25px]">Your Components</h2>
       <div className="grid md:grid-cols-2 gap-4">
-        {/* {components.map((component) => {
+        {components.map((component) => {
           const data = component.data();
           console.log(`component data jsx`, data);
           return (
@@ -29,7 +30,7 @@ export default async function YourComponents({
               isYours={true}
             />
           );
-        })} */}
+        })}
       </div>
     </div>
   );

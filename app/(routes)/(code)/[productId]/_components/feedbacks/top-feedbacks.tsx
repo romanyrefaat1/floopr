@@ -3,7 +3,11 @@ import FilterButton from "@/components/filter/filter-button";
 import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
 import { Input } from "@/components/ui/input";
 
-export default function TopFeedbacks() {
+export default function TopFeedbacks({
+  isOwnerPa = false,
+}: {
+  isOwnerPa: boolean;
+}) {
   return (
     <>
       {/* Small screens */}
@@ -16,10 +20,10 @@ export default function TopFeedbacks() {
           </div>
         </div>
         <div>
-          <Input 
-            type="search" 
-            placeholder="Search" 
-            className="rounded-md w-full" 
+          <Input
+            type="search"
+            placeholder="Search"
+            className="rounded-md w-full"
           />
         </div>
       </div>
@@ -29,12 +33,8 @@ export default function TopFeedbacks() {
         <ButtonAddFeedback />
         <div className="flex gap-2 items-center">
           <SentimentFilterButton />
-          <Input 
-            type="search" 
-            placeholder="Search" 
-            className="rounded-md" 
-          />
-          <FilterButton />
+          <Input type="search" placeholder="Search" className="rounded-md" />
+          <FilterButton isOwnerPa={isOwnerPa} />
         </div>
       </div>
     </>

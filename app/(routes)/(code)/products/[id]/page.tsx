@@ -20,11 +20,11 @@ export type Product = {
 };
 
 export type FilterData = {
-  filter: string | null;
-  quick: string | null;
+  filter: "likes" | "date" | "sentiment" | "type" | null;
+  quick: "24-hours" | "7-days" | "30-days" | null;
+  sentiment: "positive" | "neutral" | "negative" | null;
+  type: "feature" | "idea" | "issue" | "other" | null;
   specifiedDate: string | null;
-  sentiment: string | null;
-  topic: string | null;
 };
 
 const ProductPage = async ({

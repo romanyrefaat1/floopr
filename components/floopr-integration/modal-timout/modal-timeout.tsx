@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
-import { X } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 type ModalTimeoutProps = {
   title: string;
@@ -20,7 +23,7 @@ type ModalTimeoutProps = {
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
   timeoutDuration?: number;
-  customStyles?: Record<string, string>; // Optional custom styles prop
+  isDarkMode: boolean;
 };
 
 // Modal component
@@ -33,44 +36,11 @@ export default function ModalTimeout({
   isOpen = true,
   onOpenChange,
   timeoutDuration = 0,
-  customStyles = {}
+  isDarkMode = false,
 }: ModalTimeoutProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [animate, setAnimate] = useState<number | null>(null);
-
-  const [styles, setStyles] = useState({
-    primaryColor: '#3b82f6',
-    secondaryColor: '#f3f4f6',
-    accentColor: '#dbeafe',
-    backgroundColor: 'white',
-    textColor: '#1f2937',
-    fontFamily: 'inherit',
-    fontSize: '1rem',
-    borderRadius: '0.375rem',
-    shadowStyle: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    spacing: '1.5rem'
-  });
-
-  // Get CSS variables from root on client-side
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const rootStyle = getComputedStyle(document.documentElement);
-      
-      setStyles({
-        primaryColor: rootStyle.getPropertyValue('--modal-primary-color').trim() || styles.primaryColor,
-        secondaryColor: rootStyle.getPropertyValue('--modal-secondary-color').trim() || styles.secondaryColor,
-        accentColor: rootStyle.getPropertyValue('--modal-accent-color').trim() || styles.accentColor,
-        backgroundColor: rootStyle.getPropertyValue('--modal-background-color').trim() || styles.backgroundColor,
-        textColor: rootStyle.getPropertyValue('--modal-text-color').trim() || styles.textColor,
-        fontFamily: rootStyle.getPropertyValue('--modal-font-family').trim() || styles.fontFamily,
-        fontSize: rootStyle.getPropertyValue('--modal-font-size').trim() || styles.fontSize,
-        borderRadius: rootStyle.getPropertyValue('--modal-border-radius').trim() || styles.borderRadius,
-        shadowStyle: rootStyle.getPropertyValue('--modal-shadow-style').trim() || styles.shadowStyle,
-        spacing: rootStyle.getPropertyValue('--modal-spacing').trim() || styles.spacing
-      });
-    }
-  }, []);
 
   // Auto-close the modal if timeoutDuration is set
   useEffect(() => {
@@ -80,7 +50,7 @@ export default function ModalTimeout({
           onOpenChange(false);
         }
       }, timeoutDuration * 1000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [isOpen, onOpenChange, timeoutDuration]);
@@ -108,25 +78,21 @@ export default function ModalTimeout({
 
   // The modal content (shared between both rendering methods)
   const modalContent = (
-    <div 
-      className="w-full h-full bg-white rounded-lg shadow-lg"
-      style={{
-        padding: styles.spacing,
-        backgroundColor: styles.backgroundColor,
-        color: styles.textColor,
-        fontFamily: styles.fontFamily,
-        fontSize: styles.fontSize,
-        borderRadius: styles.borderRadius,
-        boxShadow: styles.shadowStyle,
-      }}
+    <div
+      className={cn(
+        "p-6 w-full h-full rounded-lg shadow-lg",
+        // Apply background and text colors
+        "bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+      )}
     >
       {/* Title and close button */}
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-xl font-bold" style={{ color: styles.primaryColor }}>{title}</h2>
-        <button 
+        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">
+          {title}
+        </h2>
+        <button
           onClick={handleClose}
-          className="hover:text-gray-700 text-xl font-semibold"
-          style={{ color: styles.textColor }}
+          className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
           aria-label="Close"
         >
           <X size={20} />
@@ -135,30 +101,34 @@ export default function ModalTimeout({
 
       {/* Rating options */}
       <div className="flex items-center justify-between mb-8 relative">
-        {/* Line connecting the ratings */}
-        <div className="absolute top-1/2 left-0 w-full h-px" style={{ backgroundColor: styles.secondaryColor }} />
-        
+        <div className="absolute top-1/2 left-0 w-full h-px bg-[hsl(var(--border))]" />
+
         {sortedRatings.map((rating, index) => (
           <div key={index} className="flex flex-col items-center z-10">
             <button
-              className="w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 transition-all duration-300 relative"
-              style={{
-                backgroundColor: selectedRating === rating.value ? styles.accentColor : styles.secondaryColor,
-                borderColor: selectedRating === rating.value ? styles.primaryColor : styles.secondaryColor
-              }}
+              className={cn(
+                "w-10 h-10 rounded-full flex items-center justify-center text-lg border-2 transition-all duration-300 relative",
+                selectedRating === rating.value
+                  ? "bg-[hsl(var(--primary))] border-[hsl(var(--primary))]"
+                  : "bg-[hsl(var(--muted))] border-[hsl(var(--border))]"
+              )}
               onClick={() => handleRatingClick(rating.value)}
             >
-              <span className={`transition-all duration-500 transform ${animate === rating.value ? 'scale-125' : 'scale-100'}`}>
+              <span
+                className={cn(
+                  "transition-all duration-500 transform",
+                  animate === rating.value ? "scale-125" : "scale-100"
+                )}
+              >
                 {rating.emoji}
               </span>
               {animate === rating.value && (
-                <span 
-                  className="absolute inset-0 rounded-full opacity-50 animate-ping" 
-                  style={{ backgroundColor: styles.primaryColor }}
-                />
+                <span className="absolute inset-0 rounded-full bg-[hsl(var(--primary)/0.5)] animate-ping" />
               )}
             </button>
-            <span className="text-sm mt-2" style={{ color: styles.textColor }}>{rating.label}</span>
+            <span className="text-sm text-[hsl(var(--muted-foreground))] mt-2">
+              {rating.label}
+            </span>
           </div>
         ))}
       </div>
@@ -166,39 +136,53 @@ export default function ModalTimeout({
       {/* Feedback inputs */}
       {inputs.map((input, index) => (
         <div key={index} className="mb-6">
-          <label className="block mb-2 font-medium" style={{ color: styles.textColor }}>{input.label}</label>
+          <label className="block text-[hsl(var(--foreground))] mb-2 font-medium">
+            {input.label}
+          </label>
           <input
             type="text"
             placeholder={input.placeholder}
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
-            className="w-full border rounded-md p-3 focus:ring-2 focus:border-transparent"
-            style={{
-              borderColor: styles.secondaryColor,
-              color: styles.textColor,
-              borderRadius: styles.borderRadius,
-            }}
+            className={cn(
+              "w-full border rounded-md p-3",
+              "bg-[hsl(var(--background))] text-[hsl(var(--foreground))]",
+              "border-[hsl(var(--input))]",
+              "focus:ring-2 focus:ring-[hsl(var(--primary))] focus:border-transparent"
+            )}
           />
         </div>
       ))}
 
       {/* Footer */}
       <div className="flex justify-between items-center mt-8">
-        <div className="text-sm font-medium px-3 py-1 rounded-md flex items-center"
-          style={{ 
-            backgroundColor: styles.secondaryColor,
-            color: styles.textColor
-          }}
-        >
-          <span className="mr-1">✏️</span> Made by <span style={{ color: styles.primaryColor }} className="ml-1">@Dearboard</span>
+        <div className="text-sm font-medium  text-[hsl(var(--muted-foreground))] px-3 py-1 rounded-md flex items-center justify-center align-center gap-1">
+          <span className="mr-1">Made by</span>
+          <Link
+            href={`https://floopr.vercel.app?componentRef=modal-timeout&appRef=${window.location}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-fit h-fit"
+          >
+            <Image
+              src={`/${
+                isDarkMode
+                  ? `floopr-logo-no-bg-white-svg`
+                  : `floopr-logo-no-bg-svg`
+              }.svg`}
+              alt="floopr logo"
+              width={42}
+              height={12}
+            />
+          </Link>
         </div>
         <button
           onClick={handleSave}
-          className="hover:bg-blue-600 text-white px-5 py-2 rounded-md font-medium transition-colors duration-200"
-          style={{
-            backgroundColor: styles.primaryColor,
-            borderRadius: styles.borderRadius,
-          }}
+          className={cn(
+            "px-5 py-2 rounded-md font-medium transition-colors duration-200",
+            "bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]",
+            "hover:bg-[hsl(var(--primary)/0.9)]"
+          )}
         >
           {buttonText}
         </button>
@@ -214,8 +198,22 @@ export default function ModalTimeout({
   // Mode 1: In-container modal
   if (parent && parent.current) {
     return createPortal(
-      <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-        {modalContent}
+      <div
+        className={cn(
+          "absolute inset-0 z-50 flex items-center justify-center bg-black/30",
+          isDarkMode ? "dark" : "",
+          "[--background:0,0%,100%] [--foreground:0,0%,0%]",
+          "[--muted:0,0%,96%] [--muted-foreground:0,0%,45%]",
+          "[--border:0,0%,90%] [--input:0,0%,90%]",
+          "[--primary:250,89%,68%] [--primary-foreground:0,0%,100%]",
+          // Dark mode overrides
+          "dark:[--background:0,0%,15%] dark:[--foreground:0,0%,100%]",
+          "dark:[--muted:0,0%,15%] dark:[--muted-foreground:0,0%,65%]",
+          "dark:[--border:0,0%,20%] dark:[--input:0,0%,20%]",
+          "dark:[--primary:250,89%,68%] dark:[--primary-foreground:0,0%,100%]"
+        )}
+      >
+        <div className="max-w-md w-full">{modalContent}</div>
       </div>,
       parent.current
     );
@@ -223,10 +221,8 @@ export default function ModalTimeout({
 
   // Mode 2: Full-page modal
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-      <div className="max-w-md w-full">
-        {modalContent}
-      </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+      <div className="max-w-md w-full">{modalContent}</div>
     </div>
   );
 }

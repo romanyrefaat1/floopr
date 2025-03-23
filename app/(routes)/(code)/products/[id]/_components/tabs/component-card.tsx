@@ -1,29 +1,59 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import Link from "next/link";
 import { Product } from "../../page";
-import FeedbackModalTimeout from "@/components/floopr-integration/modal-timout/imports/feedback-modal-timeout";
+import OpenModalButton from "./open-modal-button";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
+import { useState } from "react";
 
-export default function ComponentCard({ productData, componentData, isYours }: { productData: Product; componentData: object, isYours: boolean }) {
-    console.log(`my-componentData`, componentData)
-    return (
-        
-        <Card className="flex flex-col-reverse md:flex-row items-center justify-center gap-4 p-4 md:p-8">
-            {/* {JSON.stringify(componentData)} */}
-            <div className="image w-full  flex items-center justify-center rounded-lg border p-[10px]">preview</div>
-            {isYours && <Link href={`/products/${productData.docId}/my-compnoents/${componentData.componentData.componentId}?componentType=${componentData.componentType}`}>open</Link>}
-            <div className="flex flex-col">
-                <CardHeader className="flex flex-row justify-between items-center">
-                    <div>
-                        <CardTitle>{componentData.title}</CardTitle>
-                        <CardDescription>{componentData.description}</CardDescription>  
-                    </div>
-                </CardHeader>
-                <FeedbackModalTimeout apiKey={componentData.apiKey} productId={productData.docId} componentId={componentData.componentData.componentId}/>
-                <Link href={`/edit-component/${componentData.componentType}/${componentData.componentData.componentId}?ref=${productData.docId}`}>
-                    <Button className="w-full" variant="secondary">{isYours ? `Edit` : `Add` } Component</Button>
-                </Link>
-            </div>
-        </Card>
-    )
+export default function ComponentCard({
+  productData,
+  componentData,
+  isYours,
+}: {
+  productData: Product;
+  componentData: { name: string; title: string; description: string } | object;
+  isYours: boolean;
+}) {
+  //   console.log(`my-componentData`, componentData);
+  return (
+    <Card className="flex flex-col-reverse md:grid md:grid-cols-2 items-center justify-center gap-4 p-4 md:p-4">
+      <div className="image w-full flex items-center justify-center rounded-lg border p-[10px]">
+        preview
+      </div>
+
+      <div className="flex flex-col">
+        <CardHeader className="flex flex-col justify-between gap-4">
+          <CardTitle>{componentData.title || `Your component`}</CardTitle>
+          <CardDescription>
+            {componentData.description || `Component`}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Link
+            href={
+              isYours
+                ? `/edit-component/${componentData.componentType}/${componentData.componentData.componentId}?ref=${productData.docId}`
+                : `/edit-component/${componentData.name}?ref=${productData.docId}`
+            }
+          >
+            <Button className="w-full" variant="secondary">
+              {isYours ? `Edit` : `Add`} Component
+            </Button>
+          </Link>
+          {isYours && (
+            <OpenModalButton
+              componentData={componentData}
+              productData={productData}
+            />
+          )}
+        </CardContent>
+      </div>
+    </Card>
+  );
 }
