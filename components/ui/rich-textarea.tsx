@@ -12,21 +12,24 @@ import "draft-js/dist/Draft.css";
 import { Button } from "./button";
 
 type RichTextEditorProps = {
-  onChange: (content: any) => void;
+  onChange: (content: Record<string, any>) => void;
   placeholder?: string;
   className?: string;
   style?: React.CSSProperties;
 };
 
-const RichTextEditor = ({ onChange, placeholder, className, style }: RichTextEditorProps) => {
+const RichTextEditor = ({
+  onChange,
+  placeholder,
+  className,
+  style,
+}: RichTextEditorProps) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const editor = useRef(null);
-  const [isFocused, setIsFocused] = useState(false);
 
   const focusEditor = () => {
     if (editor.current) {
       editor.current.focus();
-      setIsFocused(true);
     }
   };
 
@@ -48,7 +51,8 @@ const RichTextEditor = ({ onChange, placeholder, className, style }: RichTextEdi
     return "not-handled";
   };
 
-  const mapKeyToEditorCommand = (e: React.KeyboardEvent) => getDefaultKeyBinding(e);
+  const mapKeyToEditorCommand = (e: React.KeyboardEvent) =>
+    getDefaultKeyBinding(e);
 
   const toggleInlineStyle = (e: React.MouseEvent, style: string) => {
     e.preventDefault();
@@ -72,12 +76,12 @@ const RichTextEditor = ({ onChange, placeholder, className, style }: RichTextEdi
     },
   };
 
-  const hasInlineStyle = (style) => {
+  const hasInlineStyle = (style: string) => {
     const currentStyle = editorState.getCurrentInlineStyle();
     return currentStyle.has(style);
   };
 
-  const hasBlockType = (blockType) => {
+  const hasBlockType = (blockType: string) => {
     const selection = editorState.getSelection();
     const blockKey = selection.getStartKey();
     const block = editorState.getCurrentContent().getBlockForKey(blockKey);
@@ -187,8 +191,8 @@ const RichTextEditor = ({ onChange, placeholder, className, style }: RichTextEdi
             placeholder={placeholder || "Write your thoughts..."}
             customStyleMap={styleMap}
             spellCheck={true}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            onFocus={focusEditor}
+            onBlur={() => {}}
           />
         </div>
       </div>

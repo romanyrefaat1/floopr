@@ -9,10 +9,11 @@ export type FeedbackItemInDB = {
   feedbackId: string;
   productId: string;
   status?: string;
+  isComponent: boolean;
   // type: `idea` | `feature` | `issue` | `other`;
   type: string;
   topic?: {
-    topTopic?: string;
+    topTopic: string;
     text: string;
     topScore: number;
     labels: string[];
@@ -25,7 +26,9 @@ export type FeedbackItemInDB = {
   };
   feedback: {
     title: string;
-    content?: string;
+    content?: object;
+    inputs?: Array;
+    isRich: boolean;
   };
   userInfo?: {
     username: string;
@@ -55,12 +58,10 @@ export default async function FeedbackList({
   isOwner: boolean;
 }) {
   try {
-    console.log(`list productId:`, productId);
     const feedbacks = (await getFilteredFeedbacks(
       productId,
       filterData
-    )) as Array<unknown>;
-    console.log(`Fetched feedbacks`, feedbacks);
+    )) as Array<FeedbackItemInDB>;
 
     if (feedbacks.length === 0) {
       return (
@@ -72,7 +73,6 @@ export default async function FeedbackList({
 
     return (
       <div className="space-y-4">
-        {isOwner ? `owner` : `not owner`}
         {feedbacks.map((feedback) => (
           <FeedbackItem
             key={feedback.feedbackId}
@@ -81,6 +81,10 @@ export default async function FeedbackList({
               ...feedback,
               createdAt: feedback.createdAt?.toDate(),
               updatedAt: feedback.updatedAt?.toDate(),
+              topic: {
+                ...feedback.topic,
+                topTopic: feedback.topic?.topTopic,
+              },
             }}
             productId={productId}
           />

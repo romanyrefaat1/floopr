@@ -1,18 +1,25 @@
+import updateBasicAnalyticsFromNewFeedback from "./basic-analytics/update/update-basic-analytics-from-new-feedback";
 import { FeedbackItemInDB } from "@/app/(routes)/(code)/[productId]/_components/feedback-list";
 import { db } from "@/lib/firebase";
 import { analyzeSentiment } from "@/services/analyze-sentiment";
 import classifyTopic from "@/services/classify-topic";
-import { doc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
-import updateBasicAnalyticsFromNewFeedback from "./basic-analytics/update/update-basic-analytics-from-new-feedback";
+import {
+  doc,
+  setDoc,
+  serverTimestamp,
+  updateDoc,
+  addDoc,
+  collection,
+} from "firebase/firestore";
 
 export type SimpleFeedbackItemData = {
   feedback: {
     title: string;
-    content: string;
-    type: `idea` | `feature` | `issue` | `other`
+    content: string | null;
+    isRich: boolean;
+    type: `idea` | `feature` | `issue` | `other`;
   };
   productId: string;
-  componentRefId?: string;
   userInfo?: {
     userId?: string;
     username?: string;
@@ -27,10 +34,30 @@ export type AdvancedFeedbackItemData = {
   username: string;
 };
 
+export type FeedbackComponentModalInputs = {
+  label: string;
+  placeholder: string;
+  id: number;
+  value: string;
+};
+
+// Type for the modal component feedback
+type AddComponentFeedbackProps = {
+  inputs: FeedbackComponentModalInputs[];
+  productId: string;
+  componentRefId: string;
+  rating: number;
+  userInfo?: {
+    userId?: string;
+    username?: string;
+    profilePicture?: string | null;
+  } | null;
+};
+
 /**
  * Adds a simple feedback entry to a product with real-time updates
  */
-export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
+export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
   const { feedback, productId, componentRefId, userInfo } = feedbackData;
   console.log(`addFeedback`, feedbackData);
 
@@ -43,11 +70,6 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
     const topicClassification = await classifyTopic(
       `${feedback.title}. ${feedback.content}`
     );
-    // const topicClassification = {
-    //   labels: ["User Interface"],
-    //   topTopic: "User Interface",
-    //   topScore: 1
-    // }
     console.log(`topicClassification addismeple feedback`, topicClassification);
 
     // 1. Ensure the product document exists in the "products" collection
@@ -79,9 +101,11 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
           data: [],
         },
       },
+      // In your addSimpleFeedback function
       feedback: {
-        title: feedback.title,
-        content: feedback.content,
+        title: feedback.title || "Untitled",
+        content: feedback.content || null,
+        isRich: true,
       },
       feedbackId,
       productId,
@@ -90,6 +114,7 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
       status: "Sent", // Adding status can help with filtering in real-time listeners
       // Component
       componentRefId: componentRefId || null,
+      isComponent: null,
       userInfo,
     });
 
@@ -100,14 +125,85 @@ export async function addSimpleFeedback(feedbackData: FeedbackItemInDB) {
     });
 
     // Update basic analytics
-    console.log(`start update basic analytics`)
-    await updateBasicAnalyticsFromNewFeedback({productId, sentimentResult, topicClassification});
-    console.log(`end update basic analytics`)
+    console.log(`start update basic analytics`);
+    const isUpdateBasicAnalyticsSuccess =
+      await updateBasicAnalyticsFromNewFeedback({
+        productId,
+        sentimentResult,
+        topicClassification,
+      });
+    console.log(`end update basic analytics`);
+
+    console.log(`isUpdateBasicAnalyticsSuccess`, isUpdateBasicAnalyticsSuccess);
 
     return { success: true, feedbackId };
   } catch (error) {
     console.error("Error adding feedback:", error);
     return { success: false, error };
+  }
+}
+
+/**
+ * Adds feedback from a component (like modal)
+ */
+export async function addComponentFeedback({
+  inputs,
+  productId,
+  componentRefId,
+  rating,
+  userInfo = null,
+}: AddComponentFeedbackProps) {
+  try {
+    // Log the inputs for debugging
+    console.log("Adding component feedback with:", {
+      inputs,
+      productId,
+      componentRefId,
+      rating,
+      userInfo,
+    });
+
+    // Create the feedback document
+    const feedbackData = {
+      feedback: {
+        inputs,
+        isRich: false,
+      },
+      type: "feedback",
+      status: "Sent",
+      // Component
+      isComponent: true,
+      componentRefId,
+      componentId: `modal-timeout`,
+      componentName: `Modal Timeout`,
+
+      rating,
+      userInfo: userInfo || null,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      socialData: {
+        likes: { count: 0, data: [] },
+        comments: { count: 0, data: [] },
+      },
+    };
+
+    // Get the collection reference
+    const feedbacksCollectionRef = collection(
+      db,
+      "products",
+      productId,
+      "feedbacks"
+    );
+
+    // Add the document
+    const docRef = await addDoc(feedbacksCollectionRef, feedbackData);
+
+    console.log("Component feedback added successfully with ID:", docRef.id);
+
+    return { success: true, id: docRef.id };
+  } catch (error) {
+    console.error("Error adding component feedback:", error);
+    return { success: false, error: error.message };
   }
 }
 

@@ -12,11 +12,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import RichTextEditor from "@/components/ui/rich-textarea";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { X } from "lucide-react";
-import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,55 +21,58 @@ import { z } from "zod";
 
 const formSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(100),
-  description: z.string().optional(),
+  description: z.any().optional(),
   type: z.enum(["feature", "idea", "issue", "other"]),
-  image: z.instanceof(File).optional(),
 });
 
 export default function FeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const params = useParams();
   const productId = params.productId;
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
-      description: "",
+      description: {},
       type: "feature",
-      image: undefined,
     },
   });
 
-  async function onSubmit(values) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
 
+      // Debug logging
+      console.log("Form values:", values);
+
+      // Create a feedback object with the form values
       const feedbackData = {
         feedback: {
-          title: values.title,
+          title: values.title || "Untitled",
           content: values.description || "",
-          type: values.type,
+          type: values.type || "other",
         },
-        productId,
+        productId: String(productId),
         userInfo: {
           userId: "anonymous",
           username: "Anonymous User",
+          profilePicture: null,
         },
       };
 
+      console.log("Submitting feedback:", feedbackData);
+
       const result = await addSimpleFeedback(feedbackData);
       if (result.success) {
-        toast("Feedback submitted");
+        toast.success("Feedback submitted successfully");
         form.reset();
-        // router.push(`/${productId}/feedbacks/${result.feedbackId}`)
       } else {
-        toast("Failed to submit feedback. Please try again.");
+        toast.error("Failed to submit feedback. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting feedback:", error);
-      toast("An unexpected error occurred. Please try again.");
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -80,7 +80,8 @@ export default function FeedbackForm() {
 
   return (
     <div className="rounded-modal w-full min-w-[full] mx-auto p-4 text-card-foreground font-sans text-base">
-      <CardTitle><h2 className="text-2xl font-bold mb-6 text-center">Add Feedback</h2>
+      <CardTitle>
+        <h2 className="text-2xl font-bold mb-6 text-center">Add Feedback</h2>
       </CardTitle>
 
       <Form {...form}>
@@ -132,7 +133,7 @@ export default function FeedbackForm() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="text-red-500 text-xs" />
+                <FormMessage className="text-destructive text-xs" />
               </FormItem>
             )}
           />
@@ -146,12 +147,10 @@ export default function FeedbackForm() {
                 <FormControl>
                   <RichTextEditor
                     onChange={(content) => {
-                      console.log("Content updated:", content);
-                      field.onChange(JSON.stringify(content))}
-                    }
-                    placeholder="Enter your description(optional)"
+                      field.onChange(content);
+                    }}
+                    placeholder="Enter your description (optional)"
                     className="rounded-md bg-background text-foreground border border-secondary"
-                    // style={{ color: "#000000" }}
                   />
                 </FormControl>
                 <FormMessage />

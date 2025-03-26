@@ -9,12 +9,6 @@ import { ModalConfig } from "@/components/floopr-integration/modal-timout/modal-
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
 
 export const ReviewStep = ({
   config,
@@ -85,13 +79,6 @@ export const ReviewStep = ({
       />
     </AccordionSection>
     <AccordionSection value="theme" title="Theme">
-      {/* <Card>
-        <CardHeader></CardHeader>
-        <h3 className="text-lg font-medium mb-2">Modal Theme</h3>
-        <CardContent>
-          
-        </CardContent>
-      </Card> */}
       <div className="border rounded-lg p-4 mt-4">
         <h3 className="text-lg font-medium mb-2">Modal Theme</h3>
         <p className="leading-tight text-sm" style={{ lineHeight: `.8px` }}>

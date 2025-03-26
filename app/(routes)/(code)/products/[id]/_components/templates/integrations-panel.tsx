@@ -1,6 +1,8 @@
 import { Product } from "../../page";
 import AllComponents from "../tabs/feedback-integrations-tab/all-components";
 import YourComponents from "../tabs/feedback-integrations-tab/your-components";
+import LoaderSpinner from "@/components/loader-spinner";
+import { SkeletonCard } from "@/components/skeletons/skeleton-card";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,6 +22,7 @@ import {
   Timer,
 } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default function IntegrationsPanel({
   productData,
@@ -59,7 +62,7 @@ export default function IntegrationsPanel({
       </div>
 
       <Tabs defaultValue="your-components" className="space-y-4">
-        <TabsList className="bg-secondaryBackground w-full">
+        <TabsList className="bg-secondaryBackground w-fit">
           <TabsTrigger
             value="your-components"
             className={cn(
@@ -80,15 +83,39 @@ export default function IntegrationsPanel({
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="your-components" className="space-y-4">
-          <YourComponents
-            productId={productData.docId}
-            productData={productData}
-          />
+        <TabsContent value="your-components" className="space-y-4 h-full">
+          <Suspense
+            fallback={
+              <div className="grid lg:grid-cols-2 gap-2">
+                <h2 className="text-3xl font-bold mb-[25px]">
+                  Your Components
+                </h2>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            }
+          >
+            <YourComponents
+              productId={productData.docId}
+              productData={productData}
+            />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="all-components" className="space-y-4">
-          <AllComponents productData={productData} />
+          <Suspense
+            fallback={
+              <div className="grid lg:grid-cols-2 gap-2">
+                <h2 className="text-3xl font-bold mb-[25px]">All Components</h2>
+                <SkeletonCard />
+                <SkeletonCard />
+                <SkeletonCard />
+              </div>
+            }
+          >
+            <AllComponents productData={productData} />
+          </Suspense>
         </TabsContent>
       </Tabs>
     </div>

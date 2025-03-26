@@ -7,7 +7,7 @@
   /* Primary colors */
   --primary: 250, 89%, 68%; /* #7c64f6 */
   --primary-foreground: 0, 0%, 100%; /* #ffffff */
-  --primary-muted: 257, 36%, 75%; /* #b4a7d6 */
+  --primary-muted: 257, 36%, 65%; /* #b4a7d6 */
   --primary-muted-foreground: 255, 69%, 91%; /* #e0d8f8 */
 
   /* Base colors */

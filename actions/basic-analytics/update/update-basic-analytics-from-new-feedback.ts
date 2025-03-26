@@ -73,15 +73,25 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
 
     // Find all feedback
     const allFeedbacks = await getFeedbacks(productId);
-    console.log(`allFeedbacks`, allFeedbacks)
-    const allTopics = allFeedbacks.map(f => f.topic.labels[0]);
+    console.log(`allFeedbacks from update`, allFeedbacks)
+    const allTopics = allFeedbacks.map(f => {
+      const currFeedback = f
+      console.log(`currentFeedback`, currFeedback)
+      const currTopic = currFeedback.topic
+      console.log(`currentTopic`, currTopic)
+      if (!currTopic) return "Uncategorized"
+      return currTopic?.topTopic || "Uncategorized"
+    });
+    console.log(`allTopics`, allTopics)
 
     const topicCounts = allTopics.reduce((acc, topic) => {
       acc[topic] = (acc[topic] || 0) + 1;
       return acc;
     }, {});
+    console.log(`topic counts`, topicCounts)
     const topTopic = Object.entries(topicCounts).sort((a, b) => b[1] - a[1])[0][0];
     const topTopicPercent = (topicCounts[topTopic] / allTopics.length || 0) * 100;
+    console.log(`topTopic`, topTopic)
 
     // Map topic classification results to analytics.topic structure.
     const topicUpdate = {
@@ -114,4 +124,5 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
     console.log("End update product document");
   });
   console.log("runTransaction finished");
+  return {success: true}
 }

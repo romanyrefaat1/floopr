@@ -89,6 +89,20 @@ export default function FlooprFeedbackModalTimeout({
     return null;
   }
 
+  let userInfoFromProps: {
+    userId: string;
+    username: string;
+    profilePicture: string;
+  } | null = {
+    userId: "",
+    username: "",
+    profilePicture: "",
+  };
+
+  if (userInfo) {
+    userInfoFromProps = userInfo;
+  }
+
   // Load component data from database
   useEffect(() => {
     const loadComponent = async () => {
@@ -120,19 +134,6 @@ export default function FlooprFeedbackModalTimeout({
         if (data.style) {
           setStyles(data.style);
         }
-        console.log(`te inputs:`, data.inputs);
-        {
-          /*
-      [
-        {
-          id: 1,
-          label: "Explain it here",
-          placeholder: "Write your feedback...",
-          value: ""
-        }
-      ]
-      */
-        }
 
         setButtonText(data.buttonText);
         setTimeoutDuration(data.timeoutDuration);
@@ -147,17 +148,6 @@ export default function FlooprFeedbackModalTimeout({
     loadComponent();
   }, [apiKey, productId, componentId]);
 
-  // Auto-close the modal if timeoutDuration is set
-  // React.useEffect(() => {
-  //   if (timeoutDuration > 0 && isOpen) {
-  //     const timer = setTimeout(() => {
-  //       setIsOpen(false);
-  //     }, timeoutDuration * 1000);
-
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [isOpen, timeoutDuration]);
-
   const handleRatingClick = (value) => {
     setSelectedRating(value);
     setAnimate(value);
@@ -165,38 +155,54 @@ export default function FlooprFeedbackModalTimeout({
   };
 
   const handleSave = async () => {
-    if (isOpen) {
-      setIsOpen(false);
+    // Validate feedback before submitting
+
+    if (selectedRating === null) {
+      toast.error("Please select a rating before submitting");
+      return;
     }
+
     setIsSubmitting(true);
 
-    // Save rating and feedback to database
     try {
-      const userFeedback = {
+      // Log what we're sending for debugging
+      console.log("Sending feedback data:", {
         productId,
         componentId,
-        feedback,
+        feedback: inputs,
         rating: selectedRating,
-      };
+        userInfo: userInfoFromProps,
+      });
+
       const response = await fetch(`/api/imports/components/save-data`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...userFeedback,
-          userInfo,
+          productId,
+          componentId,
+          feedback: inputs,
+          isComponent: true,
+          rating: selectedRating,
+          userInfo: userInfoFromProps,
         }),
       });
+
       const data = await response.json();
+
       if (!response.ok) {
-        toast.error("Failed to save feedback:", data.error);
-        return;
+        console.error("Server response:", data);
+        throw new Error(data.error || "Failed to save feedback");
       }
-      toast.success("Feedback saved successfully");
+
+      toast.success("Thank you for your feedback!");
+      setIsOpen(false);
     } catch (error) {
       console.error("Error saving feedback:", error);
-      toast.error("Failed to save feedback");
+      toast.error(
+        error.message || "Failed to save feedback. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -280,7 +286,7 @@ export default function FlooprFeedbackModalTimeout({
       {/* Feedback inputs */}
       {inputs.map((input, index) => (
         <div key={index} className="mb-6">
-          <label className="block text-[hsl(var(--foreground))] mb-2 font-medium">
+          <label className="block text-[hsl(var(--foreground))] text-left mb-2 font-medium">
             {input.label}
           </label>
           <input

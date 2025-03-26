@@ -10,9 +10,12 @@ export default async function FeedbackIntegrationsTab({ productData }: { product
     return (
         <Suspense fallback={<LoaderSpinner />}>
       <Tabs defaultValue="your-components">
-<TabsList>
+<TabsList className="w-fit">
+
+<div className="w-fit">
     <TabsTrigger value="your-components">Your components</TabsTrigger>
     <TabsTrigger value="all-components">All components</TabsTrigger>
+    </div>    
 </TabsList>
 <TabsContent value="your-components">
     <YourComponents productId={productData.docId} productData={productData} />

@@ -1,5 +1,6 @@
-import { Calendar, Home, Inbox, Plus, Search, Settings } from "lucide-react"
+"use client";
 
+import { ThemeToggle } from "./theme-toggle";
 import {
   Sidebar,
   SidebarContent,
@@ -9,8 +10,19 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { ThemeToggle } from "./theme-toggle"
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+  Calendar,
+  Home,
+  Plus,
+  ProjectorIcon,
+  Search,
+  Settings,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+import Image from "next/image";
+import { Separator } from "./ui/separator";
 
 // Menu items.
 const items = [
@@ -25,28 +37,35 @@ const items = [
     icon: Plus,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Products",
+    url: "/products",
+    icon: ProjectorIcon,
   },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
-  },
-]
+];
 
 export function AppSidebar() {
+  const { theme } = useTheme();
   return (
-    <Sidebar collapsible="icon" variant="sidebar" >
-      <SidebarContent>
+    <Sidebar collapsible="icon" variant="sidebar" className="bg-background">
+      <SidebarContent  className="bg-background">
         <SidebarGroup>
-          <SidebarGroupLabel>Ideaboard</SidebarGroupLabel>
+          <SidebarGroupLabel className="my-5">
+            {theme === `dark` ? (
+              <Image
+                src={`/floopr-logo-no-bg-white-svg.svg`}
+                width={52}
+                height={12}
+                alt="floopr logo"
+              />
+            ) : (
+              <Image
+                src={`/floopr-logo-no-bg-svg.svg`}
+                width={52}
+                height={12}
+                alt="floopr logo"
+              />
+            )}
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
@@ -59,15 +78,21 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <Separator className="my-2" />
               <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <ThemeToggle />
+                <SidebarMenuButton asChild>
+                  <ThemeToggle />
+                </SidebarMenuButton>
+                <SidebarMenuButton asChild className="sm:hidden md:inline-flex">
+                  <SidebarMenuButton>
+                  <SidebarTrigger />
                   </SidebarMenuButton>
-                </SidebarMenuItem>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

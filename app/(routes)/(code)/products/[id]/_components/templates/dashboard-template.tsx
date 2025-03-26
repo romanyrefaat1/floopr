@@ -1,3 +1,4 @@
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { FilterData, Product } from "../../page";
 import FeedbackTabs from "../feedback-tabs";
 import ContentTab from "../tabs/content-tab";
@@ -6,13 +7,12 @@ import IntegrationsPanel from "./integrations-panel";
 import ProjectOverview from "./project-overview";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 
-export default function DashboardTemplate({
+export default async function DashboardTemplate({
   productData,
   filterData,
 }: {
@@ -20,9 +20,12 @@ export default function DashboardTemplate({
   filterData: FilterData;
 }) {
   return (
-    <main className="container mx-auto px-4 py-6">
+    <main className="container mx- px-4 py-6 max-w-full">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <div className="md:hidden">
+          <SidebarTrigger />
+        </div>
         <div>
           <h1 className="text-2xl font-bold">{productData.name}</h1>
           <p className="text-muted-foreground">{productData.description}</p>

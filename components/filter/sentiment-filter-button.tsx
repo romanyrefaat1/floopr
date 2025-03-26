@@ -1,5 +1,6 @@
 "use client";
 
+import getSentimentPercent from "@/actions/basic-analytics/sentiment-percent";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,8 +13,11 @@ import { ArrowDownIcon } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function SentimentFilterButton() {
+export default function SentimentFilterButton({productId}: {productId: string}) {
   const [value, setValue] = useState("All");
+  const [positiveCount, setPositiveCount] = useState(0);
+  const [negativeCount, setNegativeCount] = useState(0);
+  const [neutralCount, setNeutralCount] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -45,6 +49,14 @@ export default function SentimentFilterButton() {
     } else {
       setValue("All");
     }
+
+    async function fetchSentimentCounts() {
+      const {positive, negative, neutral} = await getSentimentPercent(productId)
+      setPositiveCount(positive);
+      setNegativeCount(negative);
+      setNeutralCount(neutral);
+    }
+    fetchSentimentCounts();
   }, [searchParams]);
 
   return (
@@ -62,28 +74,28 @@ export default function SentimentFilterButton() {
             value="All"
           >
             <span>All</span>
-            <span className="text-text-muted text-sm">89</span>
+            <span className="text-text-muted text-sm">{positiveCount + negativeCount + neutralCount}</span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Positive"
             className="flex justify-between"
           >
             <span>Positive</span>
-            <span className="text-text-muted text-sm">49</span>
+            <span className="text-text-muted text-sm">{positiveCount}</span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Neutral"
             className="flex justify-between"
           >
             <span>Neutral</span>
-            <span className="text-text-muted text-sm">49</span>
+            <span className="text-text-muted text-sm">{neutralCount}</span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Negative"
             className="flex justify-between"
           >
             <span>Negative</span>
-            <span className="text-text-muted text-sm">40</span>
+            <span className="text-text-muted text-sm">{negativeCount}</span>
           </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>

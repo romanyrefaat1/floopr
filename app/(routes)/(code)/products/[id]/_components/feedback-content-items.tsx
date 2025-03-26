@@ -1,12 +1,9 @@
-"use client";
-
 import FeedbackItem from "../../../[productId]/_components/feedback-item";
 import { FilterData, Product } from "../page";
 import { FeedbackItemInDB } from "@/actions/add-feedback";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
+import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { Timestamp } from "firebase/firestore";
-import { DocumentData, QuerySnapshot } from "firebase/firestore";
-import { useEffect, useState } from "react";
 
 type FeedbackData = {
   id: string;
@@ -27,7 +24,7 @@ type FeedbackData = {
   };
 };
 
-export default function FeedbackContentItems({
+export default async function FeedbackContentItems({
   productData,
   productId,
   isOwner = false,
@@ -38,116 +35,45 @@ export default function FeedbackContentItems({
   filterData?: FilterData;
   isOwner: boolean;
 }) {
-  const [feedbacks, setFeedbacks] = useState<FeedbackData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  try {
+    const data = await getFilteredFeedbacks(productId, filterData || {});
 
-  useEffect(() => {
-    const fetchFeedbacks = async () => {
-      try {
-        setLoading(true);
-        const data = await getFilteredFeedbacks(productId, filterData || {});
+    const feedbacks = Array.isArray(data) ? data : [];
+    console.log(`fetced feedbacks`, feedbacks);
 
-        // Handle the response data
-        const feedbackArray = Array.isArray(data) ? data : [];
-        setFeedbacks(feedbackArray);
-      } catch (err) {
-        setError("Failed to load feedback. Please try again later.");
-        console.error("Error fetching feedbacks:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!feedbacks || !feedbacks.length) {
+      return (
+        <div
+          className="text-center py-8"
+          style={{ color: productData.style?.textColor }}
+        >
+          <p className="text-secondaryForeground">
+            No feedback found matching your criteria.
+          </p>
+        </div>
+      );
+    }
 
-    fetchFeedbacks();
-  }, [productId, filterData]);
+    const serializedFeedbacks = feedbacks.map(f=> serializeFirestoreData(f) as FeedbackItemInDB);
 
-  if (loading) {
     return (
-      <div
-        className="text-center py-8"
-        style={{ color: productData.style?.textColor }}
-      >
-        Loading feedbacks...
+      <div className="space-y-4">
+        {serializedFeedbacks.map((feedback) => (
+          <FeedbackItem
+            key={feedback.id}
+            isOwner={isOwner}
+            feedback={feedback}
+            productId={productId}
+            feedbackId={feedback.id}
+          />
+        ))}
+      </div>
+    );
+  } catch (err) {
+    return (
+      <div className="text-red-500 p-4 text-center">
+        {err instanceof Error ? err.message : "An error occurred"}
       </div>
     );
   }
-
-  if (error) {
-    return (
-      <div
-        className="text-red-500 p-4 text-center"
-        // style={{ color: productData.style?.accentColor }}
-      >
-        {error}
-      </div>
-    );
-  }
-
-  if (!feedbacks || !feedbacks.length) {
-    return (
-      <div
-        className="text-center py-8"
-        style={{ color: productData.style?.textColor }}
-      >
-        <p className="text-secondaryForeground">
-          No feedback found matching your criteria.
-        </p>
-      </div>
-    );
-  }
-
-  console.log(`feedbacks`, feedbacks);
-
-  // Prepare the feedback data with proper date serialization
-  const serializedFeedbacks = feedbacks.map((feedback) => {
-    // Convert the timestamp object back to a Date
-    const createdAtDate = feedback.createdAt
-      ? new Date(feedback.createdAt.seconds * 1000)
-      : new Date();
-
-    const updatedAtDate = feedback.updatedAt
-      ? new Date(feedback.updatedAt.seconds * 1000)
-      : createdAtDate;
-
-    return {
-      id: feedback.id,
-      feedback: {
-        title: feedback.feedback?.title || "Untitled Feedback",
-        content: feedback.feedback?.content || "",
-      },
-      type: feedback.type || "other",
-      sentiment: feedback.sentiment?.sentiment || "neutral",
-      username: feedback.userInfo?.username || "Anonymous",
-      profilePicture: feedback.userInfo?.profilePicture,
-      createdAt: createdAtDate,
-      updatedAt: updatedAtDate,
-      status: feedback.status,
-      socialData: feedback.socialData || {
-        comments: { count: 0, data: [] },
-        likes: { count: 0, data: [] },
-      },
-    };
-  });
-
-  return (
-    <div
-      className="space-y-4"
-      // style={{
-      //   backgroundColor: productData.style?.backgroundColor,
-      //   color: productData.style?.textColor,
-      // }}
-    >
-      {serializedFeedbacks.map((feedback) => (
-        <FeedbackItem
-          key={feedback.id}
-          isOwner={isOwner}
-          feedback={feedback}
-          productData={productData}
-          productId={productId}
-          feedbackId={feedback.id}
-        />
-      ))}
-    </div>
-  );
 }

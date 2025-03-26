@@ -1,26 +1,30 @@
-import { useState } from "react";
+"use client";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { doc, updateDoc } from "firebase/firestore";
+import { LucideArrowDownNarrowWide } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 const statusStyles: Record<string, string> = {
   "in progress": "bg-blue-100 text-blue-800",
   "in review": "bg-yellow-100 text-yellow-800",
-  rejected: "bg-red-100 text-red-800",
-  done: "bg-primary text-white", // Ensure "bg-primary" is defined in your Tailwind config
+  rejected: "bg-destructive text-destructive-foreground",
+  done: "bg-primary text-foreground",
+  Sent: "bg-background text-secondaryForeground",
 };
 
 export default function FinalStatus({
   finalStatus,
   isOwner,
   productId,
-  feedbackId
+  feedbackId,
 }: {
   finalStatus: string;
   isOwner: boolean;
@@ -32,8 +36,7 @@ export default function FinalStatus({
 
   const handleStatusChange = async (newStatus: string) => {
     setStatus(newStatus);
-    // Add any additional logic for handling the status change here
-    const docRef = doc(db, `products`, productId, `feedbacks`, feedbackId)
+    const docRef = doc(db, `products`, productId, `feedbacks`, feedbackId);
     await updateDoc(docRef, { status: newStatus })
       .then(() => {
         toast.success(`Status updated successfully to ${newStatus}`);
@@ -47,11 +50,13 @@ export default function FinalStatus({
     return (
       <DropdownMenu>
         <DropdownMenuTrigger
-          className={`text-xs px-2 py-1 rounded-full focus:outline-none ${statusStyles[status] || "bg-gray-200"}`}
+          className={`text-xs px-2 py-1 rounded-full focus:outline-none ${
+            statusStyles[status] || "bg-gray-200"
+          }`}
         >
           {status}
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="text-xs gap-1 flex flex-col">
           {statuses.map((s) => (
             <DropdownMenuItem
               key={s}
@@ -67,7 +72,12 @@ export default function FinalStatus({
   }
 
   return (
-    <div className={`text-xs px-2 py-1 rounded-full ${statusStyles[status] || "bg-gray-200"}`}>
+    <div
+      className={`text-xs px-2 py-1 rounded-full ${
+        statusStyles[status] || "bg-gray-200"
+      }`}
+    >
+      <LucideArrowDownNarrowWide className="inline" />
       {status}
     </div>
   );

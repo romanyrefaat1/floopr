@@ -1,13 +1,16 @@
+import { Button } from "@/components/ui/button";
 import { FilterData } from "../products/[id]/page";
 import Feedbacks from "./_components/feedbacks/feedbacks";
 import { PaDropdown } from "./_components/pa-drop-down";
 import { updatePageView } from "@/actions/basic-analytics/pageViews";
 import getProductData from "@/actions/get-product-data";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ProductStyleProvider } from "@/contexts/product-style-context";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowUpRight } from "lucide-react";
 
 export type ProductStyle = {
   backgroundColor: string;
@@ -139,6 +142,9 @@ export default async function UsersProductPage({
   return (
     // <ProductStyleProvider productStyle={productData.productStyle}>
     <main className="bg-background px-4 md:px-20 min-h-screen">
+      <div className="md:hidden">
+        <SidebarTrigger />
+              </div>
       <header className="rounded-lg border p-4 mb-6">
         <nav className="w-full flex justify-between items-center">
           <Link href={productData.link} className="h-fit">
@@ -156,6 +162,17 @@ export default async function UsersProductPage({
           filterData={filterData}
         />
       </div>
+
+      {/* If user is owner, show link to /products/productId */}
+      {isOwner && (
+        <div className="fixed bottom-4 right-4">
+          <Button variant="secondary" className="rounded-full w-fit h-fit p-4 md:p-8 group" style={{aspectRatio: 1}}>
+            <Link href={`products/${productData.docId}`} className="h-fit w-fit">
+              <ArrowUpRight className="h-5 w-5 group-hover:w-6 group-hover:h-6 transition-all" />
+            </Link>
+          </Button>
+        </div>
+      )}
     </main>
 
     // </ProductStyleProvider>
