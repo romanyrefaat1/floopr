@@ -59,20 +59,20 @@ export default async function DashboardTemplate({
       <Tabs defaultValue="feedback" className="space-y-4">
         {/* Tabs List - Scrollable on Small Screens */}
         <div className="overflow-x-auto">
-          <TabsList className="flex gap-2 bg-secondaryBackground text-foreground w-fit min-w-max md:grid md:grid-cols-4 md:max-w-md scrollbar-hide hover:scrollbar-default [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
+          <TabsList className="flex gap-2 bg-secondaryBackground text-foreground w-fit min-w-max md:grid md:grid-cols-3 md:max-w-md scrollbar-hide hover:scrollbar-default [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
             <TabsTrigger value="feedback" className="flex items-center gap-2">
               <LayoutDashboard size={16} />
               Feedback
             </TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="integrations">Integrations</TabsTrigger>
-            <TabsTrigger value="feedback-settings">Settings</TabsTrigger>
+            {/* <TabsTrigger value="feedback-settings">Settings</TabsTrigger> */}
           </TabsList>
         </div>
 
         {/* Feedback Tab Content */}
         <TabsContent value="feedback" className="space-y-4">
-          <div>
+          <div className="mb-[30px]">
             <ProjectOverview productData={productData} />
           </div>
           {/* <FeedbackTabs
@@ -104,7 +104,7 @@ export default async function DashboardTemplate({
         </TabsContent>
 
         {/* Settings Tab Content */}
-        <TabsContent value="feedback-settings">
+        {/* <TabsContent value="feedback-settings">
           <div className="space-y-4">
             <div>
               <h3 className="text-lg font-medium mb-2">Feedback Settings</h3>
@@ -145,7 +145,7 @@ export default async function DashboardTemplate({
               </div>
             </div>
           </div>
-        </TabsContent>
+        </TabsContent> */}
       </Tabs>
     </main>
   );

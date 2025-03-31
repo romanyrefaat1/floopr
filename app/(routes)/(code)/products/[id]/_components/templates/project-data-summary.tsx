@@ -19,22 +19,22 @@ export default async function ProjectDataSummary({productId}: {productId: string
         // <div></div>
         <ul className="bg-background text-foreground flex flex-col gap-4">
             <LiItem>
-                <span>Page Views</span>
+                <span className="text-mutedForeground">Page Views</span>
                 <span className="font-medium">{basicAnalytics.pageViews}</span>
             </LiItem>
             <Separator />
             <LiItem>
-                <span>Feedbacks</span>
+                <span className="text-mutedForeground">Feedbacks</span>
                 <span className="font-medium">{basicAnalytics.feedbackCount}</span>
             </LiItem>
             <Separator />
             <LiItem>
-                <span>Comments</span>
+                <span className="text-mutedForeground">Comments</span>
                 <span className="font-medium">{basicAnalytics.commentsCount}</span>
             </LiItem>   
             <Separator />
             <LiItem>
-                <span>Sentiment Percent</span>
+                <span className="text-mutedForeground">Sentiment Percent</span>
                 <span className="flex items-center gap-2">
                     {/* Small circle */}
                     {topSentiment === 'Positive' && <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>}
@@ -45,7 +45,7 @@ export default async function ProjectDataSummary({productId}: {productId: string
             </LiItem>
             <Separator />
             <LiItem>
-                <span>Top Topic</span>
+                <span className="text-mutedForeground">Top Topic</span>
                 <span className="font-medium">{basicAnalytics.topic.topTopic} | {basicAnalytics.topic.topTopicPercent}%</span>
             </LiItem>
         </ul>
