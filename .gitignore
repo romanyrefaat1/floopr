@@ -10,6 +10,7 @@ firebase-admins-service-private-keys.json
 
 # dependencies
 /node_modules
+/packages/floopr-feedback/modal-timeout/node_modules
 /.pnp
 .pnp.*
 .yarn/*

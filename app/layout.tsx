@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "DeaBoard",
-  description: "Join the waitlist for DeaBoard - the modern idea management platform that helps you capture, organize, and develop your creative thoughts. Sign up now for early access to our intuitive workspace designed for thinkers and creators.",
+  title: "floopr",
+  description: "Scale your startup wit feedback: Collect, manae and anlayze feedback effortlessly.",
 };
 
 export default function RootLayout({
@@ -28,6 +28,12 @@ export default function RootLayout({
         <Toaster position="top-right" />
         {/* <Analytics /> */}
       </ThemeProvider>
+      <script 
+  src="../packages/floopr-feedback/modal-timeout/dist/FlooprFeedbackModalTimeout.js" 
+  data-api-key="your-key"
+  data-product-id="your-product"
+  data-component-id="your-component"
+></script>
       </body>
     </html>
   );

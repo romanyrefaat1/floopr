@@ -18,7 +18,7 @@ const ProductsPa = async () => {
     //     </div>
     //   </div>
     <main className="p-4 w-full">
-      <h2 className="text-3xl font-bold">Your Products</h2>
+      <h2 className="text-3xl mb-[25px] font-bold">Your Products</h2>
       <LatestProducts userId={userId} />
     </main>
     // </SidebarProvider>

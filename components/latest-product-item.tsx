@@ -67,7 +67,7 @@ const LatestProductItem = ({
 
   return (
     <Link href={`/products/${docId}`} className="block w-full">
-      <div className="group border bg-secondary/30 border-gray-100 dark:border-gray-800 bg-white dark:bg-black rounded-lg p-6 mb-4 transition-all duration-200 hover:shadow-md transform hover:-translate-y-1">
+      <div className="group border bg-secondaryBackground border-gray-100 dark:border-gray-800 rounded-lg p-6 mb-4 transition-all duration-200 hover:shadow-md transform hover:-translate-y-1">
         {/* Tags/Badges Section */}
         {tags && tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
@@ -95,7 +95,7 @@ const LatestProductItem = ({
         {/* Header with Profile and Title */}
         <div className="flex items-center mb-4">
           {profileURL ? (
-            <div className="relative w-10 h-10 mr-3 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700">
+            <div className="relative w-10 h-10 mr-3 rounded-full overflow-hidden border border-mutedBackground">
               <Image
                 fill
                 src={profileURL}
@@ -105,35 +105,35 @@ const LatestProductItem = ({
               />
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-full mr-3 flex items-center justify-center text-white bg-gradient-to-r from-blue-500 to-blue-600">
-              <span className="text-sm font-bold">
+            <div className="w-10 h-10 rounded-full mr-3 flex items-center justify-center text-foreground bg-gradient-to-r from-blue-500 to-blue-600">
+              <span className="text-sm text-foreground font-bold">
                 {name ? name.charAt(0).toUpperCase() : "?"}
               </span>
             </div>
           )}
 
-          <div className="flex-1">
-            <h3 className="text-lg font-medium text-black dark:text-white">
+          <div className="flex-1 text-foreground">
+            <h3 className="text-lg font-medium">
               {name}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+            <p className="text-sm ">
               {productName}
             </p>
           </div>
         </div>
 
         {/* Title as a prominent heading */}
-        <h2 className="text-xl font-bold text-black dark:text-white mb-3 group-hover:text-blue-500 transition-colors">
+        <h2 className="text-xl font-bold text-black dark:text-white mb-[10px] group-hover:text-blue-500 transition-colors">
           {title}
         </h2>
 
         {/* Description */}
-        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">
-          {truncatedDescription}
+        <p className="text-secondaryForeground text-sm leading-relaxed mb-4">
+          {truncatedDescription || `No description`}
         </p>
 
         {/* Footer with stats */}
-        <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-800">
+        {/* <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-800">
           <div className="flex items-center mr-4">
             <svg 
               className="w-4 h-4 mr-1" 
@@ -168,7 +168,7 @@ const LatestProductItem = ({
             </svg>
             {commentsCount}
           </div>
-        </div>
+        </div> */}
       </div>
     </Link>
   );

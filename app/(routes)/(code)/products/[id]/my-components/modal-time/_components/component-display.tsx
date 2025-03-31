@@ -25,7 +25,7 @@ export default function ComponentDisplay({
         components are usually more customizable and could be added to specific
         pages
       </p>
-      <ComponentTabs />
+      <ComponentTabs componentId={componentData.componentData.componentId} componentAPIKey={componentData.apiKey} componentProductId={componentData.productId} />
     </main>
   );
 }

@@ -12,7 +12,7 @@ import "draft-js/dist/Draft.css";
 import { Button } from "./button";
 
 type RichTextEditorProps = {
-  onChange: (content: Record<string, any>) => void;
+  onChange?: (content: Record<string, any>) => void;
   placeholder?: string;
   className?: string;
   style?: React.CSSProperties;

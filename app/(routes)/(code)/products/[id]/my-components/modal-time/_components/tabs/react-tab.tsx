@@ -4,19 +4,22 @@ import CopyButton from "../copy-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import React, { useState } from "react";
 
-export default function ModalTimeFeedbackDocs() {
+export default function ModalTimeFeedbackDocs({ componentId, componentAPIKey, componentProductId }: { componentId: string, componentAPIKey: string, componentProductId: string }) {
   const [activeTab, setActiveTab] = useState("overview");
   const [showApiKey, setShowApiKey] = useState(false);
 
   // The component signature remains unchanged.
-  const componentSignature = `function FlooprFeedbackModalTimeout({
-  apiKey,
-  productId,
-  componentId,
-  userInfo,
-}) {
+  const componentSignature = `<FlooprFeedbackModalTimeout 
+  apiKey="${componentAPIKey}"
+  productId="${componentProductId}"
+  componentId="${componentId}"
+  userInfo={{
+    username: "Sarah Johnson",
+    userId: "user_sarah_123",
+    profilePicture: "https://example.com/sarah-profile.jpg"
+  }}
+/>`;
   // Component implementation
-}`;
 
   const installCode = `npm install modal-time-feedback`;
 
@@ -25,9 +28,9 @@ export default function ModalTimeFeedbackDocs() {
 function App() {
   return (
     <FlooprFeedbackModalTimeout 
-      productId="your-product-id"
-      apiKey="your-api-key"
-      componentId="your-component-id"
+      productId="${componentProductId}"
+      apiKey="${componentAPIKey}"
+      componentId="${componentId}"
     />
   );
 }`;
@@ -35,15 +38,15 @@ function App() {
   // For the full usage example, we build two versions:
   // 1. The displayed code uses a masked API key until the user clicks to reveal it.
   // 2. The copied code always includes the actual API key and a "use client" header.
-  const actualApiKey = "sec_prod_1234567890";
+  const actualApiKey = componentAPIKey;
   const displayedFullUsageCode = `import FlooprFeedbackModalTimeout from 'modal-time-feedback';
 
 function App() {
   return (
     <FlooprFeedbackModalTimeout 
-      productId="shopping-app"
+      productId="${componentProductId}"
       apiKey="${showApiKey ? actualApiKey : "**********"}"
-      componentId="feedback-modal-1"
+      componentId="${componentId}"
       userInfo={{
         username: "Sarah Johnson",
         userId: "user_sarah_123",
@@ -59,9 +62,9 @@ import FlooprFeedbackModalTimeout from 'modal-time-feedback';
 function App() {
   return (
     <FlooprFeedbackModalTimeout 
-      productId="shopping-app"
+      productId="${componentProductId}"
       apiKey="${actualApiKey}"
-      componentId="feedback-modal-1"
+      componentId="${componentId}"
       userInfo={{
         username: "Sarah Johnson",
         userId: "user_sarah_123",

@@ -1,30 +1,10 @@
-'use client';
 
-import { X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import getProductData from '@/actions/get-product-data';
+import FeedbackItemPreviewModal from '@/components/feedback-item-preview-modal.tsx/feedback-item-preview-modal';
+import { db } from '@/lib/firebase';
+import serializeFirestoreData from '@/lib/serialize-firestore-data';
+import { collection, getDocs } from 'firebase/firestore';
 import React from 'react';
-
-export default function FeedbackModal({ params }) {
-  const router = useRouter();
-  const { productId, feedbackId } = React.use(params);
-
-  const closeModal = () => {
-    // Navigate back to the main page for the id
-    router.push(`/${productId}`);
-  };
-
-  return (
-    <div style={modalStyles.overlay}>
-      <div style={modalStyles.modal}>
-        <button onClick={closeModal} style={modalStyles.closeButton}>
-          <X />
-        </button>
-        <h2>Feedback: {feedbackId}</h2>
-        <p>Modal content goes here.</p>
-      </div>
-    </div>
-  );
-}
 
 const modalStyles = {
   overlay: {
@@ -33,14 +13,12 @@ const modalStyles = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000, // ensure the modal is on top
   },
   modal: {
-    backgroundColor: '#fff',
     padding: '20px',
     borderRadius: '8px',
     position: 'relative',
@@ -53,3 +31,31 @@ const modalStyles = {
     right: 10,
   },
 };
+
+export default async function FeedbackModal({ params, searchParams }) {
+  const {productId, feedbackId} = params;
+
+  const productData = await getProductData(productId)
+  const serializedProductData = serializeFirestoreData(productData)
+
+  // Find feedbackData
+  const feedbackCollRef = collection(db, `products`, productId, `feedbacks`)
+  const feedbackSnap = await getDocs(feedbackCollRef)
+  const feedbackData = feedbackSnap.docs.map(doc => serializeFirestoreData(doc.data()))[0]
+
+  console.log(`feedbackData from paje:`, feedbackData)
+  console.log(`productData from paje:`, serializedProductData)
+
+  if (!feedbackData || !serializedProductData) {
+    throw new Error(`Feedback Data and Product Data are not truthy values`)
+  }
+
+  return (
+    <div style={modalStyles.overlay}>
+      <FeedbackItemPreviewModal
+        passedParams={{productId: productId, feedbackId: feedbackId}}
+        productData={serializedProductData}
+        feedbackData={feedbackData}/>
+    </div>
+  );
+}

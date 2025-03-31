@@ -7,7 +7,13 @@ import { useState } from "react";
 import { sendReply } from "@/lib/feedback-item/send-reply";
 import { useUser } from "@clerk/nextjs";
 
-export default function CommentInput({productId, feedbackId}: {productId: string, feedbackId: string}) {
+type CommentInputProps = {
+    productId: string, 
+    feedbackId: string, 
+    btnLabel?: string
+}
+
+export default function CommentInput({productId, feedbackId, btnLabel=`Send`}: CommentInputProps) {
     const [commentVal,setCommentVal] = useState("")
     const [loading, setLoading] = useState(false)
     const {user, isSignedIn} = useUser()
@@ -29,7 +35,7 @@ export default function CommentInput({productId, feedbackId}: {productId: string
     return (
         <form onSubmit={(e)=>handleSendComment(e)} className="flex gap-2">
             <Input placeholder="Reply" disabled={commentVal.length < 0} onChange={(e)=>setCommentVal(e.target.value)} />
-            <Button type="submit">Send</Button>
+            <Button type="submit">{btnLabel}</Button>
         </form>
     )
 }
