@@ -1,32 +1,66 @@
+import { Suspense } from "react";
 import { auth } from "@clerk/nextjs/server";
+
+import AnalyticsOverview from "./_components/analytics-overview";
 import AnalyzeProducts from "./_components/analyze-products";
 import LatestProducts from "./_components/latest-products";
-import { redirect } from "next/navigation";
-import SyncUser from "./sync-user";
-import { Suspense } from "react";
+import QuickStats from "./_components/quick-stats";
+import WelcomeSection from "./_components/welcome-section";
 import LoaderSpinner from "@/components/loader-spinner";
+import SyncUser from "./sync-user";
+import Link from "next/link";
 
 const Home = async () => {
-  const { userId } = await auth();
+  const { userId, redirectToSignIn } = await auth();
   
   if (!userId) {
-    redirect('/sign-in');
+    redirectToSignIn();
   }
-
   
   return (
-    <div className="w-full">
+    <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-6 md:py-4 space-y-8">
       <SyncUser />
-      <div className="flex flex-col gap-4">
-        <h2 className="text-3xl font-bold">Top Feedback</h2>
-        {/* <TopFeedback /> */}
-        <Suspense fallback={<div className="flex justify-center items-center"><LoaderSpinner /></div>}>
-          <LatestProducts userId={userId} />
-        </Suspense>
+      <WelcomeSection />
+      <div className="">
+      <div className="mt-8">
+        <QuickStats userId={userId} />
       </div>
-      <div className="flex flex-col gap-4">
-        <h2 className="text-3xl font-bold">Analyze Products</h2>
-        {/* <AnalyzeProducts /> */}
+      
+      <div className="grid mt-[25px] grid-cols-1 lg:grid-cols-1 gap-8">
+        <div className="flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold tracking-tight">Recent Products</h2>
+            <Link href={`/products`} className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+              View all
+            </Link>
+          </div>
+          <Suspense fallback={<LoaderSpinner className="min-h-[300px]" />}>
+            <LatestProducts numOfCols={1} userId={userId} />
+          </Suspense>
+        </div>
+        
+        {/* <div className="flex flex-col gap-5">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-semibold tracking-tight">Analytics Overview</h2>
+            <span className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+              View details
+            </span>
+          </div>
+          <Suspense fallback={<LoaderSpinner className="min-h-[300px]" />}>
+            <AnalyticsOverview userId={userId} />
+          </Suspense>
+        </div> */}
+      </div>
+      
+      {/* <div className="flex flex-col gap-5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold tracking-tight">Product Analysis</h2>
+          <span className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
+            View report
+          </span>
+        </div>
+        <AnalyzeProducts />
+      </div> */}
       </div>
     </div>
   );

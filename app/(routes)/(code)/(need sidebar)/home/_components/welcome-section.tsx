@@ -1,0 +1,54 @@
+import getUserData from "@/actions/getUserData";
+import { Button } from "@/components/ui/button";
+import { UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { Plus, ChevronRight } from "lucide-react";
+import Link from "next/link";
+
+const WelcomeSection = async () => {
+  const { userId } = await auth();
+  if (!userId) {
+    return null; // Handle the case where userId is not available
+  }
+  // Find data from firebase
+  const user = await getUserData(userId); // Assuming you have a function to fetch user data
+
+  return (
+    <div className="w-full rounded-xl bg-gradient-to-r from-primary/10 to-background shadow-sm">
+      <div className="flex flex-col md:flex-row gap-6 items-start sm:items-center justify-between">
+        <div className="flex items-center w-full gap-5">
+          <div className="space-y-1 w-full">
+            <h1 className="tracking-tight flex gap-1 items-center justify-between">
+              Welcome back{`, ${user?.firstName}`}
+            </h1>
+            <p className="text-secondaryForeground text-sm">
+              Here&apos;s what&apos;s happening with your products today
+            </p>
+          </div>
+        </div>
+
+        <div className={`flex md:flex-col md:items-end md:justify-between gap-4 w-full flex-1`}>
+          <div className="rounded-full p-1 bg-background shadow-sm">
+            <UserButton afterSignOutUrl="/" />
+          </div>
+          <div className="flex gap-3 w-full">
+            <Link href="/products" className="w-full sm:w-auto">
+              <Button variant="outline" className="w-full sm:w-auto">
+                View All
+                <ChevronRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link href="/new" className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto">
+                <Plus className="mr-2 h-4 w-4" />
+                New Product
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default WelcomeSection;
