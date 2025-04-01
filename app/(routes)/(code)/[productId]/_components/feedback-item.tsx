@@ -144,7 +144,7 @@ export default function FeedbackItem({
           <LikeButton feedbackId={feedback.id} productId={productId} />
         </div>
         {/* Bottom row with user info, status, topic, etc. */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col-reverse md:flex-row items-center justify-between">
           {/* User & time */}
           <div className="text-xs text-gray-500">
             {myData.userName} &middot; {myData.timeAgo}

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navbar from "./_components/navbar";
+import SyncUser from "../(routes)/(code)/(need sidebar)/home/sync-user";
 
 export default function Home() {
   //home
@@ -13,6 +14,7 @@ export default function Home() {
   ];
   return (
     <div>
+      <SyncUser />
       <header>
         <Navbar />
         <ul className="flex flex-col justify-center w-full items-center">

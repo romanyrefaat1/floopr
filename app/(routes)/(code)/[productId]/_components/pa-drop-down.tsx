@@ -1,32 +1,54 @@
 "use client";
 
-import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Share } from "lucide-react";
+import * as React from "react";
 
-export function PaDropdown() {
-  const [value, setValue] = React.useState("Posts");
+export default function ShareButton() {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isCopied, setIsCopied] = React.useState(false);
+
+  const copyToClipboard = () => {
+    const currentUrl = window.location.href;
+    navigator.clipboard.writeText(currentUrl);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 2000); // Reset copied state after 2 seconds
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="rounded-lg">
-          {value}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 bg-background">
-        <DropdownMenuRadioGroup value={value} onValueChange={setValue}>
-          <DropdownMenuRadioItem value="Posts">Posts</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="Ideas">Ideas</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="Issues">Issues</DropdownMenuRadioItem>
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <Button
+        variant="outline"
+        size="icon"
+        onClick={() => setIsOpen(true)}
+        className="rounded-lg"
+      >
+        <Share className="h-4 w-4" />
+      </Button>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Share Link</DialogTitle>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <Input
+              readOnly
+              value={typeof window !== "undefined" ? window.location.href : ""}
+            />
+            <Button onClick={copyToClipboard}>{!isCopied ? `Copy` : `Copied`}</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

@@ -2,7 +2,7 @@ import formatFirebaseTimestamp from "@/lib/formate-firebase-timestamp";
 
 export default function FeedbackMetadata({ feedbackData }: { feedbackData: any }) {
     return (
-    <div className="grid grid-cols-2 gap-4 bg-background p-4 rounded-md">
+    <div className="grid md:grid-cols-2 gap-4 bg-background p-4 rounded-md">
       <div>
         <p className="text-mutedForeground">Feedback ID</p>
         <p>{feedbackData.feedbackId}</p>

@@ -15,7 +15,8 @@ export default function Feedbacks({
   isOwnerPa: boolean;
 }) {
   return (
-    <div className="p-4 flex flex-col gap-xl2 rounded-lg bg-card text-card-foreground shadow border border-secondary">
+    // <div className="p-4 flex flex-col gap-xl2 rounded-lg bg-card text-card-foreground shadow border border-secondary">
+    <div className="p flex flex-col rounded-lg bg-card text-card-foreground shadow">
       <TopFeedbacks isOwnerPa={isOwnerPa} productId={productId} />
       <ShowFeedbacks
         productId={productId}

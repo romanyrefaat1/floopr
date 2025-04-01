@@ -13,7 +13,7 @@ export default function TopFeedbacks({
   return (
     <>
       {/* Small screens */}
-      <div className="md:hidden flex flex-col gap-2">
+      <div className="md:hidden flex flex-col my-5 gap-2">
         <div className="flex justify-between items-center">
           <ButtonAddFeedback />
           <div className="flex gap-2">
@@ -31,7 +31,7 @@ export default function TopFeedbacks({
       </div>
 
       {/* Medium screens and up */}
-      <div className="hidden md:flex justify-between items-center">
+      <div className="hidden md:flex my-5 justify-between items-center">
         <ButtonAddFeedback />
         <div className="flex gap-2 items-center">
           <SentimentFilterButton productId={productId}/>

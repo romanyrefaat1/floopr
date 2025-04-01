@@ -14,6 +14,7 @@ export default function SyncUser() {
         firstName: user.firstName,
         lastName: user.lastName,
       });
+      console.log(`user synced`)
     }
   }, [user]);
 
