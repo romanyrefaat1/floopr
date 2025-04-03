@@ -1,6 +1,7 @@
 import { FilterData } from "../../products/[id]/page";
 import FeedbackItem from "./feedback-item";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
+import serializeFirestoreData from "@/lib/serialize-firestore-data";
 
 export type FeedbackItemInDB = {
   componentRefId: string | null;
@@ -58,10 +59,15 @@ export default async function FeedbackList({
   isOwner: boolean;
 }) {
   try {
-    const feedbacks = (await getFilteredFeedbacks(
+    const unserializedFeedbacks = (await getFilteredFeedbacks(
       productId,
       filterData
     )) as Array<FeedbackItemInDB>;
+
+    // Serialize each feedback item
+    const feedbacks = unserializedFeedbacks.map((feedback) =>
+      serializeFirestoreData(feedback)
+    );
 
     if (feedbacks.length === 0) {
       return (
@@ -77,15 +83,7 @@ export default async function FeedbackList({
           <FeedbackItem
             key={feedback.feedbackId}
             isOwner={isOwner}
-            feedback={{
-              ...feedback,
-              createdAt: feedback.createdAt?.toDate(),
-              updatedAt: feedback.updatedAt?.toDate(),
-              topic: {
-                ...feedback.topic,
-                topTopic: feedback.topic?.topTopic,
-              },
-            }}
+            feedback={feedback}
             productId={productId}
           />
         ))}

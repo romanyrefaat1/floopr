@@ -19,9 +19,6 @@ export default async function getFilteredFeedbacks(
 
     // Handle different filter types
     if (filterData.filter === "likes") {
-      if (!isOwnerPa) {
-        return { isError: true };
-      }
       feedbackQuery = query(
         feedbacksRef,
         orderBy("socialData.likes.count", "desc")
@@ -30,12 +27,6 @@ export default async function getFilteredFeedbacks(
       if (!isOwnerPa) {
         return { isError: true };
       }
-      console.log(
-        `you cose date`,
-        filterData.filter,
-        filterData.quick,
-        filterData.date
-      );
       if (filterData.quick) {
         // Handle quick date filters
         const now = new Date();
@@ -66,7 +57,6 @@ export default async function getFilteredFeedbacks(
         }
         // Handle specific date filter
         const selectedDate = new Date(filterData.specifiedDate);
-        console.log(`selectedDate`, selectedDate);
 
         // Set start of day
         const startDate = new Date(selectedDate);
@@ -75,8 +65,6 @@ export default async function getFilteredFeedbacks(
         // Set end of day
         const endDate = new Date(selectedDate);
         endDate.setHours(23, 59, 59, 999);
-
-        console.log("Filtering between:", startDate, "and", endDate);
 
         feedbackQuery = query(
           feedbacksRef,
@@ -89,7 +77,6 @@ export default async function getFilteredFeedbacks(
       }
     } else if (filterData.filter === "sentiment" && filterData.sentiment) {
       const sentimentValue = filterData.sentiment.toUpperCase();
-      console.log(`Sentiment value:`, sentimentValue);
       feedbackQuery = query(
         feedbacksRef,
         where("sentiment.sentiment", "==", sentimentValue),
@@ -106,10 +93,8 @@ export default async function getFilteredFeedbacks(
       return await getAllFeedbacks(productId);
     }
 
-    console.log(`query`, feedbackQuery);
     // Execute query and format results
     const querySnapshot = await getDocs(feedbackQuery);
-    console.log(`querysnapsot docs`, querySnapshot);
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),

@@ -18,7 +18,7 @@ export async function analyzeSentiment(text) {
       body: JSON.stringify({ text }),
     });
 
-    console.log(`sintemnt client response`, response)
+    console.log(`sintemnt client response`, response);
 
     if (!response.ok) {
       console.warn(`Sentiment analysis failed with status: ${response.status}`);
@@ -40,8 +40,3 @@ export async function analyzeSentiment(text) {
     };
   }
 }
-
-// Example usage
-const result = await analyzeSentiment("I really enjoyed this movie!");
-console.log(result);
-// Output: { sentiment: "POSITIVE", score: 0.9998, text: "I really enjoyed this movie!" }

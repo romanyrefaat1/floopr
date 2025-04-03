@@ -1,5 +1,7 @@
 "use client";
 
+import CommentItem from "./comment-item";
+import LoaderSpinner from "@/components/loader-spinner";
 import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
@@ -41,8 +43,22 @@ export default function CommentsList({
     fetchComments();
   }, [productId, feedbackId]);
 
-  if (isLoading) return <div>Loading comments...</div>;
+  if (isLoading) return <LoaderSpinner className="mt-[30px]" />;
   if (error) return <div className="text-red-500">{error}</div>;
 
-  return <div className="space-y-4">{JSON.stringify(comments, null, 2)}</div>;
+  if (comments.length === 0) {
+    return (
+      <div className="flex mt-[30px] items-center justify-center text-secondaryForeground">
+        No comments available
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4 mt-[12px]">
+      {comments.map((comment) => (
+        <CommentItem key={comment.id} allData={comment} />
+      ))}
+    </div>
+  );
 }

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 
 export default function TopFeedbacks({
   isOwnerPa = false,
-  productId
+  productId,
 }: {
   isOwnerPa: boolean;
   productId: string;
@@ -17,8 +17,8 @@ export default function TopFeedbacks({
         <div className="flex justify-between items-center">
           <ButtonAddFeedback />
           <div className="flex gap-2">
-            <SentimentFilterButton productId={productId}/>
-            <FilterButton />
+            <SentimentFilterButton productId={productId} />
+            <FilterButton isOwnerPa={isOwnerPa} />
           </div>
         </div>
         <div>
@@ -34,7 +34,7 @@ export default function TopFeedbacks({
       <div className="hidden md:flex my-5 justify-between items-center">
         <ButtonAddFeedback />
         <div className="flex gap-2 items-center">
-          <SentimentFilterButton productId={productId}/>
+          <SentimentFilterButton productId={productId} />
           <Input type="search" placeholder="Search" className="rounded-md" />
           <FilterButton isOwnerPa={isOwnerPa} />
         </div>

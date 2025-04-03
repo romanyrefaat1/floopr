@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { Calendar, ThumbsUp, MessageCircle, Smile, Tag } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type FilterButtonProps = {
@@ -69,7 +69,7 @@ export default function FilterButton({
   const tabItems = [
     { id: "all", label: "All", icon: Tag },
     { id: "date", label: "Date", icon: Calendar },
-    { id: "popular", label: "Popular", icon: ThumbsUp },
+    // { id: "popular", label: "Popular", icon: ThumbsUp },
     { id: "sentiment", label: "Sentiment", icon: Smile },
     { id: "type", label: "Type", icon: MessageCircle },
   ];
@@ -140,13 +140,13 @@ export default function FilterButton({
             />
           </TabsContent>
 
-          <TabsContent value="popular">
+          {/* <TabsContent value="popular">
             <FilterTabsReach
               onSelect={(value) => handleFilter("popular", value, `likes`)}
               open={open}
               setDialogOpen={setOpen}
             />
-          </TabsContent>
+          </TabsContent> */}
 
           <TabsContent value="sentiment">
             <ul className="space-y-2">

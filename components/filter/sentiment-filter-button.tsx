@@ -13,7 +13,11 @@ import { ArrowDownIcon } from "lucide-react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function SentimentFilterButton({productId}: {productId: string}) {
+export default function SentimentFilterButton({
+  productId,
+}: {
+  productId: string;
+}) {
   const [value, setValue] = useState("All");
   const [positiveCount, setPositiveCount] = useState(0);
   const [negativeCount, setNegativeCount] = useState(0);
@@ -51,7 +55,9 @@ export default function SentimentFilterButton({productId}: {productId: string}) 
     }
 
     async function fetchSentimentCounts() {
-      const {positive, negative, neutral} = await getSentimentPercent(productId)
+      const { positive, negative, neutral } = await getSentimentPercent(
+        productId
+      );
       setPositiveCount(positive);
       setNegativeCount(negative);
       setNeutralCount(neutral);
@@ -74,7 +80,9 @@ export default function SentimentFilterButton({productId}: {productId: string}) 
             value="All"
           >
             <span>All</span>
-            <span className="text-text-muted text-sm">{positiveCount + negativeCount + neutralCount}</span>
+            <span className="text-text-muted text-sm">
+              {positiveCount + negativeCount + neutralCount}
+            </span>
           </DropdownMenuRadioItem>
           <DropdownMenuRadioItem
             value="Positive"
