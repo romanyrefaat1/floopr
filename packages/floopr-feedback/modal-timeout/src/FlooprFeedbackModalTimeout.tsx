@@ -20,7 +20,6 @@ interface FlooprFeedbackModalTimeoutProps {
   userInfo?: UserInfo;
   ImageComponent?: React.ComponentType<any>; // Override for Image
   LinkComponent?: React.ComponentType<any>; // Override for Link
-  isOpen?: boolean; // Controlled prop for visibility
   onClose?: () => void; // Callback to close the modal
   parent?: React.RefObject<HTMLElement>; // Optional parent for portal
 }
@@ -32,10 +31,10 @@ export default function FlooprFeedbackModalTimeout({
   userInfo = {},
   ImageComponent, // Default to next/image for React component
   LinkComponent, // Default to next/link for React component
-  isOpen = true,
   onClose = () => {},
   parent,
 }: FlooprFeedbackModalTimeoutProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [animate, setAnimate] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -113,14 +112,17 @@ export default function FlooprFeedbackModalTimeout({
         if (!response.ok) {
           throw new Error(data.error || "Failed to load component data");
         }
+        setIsOpen(true);
         setLoaded(true);
         setTitle(data.title);
         setRatings(data.ratings);
         setInputs(data.inputs);
         setIsDarkMode(data.isDark);
-        if (data.style) setStyles(data.style);
         setButtonText(data.buttonText);
-        setTimeoutDuration(data.timeoutDuration);
+        setTimeoutDuration(data.timeoutDuration || 0);
+        console.log(`component loaded successfully`, data);
+        // If styles are provided, set them
+        if (data.style) setStyles(data.style);
       } catch (error) {
         console.error("Error loading component data:", error);
         toast.error(error.message);
@@ -128,6 +130,14 @@ export default function FlooprFeedbackModalTimeout({
     };
     loadComponent();
   }, [apiKey, productId, componentId, loadUrl]);
+
+  // If timeoutDuration is set, open the modal after the specified time
+  useEffect(() => {
+    if (timeoutDuration >= 0) {
+      const timer = setTimeout(() => setIsOpen(true), timeoutDuration * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [timeoutDuration]);
 
   const handleRatingClick = (value: number) => {
     setSelectedRating(value);
@@ -171,6 +181,15 @@ export default function FlooprFeedbackModalTimeout({
     }
   };
 
+  const handleClose = () => {
+    setSelectedRating(null);
+    setAnimate(null);
+    setError(null);
+    setIsSubmitting(false);
+    setIsOpen(false);
+    onClose();
+  };
+
   // Early return if not loaded or not open
   if (!loaded || !isOpen) return null;
 
@@ -208,7 +227,7 @@ export default function FlooprFeedbackModalTimeout({
           {title}
         </h2>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
           aria-label="Close"
         >
