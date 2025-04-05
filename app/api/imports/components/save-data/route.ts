@@ -32,6 +32,13 @@ type SaveDataProps = {
   };
 };
 
+const corsHeaders = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*", // or "*" for all origins
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
 export async function POST(req: Request) {
   console.log(`Enter save-data`);
   try {
@@ -43,7 +50,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { success: false, error: "Missing required parameters" },
         {
-          headers: { "Content-Type": "application/json" },
+          headers: corsHeaders,
           status: 400,
         }
       );
@@ -60,8 +67,8 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { success: false, error: "Failed to save feedback" },
         {
-          headers: { "Content-Type": "application/json" },
           status: 500,
+          headers: corsHeaders,
         }
       );
     }
@@ -71,6 +78,7 @@ export async function POST(req: Request) {
       {
         headers: { "Content-Type": "application/json" },
         status: 200,
+        headers: corsHeaders,
       }
     );
   } catch (error) {
@@ -78,9 +86,13 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       {
-        headers: { "Content-Type": "application/json" },
+        headers: corsHeaders,
         status: 500,
       }
     );
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: corsHeaders });
 }
