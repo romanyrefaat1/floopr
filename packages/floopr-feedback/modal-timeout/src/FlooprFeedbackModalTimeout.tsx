@@ -1,12 +1,9 @@
 "use client";
 
-import { InputField, Rating } from "@/components/floopr-integration/modal-timout/modal-context";
-import { cn } from "@/lib/utils";
+import { InputField, Rating } from "./types";
+import { cn } from "./utils";
 import { X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 export type UserInfo = {
@@ -23,8 +20,8 @@ interface FlooprFeedbackModalTimeoutProps {
   apiBaseUrl?: string; // Optional base URL for API calls (for embed script)
   ImageComponent?: React.ComponentType<any>; // Override for Image
   LinkComponent?: React.ComponentType<any>; // Override for Link
-  isOpen: boolean; // Controlled prop for visibility
-  onClose: () => void; // Callback to close the modal
+  isOpen?: boolean; // Controlled prop for visibility
+  onClose?: () => void; // Callback to close the modal
   parent?: React.RefObject<HTMLElement>; // Optional parent for portal
 }
 
@@ -34,10 +31,10 @@ export default function FlooprFeedbackModalTimeout({
   componentId,
   userInfo = {},
   apiBaseUrl = "", // Default to relative URLs for Next.js
-  ImageComponent = Image, // Default to next/image for React component
-  LinkComponent = Link, // Default to next/link for React component
-  isOpen,
-  onClose,
+  ImageComponent, // Default to next/image for React component
+  LinkComponent, // Default to next/link for React component
+  isOpen = true,
+  onClose = () => {},
   parent,
 }: FlooprFeedbackModalTimeoutProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
@@ -70,7 +67,12 @@ export default function FlooprFeedbackModalTimeout({
     textColor: "#1f2937",
   });
   const [inputs, setInputs] = useState<InputField[]>([
-    { label: "Your feedback", placeholder: "Share your feedback", id: 1, value: "" },
+    {
+      label: "Your feedback",
+      placeholder: "Share your feedback",
+      id: 1,
+      value: "",
+    },
   ]);
   const [buttonText, setButtonText] = useState("Submit");
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -151,12 +153,15 @@ export default function FlooprFeedbackModalTimeout({
         }),
       });
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to save feedback");
+      if (!response.ok)
+        throw new Error(data.error || "Failed to save feedback");
       toast.success("Thank you for your feedback!");
       onClose();
     } catch (error) {
       console.error("Error saving feedback:", error);
-      toast.error(error.message || "Failed to save feedback. Please try again.");
+      toast.error(
+        error.message || "Failed to save feedback. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -167,6 +172,14 @@ export default function FlooprFeedbackModalTimeout({
 
   // Sort ratings
   const sortedRatings = [...ratings].sort((a, b) => a.value - b.value);
+
+  // Modify image paths to use absolute URLs when embedded
+  const getImagePath = (name: string) => {
+    if (apiBaseUrl) {
+      return `${apiBaseUrl}/images/${name}`;
+    }
+    return `/${name}`;
+  };
 
   // Modal content
   const modalContent = (
@@ -186,7 +199,9 @@ export default function FlooprFeedbackModalTimeout({
       )}
     >
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">{title}</h2>
+        <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">
+          {title}
+        </h2>
         <button
           onClick={onClose}
           className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))] transition-colors"
@@ -255,13 +270,21 @@ export default function FlooprFeedbackModalTimeout({
         <div className="text-sm font-medium text-[hsl(var(--muted-foreground))] px-3 py-1 rounded-md flex items-center justify-center align-center gap-1">
           <span className="mr-1">Made by</span>
           <LinkComponent
-            href={`https://floopr.vercel.app?componentRef=modal-timeout&appRef=${typeof window !== "undefined" ? window.location : ""}`}
+            href={`https://floopr.vercel.app?componentRef=modal-timeout&appRef=${
+              typeof window !== "undefined" ? window.location : ""
+            }`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-fit h-fit"
           >
             <ImageComponent
-              src={`/${isDarkMode ? "floopr-logo-no-bg-white-svg" : "floopr-logo-no-bg-svg"}.svg`}
+              src={getImagePath(
+                `${
+                  isDarkMode
+                    ? "floopr-logo-no-bg-white-svg"
+                    : "floopr-logo-no-bg-svg"
+                }.svg`
+              )}
               alt="floopr logo"
               width={42}
               height={12}
