@@ -1,35 +1,31 @@
-const path = require("path");
-const webpack = require("webpack");
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
-module.exports = {
-  entry: "./src/embed.ts",
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default {
+  entry: "./src/embed.tsx",
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "floopr-feedback-modal-timeout.js",
-    libraryTarget: "umd",
-    globalObject: "this",
-    umdNamedDefine: true
+    path: __dirname + "/dist",
+    filename: "modal-timeout-bundle_floopr_feedback_embed.js",
   },
+  mode: "production",
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: "ts-loader",
+        test: /\.tsx?$/, // Updated to handle both .ts and .tsx
+        use: {
+          loader: "ts-loader",
+          options: {
+            transpileOnly: true,
+          },
+        },
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".ts", ".js", ".tsx"],
   },
-  externals: {
-    react: "React",
-    "react-dom": "ReactDOM"
-  },
-  mode: "production",
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ]
 };

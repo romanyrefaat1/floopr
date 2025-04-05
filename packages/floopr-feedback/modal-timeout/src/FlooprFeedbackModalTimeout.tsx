@@ -4,6 +4,7 @@ import { InputField, Rating } from "./types";
 import { cn } from "./utils";
 import { X } from "lucide-react";
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "sonner";
 
 export type UserInfo = {
@@ -17,7 +18,6 @@ interface FlooprFeedbackModalTimeoutProps {
   productId: string;
   componentId: string;
   userInfo?: UserInfo;
-  apiBaseUrl?: string; // Optional base URL for API calls (for embed script)
   ImageComponent?: React.ComponentType<any>; // Override for Image
   LinkComponent?: React.ComponentType<any>; // Override for Link
   isOpen?: boolean; // Controlled prop for visibility
@@ -30,13 +30,23 @@ export default function FlooprFeedbackModalTimeout({
   productId,
   componentId,
   userInfo = {},
-  apiBaseUrl = "", // Default to relative URLs for Next.js
   ImageComponent, // Default to next/image for React component
   LinkComponent, // Default to next/link for React component
   isOpen = true,
   onClose = () => {},
   parent,
 }: FlooprFeedbackModalTimeoutProps) {
+  console.log(`Rendering FlooprFeedbackModalTimeout`);
+  console.log("API Key:", apiKey);
+  console.log("Product ID:", productId);
+  console.log("Component ID:", componentId);
+  console.log("User Info:", userInfo);
+  console.log("Is Open:", isOpen);
+  console.log("Parent:", parent);
+  console.log("Image Component:", ImageComponent);
+  console.log("Link Component:", LinkComponent);
+  console.log("onClose:", onClose);
+
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [animate, setAnimate] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -77,6 +87,8 @@ export default function FlooprFeedbackModalTimeout({
   const [buttonText, setButtonText] = useState("Submit");
   const [isDarkMode, setIsDarkMode] = useState(true);
 
+  const apiBaseUrl = `http://localhost:3000`; // Use env variable or prop
+
   // Construct API URLs based on apiBaseUrl
   const loadUrl = apiBaseUrl
     ? `${apiBaseUrl}/api/imports/components/load-component`
@@ -102,12 +114,14 @@ export default function FlooprFeedbackModalTimeout({
   useEffect(() => {
     const loadComponent = async () => {
       try {
+        console.log("Start: Loading component data from frontend...");
         const response = await fetch(loadUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ apiKey, productId, componentId }),
         });
         const data = await response.json();
+        console.log("Component data loaded from frontend:", data);
         if (!response.ok) {
           throw new Error(data.error || "Failed to load component data");
         }
@@ -166,6 +180,10 @@ export default function FlooprFeedbackModalTimeout({
       setIsSubmitting(false);
     }
   };
+
+  return (
+    <div className="w-[600px] bg-red-500">I am modal timeout component</div>
+  );
 
   // Early return if not loaded or not open
   if (!loaded || !isOpen) return null;

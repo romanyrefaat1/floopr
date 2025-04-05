@@ -21,38 +21,6 @@ export default function Home() {
         <title>Floopr Feedback Test</title>
       </Head>
 
-      {/* Load React dependencies first */}
-      <Script
-        src="https://unpkg.com/react@18/umd/react.production.min.js"
-        strategy="beforeInteractive"
-      />
-      <Script
-        src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
-        strategy="beforeInteractive"
-      />
-
-      {/* Then load your component */}
-      <Script src="/scripts/floopr-feedback.js" strategy="afterInteractive" />
-
-      {/* Initialize after everything is loaded */}
-      <Script id="feedback-init" strategy="afterInteractive">
-        {`
-          window.addEventListener('load', function() {
-            const container = document.getElementById('feedback-container');
-            if (container && window.FlooprFeedback) {
-              window.FlooprFeedback.mount(container, {
-                apiKey: 'your-api-key',
-                productId: 'your-product-id',
-                componentId: 'your-component-id',
-                apiBaseUrl: 'https://your-api-base-url',
-                ImageComponent: 'img',
-                LinkComponent: 'a'
-              });
-            }
-          });
-        `}
-      </Script>
-
       {/* Your main app content */}
       <div>
         <SyncUser />
