@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeToggle } from "./theme-toggle";
+import { Separator } from "./ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -22,7 +23,6 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
-import { Separator } from "./ui/separator";
 
 // Menu items.
 const items = [
@@ -47,12 +47,12 @@ export function AppSidebar() {
   const { theme } = useTheme();
   return (
     <Sidebar collapsible="icon" variant="sidebar" className="bg-background">
-      <SidebarContent  className="bg-background">
+      <SidebarContent className="bg-background">
         <SidebarGroup>
           <SidebarGroupLabel className="my-5">
             {theme === `dark` ? (
               <Image
-                src={`/floopr-logo-no-bg-white-svg.svg`}
+                src={`/images/floopr-logo-no-bg-white-svg.svg`}
                 width={52}
                 height={12}
                 alt="floopr logo"
@@ -85,7 +85,7 @@ export function AppSidebar() {
                 </SidebarMenuButton>
                 <SidebarMenuButton asChild className="sm:hidden md:inline-flex">
                   <SidebarMenuButton>
-                  <SidebarTrigger />
+                    <SidebarTrigger />
                   </SidebarMenuButton>
                 </SidebarMenuButton>
               </SidebarMenuItem>

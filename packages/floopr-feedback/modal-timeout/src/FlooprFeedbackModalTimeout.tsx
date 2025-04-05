@@ -36,20 +36,10 @@ export default function FlooprFeedbackModalTimeout({
   onClose = () => {},
   parent,
 }: FlooprFeedbackModalTimeoutProps) {
-  console.log(`Rendering FlooprFeedbackModalTimeout`);
-  console.log("API Key:", apiKey);
-  console.log("Product ID:", productId);
-  console.log("Component ID:", componentId);
-  console.log("User Info:", userInfo);
-  console.log("Is Open:", isOpen);
-  console.log("Parent:", parent);
-  console.log("Image Component:", ImageComponent);
-  console.log("Link Component:", LinkComponent);
-  console.log("onClose:", onClose);
-
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [animate, setAnimate] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [timeoutDuration, setTimeoutDuration] = useState(10);
@@ -114,17 +104,16 @@ export default function FlooprFeedbackModalTimeout({
   useEffect(() => {
     const loadComponent = async () => {
       try {
-        console.log("Start: Loading component data from frontend...");
         const response = await fetch(loadUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ apiKey, productId, componentId }),
         });
         const data = await response.json();
-        console.log("Component data loaded from frontend:", data);
         if (!response.ok) {
           throw new Error(data.error || "Failed to load component data");
         }
+        setLoaded(true);
         setTitle(data.title);
         setRatings(data.ratings);
         setInputs(data.inputs);
@@ -132,7 +121,6 @@ export default function FlooprFeedbackModalTimeout({
         if (data.style) setStyles(data.style);
         setButtonText(data.buttonText);
         setTimeoutDuration(data.timeoutDuration);
-        setLoaded(true);
       } catch (error) {
         console.error("Error loading component data:", error);
         toast.error(error.message);
@@ -150,8 +138,10 @@ export default function FlooprFeedbackModalTimeout({
   const handleSave = async () => {
     if (selectedRating === null) {
       toast.error("Please select a rating before submitting");
+      setError(`"Please select a rating before submitting"`);
       return;
     }
+
     setIsSubmitting(true);
     try {
       const response = await fetch(saveUrl, {
@@ -160,9 +150,9 @@ export default function FlooprFeedbackModalTimeout({
         body: JSON.stringify({
           productId,
           componentId,
-          feedback: inputs,
+          inputs,
           isComponent: true,
-          rating: selectedRating,
+          rating: selectedRating || 0,
           userInfo: userInfoNormalized,
         }),
       });
@@ -180,10 +170,6 @@ export default function FlooprFeedbackModalTimeout({
       setIsSubmitting(false);
     }
   };
-
-  return (
-    <div className="w-[600px] bg-red-500">I am modal timeout component</div>
-  );
 
   // Early return if not loaded or not open
   if (!loaded || !isOpen) return null;
@@ -209,6 +195,7 @@ export default function FlooprFeedbackModalTimeout({
         "[--muted:0,0%,96%] [--muted-foreground:0,0%,45%]",
         "[--border:0,0%,90%] [--input:0,0%,90%]",
         "[--primary:250,89%,68%] [--primary-foreground:0,0%,100%]",
+        "[--primary-muted: 257, 36%, 65%]",
         "dark:[--background:0,0%,15%] dark:[--foreground:0,0%,100%]",
         "dark:[--muted:0,0%,15%] dark:[--muted-foreground:0,0%,65%]",
         "dark:[--border:0,0%,20%] dark:[--input:0,0%,20%]",
@@ -284,6 +271,8 @@ export default function FlooprFeedbackModalTimeout({
           />
         </div>
       ))}
+      {/* Error */}
+      {error && <p className="text-red-500">{error}</p>}
       <div className="flex justify-between items-center mt-8">
         <div className="text-sm font-medium text-[hsl(var(--muted-foreground))] px-3 py-1 rounded-md flex items-center justify-center align-center gap-1">
           <span className="mr-1">Made by</span>
@@ -291,6 +280,7 @@ export default function FlooprFeedbackModalTimeout({
             href={`https://floopr.vercel.app?componentRef=modal-timeout&appRef=${
               typeof window !== "undefined" ? window.location : ""
             }`}
+            f
             target="_blank"
             rel="noopener noreferrer"
             className="w-fit h-fit"
@@ -314,7 +304,7 @@ export default function FlooprFeedbackModalTimeout({
           className={cn(
             "px-5 py-2 rounded-md font-medium transition-colors duration-200",
             "bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))]",
-            "hover:bg-[hsl(var(--primary)/0.9)]",
+            "hover:bg-[hsl(var(--primary-muted))]",
             "disabled:opacity-50"
           )}
           disabled={isSubmitting}

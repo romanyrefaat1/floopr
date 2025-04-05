@@ -12,7 +12,8 @@ const parseDataAttribute = (attr: string | undefined) => {
 };
 
 const script = document.currentScript as HTMLScriptElement;
-const apiBaseUrl = script.dataset.apiBaseUrl || "";
+const apiBaseUrl = "http://localhost:3000";
+// const apiBaseUrl = "https://floopr.vercel.app";
 const apiKey = script.dataset.apiKey || "";
 const productId = script.dataset.productId || "";
 const componentId = script.dataset.componentId || "";
@@ -35,17 +36,23 @@ const FeedbackWrapper = () => {
         );
         const data = await response.json();
         if (response.ok) {
+          console.log(`data.timeoutDuration`, data.timeoutDuration);
           setTimeoutDuration(data.timeoutDuration || 0);
+        } else {
+          console.error(
+            "Error loading timeout duration, Response not ok:",
+            data.error
+          );
         }
       } catch (error) {
-        console.error("Error loading timeout:", error);
+        console.error("Error loading timeout time from embed.tsx:", error);
       }
     };
     loadTimeout();
   }, []);
 
   useEffect(() => {
-    if (timeoutDuration > 0) {
+    if (timeoutDuration >= 0) {
       const timer = setTimeout(() => setIsOpen(true), timeoutDuration * 1000);
       return () => clearTimeout(timer);
     }
