@@ -2,40 +2,29 @@ import { db } from "@/lib/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
-{
-  /*
-    Tasks:
-        1. See if parsed data is correct
-        2. See if api key is correct
-        3. get data from firestore
-        4. return data
-  */
-}
-
-// Consistent CORS headers for all responses
 const corsHeaders = {
   "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*", // or "*" for all origins
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-export async function POST(request: Request) {
-  console.log("Start: POST request to load component data");
+export async function GET(request: Request) {
+  console.log("Start: GET request to load component data");
 
   try {
-    const { apiKey, productId, componentId } = await request.json();
-    console.log(
-      "apiKey, productId, componentId",
-      apiKey,
-      productId,
-      componentId
-    );
+    // Get URL parameters
+    const url = new URL(request.url);
+    const apiKey = url.searchParams.get("apiKey");
+    const productId = url.searchParams.get("productId");
+    const componentId = url.searchParams.get("componentId");
+
+    console.log("Params:", { apiKey, productId, componentId });
 
     // Check if required data is provided
     if (!apiKey || !productId || !componentId) {
       return NextResponse.json(
-        { error: "Invalid data" },
+        { error: "Missing required parameters" },
         {
           status: 400,
           headers: corsHeaders,
@@ -49,9 +38,8 @@ export async function POST(request: Request) {
     );
 
     const data = response.data();
-    console.log(`data from firestore/backend:`, data);
+    console.log(`Data from firestore:`, data);
 
-    // Check if component exists
     if (!data) {
       return NextResponse.json(
         { error: "Component not found" },

@@ -103,12 +103,18 @@ export default function FlooprFeedbackModalTimeout({
   useEffect(() => {
     const loadComponent = async () => {
       try {
-        const response = await fetch(loadUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ apiKey, productId, componentId }),
-          cache: "force-cache",
+        const params = new URLSearchParams({
+          apiKey,
+          productId,
+          componentId,
         });
+
+        const response = await fetch(`${loadUrl}?${params}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          cache: "force-cache", // This will now work with GET
+        });
+
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data.error || "Failed to load component data");

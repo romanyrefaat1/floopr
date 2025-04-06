@@ -13,14 +13,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  Calendar,
-  Home,
-  Plus,
-  ProjectorIcon,
-  Search,
-  Settings,
-} from "lucide-react";
+import { Home, Plus, ProjectorIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 
@@ -59,7 +52,7 @@ export function AppSidebar() {
               />
             ) : (
               <Image
-                src={`/floopr-logo-no-bg-svg.svg`}
+                src={`/images/floopr-logo-no-bg-svg.svg`}
                 width={52}
                 height={12}
                 alt="floopr logo"
