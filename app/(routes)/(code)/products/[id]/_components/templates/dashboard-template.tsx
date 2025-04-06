@@ -1,4 +1,3 @@
-import { SidebarTrigger } from "@/components/ui/sidebar";
 import { FilterData, Product } from "../../page";
 import FeedbackTabs from "../feedback-tabs";
 import ContentTab from "../tabs/content-tab";
@@ -7,6 +6,7 @@ import IntegrationsPanel from "./integrations-panel";
 import ProjectOverview from "./project-overview";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, LayoutDashboard } from "lucide-react";
@@ -28,7 +28,7 @@ export default async function DashboardTemplate({
         </div>
         <div>
           <h1 className="text-2xl font-bold">{productData.name}</h1>
-          <p className="text-muted-foreground">{productData.description}</p>
+          <p className="text-mutedForeground">{productData.description}</p>
         </div>
         <div className="flex items-center gap-2 mt-4 md:mt-0">
           {/* <Button variant="outline" size="sm" className="gap-2">

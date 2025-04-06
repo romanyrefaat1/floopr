@@ -45,6 +45,11 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
   
   const [currentStep, setCurrentStep] = useState('review');
   const [modalConfig, setModalConfig] = useState({
+    metaData: {
+      name: `Feedback Modal`,
+    description: `A customizable modal component that pops up after a set time on your website. you can change its design, content, and delay. users can use it to leave feedback.`,
+    imageUrl: `/images/online/components/modal-timeout.PNG`
+  },
     title: "Got any feedback?",
     productId,
     componentId: myComponentId,
@@ -91,7 +96,7 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
         return;
       }
       toast.success('Component saved successfully');
-      router.push(`/products/${productId}/my-components/${modalConfig.componentId}`);
+      router.push(`/products/${productId}/`);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }

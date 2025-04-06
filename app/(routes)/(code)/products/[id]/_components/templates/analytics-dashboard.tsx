@@ -1,5 +1,6 @@
-import { BarChart, LineChart, PieChart } from "lucide-react";
 import { Product } from "../../page";
+// import { LineChart, BarChart, PieChart } from "@/components/ui/chart";
+import { LineLinearChart } from "./analytics/line-linear-chart";
 import {
   Card,
   CardContent,
@@ -7,8 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// import { LineChart, BarChart, PieChart } from "@/components/ui/chart";
-import {LineLinearChart} from "./analytics/line-linear-chart";
+import { BarChart, LineChart, PieChart } from "lucide-react";
 
 export default function AnalyticsDashboard({
   productData,
@@ -121,7 +121,9 @@ export default function AnalyticsDashboard({
           </CardContent>
         </Card>
       </div> */}
-      <LineLinearChart productId={productData.docId}/>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <LineLinearChart productId={productData.docId} />
+      </div>
     </div>
   );
 }

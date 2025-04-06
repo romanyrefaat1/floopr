@@ -24,7 +24,15 @@ const nextConfig = {
   },
 
   images: {
-    domains: ["img.clerk.com"],
+    domains: [
+      "img.clerk.com",
+      "https://floopr.app",
+      "https://floopr.vercel.app",
+      "floopr.vercel.app",
+      "floopr.app",
+      "http://localhost:3000",
+      "localhost",
+    ],
   },
   eslint: {
     // Skip ESLint during builds

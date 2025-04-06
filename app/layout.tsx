@@ -35,7 +35,7 @@ export default function RootLayout({
           <Toaster position="top-right" />
         </ThemeProvider>
 
-        <Script
+        {/* <Script
           src="http://localhost:3000/embeds/modal-timeout-bundle_floopr_feedback_embed.js"
           strategy="afterInteractive"
           data-api-key="d9380457-dd5a-4d69-ac71-3d3978714c09"
@@ -43,7 +43,7 @@ export default function RootLayout({
           data-component-id="16bfa298-2790-454e-af28-973189f7229e"
           data-user-info='{"userId": "123", "username": "john"}'
           data-api-base-url="https://localhost:3000"
-        />
+        /> */}
       </body>
     </html>
   );

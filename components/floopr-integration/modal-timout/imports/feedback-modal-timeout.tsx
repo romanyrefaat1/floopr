@@ -107,17 +107,16 @@ export default function FlooprFeedbackModalTimeout({
   useEffect(() => {
     const loadComponent = async () => {
       try {
-        const response = await fetch(`/api/imports/components/load-component`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            apiKey,
-            productId,
-            componentId,
-          }),
-        });
+        const response = await fetch(
+          `/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            cache: "force-cache",
+          }
+        );
 
         const data = await response.json();
         if (!response.ok) {
@@ -321,7 +320,7 @@ export default function FlooprFeedbackModalTimeout({
             className="w-fit h-fit"
           >
             <Image
-              src={`/${
+              src={`/images/${
                 isDarkMode
                   ? `floopr-logo-no-bg-white-svg`
                   : `floopr-logo-no-bg-svg`
