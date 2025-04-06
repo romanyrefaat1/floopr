@@ -24,6 +24,7 @@ firebase-admins-service-private-keys.json
 
 # next.js
 /.next/
+.next
 /out/
 
 # production
