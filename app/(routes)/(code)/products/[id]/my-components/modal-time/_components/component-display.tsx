@@ -20,12 +20,11 @@ export default function ComponentDisplay({
       <h2 className="font-bold mb-2 text-secondaryForeground">
         {componentType}
       </h2>
-      <p className="mb-4 max-w-[100ch]">
-        You can import a script or a React/NextJS component. React/NextJS
-        components are usually more customizable and could be added to specific
-        pages
-      </p>
-      <ComponentTabs componentId={componentData.componentData.componentId} componentAPIKey={componentData.apiKey} componentProductId={componentData.productId} />
+      <ComponentTabs
+        componentId={componentData.componentData.componentId}
+        componentAPIKey={componentData.apiKey}
+        componentProductId={componentData.productId}
+      />
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import ComponentDisplay from "../_components/component-display";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { db } from "@/lib/firebase";
 import { auth } from "@clerk/nextjs/server";
 import { doc, getDoc } from "firebase/firestore";
@@ -73,9 +74,14 @@ export default async function MyComponentsPage({ params }) {
   const componentData = componentDocSnap.data();
 
   return (
-    <ComponentDisplay
-      componentData={componentData}
-      componentType="Modal Time"
-    />
+    <>
+      <div className="md:hidden">
+        <SidebarTrigger />
+      </div>
+      <ComponentDisplay
+        componentData={componentData}
+        componentType="Modal Time"
+      />
+    </>
   );
 }

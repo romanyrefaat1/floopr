@@ -20,6 +20,7 @@
   --ring: 250, 89%, 68%; /* matches primary */
   --muted: 0, 0%, 96%; /* #f5f5f5 */
   --muted-foreground: 210, 16%, 50%; /* #6b7280 */
+  --muted-background: 210, 16%, 54%; /* #6b7280 */
 
   /* Additional variables from docs, adapted to your palette */
   --card: var(--background); /* using the same as background */
@@ -45,6 +46,8 @@
   /* Core dark mode colors */
   --background: 0, 0%, 10%; /* dark background */
   --secondary-background: 0, 0%, 14%;
+  --muted-background: 0, 0%, 16%;
+
   --foreground: 0, 0%, 100%; /* light text */
   --secondary-foreground: 0, 0%, 50%;
   --border: 0, 0%, 20%;

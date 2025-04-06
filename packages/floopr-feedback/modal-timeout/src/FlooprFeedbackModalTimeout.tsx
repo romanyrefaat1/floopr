@@ -107,6 +107,7 @@ export default function FlooprFeedbackModalTimeout({
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ apiKey, productId, componentId }),
+          cache: "force-cache",
         });
         const data = await response.json();
         if (!response.ok) {
