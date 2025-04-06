@@ -36,8 +36,10 @@ export default function LikeButton({
   const likesCount = feedback?.socialData?.likes?.count || 0;
   const isLoading = feedbackLoading || likeLoading;
 
-  const handleFeedbackLike = async () => {
+  const handleFeedbackLike = async (e) => {
     if (likeLoading || feedbackLoading) return;
+    e.preventDefault();
+    e.stopPropagation();
 
     if (!user) {
       toast.warning("Please sign in so we can save your data");
@@ -55,7 +57,7 @@ export default function LikeButton({
 
   return (
     <Button
-      onClick={handleFeedbackLike}
+      onClick={(e) => handleFeedbackLike(e)}
       variant="outline"
       className={cn(
         "p-2 border-none flex items-center justify-center skeleton",
@@ -70,8 +72,8 @@ export default function LikeButton({
         {isLoading ? (
           <Skeleton className="h-[15px] w-[15px] rounded-full bg-secondaryForeground" />
         ) : ( */}
-          <span>{likesCount}</span>
-        {/* )} */}
+      <span>{likesCount}</span>
+      {/* )} */}
       {/* </Suspense> */}
     </Button>
   );

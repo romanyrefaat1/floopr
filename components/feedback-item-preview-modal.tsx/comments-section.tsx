@@ -23,13 +23,10 @@ export default function CommentsSection({
 
       {/* Comment Input */}
       <div className="flex items-center space-x-3">
-        <Avatar className="w-8 h-8">
-          <AvatarImage
-            src={user?.profilePicture}
-            alt="User's profile picture"
-          />
+        {/* <Avatar className="w-8 h-8">
+          <AvatarImage src={user?.imageUrl} alt="User's profile picture" />
           <AvatarFallback>U</AvatarFallback>
-        </Avatar>
+        </Avatar> */}
         <div className="flex-grow flex justify-center items-center relative">
           <CommentsForm
             feedbackId={feedbackId}

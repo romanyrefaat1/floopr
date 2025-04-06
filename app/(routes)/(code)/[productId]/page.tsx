@@ -129,7 +129,7 @@ export default async function UsersProductPage({
   console.log("productData", productData);
 
   return (
-    <main className="bg-background px-4 md:px-20 min-h-screen mt-8">
+    <main className="bg-background px-4 md:px-4 lg:px-20 min-h-screen mt-8">
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
@@ -154,10 +154,10 @@ export default async function UsersProductPage({
       </div>
 
       {isOwner && (
-        <div className="fixed bottom-4 right-4">
+        <div className="fixed bottom-4 right-4 md:bottom-10 md:right-[55px]">
           <Button
             variant="secondary"
-            className="rounded-full w-fit h-fit p-4 md:p-8 group"
+            className="rounded-full w-fit h-fit p-4 group hover:bg-mutedBackground"
             style={{ aspectRatio: 1 }}
           >
             <Link

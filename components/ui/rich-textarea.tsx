@@ -10,11 +10,13 @@ import {
 import React, { useState, useRef } from "react";
 import "draft-js/dist/Draft.css";
 import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
 type RichTextEditorProps = {
   onChange?: (content: Record<string, any>) => void;
   placeholder?: string;
   className?: string;
+  secondaryClassName?: string;
   style?: React.CSSProperties;
 };
 
@@ -22,7 +24,8 @@ const RichTextEditor = ({
   onChange,
   placeholder,
   className,
-  style,
+  secondaryClassName,
+  style = {},
 }: RichTextEditorProps) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const editor = useRef(null);
@@ -91,7 +94,10 @@ const RichTextEditor = ({
   return (
     <div className={`rich-text-editor ${className || ""}`} style={style}>
       <div
-        className="editor-container border rounded-lg p-3 min-h-[6rem] focus-within:ring-1 relative bg-background text-foreground font-sans border-secondary"
+        className={cn(
+          "editor-container border rounded-lg p-3 min-h-[6rem] focus-within:ring-1 relative bg-background text-foreground font-sans border-secondary",
+          secondaryClassName
+        )}
         onClick={focusEditor}
       >
         <div className="toolbar flex flex-wrap gap-1 justify-start mb-2 pb-2 border-b border-secondary">

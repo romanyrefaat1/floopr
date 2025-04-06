@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import RichTextEditor from "@/components/ui/rich-textarea";
+import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -29,6 +30,8 @@ export default function FeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const params = useParams();
   const productId = params.productId;
+  const { user } = useUser();
+  console.log(`userinfo`, user);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,6 +45,11 @@ export default function FeedbackForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsSubmitting(true);
+      const userInfo = {
+        username: user.firstName + " " + user.lastName,
+        userId: user.id,
+        profilePicture: user.imageUrl || null,
+      };
 
       // Debug logging
       console.log("Form values:", values);
@@ -54,11 +62,7 @@ export default function FeedbackForm() {
           type: values.type || "other",
         },
         productId: String(productId),
-        userInfo: {
-          userId: "anonymous",
-          username: "Anonymous User",
-          profilePicture: null,
-        },
+        userInfo,
       };
 
       console.log("Submitting feedback:", feedbackData);

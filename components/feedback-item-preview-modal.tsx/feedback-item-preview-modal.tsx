@@ -34,11 +34,8 @@ export default function FeedbackItemPreviewModal({
   }, [closeModal]);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden"
-      
-    >
-      <div className="bg-secondaryBackground w-[80%] max-h-[80vh] rounded-modal overflow-hidden shadow-2xl flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden">
+      <div className="bg-secondaryBackground w-full h-full md:w-[80%] md:max-h-[80vh] rounded-modal overflow-hidden shadow-2xl flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-border shrink-0">
           <h2 className="text-xl font-semibold text-foreground">
@@ -63,18 +60,18 @@ export default function FeedbackItemPreviewModal({
           </TabsList>
 
           <TabsContent
-            value="details"
-            className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-track-background scrollbar-thumb-primary"
-          >
-            <DetailsSection feedbackData={feedbackData} />
-          </TabsContent>
-
-          <TabsContent
             value="feedback"
             className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-track-background scrollbar-thumb-primary"
             style={{ wordBreak: "break-word" }}
           >
             <FeedbackSection productId={productId} feedbackId={feedbackId} />
+          </TabsContent>
+
+          <TabsContent
+            value="details"
+            className="flex-grow overflow-y-auto p-6 scrollbar-thin scrollbar-track-background scrollbar-thumb-primary"
+          >
+            <DetailsSection feedbackData={feedbackData} />
           </TabsContent>
         </Tabs>
       </div>

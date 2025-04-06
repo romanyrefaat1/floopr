@@ -15,28 +15,34 @@ export default function CommentsForm({
   productId: string;
 }) {
   const [value, setValue] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!value) return;
+    setIsLoading(true);
+    if (!value) {
+      setIsLoading(false);
+      return;
+    }
 
-    console.log("Value:", value);
-    // Uncomment below line when ready to send reply
     await sendReply(value, feedbackId, userId, productId);
+    setValue(``);
+    setIsLoading(false);
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="flex items-center space-x-3 w-full"
+      onSubmit={(e) => handleSubmit(e)}
+      className="flex items-center border rounded-md bg-mutedBackground space-x-3 w-full pr-4"
     >
       <RichTextEditor
         onChange={(content) => setValue(content)}
         placeholder="Add a comment..."
         className="w-full"
+        secondaryClassName="bg-transparent border-0 focus:outline-none"
       />
-      <Button variant="default" disabled={!value} type="submit">
-        Send
+      <Button variant="default" disabled={!value || isLoading} type="submit">
+        {isLoading ? `Sending...` : `Send`}
       </Button>
     </form>
   );

@@ -4,6 +4,7 @@ import LikeButton from "../../products/[id]/feedback/[feedbackId]/_components/li
 import { FeedbackItemInDB } from "./feedback-list";
 import FinalStatus from "./final-status";
 import LoaderSpinner from "@/components/loader-spinner";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import PlainTextViewer from "@/components/ui/plain-text-viewer";
 import { db } from "@/lib/firebase";
@@ -63,6 +64,7 @@ export default function FeedbackItem({
     topic: ``,
     status: ``,
     userName: ``,
+    profilePicture: ``,
     timeAgo: `Unkown date`,
     type: ``,
   };
@@ -81,6 +83,7 @@ export default function FeedbackItem({
   myData.status = status || "Sent";
   myData.topic = topic?.topTopic || "No topic";
   myData.userName = userInfo?.username || "Anonymous User";
+  myData.profilePicture = userInfo?.profilePicture || null;
   myData.timeAgo = "Unknown date";
   if (createdAt) {
     // Firestore timestamp => convert to JS Date
@@ -119,19 +122,19 @@ export default function FeedbackItem({
   }, [isComponent, componentRefId, productId]);
 
   return (
-    <div className="border rounded-lg p-4 bg-secondaryBackground text-foreground">
-      <div>
-        {isComponent ? (
-          isComponentNameLoading ? (
-            <LoaderSpinner className="w-fit" size="sm" />
+    <Link href={`/${productId}/${feedback.id}`} className="">
+      <div className="border hover:bg-mutedBackground transition-all rounded-lg p-4 bg-secondaryBackground text-foreground">
+        <div>
+          {isComponent ? (
+            isComponentNameLoading ? (
+              <LoaderSpinner className="w-fit" size="sm" />
+            ) : (
+              <Badge>{isComponent && componentName}</Badge>
+            )
           ) : (
-            <Badge>{isComponent && componentName}</Badge>
-          )
-        ) : (
-          <></>
-        )}
-        <div className="flex">
-          <Link href={`/${productId}/${feedback.id}`} className="mb-2 flex-1">
+            <></>
+          )}
+          <div className="flex">
             {/* Title & description */}
             <div className="mb-2 flex-1">
               <h3 className="font-semibold text-lg mb-1">{myData.title}</h3>
@@ -139,34 +142,37 @@ export default function FeedbackItem({
               {/* <RichTextViewer content={content} /> */}
               <PlainTextViewer content={myData.content} truncate={100} />
             </div>
-          </Link>
-          {/* Like Button */}
-          <LikeButton feedbackId={feedback.id} productId={productId} />
-        </div>
-        {/* Bottom row with user info, status, topic, etc. */}
-        <div className="flex flex-col-reverse md:flex-row items-center justify-between">
-          {/* User & time */}
-          <div className="text-xs text-gray-500">
-            {myData.userName} &middot; {myData.timeAgo}
+            {/* Like Button */}
+            <LikeButton feedbackId={feedback.id} productId={productId} />
           </div>
-
-          {/* Status & topic side by side */}
-          <div className="flex items-center space-x-2">
-            <FinalStatus
-              finalStatus={myData.status}
-              isOwner={isOwner}
-              productId={productId}
-              feedbackId={feedback.id}
-            />
-            <div className="text-xs bg-input px-2 py-1 rounded">
-              {myData.type}
+          {/* Bottom row with user info, status, topic, etc. */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-0">
+            {/* User & time */}
+            <div className=" self-start text-xs text-gray-500 flex gap-2 items-center space-x-2 mt-6 mb-4 md:mb-0">
+              <Avatar className="w-4 h-4">
+                <AvatarImage src={myData.profilePicture} />
+              </Avatar>{" "}
+              {myData.userName} &middot; {myData.timeAgo}
             </div>
-            <div className="text-xs bg-primary px-2 py-1 rounded">
-              {myData.topic}
+
+            {/* Status & topic side by side */}
+            <div className="  self-end flex items-center space-x-2">
+              <FinalStatus
+                finalStatus={myData.status}
+                isOwner={isOwner}
+                productId={productId}
+                feedbackId={feedback.id}
+              />
+              <div className="text-xs bg-input px-2 py-1 rounded">
+                {myData.type}
+              </div>
+              <div className="text-xs bg-primary px-2 py-1 rounded">
+                {myData.topic}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -23,7 +23,7 @@ export default function FeedbackItem({ feedbackData, productId }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div className="bg-background p-4 rounded-md space-y-3 border border-border">
+    <div className="">
       {/* Idea Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3 mb-[12px]">

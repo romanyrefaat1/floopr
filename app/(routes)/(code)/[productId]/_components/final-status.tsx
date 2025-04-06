@@ -48,26 +48,34 @@ export default function FinalStatus({
 
   if (isOwner) {
     return (
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          className={`text-xs px-2 py-1 rounded-full focus:outline-none ${
-            statusStyles[status] || "bg-gray-200"
-          }`}
-        >
-          {status}
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="text-xs gap-1 flex flex-col">
-          {statuses.map((s) => (
-            <DropdownMenuItem
-              key={s}
-              onSelect={() => handleStatusChange(s)}
-              className={`text-xs ${statusStyles[s]} rounded-full px-2 py-1`}
-            >
-              {s}
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div
+        role="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={`text-xs px-2 py-1 rounded-full focus:outline-none ${
+              statusStyles[status] || "bg-gray-200"
+            }`}
+          >
+            {status}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="text-xs gap-1 flex flex-col">
+            {statuses.map((s) => (
+              <DropdownMenuItem
+                key={s}
+                onSelect={() => handleStatusChange(s)}
+                className={`text-xs ${statusStyles[s]} rounded-full px-2 py-1`}
+              >
+                {s}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     );
   }
 
@@ -76,8 +84,13 @@ export default function FinalStatus({
       className={`text-xs px-2 py-1 rounded-full ${
         statusStyles[status] || "bg-gray-200"
       }`}
+      role="button"
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+      }}
     >
-      <LucideArrowDownNarrowWide className="inline" />
+      {/* <LucideArrowDownNarrowWide className="inline" /> */}
       {status}
     </div>
   );
