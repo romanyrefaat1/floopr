@@ -163,7 +163,7 @@ export default function FeedbackItem({
                 productId={productId}
                 feedbackId={feedback.id}
               />
-              <div className="text-xs bg-input px-2 py-1 rounded">
+              <div className="text-xs bg-background px-2 py-1 rounded">
                 {myData.type}
               </div>
               <div className="text-xs bg-primary px-2 py-1 rounded">

@@ -2,11 +2,7 @@
 
 import FeedbackForm from "@/app/(routes)/(code)/[productId]/_components/feedback-form";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 export default function ButtonAddFeedback() {
   return (
@@ -16,7 +12,7 @@ export default function ButtonAddFeedback() {
           Add Feedback
         </Button>
       </DialogTrigger>
-      <DialogContent className="rounded-lg sm:max-w-[80vw]">
+      <DialogContent className="rounded-lg sm:max-w-[80vw] md:min-h-[80vh]">
         <FeedbackForm />
       </DialogContent>
     </Dialog>

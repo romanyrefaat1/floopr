@@ -1,6 +1,7 @@
 import DashboardTemplate from "./_components/templates/dashboard-template";
 import { lightenColor } from "./_utils/lighten-color";
 import getProductData from "@/actions/get-product-data";
+import BasicSendEmailButton from "@/components/basic-send-email-button";
 import getFiltersFromParams, {
   FiltersFromParams,
 } from "@/lib/get-filters-from-params";
@@ -57,6 +58,9 @@ const ProductPage = async ({
 
   return (
     <div className="min-h-screen bg-background">
+      <div>
+        <BasicSendEmailButton />
+      </div>
       <DashboardTemplate productData={productData} filterData={filterData} />
     </div>
   );

@@ -41,7 +41,6 @@ export default function ContentTab({
   return (
     // <Suspense fallback={<LoaderSpinner />}>
     <div className="space-y-6">
-
       {/* Feedback list section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
@@ -55,14 +54,14 @@ export default function ContentTab({
             <Input placeholder="Search feedback..." className="pl-8 w-full" />
           </div>
           <div className="flex gap-2">
-            <SentimentFilterButton productId={productId}/>
+            <SentimentFilterButton productId={productId} />
             <FilterButton isOwnerPa={isOwnerPa} label="Filter" />
           </div>
         </div>
 
         {/* Active filters display */}
         {filterData.filter && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-2">
             <Badge
               className="bg-primary hover:bg-primary/90"
               style={{ backgroundColor: primaryColor }}

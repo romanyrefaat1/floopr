@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { db } from "@/lib/firebase";
+import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
 import { doc, updateDoc } from "firebase/firestore";
 import { LucideArrowDownNarrowWide } from "lucide-react";
 import { useState } from "react";
@@ -61,7 +62,7 @@ export default function FinalStatus({
               statusStyles[status] || "bg-gray-200"
             }`}
           >
-            {status}
+            {makeFirstLetterUppercase(status)}
           </DropdownMenuTrigger>
           <DropdownMenuContent className="text-xs gap-1 flex flex-col">
             {statuses.map((s) => (
@@ -91,7 +92,7 @@ export default function FinalStatus({
       }}
     >
       {/* <LucideArrowDownNarrowWide className="inline" /> */}
-      {status}
+      {makeFirstLetterUppercase(status)}
     </div>
   );
 }

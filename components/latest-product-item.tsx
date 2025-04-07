@@ -1,7 +1,7 @@
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Button } from "@/components/ui/button";
 
 export type LatestProductItemProps = {
   description: string;
@@ -74,15 +74,16 @@ const LatestProductItem = ({
           {tags.map(
             (tag) =>
               tag && (
-                <span 
+                <span
                   key={tag.id}
                   className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                   style={{
-                    backgroundColor: tag.type === "admin" 
-                      ? "hsl(var(--primary))" 
-                      : `${getBadgeColor(tag.name)}10`,
+                    backgroundColor:
+                      tag.type === "admin"
+                        ? "hsl(var(--primary))"
+                        : `${getBadgeColor(tag.name)}10`,
                     color: getBadgeColor(tag.name),
-                    border: `1px solid ${getBadgeColor(tag.name)}30`
+                    border: `1px solid ${getBadgeColor(tag.name)}30`,
                   }}
                 >
                   {tag.name}
@@ -113,12 +114,8 @@ const LatestProductItem = ({
         )}
 
         <div className="flex-1 text-foreground">
-          <h3 className="text-lg font-medium">
-            {name}
-          </h3>
-          <p className="text-sm text-mutedForeground">
-            {productName}
-          </p>
+          <h3 className="text-lg font-medium">{name}</h3>
+          <p className="text-sm text-mutedForeground">{productName}</p>
         </div>
       </div>
 
@@ -135,10 +132,14 @@ const LatestProductItem = ({
       {/* Action Buttons */}
       <div className="flex flex-wrap justify-end gap-4 mt-4">
         <Link href={`/${docId}`}>
-          <Button variant="default">Visit</Button>
+          <Button role="div" variant="default">
+            Visit
+          </Button>
         </Link>
         <Link href={`/products/${docId}`}>
-          <Button variant="outline">Go Dashboard</Button>
+          <Button role="div" variant="outline">
+            Go Dashboard
+          </Button>
         </Link>
       </div>
 
