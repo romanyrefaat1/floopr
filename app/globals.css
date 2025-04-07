@@ -39,6 +39,12 @@
   --chart-3: var(--secondary-background);
   --chart-4: var(--border);
   --chart-5: var(--muted-foreground);
+
+  /* Marketing colors */
+  --marketing-background: 0 0% 100%;
+  --marketing-foreground: 0 0% 0%;
+  --marketing-accent: 250 89% 68%;
+  --marketing-accent-foreground: 0 0% 100%;
 }
 
 /* Dark mode overrides */
@@ -69,6 +75,12 @@
   --chart-3: var(--secondary-background);
   --chart-4: var(--border);
   --chart-5: var(--muted-foreground);
+
+  /* Marketing colors */
+  --marketing-background: 0 0% 7%;
+  --marketing-foreground: 0 0% 100%;
+  --marketing-accent: 250 89% 68%;
+  --marketing-accent-foreground: 0 0% 100%;
 }
 
 /* Global styles */

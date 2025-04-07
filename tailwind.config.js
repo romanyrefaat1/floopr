@@ -36,6 +36,22 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        marketing: {
+          "floopr-purple": "hsl(250, 89%, 68%)",
+          "floopr-purple-dark": "hsl(250, 89%, 48%)",
+          "floopr-purple-light": "hsl(250, 89%, 88%)",
+          background: "hsl(0, 0%, 100%)", // Changed to HSL format
+          accent: {
+            DEFAULT: "hsl(250, 89%, 68%)",
+            foreground: "hsl(0, 0%, 100%)",
+            light: "hsl(250, 89%, 88%)",
+            dark: "hsl(250, 89%, 48%)",
+          },
+          glass: {
+            background: "hsl(0 0% 100% / 0.9)",
+            border: "hsl(0 0% 100% / 0.125)",
+          },
+        },
       },
       borderRadius: {
         lg: "1rem",
