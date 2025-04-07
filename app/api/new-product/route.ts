@@ -55,6 +55,16 @@ export async function POST(req: Request) {
           topTopic: null,
           percent: 0
         }
+        socialData: {
+          likes: {
+            count: 0,
+            data: [],
+          },
+          comments: {
+            count: 0,
+            data: [],
+          },
+        }
       }
     });
 

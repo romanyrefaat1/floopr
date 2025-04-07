@@ -58,9 +58,9 @@ const ProductPage = async ({
 
   return (
     <div className="min-h-screen bg-background">
-      <div>
+      {/* <div>
         <BasicSendEmailButton />
-      </div>
+      </div> */}
       <DashboardTemplate productData={productData} filterData={filterData} />
     </div>
   );

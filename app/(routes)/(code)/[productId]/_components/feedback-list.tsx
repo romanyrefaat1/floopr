@@ -78,7 +78,7 @@ export default async function FeedbackList({
     }
 
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 flex flex-col gap-md lg:gap-lg">
         {feedbacks.map((feedback) => (
           <FeedbackItem
             key={feedback.feedbackId}
