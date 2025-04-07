@@ -41,20 +41,20 @@ export async function POST(req: Request) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       lastFeedbackAt: null,
-      
+
       analytics: {
         sentiment: {
           positive: 0,
           negative: 0,
           neutral: 0,
           topSentiment: "neutral",
-          percent: 0
+          percent: 0,
         },
         topic: {
           allTopics: productData.topics || [],
           topTopic: null,
-          percent: 0
-        }
+          percent: 0,
+        },
         socialData: {
           likes: {
             count: 0,
@@ -64,8 +64,8 @@ export async function POST(req: Request) {
             count: 0,
             data: [],
           },
-        }
-      }
+        },
+      },
     });
 
     console.log(`code is successfull`);
