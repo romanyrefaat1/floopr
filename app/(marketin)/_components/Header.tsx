@@ -1,3 +1,4 @@
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
@@ -138,6 +139,7 @@ const Header = () => {
             </nav>
 
             <div className="mt-12 w-full">
+              <ThemeToggle />
               <Button
                 variant="default"
                 className="w-full bg-marketing-accent hover:bg-marketing-accent/90 text-marketing-accent-foreground rounded-lg py-4 h-auto"

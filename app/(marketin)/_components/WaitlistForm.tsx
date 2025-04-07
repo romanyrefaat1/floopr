@@ -24,28 +24,19 @@ const WaitlistForm = () => {
       const result = await addToWaitlist(email);
 
       if (result.success) {
-        toast({
-          title: "Success!",
-          description: result.message,
-        });
+        toast("Success! " + result.message);
         setEmail("");
 
         // Optionally scroll to features section
         // document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
       } else {
-        toast({
-          title: "Error",
-          description: result.message,
-          variant: "destructive",
-        });
+        toast("Error: " + result.message);
       }
     } catch (error) {
       console.error("Error adding to waitlist:", error);
-      toast({
-        title: "Something went wrong",
-        description: "We couldn't add you to the waitlist. Please try again.",
-        variant: "destructive",
-      });
+      toast(
+        "Something went wrong. We couldn't add you to the waitlist. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

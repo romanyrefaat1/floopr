@@ -10,12 +10,16 @@ import Features from "./_components/Features";
 import Header from "./_components/Header";
 import Hero from "./_components/Hero";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { useTheme } from "next-themes";
 import { useEffect, useRef } from "react";
 
 const Index = () => {
   const mainRef = useRef<HTMLDivElement>(null);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
+    setTheme("light"); // Set the theme to light on mount
+
     // Initialize intersection observer to handle animations
     const observer = new IntersectionObserver(
       (entries) => {
