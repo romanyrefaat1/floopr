@@ -10,6 +10,7 @@ import Features from "./_components/Features";
 import Header from "./_components/Header";
 import Hero from "./_components/Hero";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useEffect, useRef } from "react";
 
 const Index = () => {
@@ -52,6 +53,11 @@ const Index = () => {
       <Header />
       {/* <ThemeToggle /> */}
       <main className="">
+        <div>
+          <Link href={`/home`}>home</Link>
+          <Link href={`/products`}>products</Link>
+          <Link href={`/products/new`}>new product</Link>
+        </div>
         <Hero />
         {/* Subtle radial gradient for Features section */}
         <div className="relative max-w-screen overflow--hidden">

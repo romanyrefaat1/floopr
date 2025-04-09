@@ -72,7 +72,7 @@ export default function FeedbackForm() {
       if (result.success) {
         toast.success("Feedback submitted successfully");
         form.reset();
-        router.push(`/products/${productId}/${result.feedbackId}`);
+        router.push(`/${productId}/${result.feedbackId}`);
       } else {
         toast.error("Failed to submit feedback. Please try again.");
       }
