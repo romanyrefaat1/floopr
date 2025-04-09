@@ -5,6 +5,8 @@ import QuickStats from "./_components/quick-stats";
 import WelcomeSection from "./_components/welcome-section";
 import SyncUser from "./sync-user";
 import LoaderSpinner from "@/components/loader-spinner";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -18,6 +20,9 @@ const Home = async () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-6 md:py-4 space-y-8">
+      <div className="md:hidden">
+        <SidebarTrigger />
+      </div>
       <SyncUser />
       <WelcomeSection />
       <div className="">
