@@ -67,9 +67,10 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
       `${feedback.title}. ${feedback.content || ``}`
     );
     console.log(`sentimentResult`, sentimentResult);
-    const topicClassification = await classifyTopic(
-      `${feedback.title}. ${feedback.content}`
-    );
+    // const topicClassification = await classifyTopic(
+    //   `${feedback.title}. ${feedback.content}`
+    // );
+    const topicClassification = [`No topic`, `No topic`, `No topic`];
     console.log(`topicClassification addismeple feedback`, topicClassification);
 
     // 1. Ensure the product document exists in the "products" collection

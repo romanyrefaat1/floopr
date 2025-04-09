@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import RichTextEditor from "@/components/ui/rich-textarea";
 import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -28,6 +28,7 @@ const formSchema = z.object({
 
 export default function FeedbackForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const params = useParams();
   const productId = params.productId;
   const { user } = useUser();
@@ -71,6 +72,7 @@ export default function FeedbackForm() {
       if (result.success) {
         toast.success("Feedback submitted successfully");
         form.reset();
+        router.push(`/products/${productId}/${result.feedbackId}`);
       } else {
         toast.error("Failed to submit feedback. Please try again.");
       }

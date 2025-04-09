@@ -68,6 +68,7 @@ export default async function FeedbackList({
     const feedbacks = unserializedFeedbacks.map((feedback) =>
       serializeFirestoreData(feedback)
     );
+    console.log(`feedbacks:`, feedbacks);
 
     if (feedbacks.length === 0) {
       return (
