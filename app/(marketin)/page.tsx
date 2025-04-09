@@ -50,20 +50,20 @@ const Index = () => {
       ref={mainRef}
       className="min-h-screen max-w-screen overflow-x-hidden text-foreground relative"
     >
-      <Header />
+      {/* <Header />  /////// */}
       {/* <ThemeToggle /> */}
-      <main className="">
-        <div>
+      <main className="mt-[100px] bg-marketing-background">
+        <div className="flex flex-col items-center justify-center">
           <Link href={`/home`}>home</Link>
           <Link href={`/products`}>products</Link>
           <Link href={`/products/new`}>new product</Link>
         </div>
-        <Hero />
+        {/* <Hero /> ////// */}
         {/* Subtle radial gradient for Features section */}
-        <div className="relative max-w-screen overflow--hidden">
+        {/* <div className="relative max-w-screen overflow--hidden">
           <div className="absolute -top-40 -right-40 w-[180px] md:w-[500px] h-[500px] rounded-full bg-marketing-accent opacity-20 blur-3xl"></div>
           <Features />
-        </div>
+        </div> ///////// */}
         {/* <Integrations /> */}
         <div className="relative overflow-hidden">
           {/* Subtle radial gradient for Benefits section */}
