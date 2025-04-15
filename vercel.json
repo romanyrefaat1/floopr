@@ -1,8 +1,10 @@
 {
   "buildCommand": "npm run vercel-build",
   "installCommand": "npm install --legacy-peer-deps",
-  "crons": [{
+  "crons": [
+  {
     "path": "/api/ml/crons/prioritize",
-    "schedule": "* * * * *"
-  }]
+    "schedule": "0 0 * * *"
+  }
+]
 }
