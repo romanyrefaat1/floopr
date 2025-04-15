@@ -4,7 +4,7 @@
   "crons": [
   {
     "path": "/api/ml/crons/prioritize",
-    "schedule": "15 22 * * *"
+    "schedule": "37 22 * * *"
   }
 ]
 }
