@@ -1,6 +1,7 @@
 import { FilterData, Product } from "../../page";
 import AddFeedbackForm from "../add-simple-feedback-form";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
+import PrioritizedFeedback from "../prioritized-feedback";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
 import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import FilterButton from "@/components/filter/filter-button";
@@ -84,14 +85,27 @@ export default function ContentTab({
           </div>
         )}
 
-        {/* Feedback items */}
+        {/* Prioritized Feedback */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Prioritized Feedback</CardTitle>
+          <CardDescription>AI-powered feedback prioritization based on importance and urgency</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <PrioritizedFeedback
+            productId={productId}
+          />
+          {/* Codin tis. */}
+        </CardContent>
+      </Card>
 
-        <FeedbackContentWrapper
-          filterData={filterData}
-          isOwner={isOwner}
-          productData={serializedProductData}
-          productId={productId}
-        />
+      {/* Feedback items */}
+      <FeedbackContentWrapper
+        filterData={filterData}
+        isOwner={isOwner}
+        productData={serializedProductData}
+        productId={productId}
+      />
       </div>
     </div>
     // </Suspense>
