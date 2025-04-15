@@ -1,35 +1,25 @@
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
 import { NextResponse } from "next/server";
+import { getPrioritizedTasksForProduct } from "@/actions/prioritize/get-prioritized-tasks-for-product-from-firestore";
 
-
-export async function POST(req) {
-    const {productId} = await req.json();
-    console.log(`productId from prioritize route`, productId);
-
-    if(!productId){
+export async function POST(req: Request) {
+    try {
+        const { productId } = await req.json();
+        
+        const result = await getPrioritizedTasksForProduct(productId);
+        
+        if (!result.success) {
+            return NextResponse.json({
+                error: result.error
+            }, { status: 400 });
+        }
+        
         return NextResponse.json({
-            error: "Product ID is required"
-        }, {status: 400}) 
-    }
-    // From firestore
-    const collRef = collection(db, "products", productId, "topTasks");
-    const topTasksData = await getDocs(collRef);
-
-    if (topTasksData.empty) {
+            topTasks: result.topTasks
+        }, { status: 200 });
+    } catch (error) {
+        console.error("Error in prioritize route:", error);
         return NextResponse.json({
-            topTasks: []
-        }, {status: 200})
+            error: "Internal server error"
+        }, { status: 500 });
     }
-
-    const topTasks = topTasksData.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id, 
-    }))
-    console.log(`topTasks`, topTasks);
-    // const prioritizedFeedbacks = 
-
-    return NextResponse.json({
-        topTasks: topTasks
-    }, {status: 200})
 }

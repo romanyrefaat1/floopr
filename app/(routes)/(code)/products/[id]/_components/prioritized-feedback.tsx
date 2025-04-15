@@ -2,16 +2,10 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import getFeedbacks from '@/actions/get-feedbacks';
 
-type PrioritizedFeedback = {
-  task: string;
-  description: string;
-  id: string;
-  priority: number;
-};
+import { PrioritizedTask } from '@/actions/prioritize/get-prioritized-tasks-for-product-from-firestore';
 
 type PrioritizeFeedbackResponse = {
-  success: boolean;
-  prioritizedFeedbacks: PrioritizedFeedback[];
+  topTasks: PrioritizedTask[];
 };
 
 const getPriorityColor = (priority: number): string => {
@@ -52,7 +46,7 @@ export default async function PrioritizedFeedback({
 
   const data: PrioritizeFeedbackResponse = await response.json();
 
-  if (!data?.prioritizedFeedbacks?.length) {
+  if (!data?.topTasks?.length) {
     return (
       <Card className="p-4 text-gray-500">
         No prioritized tasks available
@@ -62,7 +56,7 @@ export default async function PrioritizedFeedback({
 
   return (
     <div className="space-y-4">
-      {data.prioritizedFeedbacks.map((feedback) => (
+      {data.topTasks.map((feedback) => (
         <Card key={feedback.id} className="p-4 space-y-2">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">{feedback.task}</h3>
