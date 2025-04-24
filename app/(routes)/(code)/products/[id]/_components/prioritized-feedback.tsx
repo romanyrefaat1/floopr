@@ -22,11 +22,6 @@ export default async function PrioritizedFeedback({
   if (!productId) {
     throw new Error('Product ID is required');
   }
-
-  // Temporary function to test VERCEL CRONS
-//   fetch('http://localhost:3000/api/ml/cron/prioritize')
-//   .then(response => response.json())
-//   .then(data => console.log(`CRONS DATA:`, data));
   
   const response = await fetch(`${process.env.NEXT_PUBLIC_APP_LINK}/api/ml/prioritize`, {
     method: 'POST',

@@ -38,6 +38,11 @@ const ProductPage = async ({
   const { id } = await params;
   const productDataFromServer = await getProductData(id);
 
+   // Temporary function to test VERCEL CRONS
+   fetch('http://localhost:3000/api/ml/cron/prioritize')
+   .then(response => response.json())
+   .then(data => console.log(`CRONS DATA:`, data));
+
   if (!productDataFromServer) notFound();
 
   const filterData = getFiltersFromParams(searchParams);
