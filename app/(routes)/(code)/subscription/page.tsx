@@ -3,10 +3,10 @@ import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 
 export default async function PricingPage() {
-  const { userId } = await auth();
-  if (!userId) {
-    return RedirectToSignIn({ redirectUrl: "/subscription" });
-  }
+  // const { userId, sessionId } = await auth();
+  // if (!userId || !sessionId) {
+  //   return RedirectToSignIn({ redirectUrl: "/subscription" });
+  // }
 
   return (
     <div className="container mx-auto p-4">
