@@ -50,7 +50,19 @@ export async function POST(request: Request) {
         });
         break;
 
-      case "subscription.created":
+      case "subscription.succeeded":
+        await updateFirebaseUserData(data.customer.reference, {
+          subscription: {
+            status: "active",
+            subscriptionId: data.subscription.id,
+            plan: data.subscription.items.data[0].price.product.id,
+            currentPeriodEnd: new Date(
+              data.subscription.current_period_end * 1000
+            ),
+            dodoCustomerId: data.customer.id,
+          },
+        });
+        break;
       case "subscription.renewed":
       case "invoice.paid":
         // Find user by customer reference (your Firebase UID)
