@@ -50,7 +50,7 @@ export async function POST(request: Request) {
         });
         break;
 
-      case "subscription.succeeded":
+      case "payment.succeeded":
         await updateFirebaseUserData(data.customer.reference, {
           subscription: {
             status: "active",
