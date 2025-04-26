@@ -32,10 +32,18 @@ async function verifySignature(
     .createHmac("sha256", secret)
     .update(rawBody)
     .digest("hex");
-  return crypto.timingSafeEqual(
-    Buffer.from(expectedSig),
-    Buffer.from(sigHeader)
-  );
+
+  // Turn both into Buffers of the same encoding
+  const incoming = Buffer.from(sigHeader, "hex");
+  const expected = Buffer.from(expectedSig, "hex");
+
+  // If lengths differ, immediately return false
+  if (incoming.byteLength !== expected.byteLength) {
+    return false;
+  }
+
+  // Now safe to call timingSafeEqual
+  return crypto.timingSafeEqual(incoming, expected);
 }
 
 export async function POST(request: Request) {
