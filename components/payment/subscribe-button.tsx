@@ -38,12 +38,14 @@ export default function SubscribeButton() {
   };
 
   return (
-    <button
-      onClick={handleSubscribe}
-      disabled={loading}
-      className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
-    >
-      {loading ? "Processing..." : "Subscribe for $9/month"}
-    </button>
+    <>
+      <button
+        onClick={handleSubscribe}
+        disabled={loading}
+        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+      >
+        {loading ? "Processing..." : "Subscribe for $9/month"}
+      </button>
+    </>
   );
 }

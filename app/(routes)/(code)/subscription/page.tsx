@@ -1,3 +1,4 @@
+import updateFirebaseUserData from "@/actions/user/update-firebase-user-data";
 import SubscribeButton from "@/components/payment/subscribe-button";
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";

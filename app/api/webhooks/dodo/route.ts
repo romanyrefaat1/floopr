@@ -78,6 +78,9 @@ export async function POST(request: Request) {
       case "payment.succeeded":
         console.log("Payment succeeded:", data);
         await updateFirebaseUserData(data.customer.email, {
+          triedFromWebhook: true,
+        });
+        await updateFirebaseUserData(data.customer.email, {
           subscription: {
             status: "active",
             subscriptionId: data.subscription.id,
