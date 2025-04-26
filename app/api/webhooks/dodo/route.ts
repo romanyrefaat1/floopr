@@ -4,6 +4,19 @@ import crypto from "crypto";
 import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
+// Allow CORS preflight requests
+// This is important for handling CORS preflight requests from the browser
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*", // or specify your frontend origin
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, dodo-signature",
+    },
+  });
+}
+
 export const config = {
   api: {
     bodyParser: false,
