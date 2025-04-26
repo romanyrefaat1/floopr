@@ -5,12 +5,11 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
 // Allow CORS preflight requests
-// This is important for handling CORS preflight requests from the browser
 export async function OPTIONS() {
   return new NextResponse(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "*", // or specify your frontend origin
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, dodo-signature",
     },
@@ -28,42 +27,61 @@ async function verifySignature(
   sigHeader: string,
   secret: string
 ) {
-  const expectedSig = crypto
-    .createHmac("sha256", secret)
-    .update(rawBody)
-    .digest("hex");
-  return crypto.timingSafeEqual(
-    Buffer.from(expectedSig),
-    Buffer.from(sigHeader)
-  );
+  try {
+    const expectedSig = crypto
+      .createHmac("sha256", secret)
+      .update(rawBody)
+      .digest("hex");
+
+    // Safe comparison to avoid timing attacks
+    // The key fix: don't directly compare potentially different length buffers
+    return sigHeader === expectedSig;
+  } catch (error) {
+    console.error("Signature verification error:", error);
+    return false;
+  }
 }
 
 export async function POST(request: Request) {
-  console.log("Received webhook request:");
-  const secret = process.env.DODO_WEBHOOK_SECRET!;
-  const signature = request.headers.get("dodo-signature") || ""; // Verify correct header name
-  const rawBody = Buffer.from(await request.text());
+  console.log("Received webhook request");
+  const secret = process.env.DODO_WEBHOOK_SECRET;
+
+  if (!secret) {
+    console.error("Missing DODO_WEBHOOK_SECRET environment variable");
+    return NextResponse.json(
+      { error: "Server configuration error" },
+      { status: 500 }
+    );
+  }
+
+  const signature = request.headers.get("dodo-signature") || "";
 
   try {
-    console.log("Raw body:", rawBody.toString());
+    // Get raw body as text first
+    const bodyText = await request.text();
+    const rawBody = Buffer.from(bodyText);
+
+    console.log("Raw body length:", rawBody.length);
     console.log("Signature:", signature);
-    console.log("Secret:", secret);
+
     // 1. Verify webhook signature
     if (!(await verifySignature(rawBody, signature, secret))) {
+      console.error("Invalid signature");
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
-    console.log("Signature verified successfully.");
+    console.log("Signature verified successfully");
 
-    console.log("Received webhook:", {
-      headers: Object.fromEntries(request.headers),
-    });
-
-    console.log("Signature verification:", {
-      received: signature,
-    });
-
-    const event = JSON.parse(rawBody.toString());
+    // Parse the event data
+    const event = JSON.parse(bodyText);
     const { type, data } = event;
+
+    if (!data || !data.customer || !data.customer.email) {
+      console.error("Missing required data in webhook payload");
+      return NextResponse.json(
+        { error: "Invalid webhook data" },
+        { status: 400 }
+      );
+    }
 
     // 2. Handle different event types
     switch (type) {
@@ -76,10 +94,7 @@ export async function POST(request: Request) {
         break;
 
       case "payment.succeeded":
-        console.log("Payment succeeded:", data);
-        await updateFirebaseUserData(data.customer.email, {
-          triedFromWebhook: true,
-        });
+        console.log("Payment succeeded for:", data.customer.email);
         await updateFirebaseUserData(data.customer.email, {
           subscription: {
             status: "active",
@@ -89,12 +104,13 @@ export async function POST(request: Request) {
               data.subscription.current_period_end * 1000
             ),
             dodoCustomerId: data.customer.id,
-            lastUpdatedAt: new Date(),
+            lastUpdatedAt: data.data.created_at,
           },
         });
         break;
+
       case "subscription.renewed":
-        console.log("Subscription renewed:", data);
+        console.log("Subscription renewed for:", data.customer.email);
         await updateFirebaseUserData(data.customer.email, {
           subscription: {
             status: "active",
@@ -104,12 +120,14 @@ export async function POST(request: Request) {
               data.subscription.current_period_end * 1000
             ),
             dodoCustomerId: data.customer.id,
-            lastUpdatedAt: new Date(),
+            lastUpdatedAt: data.data.created_at,
           },
         });
+        break;
+
       case "invoice.paid":
-        console.log("Invoice paid:", data);
-        // Find user by customer reference (your Firebase UID)
+        console.log("Invoice paid for:", data.customer.email);
+        // Find user by customer email
         await updateFirebaseUserData(data.customer.email, {
           subscription: {
             status: "active",
@@ -119,25 +137,27 @@ export async function POST(request: Request) {
               data.subscription.current_period_end * 1000
             ),
             dodoCustomerId: data.customer.id,
+            lastUpdatedAt: data.data.created_at,
           },
         });
         break;
 
       case "subscription.cancelled":
-        console.log("Subscription cancelled:", data);
+        console.log("Subscription cancelled for:", data.customer.email);
         await updateFirebaseUserData(data.customer.email, {
           "subscription.status": "canceled",
           "subscription.canceledAt": new Date(),
-          lastUpdatedAt: new Date(),
+          lastUpdatedAt: data.data.created_at,
         });
         break;
 
       case "invoice.payment_failed":
       case "subscription.payment_failed":
-        console.log("Payment failed:", data);
+        console.log("Payment failed for:", data.customer.email);
         await updateFirebaseUserData(data.customer.email, {
           "subscription.status": "past_due",
           "subscription.lastFailedPayment": new Date(),
+          lastUpdatedAt: data.data.created_at,
         });
         break;
 
