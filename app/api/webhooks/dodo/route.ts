@@ -46,8 +46,6 @@ export async function POST(request: Request) {
             subscription: {
               status: data.status || "active",
               subscriptionId: data.subscription_id,
-              plan: undefined, // No plan/product info in payload, set if available
-              currentPeriodEnd: undefined, // No period info in payload, set if available
               dodoCustomerId: data.customer.customer_id,
               lastUpdatedAt: data.created_at,
               paymentId: data.payment_id,
