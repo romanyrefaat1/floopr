@@ -1,179 +1,74 @@
 import updateFirebaseUserData from "@/actions/user/update-firebase-user-data";
-import { db } from "@/lib/firebase";
-import crypto from "crypto";
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import { Webhook } from "standardwebhooks";
 
-// Allow CORS preflight requests
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, webhook-signature",
-    },
-  });
-}
+// Placeholder for WebhookPayload type. Replace with actual type if available.
+// type WebhookPayload = WebhookPayload;
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-async function verifySignature(
-  rawBody: Buffer,
-  sigHeader: string,
-  secret: string
-) {
-  try {
-    // Parse the signature header (format: v1,signature)
-    const parts = sigHeader.split(",");
-    if (parts.length !== 2 || parts[0] !== "v1") {
-      console.error("Invalid signature format");
-      return false;
-    }
-
-    const signature = parts[1];
-
-    // Generate expected signature
-    const expectedSig = crypto
-      .createHmac("sha256", secret)
-      .update(rawBody)
-      .digest("base64");
-
-    // Compare with the provided signature
-    return signature === expectedSig;
-  } catch (error) {
-    console.error("Signature verification error:", error);
-    return false;
-  }
-}
+const webhook = new Webhook(process.env.DODO_WEBHOOK_SECRET!); // Replace with your secret key generated from the Dodo Payments Dashboard
 
 export async function POST(request: Request) {
-  console.log("Received webhook request");
-  const secret = process.env.DODO_WEBHOOK_SECRET;
+  const headersList = await headers();
+  const rawBody = await request.text();
 
-  if (!secret) {
-    console.error("Missing DODO_WEBHOOK_SECRET environment variable");
-    return NextResponse.json(
-      { error: "Server configuration error" },
-      { status: 500 }
-    );
-  }
-
-  // Use the correct header name from the sample response
-  const signature = request.headers.get("webhook-signature") || "";
+  const webhookHeaders = {
+    "webhook-id": headersList.get("webhook-id") || "",
+    "webhook-signature": headersList.get("webhook-signature") || "",
+    "webhook-timestamp": headersList.get("webhook-timestamp") || "",
+  };
 
   try {
-    // Get raw body as text first
-    const bodyText = await request.text();
-    const rawBody = Buffer.from(bodyText);
-
-    console.log("Raw body length:", rawBody.length);
-    console.log("Signature:", signature);
-
-    // 1. Verify webhook signature
-    if (!(await verifySignature(rawBody, signature, secret))) {
-      console.error("Invalid signature");
-      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-    }
-    console.log("Signature verified successfully");
-
-    // Parse the event data
-    const event = JSON.parse(bodyText);
+    await webhook.verify(rawBody, webhookHeaders);
+    const event = JSON.parse(rawBody);
     const { type, data } = event;
 
-    if (!data) {
-      console.error("Missing required data in webhook payload");
+    if (!data || !data.customer || !data.customer.email) {
       return NextResponse.json(
         { error: "Invalid webhook data" },
         { status: 400 }
       );
     }
 
-    // 2. Handle different event types based on the actual response format
     switch (type) {
       case "customer.created":
-        // Link Dodo customer ID to Firebase user
-        await updateFirebaseUserData(data.customer.email, {
-          dodoCustomerId: data.customer.customer_id,
-        });
-        console.log("Customer created:", data.customer.customer_id);
+        // You may need to adjust this if the payload structure is different for customer.created
+        if (data.customer && data.customer.email && data.customer.customer_id) {
+          await updateFirebaseUserData(data.customer.email, {
+            dodoCustomerId: data.customer.customer_id,
+          });
+        }
         break;
-
       case "payment.succeeded":
-        console.log("Payment succeeded for:", data.customer.email);
-
-        // For payment.succeeded, we need to fetch subscription details in a separate call
-        // or update with the data we have
-        await updateFirebaseUserData(data.customer.email, {
-          subscription: {
-            status: "active",
-            subscriptionId: data.subscription_id,
-            dodoCustomerId: data.customer.customer_id,
-            lastUpdatedAt: new Date(data.created_at),
-            lastPaymentId: data.payment_id,
-            lastPaymentAmount: data.total_amount,
-            lastPaymentCurrency: data.currency,
-          },
-        });
+        // Adjusted for new DodoPayments payload structure
+        if (data.customer && data.customer.email && data.subscription_id) {
+          await updateFirebaseUserData(data.customer.email, {
+            subscription: {
+              status: data.status || "active",
+              subscriptionId: data.subscription_id,
+              plan: undefined, // No plan/product info in payload, set if available
+              currentPeriodEnd: undefined, // No period info in payload, set if available
+              dodoCustomerId: data.customer.customer_id,
+              lastUpdatedAt: data.created_at,
+              paymentId: data.payment_id,
+              totalAmount: data.total_amount,
+              currency: data.currency,
+            },
+          });
+        }
         break;
-
-      case "subscription.renewed":
-        console.log("Subscription renewed for:", data.customer.email);
-        await updateFirebaseUserData(data.customer.email, {
-          subscription: {
-            status: "active",
-            subscriptionId: data.subscription_id,
-            dodoCustomerId: data.customer.customer_id,
-            lastUpdatedAt: new Date(data.created_at),
-          },
-        });
-        break;
-
-      case "invoice.paid":
-        console.log("Invoice paid for:", data.customer.email);
-        await updateFirebaseUserData(data.customer.email, {
-          subscription: {
-            status: "active",
-            subscriptionId: data.subscription_id,
-            dodoCustomerId: data.customer.customer_id,
-            lastUpdatedAt: new Date(data.created_at),
-          },
-        });
-        break;
-
-      case "subscription.cancelled":
-        console.log("Subscription cancelled for:", data.customer.email);
-        await updateFirebaseUserData(data.customer.email, {
-          "subscription.status": "canceled",
-          "subscription.canceledAt": new Date(),
-          lastUpdatedAt: new Date(data.created_at),
-        });
-        break;
-
-      case "invoice.payment_failed":
-      case "subscription.payment_failed":
-        console.log("Payment failed for:", data.customer.email);
-        await updateFirebaseUserData(data.customer.email, {
-          "subscription.status": "past_due",
-          "subscription.lastFailedPayment": new Date(),
-          lastUpdatedAt: new Date(data.created_at),
-        });
-        break;
-
+      // Add more cases as needed for other event types
       default:
-        console.warn(`Unhandled event type: ${type}`);
+        // Unhandled event type
+        break;
     }
-
     return NextResponse.json({ success: true });
-  } catch (error: any) {
-    console.error("Webhook Error:", error);
-    return NextResponse.json(
-      { error: error.message || "Webhook processing failed" },
-      { status: 500 }
+  } catch (error) {
+    return new Response(
+      JSON.stringify({
+        error: (error as Error).message || "Webhook processing failed",
+      }),
+      { status: 400 }
     );
   }
 }
