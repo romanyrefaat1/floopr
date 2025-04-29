@@ -43,6 +43,7 @@ export async function POST(request: Request) {
         // Adjusted for new DodoPayments payload structure
         if (data.customer && data.customer.email && data.subscription_id) {
           await updateFirebaseUserData(data.customer.email, {
+            isPaid: true,
             subscription: {
               status: data.status || "active",
               subscriptionId: data.subscription_id,
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
           });
         }
         break;
-      // Add more cases as needed for other event types
+
       default:
         // Unhandled event type
         break;
