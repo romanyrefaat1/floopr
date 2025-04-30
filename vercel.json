@@ -6,8 +6,6 @@
         "config": { "distDir": "dist" }
       }
     ]
-  }
-  {
   "buildCommand": "npm run vercel-build",
   "installCommand": "npm install --legacy-peer-deps",
   "crons": [
