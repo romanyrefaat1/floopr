@@ -17,11 +17,11 @@ const nextConfig = {
 
   // Increase the serverless function timeout for ML model loading
   experimental: {
-    serverComponentsExternalPackages: ["@xenova/transformers"],
     serverActions: {
       bodySizeLimit: "10mb",
     },
   },
+  serverExternalPackages: ["@xenova/transformers"],
 
   images: {
     domains: [
