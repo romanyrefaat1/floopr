@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "./ui/button";
+import { FeedbackNote } from "@/components/feedback-note";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,7 +9,26 @@ import Link from "next/link";
 const Hero = () => {
   const { userId } = useAuth();
   return (
-    <section className="pt-[4rem] pb-16 md:pb-20 bg-white">
+    <section className="pt-[4rem] min-h-screen pb-16 md:pb-20 bg-white">
+      {/* <div className="relative hidden lg:block w-full h-fit">
+        <FeedbackNote
+          title="Improve UI"
+          content="Make your UI more colorful. Uhmm I would say, maybe add an accent color like: Orange. And increase your font size a bit to match the boldness of your product"
+          positionX="right"
+          positionY="top-24"
+          size="md"
+        />
+      </div> */}
+      <div className="relative w-full h-full">
+        <div className="absolute bottom-[-190px] w-full">
+          <FeedbackNote
+            title="Improve UI"
+            content="Make your UI more colorful. Uhmm I would say, maybe add an accent color like: Orange. And increase your font size a bit to match the boldness of your product"
+            positionX="left"
+          />
+        </div>
+      </div>
+
       <div className="section-container">
         <div className="relative z-10 text-center max-w-3xl mx-auto">
           <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-4 py-2 rounded-full text-sm font-medium mb-4">
@@ -46,7 +68,7 @@ const Hero = () => {
         </div>
 
         <div
-          className="relative mt-16 animate-on-scroll"
+          className="relative mt-16 animate-on-scroll blur-on-scroll"
           style={{ animationDelay: "400ms" }}
         >
           <div className="aspect-[16/9] max-w-5xl mx-auto">
