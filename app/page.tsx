@@ -2,6 +2,7 @@
 
 import Benefits from "../src/components/Benefits";
 import CallToAction from "../src/components/CallToAction";
+import FavoriteTestimonials from "../src/components/FavoriteTestimonials";
 import Features from "../src/components/Features";
 import Footer from "../src/components/Footer";
 import Header from "../src/components/Header";
@@ -47,6 +48,11 @@ export default function Home() {
         <div className="relative mt-24 md:mt-40">
           <Features />
         </div>
+
+        {/* Testimonials Section */}
+        {/* <div className="relative mt-24 md:mt-40">
+          <FavoriteTestimonials />
+        </div> */}
 
         {/* Benefits Section */}
         <div className="relative mt-24 md:mt-40">

@@ -40,18 +40,29 @@ const Header = () => {
 
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-center space-x-8">
-              <Link
+              {/* <Link
                 href="#features"
                 className="text-gray-600 hover:text-floopr-purple transition-colors"
               >
                 Features
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 href="#benefits"
                 className="text-gray-600 hover:text-floopr-purple transition-colors"
               >
                 Benefits
-              </Link>
+              </Link> */}
+
+              {/* <Button
+                variant={`outline`}
+                size={`sm`}
+                className="px-2 py-1 border"
+              > */}
+              <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 border bg-transparent border-[#eee] text-[#7c7c7c] text-[10px] hover:bg-[#f5f5f5] hover:text-floopr-purple transition-colors">
+                <span className="text-xs">⌘</span>K
+              </kbd>
+              {/* </Button> */}
+
               <Link
                 href="/pricing"
                 className="text-gray-600 hover:text-floopr-purple transition-colors"
