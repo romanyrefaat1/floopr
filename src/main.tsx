@@ -1,5 +1,1 @@
-import { createRoot } from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-
-createRoot(document.getElementById("root")!).render(<App />);
+// This file is not needed in Next.js. Use app/page.tsx for the landing page entry point.

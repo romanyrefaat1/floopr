@@ -1,27 +1,19 @@
+"use client";
 
-import React from 'react';
-
-interface CircleScribbleProps {
-  className?: string;
-  color?: string;
-}
-
-const CircleScribble = ({ className = "", color = "#7C65F6" }: CircleScribbleProps) => {
+const CircleScribble = ({ className = "" }: { className?: string }) => {
   return (
     <svg
-      className={`absolute pointer-events-none ${className}`}
-      width="120"
-      height="120"
-      viewBox="0 0 120 120"
+      viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
       <path
-        d="M60 10C31.5 10 10 31.5 10 60C10 88.5 31.5 110 60 110C88.5 110 110 88.5 110 60C110 31.5 88.5 10 60 10Z"
-        stroke={color}
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeDasharray="5 5"
+        d="M30,10 Q50,5 70,20 Q90,40 80,70 Q70,90 40,85 Q10,80 10,50 Q10,20 30,10"
+        stroke="currentColor"
+        strokeWidth="4"
+        fill="none"
+        className="text-floopr-purple"
       />
     </svg>
   );

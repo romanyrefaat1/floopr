@@ -1,3 +1,1 @@
-import { useToast, toast } from "@/hooks/use-toast";
-
-export { useToast, toast };
+// This file is deprecated. Use 'sonner' for toast notifications.

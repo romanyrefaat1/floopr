@@ -1,5 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -15,12 +14,14 @@
     --popover-foreground: 240 10% 3.9%;
     --primary: 252 82% 68%;
     --primary-foreground: 0 0% 100%;
+    --primary-muted: 257 36% 65%;
+    --primary-muted-foreground: 255 69% 91%;
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --accent: 252 82% 68%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
@@ -37,12 +38,12 @@
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
     --primary: 252 82% 68%;
-    --primary-foreground: 0 0% 100%;
+    --primary-foreground: 0 0% 98%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
+    --accent: 252 82% 68%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
@@ -56,59 +57,48 @@
   * {
     @apply border-border;
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
     @apply bg-background text-foreground font-inter antialiased;
   }
-  
-  body, html {
+
+  body,
+  html {
     @apply overflow-x-hidden;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-black tracking-tight;
-  }
-
-  p {
-    @apply text-black;
   }
 }
 
 @layer components {
+  .section-container {
+    @apply relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24;
+  }
+
   .highlight-underline {
     @apply relative;
   }
-  
+
   .highlight-underline::after {
-    content: '';
+    content: "";
     @apply absolute bottom-0 left-0 w-full h-[8px] bg-floopr-purple opacity-20 -z-10 rounded-full;
   }
-  
+
   .highlight-text {
     @apply bg-gradient-to-r from-floopr-purple to-floopr-purple-light bg-clip-text text-transparent font-semibold;
   }
-  
+
   .glass-card {
     @apply bg-white bg-opacity-80 backdrop-blur-md border border-gray-100 shadow-sm rounded-2xl;
   }
-  
-  .section-container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24;
-  }
-  
-  .feature-card {
-    @apply glass-card p-8 transition-all duration-300 hover:shadow-md hover:-translate-y-1;
-  }
-  
+
   .animate-on-scroll {
-    @apply opacity-0;
+    @apply opacity-0 translate-y-4 transition-all duration-700;
   }
-  
+
   .animate-on-scroll.animated {
-    @apply animate-fade-in;
+    @apply opacity-100 translate-y-0;
   }
 }

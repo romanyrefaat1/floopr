@@ -2,102 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light mode (default) */
-:root {
-  /* Primary colors */
-  --primary: 250, 89%, 68%; /* #7c64f6 */
-  --primary-foreground: 0, 0%, 100%; /* #ffffff */
-  --primary-muted: 257, 36%, 65%; /* #b4a7d6 */
-  --primary-muted-foreground: 255, 69%, 91%; /* #e0d8f8 */
-
-  /* Base colors */
-  --background: 0, 0%, 90%; /* #ffffff */
-  --secondary-background: 0, 0%, 95%; /* light grey */
-  --foreground: 0, 0%, 5%; /* #000000 */
-  --secondary-foreground: 0, 0%, 20%; /* darker text for secondary elements */
-  --border: 210, 16%, 80%; /* #e5e7eb */
-  --input: 210, 16%, 97%; /* #f3f4f6 */
-  --ring: 250, 89%, 68%; /* matches primary */
-  --muted: 0, 0%, 96%; /* #f5f5f5 */
-  --muted-foreground: 210, 16%, 50%; /* #6b7280 */
-  --muted-background: 210, 16%, 90%; /* #6b7280 */
-
-  /* Additional variables from docs, adapted to your palette */
-  --card: var(--background); /* using the same as background */
-  --card-foreground: var(--foreground); /* using your standard text color */
-  --popover: var(--background);
-  --popover-foreground: var(--foreground);
-  --secondary: var(
-    --secondary-background
-  ); /* aligning secondary with your secondary background */
-  --accent: var(--primary); /* using primary as accent */
-  --accent-foreground: var(--primary-foreground);
-  --destructive: 0, 72%, 51%; /* a red tone, adjust if needed */
-  --destructive-foreground: var(--primary-foreground);
-  --chart-1: var(--primary);
-  --chart-2: var(--primary-muted);
-  --chart-3: var(--secondary-background);
-  --chart-4: var(--border);
-  --chart-5: var(--muted-foreground);
-
-  /* Marketing colors */
-  --marketing-background: 0 0% 100%;
-  --marketing-foreground: 0 0% 0%;
-  --marketing-accent: 250 89% 68%;
-  --marketing-accent-foreground: 0 0% 100%;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --floopr-purple: 250 100% 60%;
+    --floopr-purple-dark: 250 100% 55%;
+    --floopr-purple-bg: 250 100% 97%;
+  }
 }
 
-/* Dark mode overrides */
-.dark {
-  /* Core dark mode colors */
-  --background: 0, 0%, 10%; /* dark background */
-  --secondary-background: 0, 0%, 14%;
-  --muted-background: 0, 0%, 16%;
+@layer components {
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
 
-  --foreground: 0, 0%, 100%; /* light text */
-  --secondary-foreground: 0, 0%, 50%;
-  --border: 0, 0%, 20%;
-  --input: 0, 0%, 20%;
-  --ring: 250, 89%, 68%;
-
-  /* Additional variables for dark mode */
-  --card: var(--background);
-  --card-foreground: var(--foreground);
-  --popover: var(--background);
-  --popover-foreground: var(--foreground);
-  --secondary: var(--secondary-background);
-  --accent: var(--primary); /* assuming primary stays consistent */
-  --accent-foreground: var(--primary-foreground);
-  --destructive: 0, 72%, 51%;
-  --destructive-foreground: var(--primary-foreground);
-  --chart-1: var(--primary);
-  --chart-2: var(--primary-muted);
-  --chart-3: var(--secondary-background);
-  --chart-4: var(--border);
-  --chart-5: var(--muted-foreground);
-
-  /* Marketing colors */
-  --marketing-background: 0 0% 7%;
-  --marketing-foreground: 0 0% 100%;
-  --marketing-accent: 250 89% 68%;
-  --marketing-accent-foreground: 0 0% 100%;
+  .glass-card {
+    @apply rounded-3xl bg-white/70 backdrop-blur-lg border border-white/20 shadow-lg;
+  }
 }
 
-/* Global styles */
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  overflow-x: hidden;
+@layer utilities {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  }
+
+  .animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
+/* Custom gradient backgrounds */
+.bg-gradient-floopr {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--floopr-purple-bg)) 0%,
+    white 100%
+  );
+}
+
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove blue highlight on mobile tap */
 * {
-  border-color: hsl(var(--border));
+  -webkit-tap-highlight-color: transparent;
 }
 
-button,
-a {
-  cursor: pointer;
-}
-
-h1 {
-  @apply text-3xl font-bold;
+/* Custom focus styles */
+:focus-visible {
+  outline: 2px solid hsl(var(--floopr-purple));
+  outline-offset: 2px;
 }

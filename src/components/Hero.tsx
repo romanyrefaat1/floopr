@@ -1,89 +1,57 @@
+"use client";
 
-import { ArrowRight, Sparkles } from 'lucide-react';
-import WaitlistForm from './WaitlistForm';
-import ScribbleHighlight from './ui/ScribbleHighlight';
-import CircleScribble from './ui/CircleScribble';
-import { useEffect, useState } from 'react';
-import { getWaitlistCount } from '../../firebase';
+import WaitlistForm from "./WaitlistForm";
+import CircleScribble from "./ui/CircleScribble";
+import Image from "next/image";
 
 const Hero = () => {
-
-  const [waitlistCount, setWaitlistCount] = useState(40); // Default fallback
-  
-  useEffect(() => {
-    const fetchWaitlistCount = async () => {
-      try {
-        const count = await getWaitlistCount();
-        console.log(`count:`, count)
-        setWaitlistCount(count); 
-      } catch (error) {
-        console.error("Error fetching waitlist count:", error);
-      }
-    };
-    
-    fetchWaitlistCount();
-  }, []);
-
   return (
-    <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-floopr-purple-bg opacity-50 blur-3xl"></div>
-        <div className="absolute top-1/3 -left-40 w-[400px] h-[400px] rounded-full bg-floopr-purple-bg opacity-40 blur-3xl"></div>
-      </div>
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center text-center mb-10 md:mb-16 animate-fade-in">
-          <div className="inline-flex items-center px-3 py-1 rounded-full bg-floopr-purple-bg border border-floopr-purple/20 mb-6">
-            <Sparkles className="h-4 w-4 text-floopr-purple mr-2" />
-            <span className="text-sm font-medium text-floopr-purple-dark">Early waitlist open</span>
-          </div>
-          
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 max-w-4xl">
-            Collect and manage feedback <span className="relative">
-              <ScribbleHighlight>effortlessly</ScribbleHighlight>
-              <CircleScribble className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-20 opacity-10" />
+    <section className="pt-32 pb-16 md:pt-40 md:pb-20">
+      <div className="section-container">
+        <div className="relative z-10 text-center max-w-3xl mx-auto">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-on-scroll">
+            Making user feedback
+            <span className="relative inline-block mx-3">
+              actionable
+              <CircleScribble className="absolute -bottom-2 -right-3 w-32 h-12 text-floopr-purple opacity-20" />
             </span>
           </h1>
-          
-          <p className="text-xl md:text-2xl text-black max-w-3xl mb-8">
-            The all-in-one platform to collect, organize, and act on user feedback
+
+          <p
+            className="text-xl text-gray-600 mb-8 animate-on-scroll"
+            style={{ animationDelay: "100ms" }}
+          >
+            Collect, organize, and prioritize user feedback all in one place.
+            Help your team build what users really want.
           </p>
-          
-          <WaitlistForm />
-          
-          {waitlistCount > 19 && <div className="flex items-center justify-center mt-8 text-sm text-black">
-            <div className="flex -space-x-2 mr-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-medium">
-                  {i}
-                </div>
-              ))}
-            </div>
-            <span>Join {waitlistCount}+ early adopters</span>
-          </div>}
+
+          <div
+            className="flex justify-center animate-on-scroll"
+            style={{ animationDelay: "200ms" }}
+          >
+            <WaitlistForm />
+          </div>
         </div>
-        
-          {/* <div className="rounded-2xl overflow-hidden shadow-xl shadow-floopr-purple/5 bg-white border border-gray-100 animate-fade-in" style={{ animationDelay: '0.3s' }}>
-            <div className="aspect-[16/9] w-full bg-gray-100 relative overflow-hidden">
-              <img 
-                src="/lovable-uploads/05f2dc13-e727-4026-9dc8-4de6d361d6db.png" 
-                alt="Floopr feedback dashboard" 
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-            </div>
-          </div> */}
-      </div>
-      
-      <div className="flex justify-center mt-16">
-        <a 
-          href="#features" 
-          className="inline-flex items-center text-base font-medium text-floopr-purple hover:text-floopr-purple-dark transition-colors"
+
+        <div
+          className="relative mt-16 animate-on-scroll"
+          style={{ animationDelay: "300ms" }}
         >
-          <span>Discover features</span>
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </a>
+          <div className="aspect-[16/9] max-w-5xl mx-auto">
+            <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200 shadow-2xl">
+              <Image
+                src="/images/dashboard-preview.png"
+                alt="Floopr Dashboard Preview"
+                fill
+                className="object-cover"
+                priority
+              />
+            </div>
+          </div>
+
+          {/* Gradient overlay */}
+          <div className="absolute -inset-x-4 -bottom-4 bg-gradient-to-t from-white to-transparent h-20" />
+        </div>
       </div>
     </section>
   );
