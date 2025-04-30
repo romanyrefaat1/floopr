@@ -90,6 +90,7 @@ npm start
 We provide official Docker images and one-click deployments for:
 
 # Contributing 🤝
+
 We welcome contributions! Please follow these steps:
 
 Fork the repository
@@ -100,6 +101,7 @@ Fork the repository
 4. Open a Pull Request
 
 # License 📄
+
 Deaboard is open-source software licensed under the MIT License.
 
 [(Deaboard Twitter Follow): (https://x.com/deaboard)]
