@@ -41,35 +41,21 @@ export default function Home() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-floopr-purple-bg via-white to-white -z-10" />
 
         {/* Hero Section */}
-        <div className="relative">
-          <Hero />
-        </div>
+        <Hero />
 
         {/* Features Section */}
-        <div className="relative mt-20 md:mt-32">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1200px] aspect-square">
-            <div className="w-full h-full bg-gradient-radial from-floopr-purple/5 via-transparent to-transparent opacity-70" />
-          </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Features />
-          </div>
+        <div className="relative mt-24 md:mt-40">
+          <Features />
         </div>
 
         {/* Benefits Section */}
-        <div className="relative mt-20 md:mt-32">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[1200px] aspect-square">
-            <div className="w-full h-full bg-gradient-radial from-floopr-purple/5 via-transparent to-transparent opacity-70" />
-          </div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Benefits />
-          </div>
+        <div className="relative mt-24 md:mt-40">
+          <Benefits />
         </div>
 
         {/* CTA Section */}
-        <div className="relative mt-20 md:mt-32 mb-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <CallToAction />
-          </div>
+        <div className="relative mt-24 md:mt-40 mb-20">
+          <CallToAction />
         </div>
       </main>
       <Footer />

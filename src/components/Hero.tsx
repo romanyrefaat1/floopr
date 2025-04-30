@@ -1,28 +1,24 @@
 "use client";
 
 import WaitlistForm from "./WaitlistForm";
-import CircleScribble from "./ui/CircleScribble";
 import Image from "next/image";
 
 const Hero = () => {
   return (
-    <section className="pt-32 pb-16 md:pt-40 md:pb-20">
+    <section className="pt-24 pb-16 md:pt-32 md:pb-20 bg-white">
       <div className="section-container">
         <div className="relative z-10 text-center max-w-3xl mx-auto">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-on-scroll">
-            Making user feedback
-            <span className="relative inline-block mx-3">
-              actionable
-              <CircleScribble className="absolute -bottom-2 -right-3 w-32 h-12 text-floopr-purple opacity-20" />
-            </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-on-scroll">
+            Collect and manage
+            <br />
+            feedback effortlessly
           </h1>
 
           <p
-            className="text-xl text-gray-600 mb-8 animate-on-scroll"
+            className="text-lg md:text-xl text-gray-600 mb-8 animate-on-scroll max-w-2xl mx-auto"
             style={{ animationDelay: "100ms" }}
           >
-            Collect, organize, and prioritize user feedback all in one place.
-            Help your team build what users really want.
+            The all-in-one platform to collect, organize, and act on user feedback. Help your team make better product decisions.
           </p>
 
           <div
@@ -31,14 +27,18 @@ const Hero = () => {
           >
             <WaitlistForm />
           </div>
+          
+          <p className="text-sm text-gray-500 mt-4 animate-on-scroll" style={{ animationDelay: "300ms" }}>
+            No credit card required • Free plan available
+          </p>
         </div>
 
         <div
           className="relative mt-16 animate-on-scroll"
-          style={{ animationDelay: "300ms" }}
+          style={{ animationDelay: "400ms" }}
         >
           <div className="aspect-[16/9] max-w-5xl mx-auto">
-            <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200 shadow-2xl">
+            <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200 shadow-xl">
               <Image
                 src="/images/dashboard-preview.png"
                 alt="Floopr Dashboard Preview"
