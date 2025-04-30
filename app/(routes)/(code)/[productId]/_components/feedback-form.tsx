@@ -156,7 +156,7 @@ export default function FeedbackForm() {
                       field.onChange(content);
                     }}
                     placeholder="Enter your description (optional)"
-                    className="rounded-md bg-background text-foreground border border-secondary"
+                    className="rounded-md bg-background min-h-full text-foreground border border-secondary"
                   />
                 </FormControl>
                 <FormMessage />

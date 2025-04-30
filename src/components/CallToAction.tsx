@@ -1,40 +1,59 @@
 "use client";
 
-import WaitlistForm from "./WaitlistForm";
 import { Button } from "./ui/button";
+import Link from "next/link";
 
 const CallToAction = () => {
   return (
-    <section id="cta" className="section-container py-20 relative overflow-hidden">
+    <section
+      id="cta"
+      className="section-container py-20 relative overflow-hidden"
+    >
       <div className="text-center max-w-3xl mx-auto mb-8 animate-on-scroll">
+        <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-4 py-2 rounded-full text-sm font-medium mb-4">
+          Get Started Today
+        </span>
         <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Start Building Things Your Users will Love
+          Transform Your Product Feedback Into Success
         </h2>
         <p className="text-lg text-gray-600 mb-8">
-          Join our waitlist today and be the first to know when we launch!
+          Join thousands of product teams making better decisions with
+          data-driven insights
         </p>
 
-        <div className="flex justify-center">
-          <Button 
-            className="bg-floopr-purple hover:bg-floopr-purple-dark text-white px-8 py-6 text-lg rounded-lg"
-          >
-            Join the Waitlist
-          </Button>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Link href="/home">
+            <Button
+              variant={`outline`}
+              className="px-8 py-6 text-lg rounded-lg w-full sm:w-auto"
+            >
+              Start Free
+            </Button>
+          </Link>
+          <Link href="/pricing">
+            <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white px-8 py-6 text-lg rounded-lg w-full sm:w-auto">
+              View Pricing
+            </Button>
+          </Link>
         </div>
       </div>
 
-      <div className="mt-16 grid grid-cols-3 gap-6 text-center max-w-4xl mx-auto animate-on-scroll">
-        <div className="p-4">
-          <h3 className="font-bold mb-2">Pricing</h3>
-          <p className="text-sm text-gray-600">Free plan available</p>
+      <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 text-center max-w-4xl mx-auto animate-on-scroll">
+        <div className="glass-card p-6">
+          <h3 className="font-bold mb-2">Free Plan Available</h3>
+          <p className="text-sm text-gray-600">Start using Floopr at no cost</p>
         </div>
-        <div className="p-4">
-          <h3 className="font-bold mb-2">Privacy</h3>
-          <p className="text-sm text-gray-600">Your data stays secure</p>
+        <div className="glass-card p-6">
+          <h3 className="font-bold mb-2">AI-Powered</h3>
+          <p className="text-sm text-gray-600">
+            Get intelligent insights instantly
+          </p>
         </div>
-        <div className="p-4">
-          <h3 className="font-bold mb-2">Support</h3>
-          <p className="text-sm text-gray-600">24/7 customer service</p>
+        <div className="glass-card p-6">
+          <h3 className="font-bold mb-2">Easy Integration</h3>
+          <p className="text-sm text-gray-600">
+            Works with your existing tools
+          </p>
         </div>
       </div>
     </section>

@@ -1,13 +1,12 @@
 "use client";
 
-import { Github, Twitter } from "lucide-react";
+import { Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const Footer = () => {
   return (
     <footer className="relative mt-32">
-      {/* Gradient transition */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-floopr-purple/5 pointer-events-none" />
 
       <div className="section-container relative">
@@ -23,8 +22,9 @@ const Footer = () => {
               />
             </Link>
             <p className="mt-4 text-gray-600 max-w-md">
-              The all-in-one platform to collect, organize, and act on user
-              feedback. Help your team make better product decisions.
+              The all-in-one platform to transform user feedback into actionable
+              business strategies. Make better product decisions with AI-powered
+              insights.
             </p>
           </div>
 
@@ -49,7 +49,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="#cta"
+                  href="/pricing"
                   className="text-gray-600 hover:text-floopr-purple transition-colors"
                 >
                   Pricing
@@ -70,17 +70,6 @@ const Footer = () => {
                 >
                   <Twitter className="h-4 w-4" />
                   Twitter
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="https://github.com/RomanyU1662160/floopr"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-600 hover:text-floopr-purple transition-colors inline-flex items-center gap-2"
-                >
-                  <Github className="h-4 w-4" />
-                  GitHub
                 </Link>
               </li>
             </ul>

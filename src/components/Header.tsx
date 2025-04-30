@@ -1,13 +1,15 @@
 "use client";
 
+import { Skeleton } from "./ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { isLoaded, isSignedIn } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,23 +52,26 @@ const Header = () => {
               >
                 Benefits
               </Link>
-              <a
-                href="https://github.com/RomanyU1662160/floopr"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-floopr-purple transition-colors inline-flex items-center gap-2"
+              <Link
+                href="/pricing"
+                className="text-gray-600 hover:text-floopr-purple transition-colors"
               >
-                <Github className="h-5 w-5" />
-                <span className="hidden lg:inline">GitHub</span>
-              </a>
+                Pricing
+              </Link>
             </nav>
 
-            <Button
-              variant="default"
-              className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
-            >
-              Join Waitlist
-            </Button>
+            {!isLoaded ? (
+              <Skeleton className="h-8 w-24 bg-gray-200 rounded-md" />
+            ) : (
+              <Link href="/home">
+                <Button
+                  variant="default"
+                  className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
+                >
+                  {!isSignedIn ? `Sign In now` : `Get Feedback Now`}
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -7,10 +7,10 @@ const Features = () => {
     <section id="features" className="section-container py-20">
       <div className="text-center max-w-3xl mx-auto mb-16 animate-on-scroll">
         <h2 className="text-4xl md:text-5xl font-bold mb-6">
-          Elevate Your User Experience
+          Smart Tools for Smarter Decisions
         </h2>
         <p className="text-lg text-gray-600">
-          Powerful tools to collect, organize, and act on user feedback
+          Transform scattered feedback into structured business insights
         </p>
       </div>
 
@@ -19,26 +19,26 @@ const Features = () => {
         <div>
           <h3 className="text-2xl font-bold mb-4">Feedback Boards</h3>
           <p className="text-gray-600 mb-6">
-            Create custom boards to collect and organize feedback from your users. Categorize and prioritize feedback to make better product decisions.
+            Centralize and organize feedback in one place. Our smart categorization helps you identify patterns and opportunities.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Organize by category</span>
+              <span>Smart categorization</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Prioritize important feedback</span>
+              <span>Data-driven prioritization</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Track status and progress</span>
+              <span>Business impact tracking</span>
             </li>
           </ul>
         </div>
@@ -55,13 +55,13 @@ const Features = () => {
         </div>
       </div>
 
-      {/* Feedback Widgets Section */}
+      {/* AI Analytics Section */}
       <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
         <div className="order-2 md:order-1 relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
             <Image 
               src="/images/feedback-widget-preview.png" 
-              alt="Feedback Widget" 
+              alt="AI Analytics" 
               width={500} 
               height={400}
               className="w-full h-auto rounded-lg"
@@ -69,58 +69,61 @@ const Features = () => {
           </div>
         </div>
         <div className="order-1 md:order-2">
-          <h3 className="text-2xl font-bold mb-4">Feedback Widgets</h3>
+          <h3 className="text-2xl font-bold mb-4">AI-Powered Analytics</h3>
           <p className="text-gray-600 mb-6">
-            Embed customizable feedback forms directly into your product. Collect user insights without disrupting their experience.
+            Get deep insights into your feedback with our advanced AI analysis. Understand trends, sentiment, and business opportunities.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Easy to integrate</span>
+              <span>Sentiment analysis</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Customizable to match your brand</span>
+              <span>Trend identification</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Collect structured data</span>
+              <span>ROI predictions</span>
             </li>
           </ul>
         </div>
       </div>
 
-      {/* Product Roadmaps Section */}
+      {/* AI Tutor Section */}
       <div className="grid md:grid-cols-2 gap-16 items-center animate-on-scroll">
         <div>
-          <h3 className="text-2xl font-bold mb-4">Product Roadmaps</h3>
+          <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-3 py-1 rounded-full text-sm font-medium mb-4">
+            Coming Soon
+          </span>
+          <h3 className="text-2xl font-bold mb-4">AI Tutor</h3>
           <p className="text-gray-600 mb-6">
-            Share your product vision and upcoming features with your users. Keep them engaged and excited about what's coming next.
+            Your intelligent companion for product development. Get AI-powered suggestions for feature prioritization and strategic planning.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Visualize your product direction</span>
+              <span>Interactive AI chat assistant</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Gather votes on upcoming features</span>
+              <span>Smart feature suggestions</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Keep users informed</span>
+              <span>Strategic planning insights</span>
             </li>
           </ul>
         </div>
@@ -128,17 +131,13 @@ const Features = () => {
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
             <Image 
               src="/images/roadmap-preview.png" 
-              alt="Product Roadmap" 
+              alt="AI Tutor" 
               width={500} 
               height={400}
               className="w-full h-auto rounded-lg"
             />
           </div>
         </div>
-      </div>
-
-      <div className="text-center mt-20 animate-on-scroll">
-        <h3 className="text-2xl md:text-3xl font-bold mb-4">Literally, all the features you need!</h3>
       </div>
     </section>
   );

@@ -1,22 +1,30 @@
 "use client";
 
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 import { RedirectToSignUp, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function SubscribeButton() {
+export default function SubscribeButton({
+  className = ``,
+  label = `Subscribe Now`,
+}: {
+  className?: string;
+  label?: string;
+}) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { user } = useUser();
-
-  if (!user) {
-    return RedirectToSignUp({ redirectUrl: `subscription` });
-  }
-
-  const email = user.emailAddresses[0].emailAddress;
-  const userId = user.id; // Assuming you have the user ID from Clerk
+  const { user, isLoaded, isSignedIn } = useUser();
 
   const handleSubscribe = async () => {
+    if (!user || !isLoaded || !isSignedIn) {
+      return RedirectToSignUp({ redirectUrl: `subscription` });
+    }
+
+    const email = user.emailAddresses[0].emailAddress;
+    const userId = user.id;
+
     setLoading(true);
     try {
       const response = await fetch("/api/create-subscription", {
@@ -39,13 +47,17 @@ export default function SubscribeButton() {
 
   return (
     <>
-      <button
+      <Button
         onClick={handleSubscribe}
         disabled={loading}
-        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        className={cn(
+          className?.length > 0
+            ? className
+            : "bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 disabled:opacity-50"
+        )}
       >
-        {loading ? "Processing..." : "Subscribe for $9/month"}
-      </button>
+        {loading ? "Processing..." : label}
+      </Button>
     </>
   );
 }
