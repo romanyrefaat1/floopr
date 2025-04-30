@@ -51,17 +51,21 @@ const Hero = () => {
         >
           <div className="aspect-[16/9] max-w-5xl mx-auto">
             <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200">
-              <Image
-                src="/images/dashboard-preview.png"
-                alt="Floopr Dashboard Preview"
-                fill
-                className="object-cover"
-                priority
-              />
+              <Link
+                href={`https://floopr.vercel.app/31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
+              >
+                <Image
+                  src="/images/land/dashboard-preview.png"
+                  alt="Floopr Dashboard Preview"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </Link>
             </div>
           </div>
 
-          <div className="absolute -inset-x-4 -bottom-4 bg-gradient-to-t from-white to-transparent h-20" />
+          <div className="absolute -inset-x-4 -bottom-4 bg-gradient-to-t from-white via-white/50 to-transparent h-20 md:h-60" />
         </div>
       </div>
     </section>

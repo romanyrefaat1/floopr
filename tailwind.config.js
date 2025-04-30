@@ -15,10 +15,6 @@ module.exports = {
         inter: ["Inter", ...fontFamily.sans],
       },
       colors: {
-        "floopr-purple": "#8A4FFF",
-        "floopr-purple-dark": "#7038FF",
-        "floopr-purple-light": "#A375FF",
-        "floopr-purple-bg": "#F5F0FF",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -27,6 +23,8 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          muted: "hsl(var(--primary-muted))",
+          "muted-foreground": "hsl(var(--primary-muted-foreground))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -39,6 +37,7 @@ module.exports = {
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+          background: "hsl(var(--muted-background))",
         },
         accent: {
           DEFAULT: "hsl(var(--accent))",
@@ -51,6 +50,23 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        // Floopr and sidebar colors remain for landing/marketing/side UI
+        floopr: {
+          purple: "#7C65F6",
+          "purple-light": "#9B87F5",
+          "purple-dark": "#5E49D2",
+          "purple-bg": "#F6F4FF",
+        },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
         },
       },
       backgroundImage: {
