@@ -40,15 +40,51 @@ export default function Home() {
       <Header />
       <main className="relative pt-20">
         {/* Gradient background */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-floopr-purple-bg via-white to-white -z-10" />
+        {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-floopr-purple-bg via-white to-white -z-10" /> */}
 
         {/* Hero Section */}
         <Hero />
+        <div className="background-line-class-definer relative">
+        <div className="absolute top-0 left-0 dj -z-1 w-full h-full">
+  <svg 
+    viewBox="0 0 600 2000" 
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-full h-full"
+    preserveAspectRatio="none"
+  >
+    <defs>
+      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="8" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+
+    <path d="M155 100
+             C180 200, 250 300, 350 400
+             C450 500, 400 600, 350 700
+             C300 800, 450 850, 520 900"
+          fill="none" 
+          stroke="#4285F4" 
+          stroke-width="4.5" 
+          stroke-linecap="round" 
+          stroke-linejoin="round"
+          filter="url(#glow)" />
+  </svg>
+</div>
+
+
         <BeforeAndAfterSection />
+        
 
         {/* Features Section */}
         <div className="relative mt-24 md:mt-40">
           <Features />
+        </div>
+
         </div>
 
         {/* Testimonials Section */}

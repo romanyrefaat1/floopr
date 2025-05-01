@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function BeforeAfterSection() {
   return (
     <section className="py-20 px-4 bg-white">
@@ -9,8 +11,9 @@ export default function BeforeAfterSection() {
           </p>
         </div>
 
-<div className=" bg-floopr-purple/50 rounded-xl p-5">
-        <div className="grid md:grid-cols-2 gap-12 mb-16">
+        <div
+  className="grid md:grid-cols-2 gap-12 mb-16 rounded-xl p-5 bg-gradient-to-br from-floopr-purple/50 to-floopr-purple/90"
+>
           {/* Before Column */}
           <div className="bg-gray-50 rounded-2xl p-6 md:p-8">
             <div className="flex items-center mb-8">
@@ -129,18 +132,18 @@ export default function BeforeAfterSection() {
         </div>
         
         {/* Call to Action */}
-        <div className="bg-gray- rounded-xl p-8 text-center">
+        <div className="bg-gray-50 rounded-xl p-8 text-center">
           <div className="mb-2">
             <span className="text-2xl">💡</span>
           </div>
-          <h3 className="text-2xl font-bold mb-6">Ready to stop guessing and start building what matters?</h3>
+          <h3 className="text-2xl font-bold mb-6">Ready to stop guessing?</h3>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="#" 
+            <Link 
+              href="/pricing" 
               className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-6 rounded-lg transition-all duration-200"
             >
               Try Floopr — free for solo devs
-            </a>
+            </Link>
             <a 
               href="#" 
               className="inline-block bg-white hover:bg-gray-100 text-gray-800 border border-gray-300 font-medium py-2.5 px-6 rounded-lg transition-all duration-200"
@@ -148,7 +151,6 @@ export default function BeforeAfterSection() {
               View Pricing
             </a>
           </div>
-        </div>
         </div>
       </div>
     </section>
