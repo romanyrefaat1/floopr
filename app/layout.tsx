@@ -18,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
-        <Providers>{children}</Providers>
+        {/* <Providers> */}
+          {children}
+          {/* </Providers> */}
       </body>
     </html>
   );

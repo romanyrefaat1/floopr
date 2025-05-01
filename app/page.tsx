@@ -1,5 +1,6 @@
 "use client";
 
+import BeforeAndAfterSection from "@/src/components/BeforeAndAfterSection";
 import Benefits from "../src/components/Benefits";
 import CallToAction from "../src/components/CallToAction";
 import FavoriteTestimonials from "../src/components/FavoriteTestimonials";
@@ -43,6 +44,7 @@ export default function Home() {
 
         {/* Hero Section */}
         <Hero />
+        <BeforeAndAfterSection />
 
         {/* Features Section */}
         <div className="relative mt-24 md:mt-40">

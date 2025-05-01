@@ -2,12 +2,13 @@
 
 import SubscribeButton from "@/components/payment/subscribe-button";
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Check, Lock } from "lucide-react";
 import Link from "next/link";
 
 const PricingPage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex items=center justify-center">
       <div className="section-container py-32">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
@@ -54,7 +55,39 @@ const PricingPage = () => {
           </div>
 
           {/* Growth Plan */}
-          <div className="glass-card p-8 rounded-xl border-2 border-floopr-purple relative">
+          <div className="glass-card relative select-none blur-[2px] hover:blur-[3px] transition p-8 rounded-xl border-2 border-floopr-purple relative">
+            {/* Lock styling */}
+            <div className="w-full h-4 bg-floopr-purple rounded" style={{
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) rotate(-6deg)',
+  }}/>
+         
+
+
+<TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+        <Lock
+  size={42}
+  fill="#9E39FF"
+  style={{
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) rotate(-6deg)',
+    border: 'none',  // This ensures no border is applied
+  }}
+/>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Add to library</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+
+
             <div className="absolute -top-3 right-4 bg-floopr-purple text-white px-3 py-1 rounded-full text-sm">
               Recommended
             </div>
@@ -89,10 +122,10 @@ const PricingPage = () => {
               </div>
             </div>
 
-            <SubscribeButton
+            {/* <SubscribeButton
               label={`Get Started`}
               className={`w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white`}
-            />
+            /> */}
           </div>
         </div>
       </div>
