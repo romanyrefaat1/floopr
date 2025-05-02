@@ -1,6 +1,6 @@
 import FeedbackItem from "../../../[productId]/_components/feedback-item";
+import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { FilterData, Product } from "../page";
-import { FeedbackItemInDB } from "@/actions/add-feedback";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { Timestamp } from "firebase/firestore";
@@ -36,6 +36,7 @@ export default async function FeedbackContentItems({
   isOwner: boolean;
 }) {
   try {
+    console.log(`productId from feedbakcontentitems`, productId);
     const data = await getFilteredFeedbacks(productId, filterData || {});
 
     const feedbacks = Array.isArray(data) ? data : [];
@@ -54,7 +55,9 @@ export default async function FeedbackContentItems({
       );
     }
 
-    const serializedFeedbacks = feedbacks.map(f=> serializeFirestoreData(f) as FeedbackItemInDB);
+    const serializedFeedbacks = feedbacks.map(
+      (f) => serializeFirestoreData(f) as FeedbackItemInDB
+    );
 
     return (
       <div className="space-y-4">

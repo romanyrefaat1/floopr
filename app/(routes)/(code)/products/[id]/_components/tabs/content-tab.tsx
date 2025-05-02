@@ -32,7 +32,7 @@ export default function ContentTab({
   filterData: FilterData;
   isOwnerPa: boolean;
 }) {
-  const productId = productData.productId;
+  const productId = productData.docId;
   console.log(`content tab productId:`, productId);
   const primaryColor = productData.style?.primaryColor || "#7c64f6";
 
@@ -86,26 +86,26 @@ export default function ContentTab({
         )}
 
         {/* Prioritized Feedback */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Prioritized Feedback</CardTitle>
-          <CardDescription>AI-powered feedback prioritization based on importance and urgency</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <PrioritizedFeedback
-            productId={productId}
-          />
-          {/* Codin tis. */}
-        </CardContent>
-      </Card>
+        {/* <Card>
+          <CardHeader>
+            <CardTitle>Prioritized Feedback</CardTitle>
+            <CardDescription>
+              AI-powered feedback prioritization based on importance and urgency
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <PrioritizedFeedback productId={productId} />
+            {/* Codin tis.
+          </CardContent>
+        </Card> */}
 
-      {/* Feedback items */}
-      <FeedbackContentWrapper
-        filterData={filterData}
-        isOwner={isOwner}
-        productData={serializedProductData}
-        productId={productId}
-      />
+        {/* Feedback items */}
+        <FeedbackContentWrapper
+          filterData={filterData}
+          isOwner={isOwner}
+          productData={serializedProductData}
+          productId={productId}
+        />
       </div>
     </div>
     // </Suspense>

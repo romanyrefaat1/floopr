@@ -19,6 +19,7 @@ export default async function DashboardTemplate({
   productData: Product;
   filterData: FilterData;
 }) {
+  console.log("Product Data:", productData);
   return (
     <main className="container mx- px-4 py-6 max-w-full">
       {/* Header */}
