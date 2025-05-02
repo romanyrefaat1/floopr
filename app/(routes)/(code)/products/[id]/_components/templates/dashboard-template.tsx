@@ -22,20 +22,20 @@ export default async function DashboardTemplate({
 }) {
   console.log("Product Data:", productData);
   return (
-    <main className="container mx- px-4 py-6 max-w-full">
+    <main className="container mx- px-4 py-[3rem] max-w-full">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div className="md:hidden">
           <SidebarTrigger />
         </div>
         <div>
-          <div>
+          <div className="mb-4">
             <AllProductsPreviewComboBox productId={productData.docId} />
           </div>
-          {/* <h1 className="text-2xl font-bold">{productData.name}</h1> */}
+          <h1 className="text-2xl font-bold">{productData.name}</h1>
           <p className="text-mutedForeground">{productData.description}</p>
         </div>
-        <div className="flex items-center gap-2 mt-4 md:mt-0">
+        <div className="flex items-center self-start gap-2 mt-4 md:mt-0">
           {/* <Button variant="outline" size="sm" className="gap-2">
             <CalendarIcon size={16} />
             Last 7 Days

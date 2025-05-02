@@ -130,9 +130,9 @@ export default async function UsersProductPage({
 
   return (
     <main className="bg-background px-4 md:px-4 lg:px-20 min-h-screen mt-8">
-      <div className="md:hidden">
+      {/* <div className="md:hidden">
         <SidebarTrigger />
-      </div>
+      </div> */}
       <header className="rounded-lg border p-4 mb-6">
         <nav className="w-full flex justify-between items-center">
           <Link href={productData.link} className="h-fit">

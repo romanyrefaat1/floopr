@@ -62,13 +62,14 @@ export default async function FeedbackContentItems({
     return (
       <div className="space-y-4">
         {serializedFeedbacks.map((feedback) => (
-          <FeedbackItem
-            key={feedback.id}
-            isOwner={isOwner}
-            feedback={feedback}
-            productId={productId}
-            feedbackId={feedback.id}
-          />
+          <div className="mb-4" key={feedback.id}>
+            <FeedbackItem
+              isOwner={isOwner}
+              feedback={feedback}
+              productId={productId}
+              feedbackId={feedback.id}
+            />
+          </div>
         ))}
       </div>
     );

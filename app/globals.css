@@ -20,7 +20,7 @@
   --ring: 250, 89%, 68%; /* matches primary */
   --muted: 0, 0%, 96%; /* #f5f5f5 */
   --muted-foreground: 210, 10%, 40%; /* #6b7280 */
-  --muted-background: 210, 16%, 90%; /* #e5e7eb */
+  --muted-background: 210, 16%, 87%; /* #e5e7eb */
 
   /* Additional variables from docs, adapted to your palette */
   --card: var(--background); /* using the same as background */
@@ -30,8 +30,8 @@
   --secondary: var(
     --secondary-background
   ); /* aligning secondary with your secondary background */
-  --accent: var(--border); /* using primary as accent */
-  --accent-foreground: var(--primary-foreground);
+  --accent: 0, 10%, 88%; /* using primary as accent */
+  --accent-foreground: 0, 0%, 30%;
   --destructive: 0, 72%, 51%; /* a red tone, adjust if needed */
   --destructive-foreground: var(--primary-foreground);
   --chart-1: var(--primary);
