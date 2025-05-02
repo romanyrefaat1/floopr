@@ -1,4 +1,5 @@
 import { FilterData, Product } from "../../page";
+import AllProductsPreviewComboBox from "../all-products-preview-combo-box";
 import FeedbackTabs from "../feedback-tabs";
 import ContentTab from "../tabs/content-tab";
 import AnalyticsDashboard from "./analytics-dashboard";
@@ -28,7 +29,10 @@ export default async function DashboardTemplate({
           <SidebarTrigger />
         </div>
         <div>
-          <h1 className="text-2xl font-bold">{productData.name}</h1>
+          <div>
+            <AllProductsPreviewComboBox productId={productData.docId} />
+          </div>
+          {/* <h1 className="text-2xl font-bold">{productData.name}</h1> */}
           <p className="text-mutedForeground">{productData.description}</p>
         </div>
         <div className="flex items-center gap-2 mt-4 md:mt-0">

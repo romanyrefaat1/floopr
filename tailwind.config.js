@@ -20,6 +20,8 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        mutedForeground: "hsl(var(--muted-foreground))",
+        mutedBackground: "hsl(var(--muted-background))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -81,14 +83,14 @@ module.exports = {
       },
       keyframes: {
         float: {
-          '0%': { transform: 'translate(0, 0) rotate(0deg)' },
-          '20%': { transform: 'translate(25px, -25px) rotate(5deg)' },
-          '40%': { transform: 'translate(-15px, 25px) rotate(-5deg)' },
-          '60%': { transform: 'translate(-25px, -15px) rotate(3deg)' },
-          '80%': { transform: 'translate(15px, 25px) rotate(-3deg)' },
-          '100%': { transform: 'translate(0, 0) rotate(0deg)' }
-        }
-      }
+          "0%": { transform: "translate(0, 0) rotate(0deg)" },
+          "20%": { transform: "translate(25px, -25px) rotate(5deg)" },
+          "40%": { transform: "translate(-15px, 25px) rotate(-5deg)" },
+          "60%": { transform: "translate(-25px, -15px) rotate(3deg)" },
+          "80%": { transform: "translate(15px, 25px) rotate(-3deg)" },
+          "100%": { transform: "translate(0, 0) rotate(0deg)" },
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

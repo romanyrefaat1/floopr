@@ -5,6 +5,7 @@ import BasicSendEmailButton from "@/components/basic-send-email-button";
 import getFiltersFromParams, {
   FiltersFromParams,
 } from "@/lib/get-filters-from-params";
+import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 
 export type Product = {
@@ -36,6 +37,7 @@ const ProductPage = async ({
   searchParams: FiltersFromParams;
 }) => {
   const { id } = await params;
+  const { userId } = await auth();
   const productDataFromServer = await getProductData(id);
 
   // Temporary function to test VERCEL CRONS
@@ -44,6 +46,13 @@ const ProductPage = async ({
   //  .then(data => console.log(`CRONS DATA:`, data));
 
   if (!productDataFromServer) notFound();
+  console.log(`productDataFromServer`, productDataFromServer.name);
+  console.log(`userId from main`, userId);
+  console.log(`productDataFromServer`, productDataFromServer.ownerId);
+
+  if (productDataFromServer.ownerId !== userId) {
+    return notFound();
+  }
 
   const filterData = getFiltersFromParams(searchParams);
 
@@ -58,7 +67,7 @@ const ProductPage = async ({
   };
 
   if (!productData) {
-    notFound();
+    return notFound();
   }
 
   return (
@@ -66,6 +75,7 @@ const ProductPage = async ({
       {/* <div>
         <BasicSendEmailButton />
       </div> */}
+
       <DashboardTemplate productData={productData} filterData={filterData} />
     </div>
   );
