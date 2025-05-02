@@ -15,6 +15,13 @@ const nextConfig = {
     return config;
   },
 
+  swcMinify: false, // Disable SWC minification for better compatibility with certain libraries
+  swcMinifyOptions: {
+    compress: {
+      drop_console: true, // Remove console logs in production
+    }
+  }
+
   // Increase the serverless function timeout for ML model loading
   experimental: {
     serverActions: {
