@@ -7,7 +7,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Hero = () => {
-  const { userId } = useAuth();
+  // const { userId } = useAuth();
+  const userId = null
   return (
     <section className="pt-[4rem] min-h-screen pb-16 md:pb-20 bg-white">
       {/* <div className="relative hidden lg:block w-full h-fit">
