@@ -19,8 +19,8 @@ const nextConfig = {
   swcMinifyOptions: {
     compress: {
       drop_console: true, // Remove console logs in production
-    }
-  }
+    },
+  },
 
   // Increase the serverless function timeout for ML model loading
   experimental: {
