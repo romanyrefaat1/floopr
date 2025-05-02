@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-floopr flex items-center justify-between px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-floopr-purple/20 flex items-center justify-between px-6 relative overflow-hidden">
       {/* Left content */}
       <div className="flex-1 text-center lg:text-left z-10 pl-4 lg:pl-12">
         <img
@@ -25,32 +25,17 @@ export default function NotFound() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 items-center lg:items-start">
-          <Button
-            variant="default"
-            asChild
-            className="bg-floopr-purple hover:bg-floopr-purple-light text-foreground"
-          >
+          <Button variant="default" asChild>
             <Link href="/">
               <Home className="mr-2 h-4 w-4" />
               Back to Home
-            </Link>
-          </Button>
-
-          <Button
-            variant="outline"
-            asChild
-            className="border-white text-white hover:bg-white/10"
-          >
-            <Link href="/search">
-              <Search className="mr-2 h-4 w-4" />
-              Search Content
             </Link>
           </Button>
         </div>
       </div>
 
       {/* Right content - Big 404 */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[20vw] font-bold text-floopr-purple-dark select-none hidden lg:block">
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 text-[20vw] font-bold text-floopr-purple/20 select-none hidden lg:block">
         404
       </div>
 
