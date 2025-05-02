@@ -2,9 +2,8 @@ import DashboardTemplate from "./_components/templates/dashboard-template";
 import { lightenColor } from "./_utils/lighten-color";
 import getProductData from "@/actions/get-product-data";
 import BasicSendEmailButton from "@/components/basic-send-email-button";
-import getFiltersFromParams, {
-  FiltersFromParams,
-} from "@/lib/get-filters-from-params";
+import { ChatbotProvider } from "@/contexts/chatbot-context";
+import getFiltersFromParams from "@/lib/get-filters-from-params";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 
@@ -12,12 +11,13 @@ export type Product = {
   docId: string;
   name: string;
   description: string;
+  ownerId: string;
   style?: {
     textColor: string;
     backgroundColor: string;
     primaryColor: string;
     accentColor: string;
-    [key: string]: any;
+    [key: string]: string | undefined;
   };
 };
 
@@ -34,11 +34,11 @@ const ProductPage = async ({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: FiltersFromParams;
+  searchParams: FilterData;
 }) => {
   const { id } = await params;
   const { userId } = await auth();
-  const productDataFromServer = await getProductData(id);
+  const productDataFromServer = (await getProductData(id)) as Product;
 
   // Temporary function to test VERCEL CRONS
   //  fetch('http://localhost:3000/api/ml/cron/prioritize')
@@ -71,13 +71,15 @@ const ProductPage = async ({
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* <div>
-        <BasicSendEmailButton />
-      </div> */}
+    <ChatbotProvider>
+      <div className="min-h-screen bg-background">
+        {/* <div>
+          <BasicSendEmailButton />
+        </div> */}
 
-      <DashboardTemplate productData={productData} filterData={filterData} />
-    </div>
+        <DashboardTemplate productData={productData} filterData={filterData} />
+      </div>
+    </ChatbotProvider>
   );
 };
 
