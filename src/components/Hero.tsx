@@ -36,9 +36,7 @@ const Hero = () => {
           </span>
 
           <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold mb-6 animate-on-scroll">
-            Turn Messy Feedback
-            <br />
-            Into Business Plans
+            <br />a Into Business Plan
           </h1>
 
           <p
