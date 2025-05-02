@@ -9,9 +9,7 @@ import { useState, useEffect } from "react";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
-  // const { isLoaded, isSignedIn } = useUser();
-  const isLoaded=true
-  const isSignedIn=false
+  const { isLoaded, isSignedIn } = useUser();
 
   useEffect(() => {
     const handleScroll = () => {

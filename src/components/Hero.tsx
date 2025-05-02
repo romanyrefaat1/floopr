@@ -7,8 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Hero = () => {
-  // const { userId } = useAuth();
-  const userId = null
+  const { userId } = useAuth();
   return (
     <section className="pt-[4rem] min-h-screen pb-16 md:pb-20 bg-white">
       {/* <div className="relative hidden lg:block w-full h-fit">
@@ -37,7 +36,9 @@ const Hero = () => {
           </span>
 
           <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold mb-6 animate-on-scroll">
-            <br />a Into Business Plan
+            Turn Messy Feedback
+            <br />
+            Into a Business Plan
           </h1>
 
           <p

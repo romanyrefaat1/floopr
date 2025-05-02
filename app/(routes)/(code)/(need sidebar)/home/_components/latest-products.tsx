@@ -19,12 +19,12 @@ const LatestProducts = async ({
 }) => {
   const latestProducts = await getLatestProducts(userId);
   const numOfProducts = latestProducts.length;
-  const numOfCols = numOfProducts > 1 ? ( myNumOfCols > 1 ? myNumOfCols : 1) : 1;
+  const numOfCols = numOfProducts > 1 ? (myNumOfCols > 1 ? myNumOfCols : 1) : 1;
 
   return (
     <div
       className={`grid grid-cols-[${numOfCols}] sm:grid-cols-${
-        numOfCols > 1 ? numOfCols - 1 : numOfCols
+        numOfCols > 1 ? numOfCols : numOfCols
       } gap-4`}
     >
       {latestProducts.length > 0 ? (

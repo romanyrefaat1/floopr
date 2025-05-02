@@ -19,7 +19,8 @@ const Features = () => {
         <div>
           <h3 className="text-2xl font-bold mb-4">Feedback Boards</h3>
           <p className="text-gray-600 mb-6">
-            Centralize and organize feedback in one place. Our smart categorization helps you identify patterns and opportunities.
+            Centralize and organize feedback in one place. Our smart
+            categorization helps you identify patterns and opportunities.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
@@ -44,10 +45,93 @@ const Features = () => {
         </div>
         <div className="relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
-            <Image 
-              src="/images/feedback-board-preview.png" 
-              alt="Feedback Board" 
-              width={500} 
+            <Image
+              src="/images/land/home-pa.png"
+              alt="Feedback Board"
+              width={500}
+              height={400}
+              className="w-full h-auto rounded-lg"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Custom Feedback Page Section */}
+      <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
+        <div className="relative">
+          <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
+            <Image
+              src="/images/land/dashboard-preview.png"
+              alt="Floopr Dashboard Preview"
+              width={500}
+              height={400}
+              className="w-full h-auto rounded-lg"
+            />
+          </div>
+        </div>
+        <div>
+          <h3 className="text-2xl font-bold mb-4">Custom Feedback Page</h3>
+          <p className="text-gray-600 mb-6">
+            Collect feedback with a beautiful, branded page tailored to your
+            product and users.
+          </p>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Customizable design</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Easy sharing link</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Collect votes and comments</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Multiple Product Boards Section */}
+      <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
+        <div>
+          <h3 className="text-2xl font-bold mb-4">Multiple Product Boards</h3>
+          <p className="text-gray-600 mb-6">
+            Manage feedback for several products or teams, all in one place.
+          </p>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Create unlimited boards</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Switch between products easily</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Team-based access</span>
+            </li>
+          </ul>
+        </div>
+        <div className="relative">
+          <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
+            <Image
+              src="/images/land/products-pa.png"
+              alt="Multiple Product Boards"
+              width={500}
               height={400}
               className="w-full h-auto rounded-lg"
             />
@@ -59,19 +143,26 @@ const Features = () => {
       <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
         <div className="order-2 md:order-1 relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
-            <Image 
+            {/* <Image 
               src="/images/feedback-widget-preview.png" 
               alt="AI Analytics" 
               width={500} 
               height={400}
               className="w-full h-auto rounded-lg"
-            />
+            /> */}
+            <div className="w-[500px] h-[400px] text-center flex items-center justify-center flex-col gap-2 mx-auto">
+              <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-3 py-1 rounded-full text-sm font-medium mb-4">
+                Coming Soon
+              </span>
+              {/* <span className="w-full h-2 bg-floopr-purple-light rounded absolute" /> */}
+            </div>
           </div>
         </div>
         <div className="order-1 md:order-2">
           <h3 className="text-2xl font-bold mb-4">AI-Powered Analytics</h3>
           <p className="text-gray-600 mb-6">
-            Get deep insights into your feedback with our advanced AI analysis. Understand trends, sentiment, and business opportunities.
+            Get deep insights into your feedback with our advanced AI analysis.
+            Understand trends, sentiment, and business opportunities.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
@@ -100,11 +191,12 @@ const Features = () => {
       <div className="grid md:grid-cols-2 gap-16 items-center animate-on-scroll">
         <div>
           <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-3 py-1 rounded-full text-sm font-medium mb-4">
-            Coming Soon
+            In Progress
           </span>
           <h3 className="text-2xl font-bold mb-4">AI Tutor</h3>
           <p className="text-gray-600 mb-6">
-            Your intelligent companion for product development. Get AI-powered suggestions for feature prioritization and strategic planning.
+            Your intelligent companion for product development. Get AI-powered
+            suggestions for feature prioritization and strategic planning.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
@@ -129,13 +221,19 @@ const Features = () => {
         </div>
         <div className="relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
-            <Image 
-              src="/images/roadmap-preview.png" 
-              alt="AI Tutor" 
-              width={500} 
+            {/* <Image
+              src="/images/roadmap-preview.png"
+              alt="AI Tutor"
+              width={500}
               height={400}
               className="w-full h-auto rounded-lg"
-            />
+            /> */}
+            <div className="w-[500px] h-[400px] text-center flex items-center justify-center flex-col gap-2 mx-auto">
+              <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-3 py-1 rounded-full text-sm font-medium mb-4">
+                In Progress
+              </span>
+              {/* <span className="w-full h-2 bg-floopr-purple-light rounded absolute" /> */}
+            </div>
           </div>
         </div>
       </div>
