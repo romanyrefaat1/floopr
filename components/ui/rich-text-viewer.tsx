@@ -16,17 +16,17 @@ const RichTextViewer: React.FC<DraftJsViewerProps> = ({
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   if (!content && !(content as any).blocks) {
-    return <p>content not if in ric text viewer</p>
-    }
+    return <p>content not if in ric text viewer</p>;
+  }
 
   useEffect(() => {
-      try {
-        const contentState = convertFromRaw(content);
-        setEditorState(EditorState.createWithContent(contentState));
-        console.log(`contentState`, contentState)
-      } catch (error) {
-        console.error("Error converting raw content:", error);
-      }
+    try {
+      const contentState = convertFromRaw(content);
+      setEditorState(EditorState.createWithContent(contentState));
+      console.log(`contentState`, contentState);
+    } catch (error) {
+      console.error("Error converting raw content:", error);
+    }
   }, [content]);
 
   return (
@@ -36,4 +36,4 @@ const RichTextViewer: React.FC<DraftJsViewerProps> = ({
   );
 };
 
-export default RichTextViewer
+export default RichTextViewer;

@@ -1,7 +1,10 @@
+import { FeedbackItemInDB } from "@/app/(routes)/(code)/[productId]/_components/feedback-list";
 import { db } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 
-export async function getAllFeedbacks(productId: string) {
+export async function getAllFeedbacks(
+  productId: string
+): Promise<FeedbackItemInDB[]> {
   const response = query(
     collection(db, `products`, productId, `feedbacks`),
     orderBy("socialData.likes.count", "desc")

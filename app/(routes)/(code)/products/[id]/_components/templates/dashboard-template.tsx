@@ -154,7 +154,7 @@ export default async function DashboardTemplate({
         </TabsContent> */}
         </Tabs>
       </div>
-      <ChatbotIndex />
+      <ChatbotIndex productId={productData.docId} />
     </main>
   );
 }
