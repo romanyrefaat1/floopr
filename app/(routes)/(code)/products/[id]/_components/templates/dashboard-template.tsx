@@ -5,13 +5,14 @@ import ContentTab from "../tabs/content-tab";
 import AnalyticsDashboard from "./analytics-dashboard";
 import IntegrationsPanel from "./integrations-panel";
 import ProjectOverview from "./project-overview";
+import SettingsPanel from "./settings-panel";
 import ChatbotIndex from "@/components/chatbot/chatbot-index";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, LayoutDashboard } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
 
 export default async function DashboardTemplate({
@@ -22,7 +23,7 @@ export default async function DashboardTemplate({
   filterData: FilterData;
 }) {
   return (
-    <main className="container mx- max-w-full flex">
+    <main className="container px-[80px] max-w-full flex">
       <div className="px-4 py-[3rem] w-full ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
@@ -65,14 +66,14 @@ export default async function DashboardTemplate({
         <Tabs defaultValue="feedback" className="space-y-4">
           {/* Tabs List - Scrollable on Small Screens */}
           <div className="overflow-x-auto">
-            <TabsList className="flex gap-2 bg-secondaryBackground text-foreground w-fit min-w-max md:grid md:grid-cols-3 md:max-w-md scrollbar-hide hover:scrollbar-default [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
+            <TabsList className="flex gap-2 bg-secondaryBackground text-foreground w-fit min-w-max md:grid md:grid-cols-4 md:max-w-md scrollbar-hide hover:scrollbar-default [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
               <TabsTrigger value="feedback" className="flex items-center gap-2">
                 <LayoutDashboard size={16} />
                 Feedback
               </TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="integrations">Integrations</TabsTrigger>
-              {/* <TabsTrigger value="feedback-settings">Settings</TabsTrigger> */}
+              <TabsTrigger value="feedback-settings">Settings</TabsTrigger>
             </TabsList>
           </div>
 
@@ -110,6 +111,12 @@ export default async function DashboardTemplate({
           </TabsContent>
 
           {/* Settings Tab Content */}
+          <TabsContent value="feedback-settings">
+            <SettingsPanel
+              productId={productData.docId}
+              productData={productData}
+            />
+          </TabsContent>
           {/* <TabsContent value="feedback-settings">
           <div className="space-y-4">
             <div>

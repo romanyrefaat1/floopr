@@ -50,7 +50,7 @@ const Hero = () => {
           </p>
 
           <div
-            className="flex justify-center align-center items-center gap-4 animate-on-scroll"
+            className="flex justify-center align-center items-center gap-4 animate-on-scroll px-6"
             style={{ animationDelay: "200ms" }}
           >
             <Link href="#demo">

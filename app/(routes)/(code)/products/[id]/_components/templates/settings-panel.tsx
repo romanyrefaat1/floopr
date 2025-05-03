@@ -1,4 +1,8 @@
+"use client";
+
 import { Product } from "../../page";
+import updateProductData from "@/actions/product/updateProductData";
+import LoaderSpinner from "@/components/loader-spinner";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,217 +14,109 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 
 export default function SettingsPanel({
+  productId,
   productData,
 }: {
-  productData: Product;
+  productId: string;
+  productData?: any;
 }) {
+  const [name, setName] = useState(productData?.name || "");
+  const [description, setDescription] = useState(
+    productData?.description || ""
+  );
+  const [context, setContext] = useState(productData?.productContext || "");
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setSuccess(false);
+    setError("");
+
+    try {
+      // Simulate API call
+      await updateProductData(productId, {
+        name: name.trim(),
+        description: description.trim(),
+        productContext: context.trim(),
+      });
+      setSuccess(true);
+    } catch (err) {
+      setError("Failed to save changes.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-bold mb-4">Settings</h2>
-        <p className="text-muted-foreground mb-6">
-          Configure your product settings and preferences
+    <div className="space-y-8">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-lg font-bold">General Settings</h2>
+        <p className="text-mutedForeground">
+          Update your product information and context.
         </p>
       </div>
-
-      <Tabs defaultValue="general">
-        <TabsList className="mb-4">
-          <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="appearance">Appearance</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="general">
-          <Card>
-            <CardHeader>
-              <CardTitle>General Settings</CardTitle>
-              <CardDescription>
-                Manage your product details and configuration
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="product-name">Product Name</Label>
-                <Input id="product-name" defaultValue={productData.name} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="product-description">Description</Label>
-                <Input
-                  id="product-description"
-                  defaultValue={productData.description}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="product-url">Product URL</Label>
-                <Input id="product-url" placeholder="https://yourproduct.com" />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label htmlFor="public-feedback">Public Feedback</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Allow users to see other feedback
-                  </p>
-                </div>
-                <Switch id="public-feedback" />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save Changes</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="appearance">
-          <Card>
-            <CardHeader>
-              <CardTitle>Appearance</CardTitle>
-              <CardDescription>
-                Customize how your feedback forms and widgets look
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label>Primary Color</Label>
-                <div className="flex gap-2">
-                  <Input
-                    type="color"
-                    defaultValue="#7c64f6"
-                    className="w-12 h-12 p-1"
-                  />
-                  <Input defaultValue="#7c64f6" className="flex-1" />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label>Font Family</Label>
-                <Select defaultValue="inter">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select font" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="inter">Inter</SelectItem>
-                    <SelectItem value="roboto">Roboto</SelectItem>
-                    <SelectItem value="poppins">Poppins</SelectItem>
-                    <SelectItem value="system">System Default</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Border Radius</Label>
-                <Select defaultValue="md">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select border radius" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="sm">Small</SelectItem>
-                    <SelectItem value="md">Medium</SelectItem>
-                    <SelectItem value="lg">Large</SelectItem>
-                    <SelectItem value="full">Full</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save Appearance</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="notifications">
-          <Card>
-            <CardHeader>
-              <CardTitle>Notification Settings</CardTitle>
-              <CardDescription>
-                Configure how you receive notifications about new feedback
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Email Notifications</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Receive email when new feedback is submitted
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Slack Notifications</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Send notifications to a Slack channel
-                  </p>
-                </div>
-                <Switch />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="space-y-0.5">
-                  <Label>Weekly Digest</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Receive a weekly summary of feedback
-                  </p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button>Save Notification Settings</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="team">
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Management</CardTitle>
-              <CardDescription>
-                Manage team members who can access this product
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label>Invite Team Member</Label>
-                <div className="flex gap-2">
-                  <Input placeholder="Email address" className="flex-1" />
-                  <Button>Invite</Button>
-                </div>
-              </div>
-              <div className="border rounded-md">
-                <div className="flex items-center justify-between p-4 border-b">
-                  <div>
-                    <p className="font-medium">john@example.com</p>
-                    <p className="text-sm text-muted-foreground">Admin</p>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    Remove
-                  </Button>
-                </div>
-                <div className="flex items-center justify-between p-4">
-                  <div>
-                    <p className="font-medium">sarah@example.com</p>
-                    <p className="text-sm text-muted-foreground">Viewer</p>
-                  </div>
-                  <Button variant="outline" size="sm">
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="productName">Product Name</Label>
+            <Input
+              id="productName"
+              placeholder="Enter product name"
+              className="max-w-md"
+              disabled={isLoading}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="productDescription">Product Description</Label>
+            <Textarea
+              id="productDescription"
+              placeholder="Enter a brief description of your product"
+              className="max-w-md"
+              rows={3}
+              disabled={isLoading}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="productContext">Product Context</Label>
+            <Textarea
+              id="productContext"
+              placeholder="Add additional context about your product to help the AI provide better responses"
+              className="max-w-md"
+              rows={4}
+              disabled={isLoading}
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+            />
+            <p className="text-sm text-mutedForeground">
+              This context helps our AI better understand your product and
+              provide more relevant responses to queries.
+            </p>
+          </div>
+        </div>
+        <Button type="submit" className="mt-6" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <LoaderSpinner className="mr-2" />
+              Saving Changes...
+            </>
+          ) : (
+            "Save Changes"
+          )}
+        </Button>
+        {success && <p className="text-green-600 text-sm">Saved!</p>}
+        {error && <p className="text-red-600 text-sm">{error}</p>}
+      </form>
     </div>
   );
 }

@@ -34,7 +34,7 @@ const Header = () => {
               alt="Floopr Logo"
               width={140}
               height={40}
-              className="h-8 w-auto"
+              className="h-5 md:h-8 w-auto"
             />
           </Link>
 
