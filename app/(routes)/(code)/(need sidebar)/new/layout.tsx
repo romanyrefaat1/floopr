@@ -7,7 +7,7 @@ interface NewProductLayoutProps {
 
 const NewProductLayout = ({ children }: NewProductLayoutProps) => {
   return (
-    <main>
+    <main className="px-[70px] bg-background">
       <ProductFormContextProvider>
         <div className="h-36 md:h-0">{children}</div>
       </ProductFormContextProvider>

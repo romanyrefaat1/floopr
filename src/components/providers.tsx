@@ -3,6 +3,7 @@
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
 import { AuthProvider } from "@/contexts/auth-context";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 // Default style for ProductStyleProvider
 const defaultProductStyle = {
@@ -27,6 +28,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <ClerkProvider>
+      <Toaster />
       <AuthProvider>{children}</AuthProvider>
     </ClerkProvider>
   );

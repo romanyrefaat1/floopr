@@ -25,6 +25,8 @@ import { z } from "zod";
 const newProductFormSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   description: z.string().optional(),
+  website: z.string().url("Invalid URL").optional().or(z.literal("")),
+  context: z.string().optional(),
 });
 
 type NewProductForm = z.infer<typeof newProductFormSchema>;
@@ -41,6 +43,8 @@ const Step1NewProduct = () => {
     defaultValues: {
       name: productForm.name || "",
       description: productForm.description || "",
+      website: productForm.website || "",
+      context: productForm.context || "",
     },
   });
 
@@ -52,11 +56,15 @@ const Step1NewProduct = () => {
     // Only update if values have changed to avoid infinite loops
     if (
       watchedValues.name !== productForm.name ||
-      watchedValues.description !== productForm.description
+      watchedValues.description !== productForm.description ||
+      watchedValues.website !== productForm.website ||
+      watchedValues.context !== productForm.context
     ) {
       updateProductForm({
         name: watchedValues.name,
         description: watchedValues.description,
+        websiteLink: watchedValues.website,
+        context: watchedValues.context,
       });
     }
   }, [
@@ -64,6 +72,8 @@ const Step1NewProduct = () => {
     updateProductForm,
     productForm.name,
     productForm.description,
+    productForm.website,
+    productForm.context,
   ]);
 
   async function onSubmit(values: NewProductForm) {
@@ -84,7 +94,7 @@ const Step1NewProduct = () => {
   }
 
   return (
-    <div className="container mx-auto w-full px-0 py-8">
+    <div className="container mx-auto w-full px-0 py-8 bg-background">
       <h1 className="mb-6">Create New Product</h1>
 
       {/* <Card> */}
@@ -123,9 +133,6 @@ const Step1NewProduct = () => {
               <FormItem>
                 <div className="flex items-center gap-2">
                   <FormLabel>Product Description</FormLabel>
-                  <span className="text-xs text-muted-foreground">
-                    (optional)
-                  </span>
                 </div>
                 <FormControl>
                   <Textarea
@@ -136,6 +143,52 @@ const Step1NewProduct = () => {
                 </FormControl>
                 <FormDescription>
                   Describe your product&apos;s features and benefits
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="website"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormLabel>Website Link</FormLabel>
+                </div>
+                <FormControl>
+                  <Input placeholder="https://yourwebsite.com" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Add a link to your product's website (if available)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            name="context"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormLabel>Product Context</FormLabel>
+                  <span className="text-xs text-muted-foreground">
+                    (optional, for our AI to work better)
+                  </span>
+                </div>
+                <FormControl>
+                  <Textarea
+                    placeholder="Add any extra context about your product to help our AI give better results"
+                    className="min-h-[80px]"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This context helps our AI better understand your product and
+                  provide more relevant responses.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

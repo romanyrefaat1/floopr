@@ -1,20 +1,12 @@
 "use client";
 
-import { Product } from "../../page";
 import updateProductData from "@/actions/product/updateProductData";
 import LoaderSpinner from "@/components/loader-spinner";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import { useState } from "react";
 
 export default function SettingsPanel({
@@ -29,6 +21,9 @@ export default function SettingsPanel({
     productData?.description || ""
   );
   const [context, setContext] = useState(productData?.productContext || "");
+  const [websiteLink, setWebsiteLink] = useState(
+    productData?.websiteLink || ""
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -40,15 +35,21 @@ export default function SettingsPanel({
     setError("");
 
     try {
-      // Simulate API call
       await updateProductData(productId, {
         name: name.trim(),
         description: description.trim(),
         productContext: context.trim(),
+        websiteLink: websiteLink.trim(),
       });
       setSuccess(true);
+      toast.success("Product updated!", {
+        description: "Your product settings have been saved."
+      });
     } catch (err) {
       setError("Failed to save changes.");
+      toast.error("Update failed", {
+        description: "Could not update your product. Please try again."
+      });
     } finally {
       setIsLoading(false);
     }
@@ -88,6 +89,21 @@ export default function SettingsPanel({
             />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="websiteLink">Website Link</Label>
+            <Input
+              id="websiteLink"
+              placeholder="https://yourwebsite.com (optional)"
+              className="max-w-md"
+              disabled={isLoading}
+              value={websiteLink}
+              onChange={(e) => setWebsiteLink(e.target.value)}
+              type="url"
+            />
+            <p className="text-sm text-mutedForeground">
+              Add a link to your product's website (optional)
+            </p>
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="productContext">Product Context</Label>
             <Textarea
               id="productContext"
@@ -114,8 +130,6 @@ export default function SettingsPanel({
             "Save Changes"
           )}
         </Button>
-        {success && <p className="text-green-600 text-sm">Saved!</p>}
-        {error && <p className="text-red-600 text-sm">{error}</p>}
       </form>
     </div>
   );
