@@ -97,7 +97,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       className={cn(
         "block",
         isFullScreen && "relative w-full h-full",
-        !isFullScreen && "fixed bottom-6 right-6 z-50"
+        !isFullScreen && "fixed bottom-2 md:bottom-6 right-2 md:right-6 z-50"
       )}
     >
       {!isOpen && (
