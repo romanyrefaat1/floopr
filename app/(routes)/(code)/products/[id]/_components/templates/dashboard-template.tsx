@@ -23,7 +23,7 @@ export default async function DashboardTemplate({
   filterData: FilterData;
 }) {
   return (
-    <main className="container px-[80px] max-w-full flex">
+    <main className="container max-w-full flex">
       <div className="px-4 py-[3rem] w-full ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">

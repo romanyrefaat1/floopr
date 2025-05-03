@@ -57,10 +57,7 @@ const Hero = () => {
               <Button variant={`link`}>Watch Demo</Button>
             </Link>
             <Link href="/home">
-              <Button
-                variant="outline"
-                className="px-8 py-6 text-lg rounded-lg bg-floopr-purple hover:bg-floopr-purple-dark text-white"
-              >
+              <Button className="scale-110" size="lg">
                 {userId ? `Get Feedback Now` : `Get Started`}
               </Button>
             </Link>

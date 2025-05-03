@@ -87,9 +87,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
     }
     setLoading(false);
     setInput("");
-    setTimeout(() => {
-      chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+    // setTimeout(() => {
+    //   chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    // }, 100);
   };
 
   return (

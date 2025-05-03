@@ -193,10 +193,22 @@ const Features = () => {
           <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-3 py-1 rounded-full text-sm font-medium mb-4">
             In Progress
           </span>
-          <h3 className="text-2xl font-bold mb-4">AI Tutor</h3>
+          <h3 className="text-2xl font-bold mb-4 flex items-center gap-4">
+            AI Tutor:{" "}
+            <span className="text-floopr-purple-dark underline flex items-center">
+              <Image
+                src="/images/assistant-avatar/prey.png"
+                alt="AI Analytics"
+                width={20}
+                height={20}
+                className=" h-auto rounded-lg bg-floopr-purple-dark inline-block mr-2"
+              />
+              Prey
+            </span>
+          </h3>
           <p className="text-gray-600 mb-6">
-            Your intelligent companion for product development. Get AI-powered
-            suggestions for feature prioritization and strategic planning.
+            Talk with your feedbacks. Get AI-powered suggestions for feature
+            prioritization and strategic planning.
           </p>
           <ul className="space-y-3">
             <li className="flex items-center gap-2">
@@ -209,7 +221,7 @@ const Features = () => {
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
               </div>
-              <span>Smart feature suggestions</span>
+              <span>Brainstorm with your new AI co-founder</span>
             </li>
             <li className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
@@ -217,23 +229,31 @@ const Features = () => {
               </div>
               <span>Strategic planning insights</span>
             </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Prey adapts to talk like your users</span>
+            </li>
           </ul>
         </div>
         <div className="relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
             {/* <Image
-              src="/images/roadmap-preview.png"
+              src="/images/land/ai-assistant.png"
               alt="AI Tutor"
               width={500}
               height={400}
               className="w-full h-auto rounded-lg"
             /> */}
-            <div className="w-[500px] h-[400px] text-center flex items-center justify-center flex-col gap-2 mx-auto">
-              <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-3 py-1 rounded-full text-sm font-medium mb-4">
-                In Progress
-              </span>
-              {/* <span className="w-full h-2 bg-floopr-purple-light rounded absolute" /> */}
-            </div>
+            <video
+              src="/videos/land/screen-capture (4).webm"
+              className="w-full rounded-lg"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
           </div>
         </div>
       </div>
