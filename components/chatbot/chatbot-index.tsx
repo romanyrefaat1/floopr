@@ -27,6 +27,10 @@ const firstMess = {
   text: "Hi! I'm Prey, your AI assistant with Floopr. Ask me whatever you want to know about the feedbacks you have, what do you want to know?",
 };
 
+const keywords = {
+  hash: [`#all-feedbacks`],
+};
+
 export default function ChatbotIndex({ productId }: { productId: string }) {
   const { user } = useUser();
   const { isOpen, openChatbot, closeChatbot, makeFullScreen, isFullScreen } =
@@ -167,7 +171,44 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                       : "Prey"}
                   </span>
                   <span className="block text-base break-words whitespace-pre-line text-wrap">
-                    {msg.text}
+                    {msg.position === "left"
+                      ? (() => {
+                          // Regex to match hashtags (e.g., #all-feedbacks)
+                          const hashtagRegex = /#[\w-]+/g;
+                          const elements = [];
+                          let lastIndex = 0;
+                          let match;
+                          while (
+                            (match = hashtagRegex.exec(msg.text)) !== null
+                          ) {
+                            // Push text before hashtag
+                            if (match.index > lastIndex) {
+                              elements.push(
+                                msg.text.slice(lastIndex, match.index)
+                              );
+                            }
+                            // Check if hashtag is in keywords.hash
+                            if (keywords.hash.includes(match[0])) {
+                              elements.push(
+                                <span
+                                  key={match.index}
+                                  className="text-red-500"
+                                >
+                                  {match[0]}
+                                </span>
+                              );
+                            } else {
+                              elements.push(match[0]);
+                            }
+                            lastIndex = match.index + match[0].length;
+                          }
+                          // Push remaining text
+                          if (lastIndex < msg.text.length) {
+                            elements.push(msg.text.slice(lastIndex));
+                          }
+                          return elements;
+                        })()
+                      : msg.text}
                   </span>
                 </div>
               </div>

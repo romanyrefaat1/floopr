@@ -1,4 +1,5 @@
 import { getAllFeedbacks } from "@/actions/get-all-feedbacks";
+import getProductData from "@/actions/get-product-data";
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -28,6 +29,12 @@ export async function POST(request: NextRequest) {
     if (!messContext) {
       console.warn("messContext is empty, using default context.");
     }
+
+    const productData = await getProductData(productId);
+    if (!productData) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    const { name: productName, description: productDescription } = productData;
 
     let feedbacksText = "";
     if (prompt.includes("#all-feedbacks")) {
@@ -69,7 +76,7 @@ export async function POST(request: NextRequest) {
         role: "model",
         parts: [
           {
-            text: `You are a helpful assistant. Follow the user's instructions carefully. Based on the context, you can answer questions about the feedbacks and the product. You are a chatbot for Floopr, a product feedback platform. You are a helpful assistant. Follow the user's instructions carefully. Based on the context, you can answer questions about the feedbacks and the product. Your name is Prey. Make sure to reference the feedbacks in your answers, and you can show a tag of the feedback with href: floopr.vercel.app/${productId}/feedbackId,`,
+            text: `You are a helpful assistant. Follow the user's instructions carefully. Based on the context, you can answer questions about the feedbacks and the product. You are a chatbot for Floopr, a product feedback platform. You are a helpful assistant. Follow the user's instructions carefully. Based on the context, you can answer questions about the feedbacks and the product. Your name is Prey. Make sure to reference the feedbacks in your answers, and you can show a tag of the feedback with href: floopr.vercel.app/${productId}/feedbackId. User's product name: ${productName}, user's product description: ${productDescription}, user's product context: .`,
           },
         ],
       },
