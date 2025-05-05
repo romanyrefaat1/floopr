@@ -76,7 +76,7 @@ export default function FlooprFeedbackModalTimeout({
   const [buttonText, setButtonText] = useState("Submit");
   const [isDarkMode, setIsDarkMode] = useState(true);
 
-  const apiBaseUrl = `http://localhost:3000`; // Use env variable or prop
+  const apiBaseUrl = `floopr.vercel.app`; // Use env variable or prop
 
   // Construct API URLs based on apiBaseUrl
   const loadUrl = apiBaseUrl
