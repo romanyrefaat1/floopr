@@ -7,6 +7,7 @@ import Features from "../src/components/Features";
 import Footer from "../src/components/Footer";
 import Header from "../src/components/Header";
 import Hero from "../src/components/Hero";
+import Hero from "../src/components/Demo";
 import BeforeAndAfterSection from "@/src/components/BeforeAndAfterSection";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
@@ -79,6 +80,9 @@ export default function Home() {
         {/* Features Section */}
         <div className="relative mt-24 md:mt-40">
           <Features />
+        </div>
+         <div className="relative mt-24 md:mt-40">
+          <Demo />
         </div>
         {/* Testimonials Section */}
         {/* <div className="relative mt-24 md:mt-40">
