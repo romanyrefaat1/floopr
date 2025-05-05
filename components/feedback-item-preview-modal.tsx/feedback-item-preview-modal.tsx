@@ -34,7 +34,7 @@ export default function FeedbackItemPreviewModal({
   }, [closeModal]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-secondaryBackground backdrop-blur-sm overflow-hidden">
       <div className="bg-secondaryBackground w-full h-full md:w-[80%] md:max-h-[80vh] rounded-modal overflow-hidden shadow-2xl flex flex-col">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-border shrink-0">
