@@ -20,7 +20,9 @@ const Demo = () => {
             priority
           />
         </span>
-        in Action
+<br />
+<span className="">
+        in Action</span>
       </h2>
       <span className="size-4 text-center w-full mb-[30px]">
         (It&apos;s at 1.5x)
