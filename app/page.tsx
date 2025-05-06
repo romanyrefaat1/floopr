@@ -7,6 +7,7 @@ import Features from "../src/components/Features";
 import Footer from "../src/components/Footer";
 import Header from "../src/components/Header";
 import Hero from "../src/components/Hero";
+import FloatingFeedbackButton from "@/components/floating-feedback-button";
 import Demo from "@/src/Demo";
 import BeforeAndAfterSection from "@/src/components/BeforeAndAfterSection";
 import Link from "next/link";
@@ -53,6 +54,7 @@ export default function Home() {
         {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-floopr-purple-bg via-white to-white -z-10" /> */}
 
         {/* Hero Section */}
+        <FloatingFeedbackButton />
         <Hero />
         <BeforeAndAfterSection />
         {/* Call to action */}
