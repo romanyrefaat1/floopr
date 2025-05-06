@@ -22,6 +22,7 @@ export default async function AllComponents({
               key={component.id}
               productData={productData}
               componentData={data}
+              imageUrl={data.imageUrl}
             />
           );
         })}

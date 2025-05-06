@@ -12,15 +12,18 @@ import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from "sonner";
 
 export default function ComponentCard({
   productData,
   componentData,
   isYours,
+  imageUrl,
 }: {
   productData: Product;
   componentData: { name: string; title: string; description: string } | object;
   isYours: boolean;
+  imageUrl: string;
 }) {
   //   console.log(`my-componentData`, componentData);
   const productDataFromFirestore = serializeFirestoreData(productData);
@@ -35,7 +38,7 @@ export default function ComponentCard({
     metaData = {
       title: componentData.title,
       description: componentData.description,
-      imageUrl: componentData.imageUrl,
+      imageUrl: imageUrl,
     };
   } else if (isYours) {
     metaData = {
@@ -80,22 +83,31 @@ export default function ComponentCard({
               productData={productDataFromFirestore}
             />
           )}
-          <Link
-            className="w-full"
-            href={
-              isYours
-                ? `/products/${productDataFromFirestore.docId}/my-components/${componentData.componentType}/${componentData.componentData.componentId}`
-                : `/edit-component/${componentData.name}?ref=${productDataFromFirestore.docId}`
-            }
-          >
-            <Button
+          {!componentData.isCreating && (
+            <Link
               className="w-full"
-              variant={isYours ? "outline" : "default"}
+              href={
+                isYours
+                  ? `/products/${productDataFromFirestore.docId}/my-components/${componentData.componentType}/${componentData.componentData.componentId}`
+                  : `/edit-component/${componentData.name}?ref=${productDataFromFirestore.docId}`
+              }
             >
-              {isYours ? `Import` : `Add`} Component
-            </Button>
-          </Link>
+              <Button
+                className="w-full"
+                variant={isYours ? "outline" : "default"}
+              >
+                {isYours ? `Import` : `Add`} Component
+              </Button>
+            </Link>
+          )}
         </CardContent>
+        {componentData.isCreating && (
+          <div>
+            <p className="text-sm w-full p-2 text-center bg-floopr-purple/30 mt-2 rounded">
+              Component in progress...
+            </p>
+          </div>
+        )}
       </div>
     </Card>
   );
