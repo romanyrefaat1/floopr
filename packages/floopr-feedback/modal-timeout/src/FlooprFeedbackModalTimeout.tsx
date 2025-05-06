@@ -235,7 +235,7 @@ export default function FlooprFeedbackModalTimeout({
         </h2>
         <button
           onClick={handleClose}
-          className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
+          className="bg-floopr-purple hover:bg-floopr-purple-dark text-foreground shadow-md hover:shadow-lg transition-all"
           aria-label="Close"
         >
           <X size={20} />
