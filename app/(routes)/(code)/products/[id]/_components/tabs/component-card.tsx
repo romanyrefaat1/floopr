@@ -56,8 +56,8 @@ export default function ComponentCard({
             width={300}
             height={40}
             alt="Component Preview"
-            // src={componentData.imageUrl || null}
-            src={`/images/online/components/modal-timeout.PNG`}
+            src={componentData.imageUrl || `/images/online/components/modal-timeout.PNG`}
+            // src={`/images/online/components/modal-timeout.PNG`}
           />
         </div>
       )}
