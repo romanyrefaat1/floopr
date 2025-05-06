@@ -7,6 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "build-no-check": "next build",
+    "build-webpack-component": "npx webpack --config webpack.config.js",
     "vercel-build": "npx cross-env NEXT_DISABLE_ESLINT=1 SKIP_LINTING=1 next build",
     "start": "next start",
     "lint": "next lint"
