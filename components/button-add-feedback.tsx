@@ -12,7 +12,7 @@ export default function ButtonAddFeedback() {
           Add Feedback
         </Button>
       </DialogTrigger>
-      <DialogContent className="rounded-lg sm:max-w-[80vw] md:min-h-[80vh]">
+      <DialogContent className="rounded-lg sm:max-w-[80vw] md:min-h-[80vh] p-0">
         <FeedbackForm />
       </DialogContent>
     </Dialog>
