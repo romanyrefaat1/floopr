@@ -12,8 +12,6 @@ const parseDataAttribute = (attr: string | undefined) => {
 };
 
 const script = document.currentScript as HTMLScriptElement;
-// const apiBaseUrl = "http://localhost:3000";
-const apiBaseUrl = "https://floopr.vercel.app";
 const apiKey = script.dataset.apiKey || "";
 const productId = script.dataset.productId || "";
 const componentId = script.dataset.componentId || "";
