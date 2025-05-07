@@ -3,11 +3,7 @@
 import {
   addSimpleFeedback,
   SimpleFeedbackItemData,
-} from "@/actions/add-feedback";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useUser } from "@clerk/nextjs";
-import { serverTimestamp } from "firebase/firestore";
+} from "./utils/add-feedback";
 import {
   ArrowLeft,
   BugIcon,
@@ -83,7 +79,7 @@ interface FloatingFeedbackButtonProps {
   isSecondSectionColorLikeFeatureType?: boolean;
   username?: string;
   userId?: string;
-  userImage?: string | null; // Changed from string | null
+  userImage?: string | null;
   position?: Position;
   componentId: string;
   productId: string;
@@ -117,6 +113,29 @@ function isColorDark(color: string): boolean {
   }
   const brightness = (r * 299 + g * 587 + b * 114) / 1000;
   return brightness < 128;
+}
+
+// Add a local cn utility if not present
+function cn(...classes: (string | boolean | undefined | null)[]) {
+  return classes.filter(Boolean).join(" ");
+}
+
+// Add a local Button component if not present
+function Button({
+  children,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+  return (
+    <button
+      {...props}
+      className={cn(
+        "px-4 py-2 rounded transition-colors duration-200",
+        props.className
+      )}
+    >
+      {children}
+    </button>
+  );
 }
 
 export default function FlooprFloatingFeedbackButton({
@@ -301,6 +320,36 @@ export default function FlooprFloatingFeedbackButton({
     };
   };
 
+  const getPositionStyles = () => {
+    switch (position) {
+      case "top-left":
+        return { top: "1rem", left: "1rem" };
+      case "top-right":
+        return { top: "1rem", right: "1rem" };
+      case "bottom-left":
+        return { bottom: "1rem", left: "1rem" };
+      case "bottom-right":
+        return { bottom: "1rem", right: "1rem" };
+      default:
+        return {};
+    }
+  };
+
+  const getPopupPositionStyles = () => {
+    switch (position) {
+      case "top-left":
+        return { left: "0", top: "100%", marginTop: "1rem" };
+      case "top-right":
+        return { right: "0", top: "100%", marginTop: "1rem" };
+      case "bottom-left":
+        return { left: "0", bottom: "100%", marginBottom: "1rem" };
+      case "bottom-right":
+        return { right: "0", bottom: "100%", marginBottom: "1rem" };
+      default:
+        return { right: "0", bottom: "100%", marginBottom: "1rem" };
+    }
+  };
+
   const handleSubmit = async () => {
     if (!title || !description || !selectedType) {
       toast.error("Please fill in all fields");
@@ -308,7 +357,7 @@ export default function FlooprFloatingFeedbackButton({
     }
 
     try {
-      const feedbackData: SimpleFeedbackItemData = {
+      const feedbackData = {
         feedback: {
           title,
           content: description,
@@ -316,18 +365,21 @@ export default function FlooprFloatingFeedbackButton({
           type: selectedType as "feature" | "idea" | "issue" | "other",
         },
         productId,
-        isComponent: true,
         componentId,
-        createdAt: serverTimestamp(),
         componentType: "floating-button",
         userInfo: {
           username,
           userId,
-          profilePicture: userImage,
+          profilePicture: userImage ?? null,
         },
       };
 
-      const result = await addSimpleFeedback(feedbackData);
+      const res = await fetch("/api/imports/components/save-simple-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(feedbackData),
+      });
+      const result = await res.json();
       if (result.success) {
         setIsSubmitted(true);
         setTitle("");
@@ -338,6 +390,8 @@ export default function FlooprFloatingFeedbackButton({
           handleClose();
         }, 500);
         return;
+      } else {
+        toast.error(result.error || "Failed to submit feedback");
       }
     } catch (error) {
       toast.error("Failed to submit feedback");
@@ -372,39 +426,15 @@ export default function FlooprFloatingFeedbackButton({
     }, 200);
   };
 
-  const getPositionStyles = () => {
-    switch (position) {
-      case "top-left":
-        return { top: "1rem", left: "1rem" };
-      case "top-right":
-        return { top: "1rem", right: "1rem" };
-      case "bottom-left":
-        return { bottom: "1rem", left: "1rem" };
-      case "bottom-right":
-        return { bottom: "1rem", right: "1rem" };
-      default:
-        return {};
-    }
-  };
-
-  const getPopupPositionStyles = () => {
-    switch (position) {
-      case "top-left":
-        return { left: "0", top: "100%", marginTop: "1rem" };
-      case "top-right":
-        return { right: "0", top: "100%", marginTop: "1rem" };
-      case "bottom-left":
-        return { left: "0", bottom: "100%", marginBottom: "1rem" };
-      case "bottom-right":
-        return { right: "0", bottom: "100%", marginBottom: "1rem" };
-      default:
-        return { right: "0", bottom: "100%", marginBottom: "1rem" };
-    }
-  };
+  function flattenClasses(...args: any[]): any[] {
+    return args.flat(Infinity);
+  }
 
   return (
     <div
-      className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+      className={cn(
+        ...flattenClasses("absolute z-50 min-h-fit", isFixed && `fixed`)
+      )}
       style={getPositionStyles()}
     >
       {/* Circular Button */}
@@ -442,20 +472,22 @@ export default function FlooprFloatingFeedbackButton({
       {isOpen && (
         <div
           className={cn(
-            "transition-all duration-200",
-            isModal
-              ? [
-                  "fixed inset-0 flex items-center justify-center",
-                  isModalAnimating ? "opacity-0" : "opacity-0",
-                  isMounted && "opacity-100",
-                ]
-              : [
-                  "absolute",
-                  isModalAnimating
-                    ? "opacity-0 translate-y-4"
-                    : "opacity-0 translate-y-4",
-                  isMounted && "opacity-100 translate-y-0",
-                ]
+            ...flattenClasses(
+              "transition-all duration-200",
+              isModal
+                ? [
+                    "fixed inset-0 flex items-center justify-center",
+                    isModalAnimating ? "opacity-0" : "opacity-0",
+                    isMounted && "opacity-100",
+                  ]
+                : [
+                    "absolute",
+                    isModalAnimating
+                      ? "opacity-0 translate-y-4"
+                      : "opacity-0 translate-y-4",
+                    isMounted && "opacity-100 translate-y-0",
+                  ]
+            )
           )}
           style={{
             backgroundColor: isModal ? overlayColor : "transparent",
@@ -464,22 +496,24 @@ export default function FlooprFloatingFeedbackButton({
         >
           <div
             className={cn(
-              "relative transition-all duration-200",
-              isModal
-                ? [
-                    "max-w-md w-full mx-4",
-                    isModalAnimating
-                      ? "scale-95 opacity-0"
-                      : "scale-95 opacity-0",
-                    isMounted && "scale-100 opacity-100",
-                  ]
-                : [
-                    "w-[320px] shadow-lg",
-                    isModalAnimating
-                      ? "scale-95 opacity-0"
-                      : "scale-95 opacity-0",
-                    isMounted && "scale-100 opacity-100",
-                  ]
+              ...flattenClasses(
+                "relative transition-all duration-200",
+                isModal
+                  ? [
+                      "max-w-md w-full mx-4",
+                      isModalAnimating
+                        ? "scale-95 opacity-0"
+                        : "scale-95 opacity-0",
+                      isMounted && "scale-100 opacity-100",
+                    ]
+                  : [
+                      "w-[320px] shadow-lg",
+                      isModalAnimating
+                        ? "scale-95 opacity-0"
+                        : "scale-95 opacity-0",
+                      isMounted && "scale-100 opacity-100",
+                    ]
+              )
             )}
             style={{
               backgroundColor: backgroundColor,
@@ -544,11 +578,13 @@ export default function FlooprFloatingFeedbackButton({
             <div className="relative min-h-[200px] mb-[60px]">
               <div
                 className={cn(
-                  "absolute inset-0",
-                  "transition-all duration-200 ease-in-out",
-                  isContentAnimating
-                    ? "opacity-0 translate-y-2"
-                    : "opacity-100 translate-y-0"
+                  ...flattenClasses(
+                    "absolute inset-0",
+                    "transition-all duration-200 ease-in-out",
+                    isContentAnimating
+                      ? "opacity-0 translate-y-2"
+                      : "opacity-100 translate-y-0"
+                  )
                 )}
               >
                 {!selectedType ? (
@@ -558,10 +594,12 @@ export default function FlooprFloatingFeedbackButton({
                         key={type.value}
                         onClick={() => handleTypeSelect(type.value)}
                         className={cn(
-                          "w-full p-2 rounded-lg border transition-all duration-300",
-                          "hover:scale-[1.02] active:scale-[0.98]",
-                          "flex items-center gap-3",
-                          "group relative overflow-hidden"
+                          ...flattenClasses(
+                            "w-full p-2 rounded-lg border transition-all duration-300",
+                            "hover:scale-[1.02] active:scale-[0.98]",
+                            "flex items-center gap-3",
+                            "group relative overflow-hidden"
+                          )
                         )}
                         style={{
                           borderColor: type.color,
@@ -595,7 +633,11 @@ export default function FlooprFloatingFeedbackButton({
                         placeholder="Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full p-2 border bg-transparent transition-all duration-300 focus:border-2"
+                        className={cn(
+                          ...flattenClasses(
+                            "w-full p-2 border bg-transparent transition-all duration-300 focus:border-2"
+                          )
+                        )}
                         style={{
                           color: textColor,
                           borderRadius: borderRadiusSizes[borderRadius],
@@ -606,7 +648,11 @@ export default function FlooprFloatingFeedbackButton({
                       placeholder="Description"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      className="w-full p-2 border bg-transparent min-h-[100px] transition-all duration-300 focus:border-2"
+                      className={cn(
+                        ...flattenClasses(
+                          "w-full p-2 border bg-transparent min-h-[100px] transition-all duration-300 focus:border-2"
+                        )
+                      )}
                       style={{
                         color: textColor,
                         borderRadius: borderRadiusSizes[borderRadius],
@@ -615,9 +661,11 @@ export default function FlooprFloatingFeedbackButton({
                     <Button
                       onClick={handleSubmit}
                       className={cn(
-                        "w-full transition-all duration-300",
-                        "hover:shadow-lg hover:brightness-110",
-                        "active:scale-[0.98]"
+                        ...flattenClasses(
+                          "w-full transition-all duration-300",
+                          "hover:shadow-lg hover:brightness-110",
+                          "active:scale-[0.98]"
+                        )
                       )}
                       style={{
                         color: "white",
@@ -626,7 +674,13 @@ export default function FlooprFloatingFeedbackButton({
                       disabled={isSubmitted}
                     >
                       {isSubmitted ? (
-                        <span className="flex items-center justify-center w-full">
+                        <span
+                          className={cn(
+                            ...flattenClasses(
+                              "flex items-center justify-center w-full"
+                            )
+                          )}
+                        >
                           <Stars className="mr-2 h-5 w-5" />
                           Thanks for your feedback
                         </span>

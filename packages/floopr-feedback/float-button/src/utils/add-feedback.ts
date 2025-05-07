@@ -1,3 +1,7 @@
+import { analyzeSentiment } from "./analyze-sentiment";
+import classifyTopic from "./classify-topic";
+import { db } from "./firebase";
+import updateBasicAnalyticsFromNewFeedback from "./update-basic-analytics-from-new-feedback";
 import { doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 
 export type SimpleFeedbackItemData = {
@@ -25,10 +29,9 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
       `${feedback.title}. ${feedback.content || ``}`
     );
     console.log(`sentimentResult`, sentimentResult);
-    // const topicClassification = await classifyTopic(
-    //   `${feedback.title}. ${feedback.content}`
-    // );
-    const topicClassification = [`No topic`, `No topic`, `No topic`];
+    const topicClassification = await classifyTopic(
+      `${feedback.title}. ${feedback.content}`
+    );
     console.log(`topicClassification addismeple feedback`, topicClassification);
 
     // 1. Ensure the product document exists in the "products" collection

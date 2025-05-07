@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
         <Providers>{children}</Providers>
-        <FloatingFeedbackButton
+        {/* <FloatingFeedbackButton
           isModal={false}
           backgroundColor="#ffffff"
           padding="lg"
@@ -40,7 +40,15 @@ export default function RootLayout({
           isSecondSectionColorLikeFeatureType={false}
           componentId={`not_yet_implemented`}
           productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
-        />
+        /> */}
+        <script
+          src="http://localhost:3000/embeds/float-button-bundle_floopr_feedback_embed.js"
+          data-api-key="YOUR_API_KEY"
+          data-product-id="YOUR_PRODUCT_ID"
+          data-component-id="YOUR_COMPONENT_ID"
+          data-user-info='{"userId": "user_123", "userName": "Alice", "userImage": "https://example.com/avatar.jpg"}'
+          defer
+        ></script>
       </body>
     </html>
   );
