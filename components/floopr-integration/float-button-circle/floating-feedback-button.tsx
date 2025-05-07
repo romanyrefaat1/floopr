@@ -19,6 +19,7 @@ import {
   X,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
@@ -86,6 +87,34 @@ interface FloatingFeedbackButtonProps {
   position?: Position;
   componentId: string;
   productId: string;
+}
+
+// Utility to check if a color is dark
+function isColorDark(color: string): boolean {
+  let r = 255,
+    g = 255,
+    b = 255;
+  if (color.startsWith("#")) {
+    const hex = color.replace("#", "");
+    if (hex.length === 3) {
+      r = parseInt(hex[0] + hex[0], 16);
+      g = parseInt(hex[1] + hex[1], 16);
+      b = parseInt(hex[2] + hex[2], 16);
+    } else if (hex.length === 6) {
+      r = parseInt(hex.substring(0, 2), 16);
+      g = parseInt(hex.substring(2, 4), 16);
+      b = parseInt(hex.substring(4, 6), 16);
+    }
+  } else if (color.startsWith("rgb")) {
+    const rgb = color.match(/\d+/g);
+    if (rgb) {
+      r = parseInt(rgb[0]);
+      g = parseInt(rgb[1]);
+      b = parseInt(rgb[2]);
+    }
+  }
+  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+  return brightness < 128;
 }
 
 export default function FloatingFeedbackButton({
@@ -443,7 +472,7 @@ export default function FloatingFeedbackButton({
             </div>
 
             {/* Main content with animations */}
-            <div className="relative min-h-[200px]">
+            <div className="relative min-h-[200px] mb-[60px]">
               <div
                 className={cn(
                   "absolute inset-0",
@@ -542,24 +571,30 @@ export default function FloatingFeedbackButton({
             </div>
 
             {/* Logo */}
-            <div className="mt-6 flex justify-center items-center text-sm text-muted-foreground">
+            <div
+              className="mt-6 flex justify-end items-center text-sm text-muted-foreground"
+              style={{ scale: 0.9 }}
+            >
               <span className="mr-2" style={{ color: textColor }}>
                 Made by
               </span>
-              <Image
-                src="/floopr-logo-no-bg-svg.svg"
-                alt="Floopr logo"
-                width={42}
-                height={12}
-                className="dark:hidden"
-              />
-              <Image
-                src="/floopr-logo-no-bg-white-svg.svg"
-                alt="Floopr logo"
-                width={42}
-                height={12}
-                className="hidden dark:block"
-              />
+              <Link href="https://floopr.vercel.app" target="_blank">
+                {isColorDark(backgroundColor) ? (
+                  <Image
+                    src="/floopr-logo-no-bg-white-svg.svg"
+                    alt="Floopr logo"
+                    width={42}
+                    height={12}
+                  />
+                ) : (
+                  <Image
+                    src="/floopr-logo-no-bg-svg.svg"
+                    alt="Floopr logo"
+                    width={42}
+                    height={12}
+                  />
+                )}
+              </Link>
             </div>
           </div>
         </div>

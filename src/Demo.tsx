@@ -7,7 +7,7 @@ const Demo = () => {
       className="p-8 rounded-lg shadow-lg my-8 flex justify-center flex-col"
       id="demo"
     >
-      <h2 className="text-5xl text-center font-semibold tracking-tight flex items-center justify-center gap-[4px] mb-2">
+      <h2 className="text-5xl text-center font-semibold tracking-tight mb-2">
         See{" "}
         <span className="inline-block align-middle">
           <Image
@@ -20,9 +20,8 @@ const Demo = () => {
             priority
           />
         </span>
-<br />
-<span className="">
-        in Action</span>
+        <br />
+        in Action
       </h2>
       <span className="size-4 text-center w-full mb-[30px]">
         (It&apos;s at 1.5x)
