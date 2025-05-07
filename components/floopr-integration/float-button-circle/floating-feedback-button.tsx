@@ -87,6 +87,7 @@ interface FloatingFeedbackButtonProps {
   position?: Position;
   componentId: string;
   productId: string;
+  isFixed?: boolean;
 }
 
 // Utility to check if a color is dark
@@ -122,7 +123,7 @@ export default function FloatingFeedbackButton({
   primaryColor = "hsl(var(--primary))",
   backgroundColor = "hsl(var(--background))",
   // textColor = "hsl(var(--foreground))",
-textColor = "#000",
+  textColor = "#000",
   overlayColor = "rgb(0 0 0 / 0.5)",
   accentColor = "hsl(var(--accent))",
   borderColor = "hsl(var(--border))",
@@ -136,6 +137,7 @@ textColor = "#000",
   position = "bottom-right",
   componentId,
   productId,
+  isFixed = true,
 }: FloatingFeedbackButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -262,6 +264,10 @@ textColor = "#000",
           type: selectedType as "feature" | "idea" | "issue" | "other",
         },
         productId,
+        isComponent: true,
+        componentId,
+        createdAt: serverTimestamp(),
+        componentType: "floating-button",
         userInfo: {
           username,
           userId,
@@ -338,7 +344,10 @@ textColor = "#000",
   };
 
   return (
-    <div className="fixed z-50 min-h-fit" style={getPositionStyles()}>
+    <div
+      className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+      style={getPositionStyles()}
+    >
       {/* Circular Button */}
       <button
         onClick={() => setIsOpen(true)}

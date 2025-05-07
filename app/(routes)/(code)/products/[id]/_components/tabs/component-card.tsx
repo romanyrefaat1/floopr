@@ -50,17 +50,17 @@ export default function ComponentCard({
 
   return (
     <Card className="text-center lg:text-left flex flex-col-reverse lg:grid lg:grid-cols-2 items-center justify-center gap-4 p-4 lg:p-4">
-      {metaData.imageUrl && (
-        <div className="image w-full flex items-center justify-center rounded-lg">
-          <Image
-            width={300}
-            height={40}
-            alt="Component Preview"
-            src={componentData.imageUrl || `/images/online/components/modal-timeout.PNG`}
-            // src={`/images/online/components/modal-timeout.PNG`}
-          />
-        </div>
-      )}
+      <div className="image w-full flex items-center justify-center rounded-lg">
+        <Image
+          width={300}
+          height={40}
+          alt="Component Preview"
+          src={
+            metaData.imageUrl || `/images/online/components/modal-timeout.PNG`
+          }
+          // src={`/images/online/components/modal-timeout.PNG`}
+        />
+      </div>
 
       <div className="flex flex-col">
         <CardHeader className="flex flex-col justify-between gap-4">

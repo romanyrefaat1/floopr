@@ -6,7 +6,7 @@ export default async function CreateModalTimePage({ searchParams }) {
   console.log(`productRef`, productRef);
   if (!productRef) notFound();
   return (
-    <main>
+    <main className="p-4">
       {/* <Steps inStep={1} /> */}
       <h1 className="mb-[20px]">Create Modal</h1>
       <EditModalTabs productId={productRef} />
