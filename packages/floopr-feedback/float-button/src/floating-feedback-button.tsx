@@ -87,6 +87,7 @@ interface FloatingFeedbackButtonProps {
   position?: Position;
   componentId: string;
   productId: string;
+  apiKey: string;
   isFixed?: boolean;
 }
 
@@ -118,7 +119,7 @@ function isColorDark(color: string): boolean {
   return brightness < 128;
 }
 
-export default function FloatingFeedbackButton({
+export default function FlooprFloatingFeedbackButton({
   isModal = false,
   primaryColor = "hsl(var(--primary))",
   backgroundColor = "hsl(var(--background))",
@@ -137,6 +138,7 @@ export default function FloatingFeedbackButton({
   position = "bottom-right",
   componentId,
   productId,
+  apiKey,
   isFixed = true,
 }: FloatingFeedbackButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -148,6 +150,55 @@ export default function FloatingFeedbackButton({
   const [isContentAnimating, setIsContentAnimating] = useState(false);
   const [isButtonMounted, setIsButtonMounted] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [configLoading, setConfigLoading] = useState(true);
+  const [configError, setConfigError] = useState<string | null>(null);
+  const [configData, setConfigData] = useState<any>(null);
+
+  // Validate API key, productId, and componentId, then fetch config
+  useEffect(() => {
+    async function fetchConfig() {
+      setConfigLoading(true);
+      setConfigError(null);
+      try {
+        // Replace this with your actual API endpoint or DB call
+        const res = await fetch(
+          `https://floopr.vercel.app/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
+        );
+        if (!res.ok) throw new Error("Invalid API key or component info");
+        const data = await res.json();
+        setConfigData(data);
+      } catch (err: any) {
+        setConfigError(err.message || "Failed to load config");
+      } finally {
+        setConfigLoading(false);
+      }
+    }
+    fetchConfig();
+  }, [apiKey, productId, componentId]);
+
+  // Show loading or error state
+  if (configLoading) {
+    return (
+      <div
+        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+        style={getPositionStyles()}
+      >
+        <div className="p-4 bg-white rounded shadow">Loading...</div>
+      </div>
+    );
+  }
+  if (configError) {
+    return (
+      <div
+        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+        style={getPositionStyles()}
+      >
+        <div className="p-4 bg-red-100 text-red-700 rounded shadow">
+          {configError}
+        </div>
+      </div>
+    );
+  }
 
   // Handle initial mount animation
   useEffect(() => {
