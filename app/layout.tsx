@@ -39,7 +39,7 @@ export default function RootLayout({
           borderRadius="lg"
           isSecondSectionColorLikeFeatureType={false}
           componentId={`not_yet_implemented`}
-          productId={`212faf6c-f3ff-4369-939f-e6715604804e`}
+          productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
         />
       </body>
     </html>
