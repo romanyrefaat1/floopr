@@ -1,4 +1,4 @@
-import { addSimpleFeedback } from "@/packages/floopr-feedback/float-button/src/utils/add-feedback";
+import { addSimpleFeedback } from "@/actions/add-feedback";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
