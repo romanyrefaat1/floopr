@@ -1,5 +1,7 @@
+import { Button } from "@/components/ui/button";
 import { ProductFormContextProvider } from "@/contexts/multistep-form-context";
 import { ReactNode } from "react";
+import { IconLeft } from "react-day-picker";
 
 interface NewProductLayoutProps {
   children: ReactNode;
@@ -7,9 +9,9 @@ interface NewProductLayoutProps {
 
 const NewProductLayout = ({ children }: NewProductLayoutProps) => {
   return (
-    <main className="px-[70px] bg-background">
+    <main className="px-8 md:px-[70px] bg-background min-h-screen flex flex-col">
       <ProductFormContextProvider>
-        <div className="h-36 md:h-0">{children}</div>
+        <div className="">{children}</div>
       </ProductFormContextProvider>
     </main>
   );

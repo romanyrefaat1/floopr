@@ -34,7 +34,7 @@ type NewProductForm = z.infer<typeof newProductFormSchema>;
 const Step1NewProduct = () => {
   const { productForm, updateProductForm } = useNewProductFormContext();
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState<string>(null);
   const [loading, setLoading] = useState(false);
 
   const form = useForm<NewProductForm>({
@@ -43,7 +43,7 @@ const Step1NewProduct = () => {
     defaultValues: {
       name: productForm.name || "",
       description: productForm.description || "",
-      website: productForm.website || "",
+      website: productForm.website || "https://",
       context: productForm.context || "",
     },
   });
@@ -60,16 +60,18 @@ const Step1NewProduct = () => {
       watchedValues.website !== productForm.website ||
       watchedValues.context !== productForm.context
     ) {
-      updateProductForm({
-        name: watchedValues.name,
-        description: watchedValues.description,
-        websiteLink: watchedValues.website,
-        context: watchedValues.context,
-      });
+      updateProductForm(
+        {
+          name: watchedValues.name,
+          description: watchedValues.description,
+          website: watchedValues.website,
+          context: watchedValues.context,
+        },
+        true
+      );
     }
   }, [
     watchedValues,
-    updateProductForm,
     productForm.name,
     productForm.description,
     productForm.website,
@@ -89,7 +91,7 @@ const Step1NewProduct = () => {
     setLoading(false);
 
     // Ensure we're pushing to the correct path
-    router.push(`/new/step-three?`);
+    router.push(`/new/step-three`);
     // {currentParams.toString()}
   }
 

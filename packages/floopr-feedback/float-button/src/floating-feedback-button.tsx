@@ -78,7 +78,7 @@ interface FloatingFeedbackButtonProps {
   isFixed?: boolean;
 }
 
-const baseUrl = `http://localhost:3000`;
+const baseUrl = `https://floopr.vercel.app`;
 
 // Utility to check if a color is dark
 function isColorDark(color: string): boolean {

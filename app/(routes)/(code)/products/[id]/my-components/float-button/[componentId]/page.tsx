@@ -1,7 +1,6 @@
 "use client";
 
 import { CodeBlock } from "@/components/docs/code-block";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { db } from "@/lib/firebase";
@@ -90,7 +89,7 @@ export default function FloatButtonDocs() {
   }
 
   return (
-    <div className="container mx-auto py-10 max-w-7xl">
+    <div className="container mx-4 md:mx-auto py-10 max-w-7xl">
       <div className="space-y-6">
         <div>
           <h1 className="text-4xl font-bold mb-4">
