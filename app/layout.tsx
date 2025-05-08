@@ -43,9 +43,9 @@ export default function RootLayout({
         /> */}
         <script
           src="http://localhost:3000/embeds/float-button-bundle_floopr_feedback_embed.js"
-          data-api-key="YOUR_API_KEY"
-          data-product-id="YOUR_PRODUCT_ID"
-          data-component-id="YOUR_COMPONENT_ID"
+          data-api-key="733ecbf8-583d-4641-8389-1eb99818543e"
+          data-product-id="007d6bf1-37b1-4119-b786-e3c47a574aa7"
+          data-component-id="ab3cfe6a-98b1-4742-8e85-b1a3ab763039"
           data-user-info='{"userId": "user_123", "userName": "Alice", "userImage": "https://example.com/avatar.jpg"}'
           defer
         ></script>

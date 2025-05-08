@@ -1,28 +1,19 @@
 "use client";
 
 import {
-  addSimpleFeedback,
-  SimpleFeedbackItemData,
-} from "./utils/add-feedback";
-import {
   ArrowLeft,
   BugIcon,
-  Lightbulb,
   LightbulbIcon,
-  LucideLightbulb,
   Sparkles,
   Stars,
   X,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 type PaddingSize = "sm" | "md" | "lg" | "xl";
 type BorderRadiusSize = "sm" | "md" | "lg" | "xl";
-type Position = "top-left" | "top-right" | "bottom-left" | "bottom-right";
+type ButtonPosition = "top-left" | "top-right" | "bottom-left" | "bottom-right";
 
 const paddingSizes = {
   sm: "0.5rem",
@@ -80,12 +71,14 @@ interface FloatingFeedbackButtonProps {
   username?: string;
   userId?: string;
   userImage?: string | null;
-  position?: Position;
+  buttonPosition?: ButtonPosition;
   componentId: string;
   productId: string;
   apiKey: string;
   isFixed?: boolean;
 }
+
+const baseUrl = `http://localhost:3000`;
 
 // Utility to check if a color is dark
 function isColorDark(color: string): boolean {
@@ -138,6 +131,40 @@ function Button({
   );
 }
 
+const getPositionStyles = (
+  buttonPosition: ButtonPosition,
+  isFixed: boolean
+) => {
+  const cssPosition: "fixed" | "absolute" = isFixed ? "fixed" : "absolute";
+  switch (buttonPosition) {
+    case "top-left":
+      return { top: "1rem", left: "1rem", position: cssPosition };
+    case "top-right":
+      return { top: "1rem", right: "1rem", position: cssPosition };
+    case "bottom-left":
+      return { bottom: "1rem", left: "1rem", position: cssPosition };
+    case "bottom-right":
+      return { bottom: "1rem", right: "1rem", position: cssPosition };
+    default:
+      return { position: cssPosition };
+  }
+};
+
+const getPopupPositionStyles = (buttonPosition: ButtonPosition) => {
+  switch (buttonPosition) {
+    case "top-left":
+      return { left: "0", top: "100%", marginTop: "1rem" };
+    case "top-right":
+      return { right: "0", top: "100%", marginTop: "1rem" };
+    case "bottom-left":
+      return { left: "0", bottom: "100%", marginBottom: "1rem" };
+    case "bottom-right":
+      return { right: "0", bottom: "100%", marginBottom: "1rem" };
+    default:
+      return { right: "0", bottom: "100%", marginBottom: "1rem" };
+  }
+};
+
 export default function FlooprFloatingFeedbackButton({
   isModal = false,
   primaryColor = "hsl(var(--primary))",
@@ -154,7 +181,7 @@ export default function FlooprFloatingFeedbackButton({
   username = "Anonymous user",
   userId = "anonymous",
   userImage = null,
-  position = "bottom-right",
+  buttonPosition = "bottom-right",
   componentId,
   productId,
   apiKey,
@@ -172,52 +199,6 @@ export default function FlooprFloatingFeedbackButton({
   const [configLoading, setConfigLoading] = useState(true);
   const [configError, setConfigError] = useState<string | null>(null);
   const [configData, setConfigData] = useState<any>(null);
-
-  // Validate API key, productId, and componentId, then fetch config
-  useEffect(() => {
-    async function fetchConfig() {
-      setConfigLoading(true);
-      setConfigError(null);
-      try {
-        // Replace this with your actual API endpoint or DB call
-        const res = await fetch(
-          `https://floopr.vercel.app/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
-        );
-        if (!res.ok) throw new Error("Invalid API key or component info");
-        const data = await res.json();
-        setConfigData(data);
-      } catch (err: any) {
-        setConfigError(err.message || "Failed to load config");
-      } finally {
-        setConfigLoading(false);
-      }
-    }
-    fetchConfig();
-  }, [apiKey, productId, componentId]);
-
-  // Show loading or error state
-  if (configLoading) {
-    return (
-      <div
-        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
-        style={getPositionStyles()}
-      >
-        <div className="p-4 bg-white rounded shadow">Loading...</div>
-      </div>
-    );
-  }
-  if (configError) {
-    return (
-      <div
-        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
-        style={getPositionStyles()}
-      >
-        <div className="p-4 bg-red-100 text-red-700 rounded shadow">
-          {configError}
-        </div>
-      </div>
-    );
-  }
 
   // Handle initial mount animation
   useEffect(() => {
@@ -237,6 +218,52 @@ export default function FlooprFloatingFeedbackButton({
       setIsButtonMounted(true);
     });
   }, []);
+
+  // Validate API key, productId, and componentId, then fetch config
+  useEffect(() => {
+    async function fetchConfig() {
+      setConfigLoading(true);
+      setConfigError(null);
+      try {
+        // Replace this with your actual API endpoint or DB call
+        const res = await fetch(
+          `${baseUrl}/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
+        );
+        if (!res.ok) throw new Error("Invalid API key or component info");
+        const data = await res.json();
+        setConfigData(data);
+      } catch (err: any) {
+        setConfigError(err.message || "Failed to load config");
+      } finally {
+        setConfigLoading(false);
+      }
+    }
+    fetchConfig();
+  }, [apiKey, productId, componentId]);
+
+  // Show loading or error state
+  if (configLoading) {
+    return (
+      <div
+        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+        style={getPositionStyles(buttonPosition, isFixed)}
+      >
+        <div className="p-4 bg-white rounded shadow">Loading...</div>
+      </div>
+    );
+  }
+  if (configError) {
+    return (
+      <div
+        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+        style={getPositionStyles(buttonPosition, isFixed)}
+      >
+        <div className="p-4 bg-red-100 text-red-700 rounded shadow">
+          {configError}
+        </div>
+      </div>
+    );
+  }
 
   const defaultColors = {
     feature: {
@@ -320,36 +347,6 @@ export default function FlooprFloatingFeedbackButton({
     };
   };
 
-  const getPositionStyles = () => {
-    switch (position) {
-      case "top-left":
-        return { top: "1rem", left: "1rem" };
-      case "top-right":
-        return { top: "1rem", right: "1rem" };
-      case "bottom-left":
-        return { bottom: "1rem", left: "1rem" };
-      case "bottom-right":
-        return { bottom: "1rem", right: "1rem" };
-      default:
-        return {};
-    }
-  };
-
-  const getPopupPositionStyles = () => {
-    switch (position) {
-      case "top-left":
-        return { left: "0", top: "100%", marginTop: "1rem" };
-      case "top-right":
-        return { right: "0", top: "100%", marginTop: "1rem" };
-      case "bottom-left":
-        return { left: "0", bottom: "100%", marginBottom: "1rem" };
-      case "bottom-right":
-        return { right: "0", bottom: "100%", marginBottom: "1rem" };
-      default:
-        return { right: "0", bottom: "100%", marginBottom: "1rem" };
-    }
-  };
-
   const handleSubmit = async () => {
     if (!title || !description || !selectedType) {
       toast.error("Please fill in all fields");
@@ -366,6 +363,7 @@ export default function FlooprFloatingFeedbackButton({
         },
         productId,
         componentId,
+        isComponent: true,
         componentType: "floating-button",
         userInfo: {
           username,
@@ -374,11 +372,14 @@ export default function FlooprFloatingFeedbackButton({
         },
       };
 
-      const res = await fetch("/api/imports/components/save-simple-data", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(feedbackData),
-      });
+      const res = await fetch(
+        `${baseUrl}/api/imports/components/save-simple-data`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(feedbackData),
+        }
+      );
       const result = await res.json();
       if (result.success) {
         setIsSubmitted(true);
@@ -435,7 +436,7 @@ export default function FlooprFloatingFeedbackButton({
       className={cn(
         ...flattenClasses("absolute z-50 min-h-fit", isFixed && `fixed`)
       )}
-      style={getPositionStyles()}
+      style={getPositionStyles(buttonPosition, isFixed)}
     >
       {/* Circular Button */}
       <button
@@ -491,7 +492,7 @@ export default function FlooprFloatingFeedbackButton({
           )}
           style={{
             backgroundColor: isModal ? overlayColor : "transparent",
-            ...getPopupPositionStyles(),
+            ...getPopupPositionStyles(buttonPosition),
           }}
         >
           <div
@@ -712,23 +713,29 @@ export default function FlooprFloatingFeedbackButton({
               <span className="mr-2" style={{ color: textColor }}>
                 Made by
               </span>
-              <Link href="https://floopr.vercel.app" target="_blank">
+              <a
+                href="https://floopr.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {isColorDark(backgroundColor) ? (
-                  <Image
+                  <img
                     src="/floopr-logo-no-bg-white-svg.svg"
                     alt="Floopr logo"
                     width={42}
                     height={12}
+                    style={{ display: "inline-block" }}
                   />
                 ) : (
-                  <Image
+                  <img
                     src="/floopr-logo-no-bg-svg.svg"
                     alt="Floopr logo"
                     width={42}
                     height={12}
+                    style={{ display: "inline-block" }}
                   />
                 )}
-              </Link>
+              </a>
             </div>
           </div>
         </div>

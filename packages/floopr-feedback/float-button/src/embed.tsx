@@ -1,5 +1,4 @@
 import FlooprFloatingFeedbackButton from "./floating-feedback-button";
-import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 
 const parseDataAttribute = (attr: string | undefined) => {
