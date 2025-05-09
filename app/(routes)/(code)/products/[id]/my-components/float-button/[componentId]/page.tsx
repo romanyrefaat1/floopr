@@ -115,6 +115,10 @@ export default function FloatButtonDocs() {
                 Add the following script tag to your HTML file, preferably just
                 before the closing body tag:
               </p>
+              <p>Make sure to add this script at the end of your HTML page</p>
+                    <CodeBlock code={`<script src="https://cdn.tailwindcss.com"></script>`} language="html" />
+              
+              
               <CodeBlock code={installationCode} language="html" />
 
               <div className="mt-6">

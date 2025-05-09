@@ -76,7 +76,7 @@ export default function FlooprFeedbackModalTimeout({
   const [buttonText, setButtonText] = useState("Submit");
   const [isDarkMode, setIsDarkMode] = useState(true);
 
-  const apiBaseUrl = `https://floopr.vercel.app`;
+  const apiBaseUrl = `http://localhost:3000`;
 
   // Construct API URLs based on apiBaseUrl
   const loadUrl = apiBaseUrl
@@ -338,6 +338,7 @@ export default function FlooprFeedbackModalTimeout({
           {isSubmitting ? "Submitting..." : buttonText}
         </button>
       </div>
+      <script src="https://cdn.tailwindcss.com"></script>
     </div>
   );
 

@@ -1,8 +1,8 @@
 "use client";
 
 import IncludeUserDataTab from "./include-user-data-tab";
-import ReactTab from "./react-tab";
 import ScriptTab from "./script-tab";
+import { CodeBlock } from "@/components/docs/code-block";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ComponentTabs({
@@ -20,6 +20,12 @@ export default function ComponentTabs({
         <TabsTrigger value="exclude">Exclude user data</TabsTrigger>
         <TabsTrigger value="include">Include user data</TabsTrigger>
       </TabsList>
+
+      <p>Make sure to add this script at the end of your HTML page</p>
+      <CodeBlock
+        code={`<script src="https://cdn.tailwindcss.com"></script>`}
+        language="html"
+      />
 
       <TabsContent value="exclude" className="mt-2">
         <ScriptTab

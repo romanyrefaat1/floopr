@@ -8,13 +8,14 @@ export default {
   entry: "./src/embed.tsx",
   output: {
     path: __dirname + "/dist",
+    formate: "iife",
     filename: "modal-timeout-bundle_floopr_feedback_embed.js",
   },
   mode: "production",
   module: {
     rules: [
       {
-        test: /\.tsx?$/, // Updated to handle both .ts and .tsx
+        test: /\.tsx?$/,
         use: {
           loader: "ts-loader",
           options: {
