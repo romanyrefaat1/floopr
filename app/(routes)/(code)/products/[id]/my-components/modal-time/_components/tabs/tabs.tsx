@@ -21,7 +21,7 @@ export default function ComponentTabs({
         <TabsTrigger value="include">Include user data</TabsTrigger>
       </TabsList>
 
-      <p>Make sure to add this script at the end of your HTML page</p>
+      <p>Make sure to add this script at the head of your HTML page</p>
       <CodeBlock
         code={`<script src="https://cdn.tailwindcss.com"></script>`}
         language="html"
