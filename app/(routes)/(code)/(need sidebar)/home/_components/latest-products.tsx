@@ -13,11 +13,13 @@ type ProductItem = Omit<LatestProductItemProps, "docId"> & {
 const LatestProducts = async ({
   userId,
   numOfCols: myNumOfCols = 2,
+  maxProducts,
 }: {
   userId: string;
   numOfCols: number;
+  maxProducts?: number;
 }) => {
-  const latestProducts = await getLatestProducts(userId);
+  const latestProducts = await getLatestProducts(userId, maxProducts);
   const numOfProducts = latestProducts.length;
   const numOfCols = numOfProducts > 1 ? (myNumOfCols > 1 ? myNumOfCols : 1) : 1;
 

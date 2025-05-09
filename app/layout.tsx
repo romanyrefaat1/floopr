@@ -23,7 +23,7 @@ export const metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -32,7 +32,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
         <Providers>{children}</Providers>
-        <FloatingFeedbackButton
+        {/* <FloatingFeedbackButton
           isModal={false}
           backgroundColor="#ffffff"
           padding="lg"
@@ -40,7 +40,7 @@ export default function RootLayout({
           isSecondSectionColorLikeFeatureType={false}
           componentId={`not_yet_implemented`}
           productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
-        />
+        /> */}
       </body>
     </html>
   );

@@ -56,7 +56,7 @@
 
   --foreground: 0, 0%, 100%; /* light text */
   --secondary-foreground: 0, 0%, 50%;
-  --border: 0, 0%, 20%;
+  --border: 0, 0%, 20%; /* #333 */
   --input: 0, 0%, 20%;
   --ring: 250, 89%, 68%;
 
