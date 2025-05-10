@@ -1,9 +1,43 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/products(.*)", "/new(.*)", "/checkout", "/edit-component(.*)"]);
+const isProtectedRoute = createRouteMatcher([
+  "/products(.*)",
+  "/new(.*)",
+  "/checkout",
+  "/edit-component(.*)",
+]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // First handle authentication for protected routes
   if (isProtectedRoute(req)) await auth.protect();
+
+  // Get the hostname (domain) from the request
+  const { hostname, pathname } = new URL(req.url);
+
+  // Check if this is a subdomain request
+  const isSubdomainRequest =
+    hostname.includes(".floopr.app") &&
+    !hostname.startsWith("www.") &&
+    hostname !== "floopr.app";
+
+  if (isSubdomainRequest) {
+    // Extract the subdomain (productUName)
+    const subdomain = hostname.split(".")[0];
+
+    // Forward the subdomain information as a header that our page can use
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("x-product-subdomain", subdomain);
+
+    // Rewrite to the subdomain handler route that will do the Firestore lookup
+    // But keep the URL as is (shows the subdomain in the browser)
+    return NextResponse.rewrite(new URL(`/subdomain-product`, req.url), {
+      headers: requestHeaders,
+    });
+  }
+
+  // For non-subdomain requests, continue as normal
+  return NextResponse.next();
 });
 
 export const config = {
