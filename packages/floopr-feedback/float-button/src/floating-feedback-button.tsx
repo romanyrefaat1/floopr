@@ -475,7 +475,7 @@ export default function FlooprFloatingFeedbackButton({
         <div
           className={cn(
             ...flattenClasses(
-              "transition-all duration-200",
+              "transition-all duration-200 zoom-in-105 fade-in",
               isModal
                 ? [
                     "fixed inset-0 flex items-center justify-center",

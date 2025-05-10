@@ -1,4 +1,5 @@
 import { Product } from "../../page";
+import IsYoursOptionsDropdown from "./is-yours-options-dropdown";
 import OpenModalButton from "./open-modal-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,6 @@ import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import Image from "next/image";
 import Link from "next/link";
-import { toast } from "sonner";
 
 export default function ComponentCard({
   productData,
@@ -31,6 +31,7 @@ export default function ComponentCard({
     title: null,
     description: null,
     imageUrl: null,
+    componentName: null,
   };
   console.log(`componentData ${isYours}`, componentData);
 
@@ -39,17 +40,30 @@ export default function ComponentCard({
       title: componentData.title,
       description: componentData.description,
       imageUrl: imageUrl,
+      componentName: componentData.name,
     };
   } else if (isYours) {
     metaData = {
       title: componentData.componentData.metaData.name,
       description: componentData.componentData.metaData.description,
       imageUrl: componentData.componentData.metaData.imageUrl,
+      componentName: componentData.componentData.name,
     };
   }
 
   return (
-    <Card className="text-center lg:text-left flex flex-col-reverse lg:grid lg:grid-cols-2 items-center justify-center gap-4 p-4 lg:p-4">
+    <Card className="text-center lg:text-left flex flex-col-reverse lg:grid lg:grid-cols-2 items-center justify-center gap-4 p-4 lg:p-4 relative">
+      {/* Delete dropdown for isYours */}
+      {isYours && (
+        <div className="absolute top-4 right-4">
+          <IsYoursOptionsDropdown
+            isYours={isYours}
+            productId={productDataFromFirestore.docId}
+            componentId={componentData.componentData.componentId}
+          />
+        </div>
+      )}
+      {/* Image */}
       <div className="image w-full flex items-center justify-center rounded-lg">
         <Image
           width={300}
@@ -77,7 +91,7 @@ export default function ComponentCard({
           )}
         </CardHeader>
         <CardContent className="flex lg:flex-col gap-2">
-          {isYours && (
+          {isYours && metaData.componentName === `modal-time` && (
             <OpenModalButton
               componentData={componentData}
               productData={productDataFromFirestore}
