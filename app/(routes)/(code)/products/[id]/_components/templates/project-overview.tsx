@@ -1,17 +1,17 @@
-import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import ProjectDataSummary from "./project-data-summary";
+import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 
 type ProjectOverviewProps = {
-    productData: ProductData
-}
+  productData: ProductData;
+};
 
-export default async function ProjectOverview({ productData }: ProjectOverviewProps) {
-    return (
-        <div className="flex flex-col-reverse md:grid md:grid-cols-1 gap-4">
-            {/* <div className="rounded-lg w-full min-h-[300px] bg-background/50 border p-4 flex items-center justify-center">
+export default function ProjectOverview({ productData }: ProjectOverviewProps) {
+  return (
+    <div className="flex flex-col-reverse md:grid md:grid-cols-1 gap-4">
+      {/* <div className="rounded-lg w-full min-h-[300px] bg-background/50 border p-4 flex items-center justify-center">
                 Image
             </div> */}
-            <ProjectDataSummary productId={productData.docId} />
-        </div>
-    )
+      <ProjectDataSummary productId={productData.docId} />
+    </div>
+  );
 }

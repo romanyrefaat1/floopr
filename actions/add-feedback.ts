@@ -1,8 +1,6 @@
 import updateBasicAnalyticsFromNewFeedback from "./basic-analytics/update/update-basic-analytics-from-new-feedback";
-import { FeedbackItemInDB } from "@/app/(routes)/(code)/[productId]/_components/feedback-list";
 import { db } from "@/lib/firebase";
 import { analyzeSentiment } from "@/services/analyze-sentiment";
-import classifyTopic from "@/services/classify-topic";
 import {
   doc,
   setDoc,
@@ -106,7 +104,7 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
       feedback: {
         title: feedback.title || "Untitled",
         content: feedback.content || null,
-        isRich: true,
+        isRich: feedback.isRich || true,
       },
       feedbackId,
       productId,

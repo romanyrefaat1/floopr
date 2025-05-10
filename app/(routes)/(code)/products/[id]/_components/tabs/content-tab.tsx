@@ -1,25 +1,13 @@
-import { FilterData, Product } from "../../page";
-import AddFeedbackForm from "../add-simple-feedback-form";
+import { FilterData } from "../../page";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
-import PrioritizedFeedback from "../prioritized-feedback";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
 import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import FilterButton from "@/components/filter/filter-button";
 import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
-import LoaderSpinner from "@/components/loader-spinner";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { Search, SlidersHorizontal, Plus } from "lucide-react";
-import { Suspense } from "react";
 
 export default function ContentTab({
   productData,
@@ -35,9 +23,6 @@ export default function ContentTab({
   const productId = productData.docId;
   console.log(`content tab productId:`, productId);
   const primaryColor = productData.style?.primaryColor || "#7c64f6";
-
-  // Serialize Firebase timestamps to avoid passing non-serializable objects to client components
-  const serializedProductData = serializeFirestoreData(productData);
 
   return (
     // <Suspense fallback={<LoaderSpinner />}>
@@ -103,7 +88,7 @@ export default function ContentTab({
         <FeedbackContentWrapper
           filterData={filterData}
           isOwner={isOwner}
-          productData={serializedProductData}
+          productData={productData}
           productId={productId}
         />
       </div>

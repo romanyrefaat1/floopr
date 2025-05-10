@@ -209,3 +209,11 @@ html {
 .blur-on-scroll {
   animation: blurIn 0.8s ease-out forwards;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

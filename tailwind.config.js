@@ -80,6 +80,8 @@ module.exports = {
         float: "float 20s ease-in-out infinite",
         "float-slow": "float 25s ease-in-out infinite",
         "float-slower": "float 30s ease-in-out infinite",
+        "spinner-leaf-fade": "spinner-leaf-fade 800ms linear infinite",
+        "spinner-leaf-fade-slow": "spinner-leaf-fade 1.2s linear infinite",
       },
       keyframes: {
         float: {
@@ -89,6 +91,10 @@ module.exports = {
           "60%": { transform: "translate(-25px, -15px) rotate(3deg)" },
           "80%": { transform: "translate(15px, 25px) rotate(-3deg)" },
           "100%": { transform: "translate(0, 0) rotate(0deg)" },
+        },
+        "spinner-leaf-fade": {
+          "0%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(360deg)" },
         },
       },
     },

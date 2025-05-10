@@ -4,6 +4,7 @@ import getProductData from "@/actions/get-product-data";
 import BasicSendEmailButton from "@/components/basic-send-email-button";
 import { ChatbotProvider } from "@/contexts/chatbot-context";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
+import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 
@@ -40,11 +41,6 @@ const ProductPage = async ({
   const { userId } = await auth();
   const productDataFromServer = (await getProductData(id)) as Product;
 
-  // Temporary function to test VERCEL CRONS
-  //  fetch('http://localhost:3000/api/ml/cron/prioritize')
-  //  .then(response => response.json())
-  //  .then(data => console.log(`CRONS DATA:`, data));
-
   if (!productDataFromServer) notFound();
   console.log(`productDataFromServer`, productDataFromServer.name);
   console.log(`userId from main`, userId);
@@ -53,6 +49,8 @@ const ProductPage = async ({
   if (productDataFromServer.ownerId !== userId) {
     return notFound();
   }
+
+  // const serializedProductData = serializeFirestoreData(productDataFromServer);
 
   const filterData = getFiltersFromParams(searchParams);
 

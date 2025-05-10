@@ -1,12 +1,9 @@
-import AnalyticsOverview from "./_components/analytics-overview";
-import AnalyzeProducts from "./_components/analyze-products";
 import LatestProducts from "./_components/latest-products";
 import QuickStats from "./_components/quick-stats";
 import WelcomeSection from "./_components/welcome-section";
 import SyncUser from "./sync-user";
 import LoaderSpinner from "@/components/loader-spinner";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Suspense } from "react";

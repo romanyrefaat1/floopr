@@ -16,7 +16,7 @@ export default function FeedbackItem({ feedbackData, productId }) {
     title: feedbackData?.feedback?.title,
     isRich: feedbackData?.feedback?.isRich,
     date: formatFirebaseTimestamp(feedbackData.createdAt),
-    text: feedbackData?.feedback?.content,
+    text: feedbackData?.feedback?.content || `no content`,
     likes: feedbackData?.socialData?.likes?.count,
     userProfilePic: feedbackData?.userInfo?.profilePicture ?? undefined,
   };

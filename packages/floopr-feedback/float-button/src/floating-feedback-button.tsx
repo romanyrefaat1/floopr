@@ -363,6 +363,7 @@ export default function FlooprFloatingFeedbackButton({
         },
         productId,
         componentId,
+        componentRefId: componentId,
         isComponent: true,
         componentType: "floating-button",
         userInfo: {

@@ -3,22 +3,15 @@
 import { Button } from "../ui/button";
 import { useChatbotContext } from "@/contexts/use-chatbot-context";
 import { useUser } from "@clerk/nextjs";
-import {
-  Expand,
-  ExpandIcon,
-  Fullscreen,
-  FullscreenIcon,
-  Maximize,
-  Minimize,
-  Trash,
-  X,
-} from "lucide-react";
+import { Maximize, Minimize, SendIcon, Trash, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import "react-chat-elements/dist/main.css";
 import LoaderSpinner from "../loader-spinner";
-import RichTextViewer from "../ui/rich-text-viewer";
+import { Skeleton } from "../ui/skeleton";
+import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
 
 const firstMess = {
   position: "left",
@@ -95,9 +88,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   return (
     <div
       className={cn(
-        "block",
-        isFullScreen && "relative w-full h-full",
-        !isFullScreen && "fixed bottom-2 md:bottom-6 right-2 md:right-6 z-50"
+        "block w-full",
+        isFullScreen && " w-full h-full sticky top-0",
+        !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
     >
       {!isOpen && (
@@ -119,7 +112,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       {isOpen && (
         <div
           className={cn(
-            "w-[350px] h-[500px] bg-background border rounded-xl shadow-2xl flex flex-col animate-in fade-in zoom-in-105 duration-200 overflow-hidden",
+            "sticky top-0 w-[450px] h-[500px] bg-background border rounded-xl shadow-2xl flex flex-col animate-in fade-in zoom-in-105 duration-200 overflow-hidden",
             isFullScreen && "w-full h-screen sticky top-0 inset-0 rounded-none"
           )}
         >
@@ -145,7 +138,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           </div>
           <div
             className={cn(
-              "flex-1 flex flex-col p-2 overflow-x-hidden bg-background",
+              "flex-1 flex flex-col p-2 overflow-x-hidden z-[1] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
               isFullScreen && `h-full`
             )}
           >
@@ -170,78 +163,62 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                       ? user?.firstName || "You"
                       : "Prey"}
                   </span>
-                  <span className="block text-base break-words whitespace-pre-line text-wrap">
-                    {msg.position === "left"
-                      ? (() => {
-                          // Regex to match hashtags (e.g., #all-feedbacks)
-                          const hashtagRegex = /#[\w-]+/g;
-                          const elements = [];
-                          let lastIndex = 0;
-                          let match;
-                          while (
-                            (match = hashtagRegex.exec(msg.text)) !== null
-                          ) {
-                            // Push text before hashtag
-                            if (match.index > lastIndex) {
-                              elements.push(
-                                msg.text.slice(lastIndex, match.index)
-                              );
-                            }
-                            // Check if hashtag is in keywords.hash
-                            if (keywords.hash.includes(match[0])) {
-                              elements.push(
-                                <span
-                                  key={match.index}
-                                  className="text-red-500"
-                                >
-                                  {match[0]}
-                                </span>
-                              );
-                            } else {
-                              elements.push(match[0]);
-                            }
-                            lastIndex = match.index + match[0].length;
-                          }
-                          // Push remaining text
-                          if (lastIndex < msg.text.length) {
-                            elements.push(msg.text.slice(lastIndex));
-                          }
-                          return elements;
-                        })()
-                      : msg.text}
-                  </span>
+                  {msg.position === "left" ? (
+                    <div className={`prose prose-sm`}>
+                      <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <span className="text-sm text-foreground break-words whitespace-pre-line text-wrap">
+                      <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
             {loading && (
-              <div className="self-start max-w-[80%] mb-2">
-                <div className="rounded-lg px-4 py-2 bg-mutedBackground text-foreground shadow">
-                  <span className="block text-sm font-medium mb-1 skeleton">
-                    Prey is thinking...
-                  </span>
-                  <LoaderSpinner />
-                </div>
-              </div>
+              <Skeleton className="block w-full h-[30px] text-base break-words whitespace-pre-line text-wrap mt-4">
+                Prey is reasoning
+              </Skeleton>
             )}
-            <div ref={chatEndRef} />
+
+            <div ref={chatEndRef} className="mb-52" />
           </div>
-          <div className="p-2 border-t bg-background flex gap-2 items-center">
-            <input
+          {/* <div className="px-12 py-4 -t bg-transparent flex gap-2 items-center"> */}
+          <div
+            className={cn(
+              "absolute h-[200px] w-full bg-gradient-to-t from-primary to-background bottom-0 opacity-5 z-[2]",
+              isFullScreen && `sticky top-0`
+            )}
+          />
+          {/* bg-gradient-to-t from-primary to-transparent */}
+          <div
+            className="absolute py-4 px-12 w-full bottom-0 left-1/2 -translate-x-1/2 h-fit flex gap-2 items-center
+                 p-1 z-[3]"
+          >
+            <Textarea
               ref={inputRef}
-              className="flex-1 rounded-lg border border-input bg-mutedBackground px-3 py-2 text-foreground placeholder:text-mutedForeground focus:outline-none focus:ring-2 focus:ring-floopr-purple transition text-sm"
+              className={cn(
+                "flex-1 transition-all ease-out rounded-[26px] p-4 pr-[60px] border border-input bg-background text-foreground placeholder:text-mutedForeground focus:outline-none focus:ring-2 focus:ring-floopr-purple text-sm resize-none max-h-[300px] hover:bg-secondary focus:min-h-[200px]",
+                loading && "text-mutedForeground"
+              )}
+              style={{ fieldSizing: "content", width: `200px` }} // inline style needed for field-sizing
               placeholder="Type your message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && !loading && handleSend()}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && e.ctrlKey && !loading) {
+                  handleSend();
+                }
+              }}
               disabled={loading}
             />
             <Button
               onClick={handleSend}
               disabled={loading || !input.trim()}
               size="sm"
-              className="ml-2"
+              className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
             >
-              {loading ? <LoaderSpinner /> : "Send"}
+              {loading ? <LoaderSpinner /> : <SendIcon />}
             </Button>
           </div>
         </div>

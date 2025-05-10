@@ -1,83 +1,92 @@
+"use client";
+
 import FeedbackItem from "../../../[productId]/_components/feedback-item";
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { FilterData, Product } from "../page";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
-import { Timestamp } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 
-type FeedbackData = {
-  id: string;
-  feedback: {
-    title: string;
-    content: string;
-  };
-  type: string;
-  sentiment: string;
-  username: string;
-  profilePicture?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  status: string;
-  socialData: {
-    comments: { count: number; data: any[] };
-    likes: { count: number; data: any[] };
-  };
-};
-
-export default async function FeedbackContentItems({
-  productData,
-  productId,
-  isOwner = false,
-  filterData,
-}: {
+interface FeedbackContentItemsProps {
   productData: Product;
   productId: string;
   filterData?: FilterData;
-  isOwner: boolean;
-}) {
-  try {
-    console.log(`productId from feedbakcontentitems`, productId);
-    const data = await getFilteredFeedbacks(productId, filterData || {});
+  isOwner?: boolean;
+}
 
-    const feedbacks = Array.isArray(data) ? data : [];
-    console.log(`fetced feedbacks`, feedbacks);
+export default function FeedbackContentItems({
+  productData,
+  productId,
+  isOwner = false,
+  filterData = {},
+}: FeedbackContentItemsProps) {
+  const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-    if (!feedbacks || !feedbacks.length) {
-      return (
-        <div
-          className="text-center py-8"
-          style={{ color: productData.style?.textColor }}
-        >
-          <p className="text-secondaryForeground">
-            No feedback found matching your criteria.
-          </p>
-        </div>
-      );
-    }
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
 
-    const serializedFeedbacks = feedbacks.map(
-      (f) => serializeFirestoreData(f) as FeedbackItemInDB
-    );
+    const fetchFeedbacks = async () => {
+      try {
+        const data = await getFilteredFeedbacks(productId, filterData);
+        const list = Array.isArray(data) ? data : [];
+        const serialized: FeedbackItemInDB[] = list.map(
+          (f) => serializeFirestoreData(f) as FeedbackItemInDB
+        );
+        setFeedbacks(serialized);
+      } catch (err) {
+        console.error("Error fetching feedbacks:", err);
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    fetchFeedbacks();
+  }, [productId, JSON.stringify(filterData)]);
+
+  if (loading) {
     return (
-      <div className="space-y-4">
-        {serializedFeedbacks.map((feedback) => (
-          <div className="mb-4" key={feedback.id}>
-            <FeedbackItem
-              isOwner={isOwner}
-              feedback={feedback}
-              productId={productId}
-              feedbackId={feedback.id}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  } catch (err) {
-    return (
-      <div className="text-red-500 p-4 text-center">
-        {err instanceof Error ? err.message : "An error occurred"}
+      <div
+        className="text-center py-8"
+        style={{ color: productData.style?.textColor }}
+      >
+        Loading feedback...
       </div>
     );
   }
+
+  if (error) {
+    return <div className="text-red-500 p-4 text-center">{error}</div>;
+  }
+
+  if (feedbacks.length === 0) {
+    return (
+      <div
+        className="text-center py-8"
+        style={{ color: productData.style?.textColor }}
+      >
+        <p className="text-secondaryForeground">
+          No feedback found matching your criteria.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {feedbacks.map((feedback) => (
+        <div className="mb-4" key={feedback.id}>
+          <FeedbackItem
+            isOwner={isOwner}
+            feedback={feedback}
+            productId={productId}
+            feedbackId={feedback.id}
+          />
+        </div>
+      ))}
+    </div>
+  );
 }

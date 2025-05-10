@@ -32,15 +32,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
         <Providers>{children}</Providers>
-        <FloatingFeedbackButton
-          isModal={false}
-          backgroundColor="#ffffff"
-          padding="lg"
-          borderRadius="lg"
-          isSecondSectionColorLikeFeatureType={false}
-          componentId={`not_yet_implemented`}
-          productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
-        />
       </body>
     </html>
   );
