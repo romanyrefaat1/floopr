@@ -15,6 +15,8 @@ export default clerkMiddleware(async (auth, req) => {
   // Get the hostname (domain) from the request
   const { hostname, pathname } = new URL(req.url);
 
+  console.log("Middleware processing hostname:", hostname);
+
   // Check if this is a subdomain request
   const isSubdomainRequest =
     hostname.includes(".floopr.app") &&
@@ -24,16 +26,16 @@ export default clerkMiddleware(async (auth, req) => {
   if (isSubdomainRequest) {
     // Extract the subdomain (productUName)
     const subdomain = hostname.split(".")[0];
+    console.log("Detected subdomain:", subdomain);
 
-    // Forward the subdomain information as a header that our page can use
-    const requestHeaders = new Headers(req.headers);
-    requestHeaders.set("x-product-subdomain", subdomain);
+    // Use query parameter approach instead of headers
+    // This is more reliable across different environments
+    const rewriteUrl = new URL(`/subdomain-product`, req.url);
+    rewriteUrl.searchParams.set("subdomain", subdomain);
 
-    // Rewrite to the subdomain handler route that will do the Firestore lookup
-    // But keep the URL as is (shows the subdomain in the browser)
-    return NextResponse.rewrite(new URL(`/subdomain-product`, req.url), {
-      headers: requestHeaders,
-    });
+    console.log("Rewriting to:", rewriteUrl.toString());
+
+    return NextResponse.rewrite(rewriteUrl);
   }
 
   // For non-subdomain requests, continue as normal
@@ -43,7 +45,7 @@ export default clerkMiddleware(async (auth, req) => {
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|_vercel|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
     // Always run for API routes
     "/(api|trpc)(.*)",
   ],
