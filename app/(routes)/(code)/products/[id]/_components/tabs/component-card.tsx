@@ -1,6 +1,6 @@
 import { Product } from "../../page";
-import IsYoursOptionsDropdown from "./is-yours-options-dropdown";
 import OpenModalButton from "./open-modal-button";
+import DeleteDropdown from "@/components/delete-dropdown";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +9,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { db } from "@/lib/firebase";
 import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
+import { doc } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -56,11 +58,13 @@ export default function ComponentCard({
       {/* Delete dropdown for isYours */}
       {isYours && (
         <div className="absolute top-4 right-4">
-          <IsYoursOptionsDropdown
+          {/* <DeleteDropdown
             isYours={isYours}
-            productId={productDataFromFirestore.docId}
-            componentId={componentData.componentData.componentId}
-          />
+            docRef={doc(
+              db,
+              `products/${productData.docId}/components/${componentData.componentId}`
+            )}
+          /> */}
         </div>
       )}
       {/* Image */}

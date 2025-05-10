@@ -88,9 +88,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   return (
     <div
       className={cn(
-        "block w-full",
-        isFullScreen && " w-full h-full sticky top-0",
-        !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
+        "block w-fit fixed bottom-[2.5rem] md:bottom-[5.5rem] right-7 z-50",
+        isFullScreen && " w-full h-full sticky top-0"
+        // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
     >
       {!isOpen && (
@@ -101,11 +101,11 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           className="gap-2 shadow-lg bg-background transition-all duration-300 h- flex items-center justify-center  hover:scale-105 aspect-square"
         >
           <Image
-            className="flex items-center object-contain justify-center w-full h-full select-none"
+            className="flex items-center object-contain justify-center w-fit h-fit select-none"
             src="/images/assistant-avatar/prey.png"
             alt="Chatbot Icon"
-            width={500}
-            height={500}
+            width={900}
+            height={900}
           />
         </Button>
       )}

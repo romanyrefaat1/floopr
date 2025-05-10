@@ -25,41 +25,44 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 interface DeleteComponentDropdownProps {
-  componentId: string;
-  productId: string;
+  docRef: any;
+
   onDeleteSuccess?: () => void;
+  successMessage?: string;
+  title?: string;
+  description?: string;
 }
 
-export default function IsYoursOptionsDropdown({
-  productId,
-  componentId,
+export default function DeleteDropdown({
   onDeleteSuccess,
+  docRef,
+  successMessage,
+  title = "Are you sure?",
+  description = "This action cannot be undone.",
 }: DeleteComponentDropdownProps) {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  if (!componentId || !productId) {
+  if (!docRef) {
     throw new Error("Component ID is required");
   }
 
   const handleDelete = async () => {
     try {
-      // Reference the specific component document
-      const compRef = doc(db, "products", productId, "components", componentId);
-
       // Delete the document
-      await deleteDoc(compRef);
-      console.log(`Deleted component with ID: ${componentId}`);
+      console.log(docRef);
+      const deleteRes = await deleteDoc(docRef);
+      console.log(`Deleted component with ID: ${docRef}`, deleteRes);
+      // Callback on successful delete
+      if (onDeleteSuccess) onDeleteSuccess();
 
       // Notify the user
       toast.success(
-        "Component deleted successfully. Refresh the page to see changes."
+        successMessage ||
+          "Item deleted successfully. Refresh the page to see changes."
       );
 
       // Close the alert dialog
       setIsAlertOpen(false);
-
-      // Callback on successful delete
-      if (onDeleteSuccess) onDeleteSuccess();
     } catch (error) {
       console.error("Error deleting component:", error);
       toast.error("Failed to delete component");
@@ -67,7 +70,7 @@ export default function IsYoursOptionsDropdown({
   };
 
   return (
-    <div className="absolute top-4 right-4">
+    <div className=" top-4 right-4">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -88,11 +91,8 @@ export default function IsYoursOptionsDropdown({
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  this component.
-                </AlertDialogDescription>
+                <AlertDialogTitle>{title}</AlertDialogTitle>
+                <AlertDialogDescription>{description}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>

@@ -3,14 +3,17 @@
 import LikeButton from "../../products/[id]/feedback/[feedbackId]/_components/like-button";
 import { FeedbackItemInDB } from "./feedback-list";
 import FinalStatus from "./final-status";
+import DeleteDropdown from "@/components/delete-dropdown";
 import LoaderSpinner from "@/components/loader-spinner";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import PlainTextViewer from "@/components/ui/plain-text-viewer";
+import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/lib/firebase";
 import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
+import { useAuth } from "@clerk/clerk-react";
 import { formatDistanceToNow } from "date-fns";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -55,8 +58,19 @@ export default function FeedbackItem({
   const { title, content, inputs } = feedbackData || {};
   const [componentName, setComponentName] = useState(``);
   const [isComponentNameLoading, setIsComponentNameLoading] = useState(true);
+  const { userId, isLoaded, isSignedIn } = useAuth();
+  const [isAllowsDelete, setIsAllowsDelete] = useState(isOwner);
+  const [isAllowsEdit, setIsAllowsEdit] = useState(false);
 
   console.log(`feedback-item feedback`, feedback);
+
+  useEffect(() => {
+    if (isSignedIn && isLoaded) {
+      if (userId === feedback.userInfo?.userId) {
+        setIsAllowsDelete(true);
+      }
+    }
+  }, [isAllowsEdit, userId, isLoaded, isSignedIn]);
 
   const myData = {
     title: ``,
@@ -103,13 +117,15 @@ export default function FeedbackItem({
       setIsComponentNameLoading(true);
       if (isComponent) {
         const data = await getDoc(
-          doc(db, "products", productId, "components", componentRefId)
+          doc(db, `products/${productId}/components/${componentRefId}`)
         );
+        console.log(`componnet data`, data);
         if (data.exists()) {
           const componentData = data.data();
           if (componentData) {
             setComponentName(
               componentData.componentDisplayName ||
+                componentData.title ||
                 componentData.componentType ||
                 `Name not found`
             );
@@ -125,15 +141,43 @@ export default function FeedbackItem({
     <Link href={`/${productId}/${feedback.id}`} className="">
       <div className="border hover:bg-mutedBackground transition-all rounded-lg p-4 bg-secondaryBackground text-foreground">
         <div>
-          {isComponent ? (
-            isComponentNameLoading ? (
-              <LoaderSpinner className="w-fit" size="sm" />
+          <div className="flex items-center justify-between">
+            {isComponent ? (
+              isComponentNameLoading ? (
+                <Skeleton className="w-[40px] h-[10px] bg-mutedBackground mb-4" />
+              ) : (
+                <Badge className="mb-4">
+                  {isComponent && componentName} Component
+                </Badge>
+              )
             ) : (
-              <Badge>{isComponent && componentName}</Badge>
-            )
-          ) : (
-            <></>
-          )}
+              <></>
+            )}
+            {/* Delete Dropdown */}
+            {isAllowsDelete && (
+              <div
+                role={`button`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <DeleteDropdown
+                  docRef={doc(
+                    db,
+                    `products/${productId}/feedback/${feedbackData.docId}`
+                  )}
+                  onDeleteSuccess={async () => {
+                    // Update basic analytics
+                    const productRef = doc(db, `products/${productId}`);
+                    await updateDoc(productRef, {
+                      feedbackCount: increment(-1),
+                    });
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <div className="flex">
             {/* Title & description */}
             <div className="mb-2 flex-1">
