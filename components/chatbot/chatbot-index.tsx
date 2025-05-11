@@ -27,13 +27,21 @@ const keywords = {
 
 export default function ChatbotIndex({ productId }: { productId: string }) {
   const { user } = useUser();
-  const { isOpen, openChatbot, closeChatbot, makeFullScreen, isFullScreen } =
-    useChatbotContext();
+  const {
+    isOpen,
+    openChatbot,
+    closeChatbot,
+    makeFullScreen,
+    isFullScreen,
+    drajedContext,
+  } = useChatbotContext();
   const [messages, setMessages] = useState([firstMess]);
   const [input, setInput] = useState("#all-feedbacks");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { isDrain, makeMouseInsideContainer, removeMouseInsideContainer } =
+    useChatbotContext();
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -93,6 +101,8 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
         isFullScreen && " w-full h-full right-0 sticky top-0"
         // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
+      onMouseOver={makeMouseInsideContainer}
+      onMouseLeave={removeMouseInsideContainer}
     >
       {!isOpen && (
         <Button
@@ -279,6 +289,8 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             <div ref={chatEndRef} className="mb-52" />
           </div>
           {/* <div className="px-12 py-4 -t bg-transparent flex gap-2 items-center"> */}
+          <div>{JSON.stringify(drajedContext)}</div>
+
           <div
             className={cn(
               "absolute h-[150px] w-full bg-gradient-to-t from-primary to-transparent bottom-0 opacity-5 z-[-1]"
@@ -286,10 +298,12 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             )}
           />
           {/* bg-gradient-to-t from-primary to-transparent */}
+          {isDrain && <div className="w-full h-full bg-red-500 opacity-0-50" />}
           <div
             className="absolute py-4 px-12 w-full bottom-0 left-1/2 -translate-x-1/2 h-fit flex gap-2 items-center
                  p-1 z-[3]"
           >
+            {/* Context */}
             <Textarea
               ref={inputRef}
               className={cn(
