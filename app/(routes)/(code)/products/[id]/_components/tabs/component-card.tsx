@@ -88,8 +88,8 @@ export default function ComponentCard({
               componentData.componentType ||
               `Your component`}
           </CardTitle>
-          {componentData.description && metaData.description.length > 0 && (
-            <CardDescription className="text-secondaryForeground">
+          {metaData.description.length > 0 && (
+            <CardDescription className="text-secondary-foreground">
               {makeFirstLetterUppercase(metaData.description)}
             </CardDescription>
           )}
@@ -107,7 +107,7 @@ export default function ComponentCard({
               href={
                 isYours
                   ? `/products/${productDataFromFirestore.docId}/my-components/${componentData.componentType}/${componentData.componentData.componentId}`
-                  : `/edit-component/${componentData.name}?ref=${productDataFromFirestore.docId}`
+                  : `/edit-component?componentTypeName=${componentData.name}&ref=${productDataFromFirestore.docId}`
               }
             >
               <Button

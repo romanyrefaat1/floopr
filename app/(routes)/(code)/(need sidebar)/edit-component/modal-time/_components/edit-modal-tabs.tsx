@@ -10,7 +10,7 @@ import { createPortal } from 'react-dom';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 
 import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ModalTimeout from '@/components/floopr-integration/modal-timout/modal-timeout';
 import { ReviewStep } from './review-step';
 import { PreviewStep } from './preview-step';
@@ -40,16 +40,19 @@ export type FeedbackModalConfiguratorProps = {
 export default function FeedbackModalConfigurator({productId, isComponentExists=false, componentId, productStyles}: FeedbackModalConfiguratorProps) {
   const router = useRouter()
   const [isDark, setIsDark] = useState(false)
+  const searchParams = useSearchParams()
+  const userTitle = searchParams.get('userTitle') || ''
+  const userDescription = searchParams.get('userDescription') || ''
   
   const myComponentId = isComponentExists ? componentId : crypto.randomUUID()
   
   const [currentStep, setCurrentStep] = useState('review');
   const [modalConfig, setModalConfig] = useState({
     metaData: {
-      name: `Feedback Modal`,
-    description: `A customizable modal component that pops up after a set time on your website. you can change its design, content, and delay. users can use it to leave feedback.`,
-    imageUrl: `/images/online/components/modal-timeout.PNG`
-  },
+      name: decodeURIComponent(userTitle) || `Feedback Modal`,
+      description: decodeURIComponent(userDescription) || `A customizable modal component that pops up after a set time on your website. you can change its design, content, and delay. users can use it to leave feedback.`,
+      imageUrl: `/images/online/components/modal-timeout.PNG`
+    },
     title: "Got any feedback?",
     productId,
     componentId: myComponentId,
@@ -84,6 +87,10 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
         },
         body: JSON.stringify({
           componentData: modalConfig,
+          cUserData: {
+            uTitle: decodeURIComponent(userTitle),
+            uDesc: decodeURIComponent(userDescription)
+          },
           productId: productId,
           componentType: 'modal-time'
         }),
@@ -96,7 +103,7 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
         return;
       }
       toast.success('Component saved successfully');
-      router.push(`/products/${productId}/`);
+      router.push(`/products/${productId}/#integrations`);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }

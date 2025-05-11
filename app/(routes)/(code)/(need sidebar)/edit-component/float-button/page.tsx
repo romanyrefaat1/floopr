@@ -12,7 +12,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useRef } from "react";
 import { toast } from "sonner";
 
@@ -55,7 +55,7 @@ interface FloatButtonConfig {
 }
 
 export default function FloatButtonEditPage({ searchParams }) {
-  const { ref: productRef } = searchParams;
+  const { ref: productRef, userTitle, userDescription } = searchParams;
   const router = useRouter();
   const componentId =
     typeof window !== "undefined" && window.crypto
@@ -64,8 +64,9 @@ export default function FloatButtonEditPage({ searchParams }) {
 
   const [config, setConfig] = useState<FloatButtonConfig>({
     metaData: {
-      name: "Float Button",
+      name: decodeURIComponent(userTitle) || "Float Button",
       description:
+        decodeURIComponent(userDescription) ||
         "A customizable floating feedback button that appears on your website. Users can click it to leave feedback.",
       imageUrl: "/images/online/components/float-button.PNG",
     },
@@ -84,6 +85,7 @@ export default function FloatButtonEditPage({ searchParams }) {
     productId: productRef,
     isModal: false,
   });
+  console.log(config.metaData.name, config.metaData.description);
 
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 
@@ -138,6 +140,10 @@ export default function FloatButtonEditPage({ searchParams }) {
         },
         body: JSON.stringify({
           componentData: config,
+          cUserData: {
+            uTitle: decodeURIComponent(userTitle),
+            uDesc: decodeURIComponent(userDescription),
+          },
           productId: productRef,
           componentType: "float-button",
         }),
@@ -151,7 +157,7 @@ export default function FloatButtonEditPage({ searchParams }) {
       }
 
       toast.success("Component saved successfully");
-      router.push(`/products/${productRef}/`);
+      router.push(`/products/${productRef}/#integrations`);
     } catch (error) {
       toast.error(`Error: ${error.message}`);
     }
