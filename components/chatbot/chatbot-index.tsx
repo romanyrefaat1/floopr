@@ -11,13 +11,14 @@ import LoaderSpinner from "../loader-spinner";
 import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 
 const firstMess = {
   position: "left",
   type: "text",
   role: `model`,
-  text: "Hi! I'm Prey, your AI assistant with Floopr. Ask me whatever you want to know about the feedbacks you have, what do you want to know?",
+  text: "Hi! I'm Prey, your AI assistant with Floopr. How can  do you want to know?",
 };
 
 const keywords = {
@@ -89,7 +90,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
     <div
       className={cn(
         "block w-fit fixed bottom-[2.5rem] md:bottom-[5.5rem] right-7 z-50",
-        isFullScreen && " w-full h-full sticky top-0"
+        isFullScreen && " w-full h-full right-0 sticky top-0"
         // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
     >
@@ -112,12 +113,21 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       {isOpen && (
         <div
           className={cn(
-            "sticky top-0 w-[450px] h-[500px] bg-background border rounded-xl shadow-2xl flex flex-col animate-in fade-in zoom-in-105 duration-200 overflow-hidden",
+            "sticky top-0 right-0 w-[450px] h-[500px] bg-background border rounded-xl shadow-2xl flex flex-col animate-in fade-in zoom-in-105 duration-200 overflow-hidden",
             isFullScreen && "w-full h-screen sticky top-0 inset-0 rounded-none"
           )}
         >
           <div className="flex justify-between items-center p-2 border-b backdrop-blur-sm">
-            <span className="font-semibold">Chat with Prey</span>
+            <span className="font-semibold flex items-center text-sm">
+              <Image
+                src={`/images/assistant-avatar/prey.png`}
+                width={200}
+                height={200}
+                alt="Prey Icon"
+                className="rounded-full w-5 h-5 mr-2 inline-block"
+              />{" "}
+              Prey
+            </span>
             <div className="flex items-center gap-1">
               {!isFullScreen && (
                 <Button size="icon" variant="ghost" onClick={closeChatbot}>
@@ -138,7 +148,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           </div>
           <div
             className={cn(
-              "flex-1 flex flex-col p-2 overflow-x-hidden z-[1] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
+              "flex-1 flex flex-col p-2 overflow-x-hidden z-[2] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
               isFullScreen && `h-full`
             )}
           >
@@ -159,16 +169,101 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                   }
                 >
                   <span className="block text-sm font-medium mb-1">
-                    {msg.position === "right"
-                      ? user?.firstName || "You"
-                      : "Prey"}
+                    {msg.position === "right" ? (
+                      user?.firstName || "You"
+                    ) : (
+                      <span className="flex items-center text-sm">
+                        <Image
+                          src={`/images/assistant-avatar/prey.png`}
+                          width={200}
+                          height={200}
+                          alt="Prey Icon"
+                          className="rounded-full w-4 h-4 mr-2 inline-block"
+                        />
+                        {` `} Prey
+                      </span>
+                    )}
                   </span>
                   {msg.position === "left" ? (
-                    <div className={`prose prose-sm`}>
-                      <ReactMarkdown>{msg.text}</ReactMarkdown>
+                    <div
+                      className={`prose prose-sm dark:text-white/90 leading-6`}
+                    >
+                      <ReactMarkdown
+                        components={{
+                          h1: ({ node, ...props }) => (
+                            <h1
+                              className="text-4xl font-extrabold my-6"
+                              {...props}
+                            />
+                          ),
+                          h2: ({ node, ...props }) => (
+                            <h2
+                              className="text-3xl font-bold my-5"
+                              {...props}
+                            />
+                          ),
+                          p: ({ node, ...props }) => (
+                            <p
+                              className="text-base leading-7 mb-4"
+                              {...props}
+                            />
+                          ),
+                          a: ({ node, ...props }) => (
+                            <Link
+                              className="text-blue-600 hover:underline"
+                              target="_blank"
+                              {...props}
+                            />
+                          ),
+                          code: ({
+                            node,
+                            inline,
+                            className,
+                            children,
+                            ...props
+                          }) => {
+                            if (inline) {
+                              return (
+                                <code
+                                  className="bg-gray-100 px-1 rounded text-sm"
+                                  {...props}
+                                >
+                                  {children}
+                                </code>
+                              );
+                            }
+                            // block code
+                            return (
+                              <pre className="bg-secondary text- p-4 rounded overflow-x-auto">
+                                <code className={className} {...props}>
+                                  {children}
+                                </code>
+                              </pre>
+                            );
+                          },
+                          ul: ({ node, ...props }) => (
+                            <ul
+                              className="list-disc list-inside mb-4"
+                              {...props}
+                            />
+                          ),
+                          li: ({ node, ...props }) => (
+                            <li className="mb-1 ml-4" {...props} />
+                          ),
+                          blockquote: ({ node, ...props }) => (
+                            <blockquote
+                              className="border-l-4 border-gray-300 pl-4 italic text-gray-600 my-4"
+                              {...props}
+                            />
+                          ),
+                          // add more overrides as needed…
+                        }}
+                      >
+                        {msg.text}
+                      </ReactMarkdown>
                     </div>
                   ) : (
-                    <span className="text-sm text-foreground break-words whitespace-pre-line text-wrap">
+                    <span className="text-sm dark:text-foreground break-words whitespace-pre-line text-wrap">
                       <ReactMarkdown>{msg.text}</ReactMarkdown>
                     </span>
                   )}
@@ -186,8 +281,8 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           {/* <div className="px-12 py-4 -t bg-transparent flex gap-2 items-center"> */}
           <div
             className={cn(
-              "absolute h-[200px] w-full bg-gradient-to-t from-primary to-background bottom-0 opacity-5 z-[2]",
-              isFullScreen && `sticky top-0`
+              "absolute h-[150px] w-full bg-gradient-to-t from-primary to-transparent bottom-0 opacity-5 z-[-1]"
+              // isFullScreen && `sticky top-0`
             )}
           />
           {/* bg-gradient-to-t from-primary to-transparent */}
