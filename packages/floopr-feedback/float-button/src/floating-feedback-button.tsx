@@ -56,6 +56,20 @@ interface FeedbackTypeColors {
   };
 }
 
+interface ComponentData {
+  primaryColor?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  overlayColor?: string;
+  accentColor?: string;
+  borderColor?: string;
+  padding?: PaddingSize;
+  borderRadius?: BorderRadiusSize;
+  position?: ButtonPosition;
+  isSecondSectionColorLikeFeatureType?: boolean;
+  feedbackTypeColors?: FeedbackTypeColors;
+}
+
 interface FloatingFeedbackButtonProps {
   isModal?: boolean;
   primaryColor?: string;
@@ -78,7 +92,8 @@ interface FloatingFeedbackButtonProps {
   isFixed?: boolean;
 }
 
-const baseUrl = `https://floopr.vercel.app`;
+// const baseUrl = `https://floopr.vercel.app`;
+const baseUrl = `http://localhost:3000`;
 
 // Utility to check if a color is dark
 function isColorDark(color: string): boolean {
@@ -169,7 +184,6 @@ export default function FlooprFloatingFeedbackButton({
   isModal = false,
   primaryColor = "hsl(var(--primary))",
   backgroundColor = "hsl(var(--background))",
-  // textColor = "hsl(var(--foreground))",
   textColor = "#000",
   overlayColor = "rgb(0 0 0 / 0.5)",
   accentColor = "hsl(var(--accent))",
@@ -198,7 +212,9 @@ export default function FlooprFloatingFeedbackButton({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [configLoading, setConfigLoading] = useState(true);
   const [configError, setConfigError] = useState<string | null>(null);
-  const [configData, setConfigData] = useState<any>(null);
+  const [configData, setConfigData] = useState<{
+    componentData?: ComponentData;
+  } | null>(null);
 
   // Handle initial mount animation
   useEffect(() => {
@@ -225,7 +241,6 @@ export default function FlooprFloatingFeedbackButton({
       setConfigLoading(true);
       setConfigError(null);
       try {
-        // Replace this with your actual API endpoint or DB call
         const res = await fetch(
           `${baseUrl}/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
         );
@@ -265,6 +280,23 @@ export default function FlooprFloatingFeedbackButton({
     );
   }
 
+  // Use styles from Firestore config
+  const componentStyles = configData?.componentData || {};
+  const {
+    primaryColor: configPrimaryColor = primaryColor,
+    backgroundColor: configBackgroundColor = backgroundColor,
+    textColor: configTextColor = textColor,
+    overlayColor: configOverlayColor = overlayColor,
+    accentColor: configAccentColor = accentColor,
+    borderColor: configBorpderColor = borderColor,
+    padding: configPadding = padding,
+    borderRadius: configBorderRadius = borderRadius,
+    position: configPosition = buttonPosition,
+    isSecondSectionColorLikeFeatureType:
+      configIsSecondSectionColorLikeFeatureType = isSecondSectionColorLikeFeatureType,
+    feedbackTypeColors: configFeedbackTypeColors = feedbackTypeColors,
+  } = componentStyles;
+
   const defaultColors = {
     feature: {
       main: "#3b82f6",
@@ -285,7 +317,7 @@ export default function FlooprFloatingFeedbackButton({
   };
 
   const getTypeColors = (type: keyof FeedbackTypeColors) => {
-    return feedbackTypeColors[type] || defaultColors[type];
+    return configFeedbackTypeColors[type] || defaultColors[type];
   };
 
   const feedbackTypes: FeedbackTypeConfig[] = [
@@ -333,7 +365,7 @@ export default function FlooprFloatingFeedbackButton({
     const currentTypeColors = getCurrentTypeColors();
     if (!currentTypeColors) return {};
 
-    const colors = isSecondSectionColorLikeFeatureType
+    const colors = configIsSecondSectionColorLikeFeatureType
       ? getTypeColors("feature")
       : currentTypeColors;
 
@@ -434,10 +466,8 @@ export default function FlooprFloatingFeedbackButton({
 
   return (
     <div
-      className={cn(
-        ...flattenClasses("absolute z-50 min-h-fit", isFixed && `fixed`)
-      )}
-      style={getPositionStyles(buttonPosition, isFixed)}
+      className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+      style={getPositionStyles(configPosition, isFixed)}
     >
       {/* Circular Button */}
       <button
@@ -454,17 +484,17 @@ export default function FlooprFloatingFeedbackButton({
           "hover:before:opacity- flex items-center justify-center"
         )}
         style={{
-          backgroundColor: primaryColor,
+          backgroundColor: configPrimaryColor,
           borderRadius: "9999px", // Keep the button always circular
         }}
       >
         <span
           className="relative z-10 transition-transform duration-300 group-hover:-translate-y-px flex items-center justify-center"
-          style={{ color: backgroundColor }}
+          style={{ color: configBackgroundColor }}
         >
           <LightbulbIcon
             className="font-bold border-0"
-            fill={backgroundColor}
+            fill={configBackgroundColor}
             size={28}
           />
         </span>
@@ -474,26 +504,24 @@ export default function FlooprFloatingFeedbackButton({
       {isOpen && (
         <div
           className={cn(
-            ...flattenClasses(
-              "transition-all duration-200 zoom-in-105 fade-in",
-              isModal
-                ? [
-                    "fixed inset-0 flex items-center justify-center",
-                    isModalAnimating ? "opacity-0" : "opacity-0",
-                    isMounted && "opacity-100",
-                  ]
-                : [
-                    "absolute",
-                    isModalAnimating
-                      ? "opacity-0 translate-y-4"
-                      : "opacity-0 translate-y-4",
-                    isMounted && "opacity-100 translate-y-0",
-                  ]
-            )
+            "transition-all duration-200",
+            isModal
+              ? cn(
+                  "fixed inset-0 flex items-center justify-center",
+                  isModalAnimating ? "opacity-0" : "opacity-0",
+                  isMounted && "opacity-100"
+                )
+              : cn(
+                  "absolute",
+                  isModalAnimating
+                    ? "opacity-0 translate-y-4"
+                    : "opacity-0 translate-y-4",
+                  isMounted && "opacity-100 translate-y-0"
+                )
           )}
           style={{
-            backgroundColor: isModal ? overlayColor : "transparent",
-            ...getPopupPositionStyles(buttonPosition),
+            backgroundColor: isModal ? configOverlayColor : "transparent",
+            ...getPopupPositionStyles(configPosition),
           }}
         >
           <div
@@ -518,12 +546,12 @@ export default function FlooprFloatingFeedbackButton({
               )
             )}
             style={{
-              backgroundColor: backgroundColor,
-              borderColor: borderColor,
+              backgroundColor: configBackgroundColor,
+              borderColor: configBorderColor,
               borderWidth: "1px",
-              color: textColor,
-              padding: paddingSizes[padding],
-              borderRadius: borderRadiusSizes[borderRadius],
+              color: configTextColor,
+              padding: paddingSizes[configPadding],
+              borderRadius: borderRadiusSizes[configBorderRadius],
             }}
           >
             {/* Header with back/close button */}
@@ -532,7 +560,7 @@ export default function FlooprFloatingFeedbackButton({
                 <button
                   onClick={handleBack}
                   className="text-muted-foreground hover:text-foreground transition-colors"
-                  style={{ color: textColor }}
+                  style={{ color: configTextColor }}
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </button>
@@ -560,7 +588,7 @@ export default function FlooprFloatingFeedbackButton({
                 )}
                 <h2
                   className="text-2xl font-bold text-center flex-"
-                  style={{ color: textColor }}
+                  style={{ color: configTextColor }}
                 >
                   {selectedType
                     ? feedbackTypes.find((t) => t.value === selectedType)?.label
@@ -570,7 +598,7 @@ export default function FlooprFloatingFeedbackButton({
               <button
                 onClick={handleClose}
                 className="text-muted-foreground hover:text-foreground transition-colors"
-                style={{ color: textColor }}
+                style={{ color: configTextColor }}
               >
                 <X className="h-4 w-4" />
               </button>
@@ -605,7 +633,7 @@ export default function FlooprFloatingFeedbackButton({
                         )}
                         style={{
                           borderColor: type.color,
-                          color: textColor,
+                          color: configTextColor,
                           backgroundColor: "transparent",
                         }}
                       >
@@ -641,8 +669,8 @@ export default function FlooprFloatingFeedbackButton({
                           )
                         )}
                         style={{
-                          color: textColor,
-                          borderRadius: borderRadiusSizes[borderRadius],
+                          color: configTextColor,
+                          borderRadius: borderRadiusSizes[configBorderRadius],
                         }}
                       />
                     </div>
@@ -656,8 +684,8 @@ export default function FlooprFloatingFeedbackButton({
                         )
                       )}
                       style={{
-                        color: textColor,
-                        borderRadius: borderRadiusSizes[borderRadius],
+                        color: configTextColor,
+                        borderRadius: borderRadiusSizes[configBorderRadius],
                       }}
                     />
                     <Button
@@ -671,7 +699,7 @@ export default function FlooprFloatingFeedbackButton({
                       )}
                       style={{
                         color: "white",
-                        borderRadius: borderRadiusSizes[borderRadius],
+                        borderRadius: borderRadiusSizes[configBorderRadius],
                       }}
                       disabled={isSubmitted}
                     >
@@ -711,7 +739,7 @@ export default function FlooprFloatingFeedbackButton({
               className="mt-6 flex justify-end items-center text-sm text-muted-foreground"
               style={{ scale: 0.9 }}
             >
-              <span className="mr-2" style={{ color: textColor }}>
+              <span className="mr-2" style={{ color: configTextColor }}>
                 Made by
               </span>
               <a
@@ -719,7 +747,7 @@ export default function FlooprFloatingFeedbackButton({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {isColorDark(backgroundColor) ? (
+                {isColorDark(configBackgroundColor) ? (
                   <img
                     src="/floopr-logo-no-bg-white-svg.svg"
                     alt="Floopr logo"

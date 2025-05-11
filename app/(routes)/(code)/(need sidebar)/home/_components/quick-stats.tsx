@@ -1,13 +1,22 @@
 "use client";
 
+import { getClientPageViews } from "@/actions/basic-analytics/client-specific/getClientPageViews";
 import getProductFeedbacksCommentsCount from "@/actions/basic-analytics/comments-count";
 import getFeedbackCount from "@/actions/basic-analytics/feedback-count";
 import getProductFeedbacksLikesCount from "@/actions/basic-analytics/likes-count";
-import { getClientPageViews } from "@/actions/basic-analytics/client-specific/getClientPageViews";
 import { getLatestProducts } from "@/actions/getLatestProducts";
 import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Eye, MessageSquare, ThumbsUp, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
+
+interface StatItem {
+  title: string;
+  value: string;
+  change?: string;
+  trend?: "positive" | "negative";
+  icon: React.ElementType;
+}
 
 const QuickStats = ({ userId }: { userId: string }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -37,10 +46,11 @@ const QuickStats = ({ userId }: { userId: string }) => {
           const productId = product.id;
 
           if (productId) {
-            views += await getClientPageViews(productId) || 0;
-            feedback += await getFeedbackCount(productId) || 0;
-            likes += await getProductFeedbacksLikesCount(productId) || 0;
-            comments += await getProductFeedbacksCommentsCount(productId) || 0;
+            views += (await getClientPageViews(productId)) || 0;
+            feedback += (await getFeedbackCount(productId)) || 0;
+            likes += (await getProductFeedbacksLikesCount(productId)) || 0;
+            comments +=
+              (await getProductFeedbacksCommentsCount(productId)) || 0;
           }
         }
 
@@ -75,34 +85,25 @@ const QuickStats = ({ userId }: { userId: string }) => {
     return new Intl.NumberFormat().format(num);
   };
 
-  // Sample change percentages (you would calculate these from historical data)
-  const stats = [
+  const stats: StatItem[] = [
     {
       title: "Total Views",
       value: isLoading ? "..." : formatNumber(analyticsData.totalViews),
-      // change: "+20.1%",
-      // trend: "positive",
       icon: Eye,
     },
     {
       title: "Feedback",
       value: isLoading ? "..." : formatNumber(analyticsData.totalFeedback),
-      // change: "+12%",
-      // trend: "positive",
       icon: MessageSquare,
     },
     {
       title: "Likes",
       value: isLoading ? "..." : formatNumber(analyticsData.totalLikes),
-      // change: "+18.5%",
-      // trend: "positive",
       icon: ThumbsUp,
     },
     {
       title: "Engagement Rate",
       value: isLoading ? "..." : `${analyticsData.engagementRate}%`,
-      // change: "+5%",
-      // trend: "positive",
       icon: TrendingUp,
     },
   ];
@@ -110,7 +111,10 @@ const QuickStats = ({ userId }: { userId: string }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       {stats.map((stat, index) => (
-        <Card key={index} className="overflow-hidden border">
+        <Card
+          key={index}
+          className="overflow-hidden border bg-mutedBackground hover:bg-muted/70 transition-colors"
+        >
           <CardContent className="p-6">
             <div className="flex justify-between items-start">
               <div className="space-y-3">
@@ -118,18 +122,24 @@ const QuickStats = ({ userId }: { userId: string }) => {
                   {stat.title}
                 </p>
                 <div className="flex flex-col gap-1">
-                  <h3 className="text-2xl font-bold tracking-tight">
-                    {stat.value}
-                  </h3>
-                  {stat.change && <p
-                    className={`text-xs ${
-                      stat.trend === "positive"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    } flex items-center`}
-                  >
-                    {stat.change} from last month
-                  </p>}
+                  {isLoading ? (
+                    <Skeleton className="h-8 w-24" />
+                  ) : (
+                    <h3 className="text-2xl font-bold tracking-tight">
+                      {stat.value}
+                    </h3>
+                  )}
+                  {stat.change && (
+                    <p
+                      className={`text-xs ${
+                        stat.trend === "positive"
+                          ? "text-green-500"
+                          : "text-red-500"
+                      } flex items-center`}
+                    >
+                      {stat.change} from last month
+                    </p>
+                  )}
                 </div>
               </div>
               <div className="p-2 bg-primary/10 rounded-lg">
