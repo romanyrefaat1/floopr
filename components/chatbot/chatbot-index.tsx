@@ -328,7 +328,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               {/* {JSON.stringify(drajedContext.map((item) => item.productId))} */}
               {drajedContext.length > 0 &&
                 drajedContext.map((item) => (
-                  <Link href={`/${item.id}`} target="_blank">
+                  <Link href={`/${item.productId}/${item.id}`} target="_blank">
                     <Button
                       // size={`icon`}
                       variant={`outline`}
