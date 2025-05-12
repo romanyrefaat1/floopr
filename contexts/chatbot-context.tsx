@@ -12,7 +12,7 @@ export interface ChatbotContextType {
   isDrain: boolean;
   dropDraj: () => void;
   isDrajable: boolean;
-  drajedContext: Array<string>;
+  drajedContext: Array<any>;
   makeMouseInsideContainer: () => void;
   removeMouseInsideContainer: () => void;
 }

@@ -47,7 +47,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       </AuthProvider>
       <Toaster />
       {process.env.NEXT_PUBLIC_IS_PRODUCTION && <Analytics />}
-      {/* <FloatingFeedbackButton
+      <FloatingFeedbackButton
         position="bottom-left"
         isModal={false}
         backgroundColor="#ffffff"
@@ -56,7 +56,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         isSecondSectionColorLikeFeatureType={false}
         componentId={`not_yet_implemented`}
         productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
-      /> */}
+      />
     </ClerkProvider>
   );
 }

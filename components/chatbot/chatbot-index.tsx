@@ -34,17 +34,19 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
     makeFullScreen,
     isFullScreen,
     drajedContext,
+    isDrain,
+    makeMouseInsideContainer,
+    removeMouseInsideContainer,
   } = useChatbotContext();
   const [messages, setMessages] = useState([firstMess]);
   const [input, setInput] = useState("#all-feedbacks");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { isDrain, makeMouseInsideContainer, removeMouseInsideContainer } =
-    useChatbotContext();
 
   useEffect(() => {
     inputRef.current?.focus();
+    console.log(`drajedContext`, drajedContext);
   }, []);
 
   const handleSend = async () => {
@@ -54,6 +56,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       { position: "right", type: "text", role: `user`, text: input },
     ]);
     setLoading(true);
+    console.log(`drajedContext`, drajedContext);
 
     // API call
     try {
@@ -64,6 +67,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           prompt: input,
           messContext: messages,
           productId: productId,
+          drajedContext,
         }),
       });
       const data = await res.json();
@@ -101,8 +105,17 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
         isFullScreen && " w-full h-full right-0 sticky top-0"
         // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
-      onMouseOver={makeMouseInsideContainer}
-      onMouseLeave={removeMouseInsideContainer}
+      onDragEnter={(e) => {
+        e.preventDefault();
+        makeMouseInsideContainer();
+      }}
+      onDragOver={(e) => {
+        // Without this, dragEnter/Leave won’t continue firing
+        e.preventDefault();
+      }}
+      onDragLeave={(e) => {
+        removeMouseInsideContainer();
+      }}
     >
       {!isOpen && (
         <Button
@@ -127,6 +140,10 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             isFullScreen && "w-full h-screen sticky top-0 inset-0 rounded-none"
           )}
         >
+          {isDrain && (
+            <div className="absolute top-0 left-0 w-full h-full bg-floopr-purple-light opacity-20 fade-in-50" />
+          )}
+
           <div className="flex justify-between items-center p-2 border-b backdrop-blur-sm">
             <span className="font-semibold flex items-center text-sm">
               <Image
@@ -289,7 +306,6 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             <div ref={chatEndRef} className="mb-52" />
           </div>
           {/* <div className="px-12 py-4 -t bg-transparent flex gap-2 items-center"> */}
-          <div>{JSON.stringify(drajedContext)}</div>
 
           <div
             className={cn(
@@ -298,37 +314,43 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             )}
           />
           {/* bg-gradient-to-t from-primary to-transparent */}
-          {isDrain && <div className="w-full h-full bg-red-500 opacity-0-50" />}
+
           <div
-            className="absolute py-4 px-12 w-full bottom-0 left-1/2 -translate-x-1/2 h-fit flex gap-2 items-center
+            className="absolute py-4 px-12 w-full bottom-0 left-1/2 -translate-x-1/2 h-fit 
                  p-1 z-[3]"
           >
             {/* Context */}
-            <Textarea
-              ref={inputRef}
-              className={cn(
-                "flex-1 transition-all ease-out rounded-[26px] p-4 pr-[60px] border border-input bg-background text-foreground placeholder:text-mutedForeground focus:outline-none focus:ring-2 focus:ring-floopr-purple text-sm resize-none max-h-[300px] hover:bg-secondary focus:min-h-[200px]",
-                loading && "text-mutedForeground"
-              )}
-              style={{ fieldSizing: "content", width: `200px` }} // inline style needed for field-sizing
-              placeholder="Type your message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && e.ctrlKey && !loading) {
-                  handleSend();
-                }
-              }}
-              disabled={loading}
-            />
-            <Button
-              onClick={handleSend}
-              disabled={loading || !input.trim()}
-              size="sm"
-              className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
-            >
-              {loading ? <LoaderSpinner /> : <SendIcon />}
-            </Button>
+            <div>
+              {JSON.stringify(drajedContext.map((item) => item.productId))}
+            </div>
+
+            <div className="flex gap-2 items-center">
+              <Textarea
+                ref={inputRef}
+                className={cn(
+                  "flex-1 transition-all ease-out rounded-[26px] p-4 pr-[60px] border border-input bg-background text-foreground placeholder:text-mutedForeground focus:outline-none focus:ring-2 focus:ring-floopr-purple text-sm resize-none max-h-[300px] hover:bg-secondary focus:min-h-[200px]",
+                  loading && "text-mutedForeground"
+                )}
+                style={{ fieldSizing: "content", width: `200px` }} // inline style needed for field-sizing
+                placeholder="Type your message..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && e.ctrlKey && !loading) {
+                    handleSend();
+                  }
+                }}
+                disabled={loading}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={loading || !input.trim()}
+                size="sm"
+                className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
+              >
+                {loading ? <LoaderSpinner /> : <SendIcon />}
+              </Button>
+            </div>
           </div>
         </div>
       )}

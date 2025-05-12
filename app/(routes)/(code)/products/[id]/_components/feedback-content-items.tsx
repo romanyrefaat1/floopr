@@ -83,7 +83,7 @@ export default function FeedbackContentItems({
       {feedbacks.map((feedback) => (
         <div
           className={cn("mb-4", isDrajable && ``)}
-          onDrag={() => startDraj(feedback.productId)}
+          onDrag={() => startDraj(feedback)}
           onDragEnd={dropDraj}
           key={feedback.id}
         >

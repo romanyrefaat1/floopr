@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
       messContext = [],
       productId,
       thinkingBudget = 0,
+      drajedContext,
     } = await request.json();
 
     if (!prompt || !productId || productId.length < 5) {
@@ -34,6 +35,7 @@ export async function POST(request: NextRequest) {
     if (!productData) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
+    console.log(`drajedContext`, drajedContext);
     const {
       name: productName,
       description: productDescription,
@@ -99,7 +101,12 @@ If you dont know te feedback context, say it.
 
 User’s product name: **${productName}**  
 User’s product description: *${productDescription}*  
-User’s product context: *${productContext || ``}\`*`,
+User’s product context: *${productContext || ``}\`*
+
+User referenced tese feedback to teir messaje: ${
+              JSON.stringify(drajedContext) || `No reference, read all feedback`
+            }
+`,
           },
         ],
       },

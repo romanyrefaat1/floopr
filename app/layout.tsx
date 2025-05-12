@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   title: "Floopr - Make User Feedback Actionable",
   description:
-    "Collect, organize, and prioritize user feedback all in one place. Help your team build what users really want.",
+    "Collect, organize, and prioritize user feedback all in one place. Help your team build what users really want. Floopr is the AI for feedback.",
   icons: [
     {
       rel: "icon",
