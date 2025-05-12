@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { useChatbotContext } from "@/contexts/use-chatbot-context";
 import { useUser } from "@clerk/nextjs";
-import { Maximize, Minimize, SendIcon, Trash, X } from "lucide-react";
+import { Maximize, Minimize, SendIcon, Trash, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import "react-chat-elements/dist/main.css";
@@ -27,8 +27,18 @@ const keywords = {
 
 export default function ChatbotIndex({ productId }: { productId: string }) {
   const { user } = useUser();
-  const { isOpen, openChatbot, closeChatbot, makeFullScreen, isFullScreen } =
-    useChatbotContext();
+  const {
+    isOpen,
+    openChatbot,
+    closeChatbot,
+    makeFullScreen,
+    isFullScreen,
+    drajedContext,
+    removeItemFromDrajedContext,
+    isDrain,
+    makeMouseInsideContainer,
+    removeMouseInsideContainer,
+  } = useChatbotContext();
   const [messages, setMessages] = useState([firstMess]);
   const [input, setInput] = useState("#all-feedbacks");
   const [loading, setLoading] = useState(false);
@@ -37,6 +47,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
 
   useEffect(() => {
     inputRef.current?.focus();
+    console.log(`drajedContext`, drajedContext);
   }, []);
 
   const handleSend = async () => {
@@ -46,6 +57,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       { position: "right", type: "text", role: `user`, text: input },
     ]);
     setLoading(true);
+    console.log(`drajedContext`, drajedContext);
 
     // API call
     try {
@@ -56,6 +68,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           prompt: input,
           messContext: messages,
           productId: productId,
+          drajedContext,
         }),
       });
       const data = await res.json();
@@ -93,6 +106,17 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
         isFullScreen && " w-full h-full right-0 sticky top-0"
         // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
+      onDragEnter={(e) => {
+        e.preventDefault();
+        makeMouseInsideContainer();
+      }}
+      onDragOver={(e) => {
+        // Without this, dragEnter/Leave won’t continue firing
+        e.preventDefault();
+      }}
+      onDragLeave={(e) => {
+        removeMouseInsideContainer();
+      }}
     >
       {!isOpen && (
         <Button
@@ -117,6 +141,11 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             isFullScreen && "w-full h-screen sticky top-0 inset-0 rounded-none"
           )}
         >
+          {isDrain && (
+            <div className="absolute top-0 left-0 w-full h-full bg-floopr-purple-light opacity-20 fade-in-50" />
+          )}
+
+          {/* Top */}
           <div className="flex justify-between items-center p-2 border-b backdrop-blur-sm">
             <span className="font-semibold flex items-center text-sm">
               <Image
@@ -146,6 +175,8 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               </Button>
             </div>
           </div>
+
+          {/* Messajes */}
           <div
             className={cn(
               "flex-1 flex flex-col p-2 overflow-x-hidden z-[2] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
@@ -243,12 +274,12 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                           },
                           ul: ({ node, ...props }) => (
                             <ul
-                              className="list-disc list-inside mb-4"
+                              className="list-disc list-inside mb-4 mr-3"
                               {...props}
                             />
                           ),
                           li: ({ node, ...props }) => (
-                            <li className="mb-1 ml-4" {...props} />
+                            <li className="mb-1 ml-2" {...props} />
                           ),
                           blockquote: ({ node, ...props }) => (
                             <blockquote
@@ -279,6 +310,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             <div ref={chatEndRef} className="mb-52" />
           </div>
           {/* <div className="px-12 py-4 -t bg-transparent flex gap-2 items-center"> */}
+
           <div
             className={cn(
               "absolute h-[150px] w-full bg-gradient-to-t from-primary to-transparent bottom-0 opacity-5 z-[-1]"
@@ -286,35 +318,85 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             )}
           />
           {/* bg-gradient-to-t from-primary to-transparent */}
+
           <div
-            className="absolute py-4 px-12 w-full bottom-0 left-1/2 -translate-x-1/2 h-fit flex gap-2 items-center
+            className="absolute py-4 px-12 w-full bottom-0 left-1/2 -translate-x-1/2 h-fit 
                  p-1 z-[3]"
           >
-            <Textarea
-              ref={inputRef}
-              className={cn(
-                "flex-1 transition-all ease-out rounded-[26px] p-4 pr-[60px] border border-input bg-background text-foreground placeholder:text-mutedForeground focus:outline-none focus:ring-2 focus:ring-floopr-purple text-sm resize-none max-h-[300px] hover:bg-secondary focus:min-h-[200px]",
-                loading && "text-mutedForeground"
-              )}
-              style={{ fieldSizing: "content", width: `200px` }} // inline style needed for field-sizing
-              placeholder="Type your message..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && e.ctrlKey && !loading) {
-                  handleSend();
-                }
-              }}
-              disabled={loading}
-            />
-            <Button
-              onClick={handleSend}
-              disabled={loading || !input.trim()}
-              size="sm"
-              className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
-            >
-              {loading ? <LoaderSpinner /> : <SendIcon />}
-            </Button>
+            {/* Context */}
+            <div className="flex gap-3 flex-wrap transition mb-2">
+              {/* {JSON.stringify(drajedContext.map((item) => item.productId))} */}
+              {drajedContext.length > 0 &&
+                drajedContext.map((item) => (
+                  <Link href={`/${item.id}`} target="_blank">
+                    <Button
+                      // size={`icon`}
+                      variant={`outline`}
+                      className="rounded-md bg-mutedBackground text-mutedForeground w-fit px-3 py-1  flex items-center justify-center gap-2 text-sm aspect-square hover:bg-destructive/40"
+                    >
+                      <Button
+                        variant={`destructive`}
+                        className={`w-2 h-2 p-2 flex items-center justify-center bg-mutedBackground`}
+                        size={`icon`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          removeItemFromDrajedContext(item.feedbackId);
+                        }}
+                      >
+                        <X />
+                      </Button>
+                      {item.feedback.title || `No title`}
+                    </Button>
+                  </Link>
+                ))}
+              {/* Clear all context */}
+              {/* <Button
+                // size={`icon`}
+                variant={`outline`}
+                className="rounded-md bg-mutedBackground text-mutedForeground w-fit px-3 py-1  flex items-center justify-center gap-2 text-sm aspect-square hover:bg-destructive/40"
+              >
+                <Button
+                  variant={`destructive`}
+                  className={`w-2 h-2 p-2 flex items-center justify-center bg-mutedBackground`}
+                  size={`icon`}
+                  onClick={(e) => {
+                    // removeItemFromDrajedContext(item.feedbackId);
+                  }}
+                >
+                  <Trash2 />
+                  Clear All
+                </Button>
+              </Button> */}
+            </div>
+
+            <div className="flex gap-2 items-center">
+              <Textarea
+                ref={inputRef}
+                className={cn(
+                  "flex-1 transition-all ease-out rounded-[26px] p-4 pr-[60px] border border-input bg-background text-foreground placeholder:text-mutedForeground focus:outline-none focus:ring-2 focus:ring-floopr-purple text-sm resize-none max-h-[300px] hover:bg-secondary focus:min-h-[200px]",
+                  loading && "text-mutedForeground"
+                )}
+                style={{ fieldSizing: "content", width: `200px` }} // inline style needed for field-sizing
+                placeholder="Type your message..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && e.ctrlKey && !loading) {
+                    handleSend();
+                  }
+                }}
+                disabled={loading}
+              />
+              <Button
+                onClick={handleSend}
+                disabled={loading || !input.trim()}
+                size="sm"
+                className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
+              >
+                {loading ? <LoaderSpinner /> : <SendIcon />}
+              </Button>
+            </div>
           </div>
         </div>
       )}

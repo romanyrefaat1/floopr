@@ -4,7 +4,9 @@ import FeedbackItem from "../../../[productId]/_components/feedback-item";
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { FilterData, Product } from "../page";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
+import { useChatbotContext } from "@/contexts/use-chatbot-context";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
+import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 
 interface FeedbackContentItemsProps {
@@ -23,6 +25,8 @@ export default function FeedbackContentItems({
   const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { isDrajable, startDraj, dropDraj, isDrain, drajedContext } =
+    useChatbotContext();
 
   useEffect(() => {
     setLoading(true);
@@ -78,8 +82,23 @@ export default function FeedbackContentItems({
   return (
     <div className="space-y-4">
       {feedbacks.map((feedback) => (
-        <div className="mb-4" key={feedback.id}>
+        <div
+          className={cn(
+            "mb-4",
+            drajedContext.some(
+              (item) => item.feedbackId === feedback.feedbackId
+            ) &&
+              `bg-primary-muted-foreground dark:bg-floopr-purple-dark/20 rounded-xl`
+          )}
+          onDrag={() => startDraj(feedback)}
+          onDragEnd={dropDraj}
+          key={feedback.id}
+        >
           <FeedbackItem
+            className={cn(
+              isDrajable && `cursor-grab`,
+              isDrain && `cursor-grabbing`
+            )}
             isOwner={isOwner}
             feedback={feedback}
             productId={productId}

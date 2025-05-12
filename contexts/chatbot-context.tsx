@@ -8,6 +8,14 @@ export interface ChatbotContextType {
   closeChatbot: () => void;
   makeFullScreen: () => void;
   isFullScreen: boolean;
+  startDraj: (feedbackId: string) => void;
+  isDrain: boolean;
+  dropDraj: () => void;
+  isDrajable: boolean;
+  drajedContext: Array<any>;
+  makeMouseInsideContainer: () => void;
+  removeMouseInsideContainer: () => void;
+  removeItemFromDrajedContext: (feedbackId) => void;
 }
 
 export const ChatbotContext = createContext<ChatbotContextType | undefined>(
@@ -25,6 +33,12 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
     }
     return true;
   });
+  const [isDrain, setIsDrain] = useState(false);
+  const [drainValue, setDrainValue] = useState(null);
+  const [drajedContext, setDrajedContext] = useState([]);
+  const isDrajable = isFullScreen || isOpen;
+  const [isMouseInsideContainer, setIsMouseInsideContainer] =
+    useState<boolean>();
 
   const openChatbot = () => setIsOpen(true);
   const closeChatbot = () => {
@@ -42,6 +56,34 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       return next;
     });
+  };
+  const startDraj = (feedbackId) => {
+    if (!isDrajable) return;
+    setIsDrain(true);
+    setDrainValue(feedbackId);
+  };
+  const dropDraj = () => {
+    if (!isDrajable) return;
+    setIsDrain(false);
+    if (isMouseInsideContainer) {
+      setDrajedContext((prev) => [...prev, drainValue]);
+    }
+    setDrainValue(null);
+  };
+  const makeMouseInsideContainer = () => {
+    // if (isDrain) {
+    setIsMouseInsideContainer(true);
+    // }
+  };
+  const removeMouseInsideContainer = () => {
+    // if (isDrain) {
+    setIsMouseInsideContainer(false);
+    // }
+  };
+  const removeItemFromDrajedContext = (feedbackId) => {
+    setDrajedContext((prev) =>
+      prev.filter((item) => item.feedbackId !== feedbackId)
+    );
   };
 
   useEffect(() => {
@@ -73,9 +115,17 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
         closeChatbot,
         makeFullScreen,
         isFullScreen,
+        startDraj,
+        isDrain,
+        dropDraj,
+        isDrajable,
+        drajedContext,
+        makeMouseInsideContainer,
+        removeMouseInsideContainer,
+        removeItemFromDrajedContext,
       }}
     >
-      {children}
+      <div className={"relative"}>{children}</div>
     </ChatbotContext.Provider>
   );
 };
