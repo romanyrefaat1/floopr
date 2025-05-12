@@ -1,5 +1,3 @@
-// app/layout.tsx
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -8,9 +6,9 @@ import { Providers } from "@/src/components/providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Floopr - Make User Feedback Actionable",
+  title: "Floopr - Make Customer Feedback Actionable",
   description:
-    "Collect, organize, and prioritize user feedback all in one place. Help your team build what users really want.",
+    "Collect, organize, and prioritize customer feedback all in one place. Help your team build what users really want.",
   icons: [
     {
       rel: "icon",
