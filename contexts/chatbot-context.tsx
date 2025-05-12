@@ -125,9 +125,6 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
         removeItemFromDrajedContext,
       }}
     >
-      <div className="text-red-500">
-        {isMouseInsideContainer ? `yes` : `no`} IsMouseInsideContainer
-      </div>
       <div className={"relative"}>{children}</div>
     </ChatbotContext.Provider>
   );
