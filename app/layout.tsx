@@ -1,12 +1,13 @@
-import { Providers } from "@/src/components/providers";
-import "./globals.css";
-import FloatingFeedbackButton from "@/components/floopr-integration/float-button-circle/floating-feedback-button";
+// app/layout.tsx
+
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Head from "next/head";
+import "./globals.css";
+import { Providers } from "@/src/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Floopr - Make User Feedback Actionable",
   description:
     "Collect, organize, and prioritize user feedback all in one place. Help your team build what users really want.",
@@ -22,6 +23,9 @@ export const metadata = {
       media: "(prefers-color-scheme: light)",
     },
   ],
+  verification: {
+    google: "Soz3RCl8C5vBfVKghak8-FkRHzWkmfY4iskV3VSd_hg",
+  },
 };
 
 export default function RootLayout({
@@ -31,12 +35,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Head>
-        <meta
-          name="google-site-verification"
-          content="Soz3RCl8C5vBfVKghak8-FkRHzWkmfY4iskV3VSd_hg"
-        />
-      </Head>
       <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
         <Providers>{children}</Providers>
       </body>
