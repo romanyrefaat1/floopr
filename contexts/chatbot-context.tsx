@@ -15,6 +15,7 @@ export interface ChatbotContextType {
   drajedContext: Array<any>;
   makeMouseInsideContainer: () => void;
   removeMouseInsideContainer: () => void;
+  removeItemFromDrajedContext: (feedbackId) => void;
 }
 
 export const ChatbotContext = createContext<ChatbotContextType | undefined>(
@@ -79,6 +80,11 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
     setIsMouseInsideContainer(false);
     // }
   };
+  const removeItemFromDrajedContext = (feedbackId) => {
+    setDrajedContext((prev) =>
+      prev.filter((item) => item.feedbackId !== feedbackId)
+    );
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -116,12 +122,13 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
         drajedContext,
         makeMouseInsideContainer,
         removeMouseInsideContainer,
+        removeItemFromDrajedContext,
       }}
     >
       <div className="text-red-500">
         {isMouseInsideContainer ? `yes` : `no`} IsMouseInsideContainer
       </div>
-      <div className="relative">{children}</div>
+      <div className={"relative"}>{children}</div>
     </ChatbotContext.Provider>
   );
 };

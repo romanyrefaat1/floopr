@@ -1,6 +1,5 @@
 import { Providers } from "@/src/components/providers";
 import "./globals.css";
-import FloatingFeedbackButton from "@/components/floopr-integration/float-button-circle/floating-feedback-button";
 import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });

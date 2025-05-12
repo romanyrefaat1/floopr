@@ -3,7 +3,7 @@
 import { Button } from "../ui/button";
 import { useChatbotContext } from "@/contexts/use-chatbot-context";
 import { useUser } from "@clerk/nextjs";
-import { Maximize, Minimize, SendIcon, Trash, X } from "lucide-react";
+import { Maximize, Minimize, SendIcon, Trash, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import "react-chat-elements/dist/main.css";
@@ -34,6 +34,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
     makeFullScreen,
     isFullScreen,
     drajedContext,
+    removeItemFromDrajedContext,
     isDrain,
     makeMouseInsideContainer,
     removeMouseInsideContainer,
@@ -144,6 +145,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             <div className="absolute top-0 left-0 w-full h-full bg-floopr-purple-light opacity-20 fade-in-50" />
           )}
 
+          {/* Top */}
           <div className="flex justify-between items-center p-2 border-b backdrop-blur-sm">
             <span className="font-semibold flex items-center text-sm">
               <Image
@@ -173,6 +175,8 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               </Button>
             </div>
           </div>
+
+          {/* Messajes */}
           <div
             className={cn(
               "flex-1 flex flex-col p-2 overflow-x-hidden z-[2] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
@@ -270,12 +274,12 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                           },
                           ul: ({ node, ...props }) => (
                             <ul
-                              className="list-disc list-inside mb-4"
+                              className="list-disc list-inside mb-4 mr-3"
                               {...props}
                             />
                           ),
                           li: ({ node, ...props }) => (
-                            <li className="mb-1 ml-4" {...props} />
+                            <li className="mb-1 ml-2" {...props} />
                           ),
                           blockquote: ({ node, ...props }) => (
                             <blockquote
@@ -320,8 +324,50 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                  p-1 z-[3]"
           >
             {/* Context */}
-            <div>
-              {JSON.stringify(drajedContext.map((item) => item.productId))}
+            <div className="flex gap-3 flex-wrap transition mb-2">
+              {/* {JSON.stringify(drajedContext.map((item) => item.productId))} */}
+              {drajedContext.length > 0 &&
+                drajedContext.map((item) => (
+                  <Link href={`/${item.id}`} target="_blank">
+                    <Button
+                      // size={`icon`}
+                      variant={`outline`}
+                      className="rounded-md bg-mutedBackground text-mutedForeground w-fit px-3 py-1  flex items-center justify-center gap-2 text-sm aspect-square hover:bg-destructive/40"
+                    >
+                      <Button
+                        variant={`destructive`}
+                        className={`w-2 h-2 p-2 flex items-center justify-center bg-mutedBackground`}
+                        size={`icon`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          removeItemFromDrajedContext(item.feedbackId);
+                        }}
+                      >
+                        <X />
+                      </Button>
+                      {item.feedback.title || `No title`}
+                    </Button>
+                  </Link>
+                ))}
+              {/* Clear all context */}
+              {/* <Button
+                // size={`icon`}
+                variant={`outline`}
+                className="rounded-md bg-mutedBackground text-mutedForeground w-fit px-3 py-1  flex items-center justify-center gap-2 text-sm aspect-square hover:bg-destructive/40"
+              >
+                <Button
+                  variant={`destructive`}
+                  className={`w-2 h-2 p-2 flex items-center justify-center bg-mutedBackground`}
+                  size={`icon`}
+                  onClick={(e) => {
+                    // removeItemFromDrajedContext(item.feedbackId);
+                  }}
+                >
+                  <Trash2 />
+                  Clear All
+                </Button>
+              </Button> */}
             </div>
 
             <div className="flex gap-2 items-center">

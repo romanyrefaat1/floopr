@@ -25,7 +25,8 @@ export default function FeedbackContentItems({
   const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { isDrajable, startDraj, dropDraj } = useChatbotContext();
+  const { isDrajable, startDraj, dropDraj, isDrain, drajedContext } =
+    useChatbotContext();
 
   useEffect(() => {
     setLoading(true);
@@ -82,12 +83,22 @@ export default function FeedbackContentItems({
     <div className="space-y-4">
       {feedbacks.map((feedback) => (
         <div
-          className={cn("mb-4", isDrajable && ``)}
+          className={cn(
+            "mb-4",
+            drajedContext.some(
+              (item) => item.feedbackId === feedback.feedbackId
+            ) &&
+              `bg-primary-muted-foreground dark:bg-floopr-purple-dark/20 rounded-xl`
+          )}
           onDrag={() => startDraj(feedback)}
           onDragEnd={dropDraj}
           key={feedback.id}
         >
           <FeedbackItem
+            className={cn(
+              isDrajable && `cursor-grab`,
+              isDrain && `cursor-grabbing`
+            )}
             isOwner={isOwner}
             feedback={feedback}
             productId={productId}

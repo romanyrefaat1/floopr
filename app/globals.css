@@ -32,7 +32,7 @@
   ); /* aligning secondary with your secondary background */
   --accent: 0, 10%, 88%; /* using primary as accent */
   --accent-foreground: 0, 0%, 30%;
-  --destructive: 0, 72%, 45%; /* a red tone, adjust if needed */
+  --destructive: 0, 22%, 25%; /* a red tone, adjust if needed */
   --muted-destructive: 0, 72%, 41%; /* a lighter red tone */
   --destructive-foreground: var(--primary-foreground);
   --chart-1: var(--primary);
