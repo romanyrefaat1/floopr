@@ -1,12 +1,8 @@
-<<<<<<< HEAD
-import type { Metadata } from "next";
-=======
 import { Providers } from "@/src/components/providers";
+import type { Metadata } from "next";
 import "./globals.css";
->>>>>>> prey-context
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Providers } from "@/src/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
