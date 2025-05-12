@@ -2,6 +2,7 @@ import { Providers } from "@/src/components/providers";
 import "./globals.css";
 import FloatingFeedbackButton from "@/components/floopr-integration/float-button-circle/floating-feedback-button";
 import { Inter } from "next/font/google";
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,6 +31,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <meta
+          name="google-site-verification"
+          content="Soz3RCl8C5vBfVKghak8-FkRHzWkmfY4iskV3VSd_hg"
+        />
+      </Head>
       <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
         <Providers>{children}</Providers>
       </body>
