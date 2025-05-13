@@ -17,7 +17,7 @@ export default function Feedbacks({
   isOwnerPa: boolean;
 }) {
   return (
-    <div className="p flex flex-col rounded-lg bg-card text-card-foreground shadow">
+    <div className="p flex flex-col rounded-lg bg- text-card-foreground ">
       <Suspense fallback={<LoaderSpinner />}>
         <TopFeedbacks isOwnerPa={isOwnerPa} productId={productId} />
       </Suspense>

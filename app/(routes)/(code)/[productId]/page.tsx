@@ -157,7 +157,7 @@ export default async function UsersProductPage({
         <div className="fixed bottom-4 right-4 md:bottom-10 md:right-[55px]">
           <Button
             variant="secondary"
-            className="rounded-full w-fit h-fit p-4 group hover:bg-mutedBackground"
+            className="rounded-full w-fit h-fit p-4 group bg-mutedBackground hover:bg-mutedBackground"
             style={{ aspectRatio: 1 }}
           >
             <Link
