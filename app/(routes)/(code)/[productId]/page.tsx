@@ -113,7 +113,7 @@ export default async function UsersProductPage({
     ownerId: productDataFirebase.ownerId,
     isOwner,
     productId: productDataFirebase.productId,
-    link: productDataFirebase.link || `/${productId}`,
+    link: productDataFirebase.websiteLink || `/${productId}`,
     mainTitle: productDataFirebase.mainTitle,
     titleLabel: productDataFirebase.titleLabel,
     descriptionLabel: productDataFirebase.descriptionLabel,
