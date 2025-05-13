@@ -24,7 +24,7 @@ function FeedbackScript() {
     src: "https://floopr.vercel.app/embeds/float-button-bundle_floopr_feedback_embed.js",
     "data-api-key": process.env.PA_FLOAT_BUTTON_FLOOPR_API_KEY,
     "data-product-id": "31a4fd3d-615a-409c-97ee-bda48bbbb8e2",
-    "data-component-id": "92182c5d-232c-45a5-952e-ec92194ad16a",
+    "data-component-id": "6e5b7f46-0488-4a85-8564-3f323338471f",
     defer: true,
   };
 
