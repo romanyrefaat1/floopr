@@ -11,8 +11,8 @@
   --primary-muted-foreground: 255, 69%, 91%; /* #e0d8f8 */
 
   /* Base colors */
-  --background: 0, 0%, 90%; /* #ffffff */
-  --secondary-background: 0, 0%, 95%; /* light grey */
+  --background: 0, 0%, 94%; /* #ffffff */
+  --secondary-background: 0, 0%, 92%; /* light grey */
   --foreground: 0, 0%, 5%; /* #000000 */
   --secondary-foreground: 0, 0%, 20%; /* darker text for secondary elements */
   --border: 210, 96%, 80%; /* #e5e7eb */

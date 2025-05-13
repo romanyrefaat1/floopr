@@ -19,7 +19,7 @@ const Hero = () => {
           size="md"
         />
       </div> */}
-      <div className="relative w-full h-full">
+      {/* <div className="relative w-full h-full">
         <div className="absolute bottom-[-190px] w-full">
           <FeedbackNote
             title="Improve UI"
@@ -27,30 +27,29 @@ const Hero = () => {
             positionX="left"
           />
         </div>
-      </div>
+      </div> */}
 
-      <div className="section-container">
-        <div className="relative z-10 text-center max-w-3xl mx-auto">
+      <div className="section-container flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-8 px-4 md:px-6 lg:px-8">
+        <div className="relative z-10 text-center lg:text-left max-w-3xl mx-auto lg:mx-0 lg:w-1/2">
           <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-4 py-2 rounded-full text-sm font-medium mb-4">
             Beta Version
           </span>
 
-          <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold mb-6 animate-on-scroll">
-            Turn Messy Feedback
-            <br />
-            Into a Business Plan
+          <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-3 mx-auto lg:mx-0 animate-on-scroll">
+            Collect, Analyze, and Build with
+            Feedback that drives Product Success
           </h1>
 
           <p
-            className="text-lg md:text-xl text-gray-600 mb-8 animate-on-scroll max-w-2xl mx-auto"
+            className="text-md md:text-lg text-gray-600 mb-8 animate-on-scroll max-w-2xl mx-auto"
             style={{ animationDelay: "100ms" }}
           >
-            Harness the power of AI to transform user feedback into actionable
-            business strategies. Organize, analyze, and execute with precision.
+            Transform customer feedback into actionable business strategies. Organize,
+            analyze, and execute with precision.
           </p>
 
           <div
-            className="flex justify-center align-center items-center gap-4 animate-on-scroll px-6"
+            className="flex justify-center lg:justify-start items-center gap-4 animate-on-scroll px-6 lg:px-0"
             style={{ animationDelay: "200ms" }}
           >
             <Link href="#demo">
@@ -65,16 +64,18 @@ const Hero = () => {
         </div>
 
         <div
-          className="relative mt-16 animate-on-scroll blur-on-scroll"
+          className="relative mt-16 lg:mt-0 animate-on-scroll blur-on-scroll lg:w-1/2"
           style={{ animationDelay: "400ms" }}
         >
-          <div className="aspect-[16/9] max-w-5xl mx-auto">
+          <span className="block text-center lg:text-right mb-2 text-gray-600 italic">to make it clear this is what you will get</span>
+          <div className="aspect-[16/9] max-w-5xl mx-auto lg:ml-auto group">
             <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200">
               <Link
                 href={`https://floopr.vercel.app/31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
               >
                 <Image
-                  src="/images/land/dashboard-preview.png"
+                  // src="/images/land/dashboard-preview.png"
+                  src="/images/land/hero/test-test.png"
                   alt="Floopr Dashboard Preview"
                   fill
                   className="object-cover"

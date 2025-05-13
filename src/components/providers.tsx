@@ -6,7 +6,7 @@ import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
 
-function FeedbackScript() {
+export function FeedbackScript() {
   const { user, isLoaded } = useUser();
 
   if (!isLoaded) return null;
@@ -42,7 +42,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <ClerkProvider>
       <AuthProvider>
         {children}
-        <FeedbackScript />
       </AuthProvider>
       <Toaster />
       {process.env.NEXT_PUBLIC_IS_PRODUCTION && <Analytics />}

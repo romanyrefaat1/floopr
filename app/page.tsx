@@ -64,9 +64,9 @@ export default function Home() {
 
         {/* Hero Section */}
         <Hero />
-        <BeforeAndAfterSection />
+        {/* <BeforeAndAfterSection /> */}
         {/* Call to action */}
-        <div className="bg-gray-50 p-8 text-center">
+        {/* <div className="bg-gray-50 p-8 text-center">
           <div className="mb-2">
             <span className="text-2xl">💡</span>
           </div>
@@ -85,10 +85,10 @@ export default function Home() {
               View Pricing
             </a>
           </div>
-        </div>
+        </div> */}
 
         {/* Features Section */}
-        <div className="relative mt-24 md:mt-40">
+        <div className="relative m">
           <Features />
         </div>
         <div className="relative mt-24 md:mt-40">

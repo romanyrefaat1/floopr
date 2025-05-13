@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { FeedbackScript } from "@/src/components/providers";
 import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 
@@ -23,6 +24,8 @@ export default async function PageLayout({ children, modal }) {
         </SidebarProvider>
         {modal}
       </div>
+              <FeedbackScript />
+      
     </ThemeProvider>
   );
 }
