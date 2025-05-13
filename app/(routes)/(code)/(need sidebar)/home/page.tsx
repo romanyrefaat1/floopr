@@ -41,7 +41,7 @@ const Home = async () => {
               </Link>
             </div>
             <Suspense fallback={<LoaderSpinner className="min-h-[300px]" />}>
-              <LatestProducts numOfCols={1} userId={userId} />
+              <LatestProducts numOfCols={1} userId={userId} maxProducts={4} />
             </Suspense>
           </div>
 

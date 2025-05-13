@@ -1,25 +1,18 @@
 import { db } from "@/lib/firebase";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  limit,
-} from "firebase/firestore";
+import { collection, query, where, getDocs, limit } from "firebase/firestore";
 
-export async function getLatestProducts(userId: string) {
+export async function getLatestProducts(userId: string, maxProducts: number) {
   try {
     const productsRef = collection(db, "products");
 
     const q = query(
       productsRef,
       where("ownerId", "==", userId),
-    //   orderBy("createdAt", "desc"),
-      limit(4)
+      maxProducts && limit(maxProducts)
     );
 
     const querySnapshot = await getDocs(q);
-    console.log(querySnapshot)
+    console.log(querySnapshot);
 
     const products = querySnapshot.docs.map((doc) => {
       const data = doc.data();
