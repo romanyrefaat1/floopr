@@ -15,8 +15,8 @@ const RichTextViewer: React.FC<DraftJsViewerProps> = ({
 }) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
-  if (!content && !(content as any).blocks) {
-    return <p>content not if in ric text viewer</p>;
+  if (!content || !(content as any).blocks || typeof content === "string") {
+    return <p>{content}</p>;
   }
 
   useEffect(() => {
