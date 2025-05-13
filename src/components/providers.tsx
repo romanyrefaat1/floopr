@@ -1,9 +1,8 @@
 "use client";
 
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
-import FloatingFeedbackButton from "@/components/floopr-integration/float-button-circle/floating-feedback-button";
 import { AuthProvider } from "@/contexts/auth-context";
-import { ClerkProvider, useUser, useUser } from "@clerk/nextjs";
+import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import { Toaster } from "sonner";
 
