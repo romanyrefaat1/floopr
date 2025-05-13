@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
 
 const Features = () => {
   return (
@@ -46,7 +48,7 @@ const Features = () => {
         <div className="relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
             <Image
-              src="/images/land/home-pa.png"
+              src="/images/features/feedback-boards.png"
               alt="Feedback Board"
               width={500}
               height={400}
@@ -101,7 +103,7 @@ const Features = () => {
       </div>
 
       {/* Multiple Product Boards Section */}
-      <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
+      {/* <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
         <div>
           <h3 className="text-2xl font-bold mb-4">Multiple Product Boards</h3>
           <p className="text-gray-600 mb-6">
@@ -136,6 +138,67 @@ const Features = () => {
               width={500}
               height={400}
               className="w-full h-auto rounded-lg"
+            />
+          </div>
+        </div>
+      </div> */}
+
+      {/* Embeddable Widgets Section */}
+      <div className="grid md:grid-cols-2 gap-16 items-center mb-24 animate-on-scroll">
+        <div>
+          <h3 className="text-2xl font-bold mb-4">Embeddable Widgets & Quick Setup</h3>
+          <p className="text-gray-600 mb-6">
+            Integrate feedback collection seamlessly into your product with our customizable widgets.
+            Get started in under a minute with our simple documentation and ready-to-use components.
+          </p>
+          <ul className="space-y-3">
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Edit and preview directly from our UI</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Make components fit to your brand identity</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Copy & Paste script tag into your website</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-floopr-purple-bg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-floopr-purple"></div>
+              </div>
+              <span>Get feedback directly from your site</span>
+            </li>
+          </ul>
+        </div>
+        <div className="relative h-[500px] group">
+          {/* Background image */}
+          <div className="absolute inset-8 transform translate-y-8 translate-x-8">
+            <div className="glass-card p-6 shadow-xl rounded-xl overflow-hidden h-full opacity-40 blur-[2px]">
+              <Image
+                src="/images/features/component-doc.png"
+                alt="Component Documentation"
+                width={500}
+                height={400}
+                className="rounded-lg w-full h-full object-cover"
+              />
+            </div>
+          </div>
+          {/* Main card */}
+          <div className="glass-card p-6 shadow-2xl rounded-xl overflow-hidden absolute inset-0 transform hover:-translate-y-2 transition-all duration-300">
+            <Image
+              src="/images/features/edit-component.png"
+              alt="Widget Editor"
+              width={500}
+              height={400}
+              className="rounded-lg w-full h-full object-cover"
             />
           </div>
         </div>
