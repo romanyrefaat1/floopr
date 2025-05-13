@@ -24,15 +24,15 @@ export default async function DashboardTemplate({
   filterData: FilterData;
 }) {
   return (
-    <main className="container max-w-full flex">
-      <div className="px-4 py-[3rem] w-full ">
+    <main className="container max-w-screen flex">
+      <div className="px-4 py-[3rem] flex- w-full ">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div className="md:hidden">
             <SidebarTrigger />
           </div>
           <div>
-            <div className="mb-4">
+            <div className="mb-4 ">
               <AllProductsPreviewComboBox productId={productData.docId} />
             </div>
             <h1 className="text-2xl font-bold">{productData.name}</h1>
@@ -67,7 +67,7 @@ export default async function DashboardTemplate({
         <Tabs defaultValue="feedback" className="space-y-4">
           <TabsClient>
             {/* Tabs List - Scrollable on Small Screens */}
-            <div className="overflow-x-auto sticky top-0 z-[2]">
+            <div className="overflow-x-auto sticky top-0 z-[2] shadow-md">
               <TabsList className="flex gap-2 bg-mutedBackground text-foreground w-fit min-w-max md:grid md:grid-cols-4 md:max-w-md scrollbar-hide hover:scrollbar-default [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
                 <TabsTrigger
                   value="feedback"

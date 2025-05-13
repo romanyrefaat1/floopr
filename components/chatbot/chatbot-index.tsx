@@ -18,7 +18,7 @@ const firstMess = {
   position: "left",
   type: "text",
   role: `model`,
-  text: "Hi! I'm Prey, your AI assistant with Floopr. How can  do you want to know?",
+  text: "Hi! I'm Prey, your AI assistant with Floopr. How can I help you today?",
 };
 
 const keywords = {
@@ -102,8 +102,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   return (
     <div
       className={cn(
-        "block w-fit fixed bottom-[2.5rem] md:bottom-[5.5rem] right-7 z-50",
-        isFullScreen && " w-full h-full right-0 sticky top-0"
+        "block w-fit max-w-screen fixed bottom-[2.5rem] md:bottom-[5.5rem] right-7 z-50",
+        isFullScreen && "h-screen right-0 sticky top-0 md:w-1/2",
+        isFullScreen && isOpen && `flex-1 min-w-[450px]`
         // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
       onDragEnter={(e) => {
@@ -123,22 +124,25 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           variant="outline"
           onClick={openChatbot}
           size="sm"
-          className="gap-2 shadow-lg bg-background transition-all duration-300 h- flex items-center justify-center  hover:scale-105 aspect-square"
+          className="gap-2 w-fit shadow-lg bg-background transition-all duration-300 h- flex items-center justify-center  hover:scale-105 aspect-square"
         >
           <Image
-            className="flex items-center object-contain justify-center w-fit h-fit select-none"
+            className="flex items-center object-contain justify-center w-[10px] h-[10px] rounded-full select-none"
             src="/images/assistant-avatar/prey.png"
             alt="Chatbot Icon"
             width={900}
             height={900}
           />
+          {` `}
+          Chat with Prey
         </Button>
       )}
       {isOpen && (
         <div
           className={cn(
-            "sticky top-0 right-0 w-[450px] h-[500px] bg-background border rounded-xl shadow-2xl flex flex-col animate-in fade-in zoom-in-105 duration-200 overflow-hidden",
-            isFullScreen && "w-full h-screen sticky top-0 inset-0 rounded-none"
+            "sticky top-0 right-0 bg-background border rounded-xl shadow-2xl flex flex-col animate-in fade-in zoom-in-105 duration-200 overflow-hidden",
+            isFullScreen && "w-full h-full sticky top-0 inset-0 rounded-none",
+            !isFullScreen && ` w-[300px] h-[450px] md:w-[450px] md:h-[500px]`
           )}
         >
           {isDrain && (
@@ -163,7 +167,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                   <X />
                 </Button>
               )}
-              <Button size="icon" variant="ghost" onClick={makeFullScreen}>
+              <Button size="icon" variant="ghost" className="hidden md:flex" onClick={makeFullScreen}>
                 {isFullScreen ? <Minimize size={12} /> : <Maximize size={12} />}
               </Button>
               <Button
@@ -179,10 +183,22 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           {/* Messajes */}
           <div
             className={cn(
-              "flex-1 flex flex-col p-2 overflow-x-hidden z-[2] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
+              "relative flex-1 flex flex-col p-2 overflow-x-hidden z-[2] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
               isFullScreen && `h-full`
             )}
           >
+            {messages.length < 2 && (
+              <div className="absolute hidden md:flex w-fit top-1/2 left-1/2 bg-mutedBackground p-2 rounded-xl transform -translate-x-1/2 -translate-y-1/2 text-mutedForeground flex items-center gap-2">
+                <Image
+                  src={`/images/assistant-avatar/prey.png`}
+                  width={200}
+                  height={200}
+                  alt="Prey Icon"
+                  className="rounded-full w-5 h-5 mr-2 inline-block select-none"
+                />
+                <p className="text-sm w-fit">You can drag any feedback into the chat</p>
+              </div>
+            )}
             {messages.map((msg, idx) => (
               <div
                 key={idx}
