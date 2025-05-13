@@ -141,7 +141,7 @@ export default async function UsersProductPage({
           <ShareButton />
         </nav>
       </header>
-      <div className={`border-secondary border rounded-lg p-4 gap-xl2`}>
+      <div className={`border-secondary lg:border lg:rounded-lg lg:p-4 gap-xl2`}>
         <h1 className="mb-2 text-4xl font-bold">Give us feedback</h1>
         <Suspense fallback={<LoaderSpinner />}>
           <Feedbacks
