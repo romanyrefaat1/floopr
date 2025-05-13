@@ -61,7 +61,9 @@ const Features = () => {
         <div className="relative">
           <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
             <Image
-              src="/images/land/dashboard-preview.png"
+              // src="/images/land/dashboard-preview.png"
+              src="/images/features/custom-pa.png"
+
               alt="Floopr Dashboard Preview"
               width={500}
               height={400}

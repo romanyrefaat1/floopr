@@ -141,8 +141,8 @@ export default async function UsersProductPage({
           <ShareButton />
         </nav>
       </header>
-      <div className={`border-secondary lg:border lg:rounded-lg lg:p-4 gap-xl2`}>
-        <h1 className="mb-2 text-4xl font-bold">Give us feedback</h1>
+      <div className={``}>
+        <h1 className="mb- text-4xl font-bold">Give us feedback</h1>
         <Suspense fallback={<LoaderSpinner />}>
           <Feedbacks
             isOwnerPa={false}
@@ -157,7 +157,7 @@ export default async function UsersProductPage({
         <div className="fixed bottom-4 right-4 md:bottom-10 md:right-[55px]">
           <Button
             variant="secondary"
-            className="rounded-full w-fit h-fit p-4 group bg-mutedBackground hover:bg-mutedBackground"
+            className="rounded-full w-fit h-fit p-4 group bg-mutedBackground hover:bg-mutedBackground border border-primary border-4"
             style={{ aspectRatio: 1 }}
           >
             <Link

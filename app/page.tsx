@@ -12,8 +12,18 @@ import Demo from "@/src/Demo";
 import BeforeAndAfterSection from "@/src/components/BeforeAndAfterSection";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { ChangelogModalProvider } from "@/src/components/ChangelogModalContext";
 
 export default function Home() {
+  // Wrap everything in ChangelogModalProvider
+  return (
+    <ChangelogModalProvider>
+      <HomeContent />
+    </ChangelogModalProvider>
+  );
+}
+
+function HomeContent() {
   const mainRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

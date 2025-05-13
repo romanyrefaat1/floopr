@@ -13,7 +13,7 @@ export default function TopFeedbacks({
   return (
     <>
       {/* Small screens */}
-      <div className="md:hidden flex flex-col my-5 gap-2">
+      <div className="md:hidden flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <ButtonAddFeedback />
           <div className="flex gap-2">

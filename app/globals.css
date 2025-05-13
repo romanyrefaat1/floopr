@@ -2,6 +2,110 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Changelog Modal Styles */
+.changelog-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+  z-index: 1000;
+}
+
+.changelog-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.changelog-modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1001;
+  padding: 2.5rem;
+}
+
+.changelog-modal.open {
+  pointer-events: auto;
+}
+
+.changelog-modal .changelog-modal-content {
+  background: white;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+  overflow-y: auto;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.changelog-modal.open .changelog-modal-content {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.changelog-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.changelog-modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.changelog-modal-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.2);
+  border-radius: 20px;
+  border: 2px solid white;
+}
+
+/* Version number style */
+.version-tag {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #666;
+  background: #f5f5f5;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+}
+
+/* Changelog entry animation */
+@keyframes entryFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.changelog-entry {
+  animation: entryFadeIn 0.5s ease-out forwards;
+}
+
+@media (max-width: 768px) {
+  .changelog-modal {
+    padding: 1rem;
+  }
+  
+  .changelog-modal .changelog-modal-content {
+    max-height: 100vh;
+    border-radius: 8px;
+  }
+}
+
 /* Light mode (default) */
 :root {
   /* Primary colors */
@@ -11,8 +115,8 @@
   --primary-muted-foreground: 255, 69%, 91%; /* #e0d8f8 */
 
   /* Base colors */
-  --background: 0, 0%, 94%; /* #ffffff */
-  --secondary-background: 0, 0%, 92%; /* light grey */
+  --background: 0, 0%, 97%; /* #ffffff */
+  --secondary-background: 0, 0%, 90%; /* light grey */
   --foreground: 0, 0%, 5%; /* #000000 */
   --secondary-foreground: 0, 0%, 20%; /* darker text for secondary elements */
   --border: 210, 96%, 80%; /* #e5e7eb */
@@ -20,7 +124,7 @@
   --ring: 250, 89%, 68%; /* matches primary */
   --muted: 210, 16%, 87%; /* #f5f5f5 */
   --muted-foreground: 210, 10%, 40%; /* #6b7280 */
-  --muted-background: 210, 16%, 87%; /* #e5e7eb */
+  --muted-background: 210, 16%, 90%; /* #e5e7eb */
 
   /* Additional variables from docs, adapted to your palette */
   --card: var(--background); /* using the same as background */

@@ -13,7 +13,7 @@ export default function ShowFeedbacks({
   console.log(`show productId:`, productId);
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">All Feedbacks</h2>
+      <h2 className="text-2xl font-bold mb-4 mt-4">All Feedbacks</h2>
       <FeedbackList
         isOwner={isOwner}
         productId={productId}
