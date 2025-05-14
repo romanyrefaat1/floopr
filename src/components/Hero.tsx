@@ -36,8 +36,7 @@ const Hero = () => {
           </span>
 
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-3 mx-auto lg:mx-0 animate-on-scroll">
-            Collect, Analyze, and Build with
-            Feedback that drives Product Success
+            Collect, Analyze, and Manage Feedback Effortlessly
           </h1>
 
           <p

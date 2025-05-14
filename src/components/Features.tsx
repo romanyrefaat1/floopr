@@ -178,30 +178,23 @@ const Features = () => {
             </li>
           </ul>
         </div>
-        <div className="relative h-[500px] group">
-          {/* Background image */}
-          <div className="absolute inset-8 transform translate-y-8 translate-x-8">
-            <div className="glass-card p-6 shadow-xl rounded-xl overflow-hidden h-full opacity-40 blur-[2px]">
-              <Image
-                src="/images/features/component-doc.png"
-                alt="Component Documentation"
-                width={500}
-                height={400}
-                className="rounded-lg w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          {/* Main card */}
-          <div className="glass-card p-6 shadow-2xl rounded-xl overflow-hidden absolute inset-0 transform hover:-translate-y-2 transition-all duration-300">
-            <Image
-              src="/images/features/edit-component.png"
-              alt="Widget Editor"
+        <div className="glass-card p-6 shadow-lg rounded-xl overflow-hidden">
+            {/* <Image
+              src="/images/land/ai-assistant.png"
+              alt="AI Tutor"
               width={500}
               height={400}
-              className="rounded-lg w-full h-full object-cover"
+              className="w-full h-auto rounded-lg"
+            /> */}
+            <video
+              src="/videos/land/embeddable-components.mp4"
+              className="w-full rounded-lg"
+              autoPlay
+              loop
+              muted
+              playsInline
             />
           </div>
-        </div>
       </div>
 
       {/* AI Analytics Section */}
@@ -259,7 +252,7 @@ const Features = () => {
             In Progress
           </span>
           <h3 className="text-2xl font-bold mb-4 flex items-center gap-4">
-            AI Tutor:{" "}
+            AI Co-Founder:{" "}
             <span className="text-floopr-purple-dark underline flex items-center">
               <Image
                 src="/images/assistant-avatar/prey.png"
@@ -312,7 +305,7 @@ const Features = () => {
               className="w-full h-auto rounded-lg"
             /> */}
             <video
-              src="/videos/land/screen-capture (4).webm"
+              src="/videos/land/ai-assistant.mp4"
               className="w-full rounded-lg"
               autoPlay
               loop
