@@ -4,19 +4,26 @@ import { collection, query, where, getDocs, limit } from "firebase/firestore";
 export async function getLatestProducts(userId: string, maxProducts: number) {
   try {
     const productsRef = collection(db, "products");
+    let q;
 
-    const q = query(
-      productsRef,
-      where("ownerId", "==", userId),
-      maxProducts && limit(maxProducts)
-    );
+    if (!maxProducts) {
+      q = query(
+        productsRef,
+        where("ownerId", "==", userId)
+      );
+    } else {
+      q = query(
+        productsRef,
+        where("ownerId", "==", userId),
+        limit(maxProducts)
+      );
+    }
 
     const querySnapshot = await getDocs(q);
     console.log(querySnapshot);
 
     const products = querySnapshot.docs.map((doc) => {
       const data = doc.data();
-      // Ensure all required properties are present
       return {
         id: doc.id,
         title: data.title || "",
@@ -27,7 +34,7 @@ export async function getLatestProducts(userId: string, maxProducts: number) {
         productName: data.productName || "",
         productRoute: data.productRoute || "",
         tags: data.tags || [],
-        ...data, // Include any other properties from the document
+        ...data,
       };
     });
 

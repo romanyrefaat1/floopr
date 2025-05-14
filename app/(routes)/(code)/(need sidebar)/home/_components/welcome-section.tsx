@@ -39,12 +39,12 @@ const WelcomeSection = () => {
           </div>
 
           <div
-            className={`flex md:flex-col md:items-end md:justify-between gap-4 w-full flex-1`}
+            className={`flex md:flex-col md:items-end md:justify-between gap-4 w-full flex-1  flex-wrap md:flex-nowrap`}
           >
             <div className="rounded-full p-1 bg-background shadow-sm">
               <UserButton afterSignOutUrl="/" />
             </div>
-            <div className="flex gap-3 w-full">
+            <div className="flex gap-3 w-full flex-wrap md:flex-nowrap">
               <Link href="/products" className="w-full sm:w-auto">
                 <Button variant="outline" className="w-full sm:w-auto">
                   View All

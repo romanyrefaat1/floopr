@@ -19,7 +19,7 @@ const LatestProducts = async ({
   numOfCols: number;
   maxProducts?: number;
 }) => {
-  const latestProducts = await getLatestProducts(userId, maxProducts);
+  const latestProducts = await getLatestProducts(userId);
   const numOfProducts = latestProducts.length;
   const numOfCols = numOfProducts > 1 ? (myNumOfCols > 1 ? myNumOfCols : 1) : 1;
 

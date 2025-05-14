@@ -33,7 +33,7 @@ const QuickStats = ({ userId }: { userId: string }) => {
         setIsLoading(true);
 
         // Get latest products for the user using client-side Firebase SDK
-        const latestProducts = await getLatestProducts(userId);
+        const latestProducts = await getLatestProducts(userId, 4);
 
         // Variables to accumulate data
         let views = 0;
@@ -123,7 +123,7 @@ const QuickStats = ({ userId }: { userId: string }) => {
                 </p>
                 <div className="flex flex-col gap-1">
                   {isLoading ? (
-                    <Skeleton className="h-8 w-24" />
+                    <Skeleton className="h-8 w-14 bg-background" />
                   ) : (
                     <h3 className="text-2xl font-bold tracking-tight">
                       {stat.value}

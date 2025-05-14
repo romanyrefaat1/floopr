@@ -22,6 +22,14 @@ export const metadata: Metadata = {
       media: "(prefers-color-scheme: light)",
     },
   ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   verification: {
     google: "Soz3RCl8C5vBfVKghak8-FkRHzWkmfY4iskV3VSd_hg",
   },

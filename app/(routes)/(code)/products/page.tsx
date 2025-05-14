@@ -17,7 +17,7 @@ const ProductsPa = async () => {
     //     <SidebarTrigger />
     //     </div>
     //   </div>
-    <main className="p-4 w-full">
+    <main className="p-4 w-full mt-[40px]">
       <h2 className="text-3xl mb-[25px] font-bold">Your Products</h2>
       <LatestProducts userId={userId} />
     </main>
