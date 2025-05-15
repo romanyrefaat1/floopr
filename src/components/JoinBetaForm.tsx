@@ -20,8 +20,10 @@ export default function JoinBetaForm() {
                 return;
             }
 
+            const newVerificationCode = crypto.randomUUID()
+
             const collectionRef = collection(db, `beta-emails`);
-            await addDoc(collectionRef, { email, createdAt: new Date() });
+            await addDoc(collectionRef, { email, createdAt: new Date(), betaCode: newVerificationCode, isVerified: false });
 
             setEmail('');
             toast.dismiss(toastLoader);
