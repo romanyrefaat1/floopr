@@ -70,7 +70,13 @@ export async function POST(request: NextRequest) {
     ${title}
     ${inputs}
     ${richContent}
-    feedbackId: ${f.feedbackId}`;
+    feedbackId: ${f.feedbackId}
+    date: ${f.createdAt}
+    likesCount: ${f.socialData?.liked?.count}
+    commentsCount: ${f.socialData?.comments?.count}
+    status: ${f.status}
+    type: ${f.type}
+    `;
           })
           .join("\n");
       }
