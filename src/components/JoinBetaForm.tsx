@@ -12,7 +12,9 @@ const emailMess = (newVerificationCode: string) => {
 
     <p>Thank you for joining our beta program!</p>
 
-    <p>Your email has been verified, and you’re now approved to use our beta version.</p>
+    <p>Your email has been verified, and you’re now approved to use our beta version.
+        And you will jet special discounts.
+    </p>
 
     <p>
       <a href="https://www.floopr.app/beta-verification?code=${newVerificationCode}" target="_blank" rel="noopener">
@@ -21,7 +23,7 @@ const emailMess = (newVerificationCode: string) => {
     </p>
 
     <p>Best regards,<br/>
-    — The Floopr Team</p>
+    — Founder, Romany</p>
   </div>
 `;
 }
