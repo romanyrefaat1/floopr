@@ -1,9 +1,12 @@
 "use client";
 
+import JoinBetaForm from "./JoinBetaForm";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 
 const CallToAction = () => {
+  const {isSignedIn} = useUser();
   return (
     <section
       id="cta"
@@ -22,19 +25,25 @@ const CallToAction = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link href="/home">
-            <Button
-              variant={`outline`}
-              className="px-8 py-6 text-lg rounded-lg w-full sm:w-auto"
-            >
-              Start Free
-            </Button>
-          </Link>
-          <Link href="/pricing">
-            <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white px-8 py-6 text-lg rounded-lg w-full sm:w-auto">
-              View Pricing
-            </Button>
-          </Link>
+          {isSignedIn ? (
+            <>
+              <Link href="/home">
+                <Button
+                  variant="outline"
+                  className="px-8 py-6 text-lg rounded-lg w-full sm:w-auto"
+                >
+                  Start Free
+                </Button>
+              </Link>
+              <Link href="/pricing">
+                <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white px-8 py-6 text-lg rounded-lg w-full sm:w-auto">
+                  View Pricing
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <JoinBetaForm />
+          )}
         </div>
       </div>
 

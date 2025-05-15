@@ -64,25 +64,28 @@ const Header = () => {
               </kbd> */}
               {/* </Button> */}
 
-              <Link
+              {/* <Link
                 href="/pricing"
                 className="text-gray-600 hover:text-floopr-purple transition-colors"
               >
                 Pricing
-              </Link>
+              </Link> */}
             </nav>
 
             {!isLoaded ? (
               <Skeleton className="h-8 w-24 bg-gray-200 rounded-md" />
             ) : (
-              <Link href="/home">
-                <Button
+              <Link href={isSignedIn ? "/home" : `#cta`}>
+                {isSignedIn ? (<Button
                   variant="default"
                   className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
                 >
-                  {!isSignedIn ? `Sign In now` : `Get Feedback Now`}
-                </Button>
+                  Get Feedback Now
+                </Button>) : (<Button>
+                <Link href="#cta">Join Beta</Link>
+              </Button>)}
               </Link>
+              
             )}
           </div>
         </div>

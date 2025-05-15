@@ -5,6 +5,7 @@ import { FeedbackNote } from "@/components/feedback-note";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
+import JoinBetaForm from "./JoinBetaForm";
 
 const Hero = () => {
   const { userId } = useAuth();
@@ -51,14 +52,20 @@ const Hero = () => {
             className="flex justify-center lg:justify-start items-center gap-4 animate-on-scroll px-6 lg:px-0"
             style={{ animationDelay: "200ms" }}
           >
-            <Link href="#demo">
-              <Button variant={`link`}>Watch Demo</Button>
-            </Link>
-            <Link href="/home">
-              <Button                   className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all">
-                {userId ? `Get Feedback Now` : `Get Started`}
-              </Button>
-            </Link>
+            {userId ? (
+              <>
+                <Link href="#demo">
+                  <Button variant={`link`}>Watch Demo</Button>
+                </Link>
+                <Link href="/home">
+                  <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all">
+                    Get Feedback Now
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <JoinBetaForm />
+            )}
           </div>
         </div>
 
