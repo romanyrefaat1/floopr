@@ -5,7 +5,8 @@ import { toast } from "sonner";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-const emailMess = (newVerificationCode: string) => {`
+const emailMess = (newVerificationCode: string) => {
+    return `
   <div>
     <p>Hi there,</p>
 

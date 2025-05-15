@@ -26,7 +26,7 @@ export async function POST(request: Request) {
       to,
       from: "refaatromany641@gmail.com",   // your verified sender
       subject,
-      text: text || undefined,
+    //   text: text || undefined,
       html: html || undefined,
     };
 
