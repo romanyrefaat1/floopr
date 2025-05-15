@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { FeedbackNote } from "@/components/feedback-note";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +8,25 @@ import JoinBetaForm from "./JoinBetaForm";
 
 const Hero = () => {
   const { userId } = useAuth();
+
+  // useEffect(() => {
+  //   const sendEmail = async () => {
+  //     const res = await fetch("/api/send-email", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         to: "refaatromany641@gmail.com",
+  //         subject: "Final Test",
+  //         html: "<strong>It works!</strong>",
+  //       }),
+  //     });
+  //     const data = await res.json();
+  //     console.log(data);
+  //   };
+
+  //   sendEmail();
+  // }, []);
+
   return (
     <section className="pt-[4rem] min-h-screen pb-16 md:pb-20 bg-white">
       {/* <div className="relative hidden lg:block w-full h-fit">

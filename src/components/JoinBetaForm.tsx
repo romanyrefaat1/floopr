@@ -5,10 +5,46 @@ import { toast } from "sonner";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
+const emailMess = (newVerificationCode: string) => {`
+  <div>
+    <p>Hi there,</p>
+
+    <p>Thank you for joining our beta program!</p>
+
+    <p>Your email has been verified, and you’re now approved to use our beta version.</p>
+
+    <p>
+      <a href="https://www.floopr.app/beta-verification?code=${newVerificationCode}" target="_blank" rel="noopener">
+        Click here and click "Verify"to access your beta dashboard
+      </a>
+    </p>
+
+    <p>Best regards,<br/>
+    — The Floopr Team</p>
+  </div>
+`;
+}
+
+
 export default function JoinBetaForm() {
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('email@example.com');
     const [loading, setLoading] = useState(false);
+
+    async function sendEmail(newVerificationCode: string) {
+        const res = await fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            to: "refaatromany641@gmail.com",
+            subject: "Final Test",
+            html: emailMess(newVerificationCode),
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+      }
     
+          
     const saveBetaEmail = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -26,6 +62,7 @@ export default function JoinBetaForm() {
             await addDoc(collectionRef, { email, createdAt: new Date(), betaCode: newVerificationCode, isVerified: false });
 
             setEmail('');
+            await sendEmail(newVerificationCode)
             toast.dismiss(toastLoader);
             toast.success('Thanks for joining! We\'ll notify you when your access is approved.');
         } catch (error) {
