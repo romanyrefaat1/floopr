@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Input } from "./ui/input";
@@ -62,7 +62,14 @@ export default function JoinBetaForm() {
             const newVerificationCode = crypto.randomUUID()
 
             const collectionRef = collection(db, `beta-emails`);
-            await addDoc(collectionRef, { email, createdAt: new Date(), betaCode: newVerificationCode, isVerified: false });
+            // check if email already exists
+            const q = query(collectionRef, where('email', '==', email));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                toast.error('Email already exists');
+                return;
+            }
+            await addDoc(collectionRef, { email, createdAt: new Date(), betaCode: newVerificationCode, isVerifiedBeta: false });
 
             setEmail('');
             await sendEmail(newVerificationCode)

@@ -14,6 +14,7 @@ export default function BetaVerification() {
     const code = searchParams.get('code');
     const [verificationCode, setVerificationCode] = useState(code || '');
     const [loading, setLoading] = useState(false);
+    const [shouldRedirect, setShouldRedirect] = useState(false);
 
     const verifyBetaCode = async (e: React.FormEvent) => {
         if (e){e.preventDefault();}
@@ -34,11 +35,16 @@ export default function BetaVerification() {
                 return;
             }
 
+            if (querySnapshot.docs[0].data().isVerifiedBeta) {
+                toast.error('This email is already verified');
+                return;
+            }
+
             const docRef = doc(db, 'beta-emails', querySnapshot.docs[0].id);
             await updateDoc(docRef, { isVerifiedBeta: true });
 
             toast.success('Beta access granted successfully!');
-            RedirectToSignIn({ redirectUrl: '/home' })
+            setShouldRedirect(true);
         } catch (error) {
             toast.error('Something went wrong. Please try again.');
             console.error(error);
@@ -46,6 +52,10 @@ export default function BetaVerification() {
             setLoading(false);
         }
     };
+
+    if (shouldRedirect) {
+        return <RedirectToSignIn redirectUrl="/home" />;
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-floopr-purple-bg to-white flex items-center justify-center p-4">
