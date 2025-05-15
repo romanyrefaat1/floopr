@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
     ${inputs}
     ${richContent}
     feedbackId: ${f.feedbackId}
-    date: ${f.createdAt}
+    date: ${f.createdAt?.toDate()?.toLocaleDateString() || `Unkown`}
     likesCount: ${f.socialData?.liked?.count}
     commentsCount: ${f.socialData?.comments?.count}
     status: ${f.status}
