@@ -27,7 +27,7 @@ const emailMess = (newVerificationCode: string) => {`
 
 
 export default function JoinBetaForm() {
-    const [email, setEmail] = useState('email@example.com');
+    const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
 
     async function sendEmail(newVerificationCode: string) {
@@ -35,8 +35,8 @@ export default function JoinBetaForm() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            to: "refaatromany641@gmail.com",
-            subject: "Final Test",
+            to: email,
+            subject: "You have been approved to use Floopr Beta",
             html: emailMess(newVerificationCode),
           }),
         });
