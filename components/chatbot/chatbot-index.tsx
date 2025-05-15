@@ -102,9 +102,10 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   return (
     <div
       className={cn(
-        "block w-fit max-w-screen fixed bottom-[2.5rem] md:bottom-[5.5rem] right-7 z-50",
+        "block w-fit max-w-screen fixed bottom-[2.5rem] md:bottom-[5.5rem] z-50",
         isFullScreen && "h-screen right-0 sticky top-0 md:w-1/2",
-        isFullScreen && isOpen && `flex-1 min-w-[450px]`
+        isFullScreen && isOpen && `flex-1 md:min-w-[450px] lg:min-w-[520px]`,
+        !isFullScreen && "right-7"
         // !isFullScreen && "fixed bottom-[5.5rem] md:bottom-[5.5rem] right-7 z-50"
       )}
       onDragEnter={(e) => {

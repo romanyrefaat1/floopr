@@ -4,6 +4,7 @@ import { formatDateDataFromShadcn } from "./_utility/formatDateData";
 import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import FilterButton from "@/components/filter/filter-button";
 import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
+import TypeFilterButton from "@/components/filter/type-filter-button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
@@ -30,7 +31,7 @@ export default function ContentTab({
       {/* Feedback list section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">Recent Feedback</h3>
+          <h3 className="text-lg font-medium">All Feedback</h3>
         </div>
 
         {/* Search and filters */}
@@ -40,6 +41,7 @@ export default function ContentTab({
             <Input placeholder="Search feedback..." className="pl-8 w-full" />
           </div>
           <div className="flex gap-2">
+            <TypeFilterButton productId={productId} />
             <SentimentFilterButton productId={productId} />
             <FilterButton isOwnerPa={isOwnerPa} label="Filter" />
           </div>

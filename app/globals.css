@@ -155,7 +155,7 @@
 /* Dark mode overrides */
 .dark {
   /* Core dark mode colors */
-  --background: 0, 0%, 10%; /* dark background */
+  --background: 0, 0%, 7%; /* dark background */
   --secondary-background: 0, 0%, 14%;
   --muted-background: 0, 0%, 16%;
 
