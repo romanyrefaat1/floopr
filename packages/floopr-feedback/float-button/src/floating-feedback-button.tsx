@@ -151,15 +151,16 @@ const getPositionStyles = (
   isFixed: boolean
 ) => {
   const cssPosition: "fixed" | "absolute" = isFixed ? "fixed" : "absolute";
+  console.log(`Float Button Position:`, buttonPosition, cssPosition);
   switch (buttonPosition) {
     case "top-left":
       return { top: "1rem", left: "1rem", position: cssPosition };
     case "top-right":
       return { top: "1rem", right: "1rem", position: cssPosition };
     case "bottom-left":
-      return { bottom: "1.5rem", left: "1.5rem", position: cssPosition };
+      return { bottom: "2rem", left: "1.5rem", position: cssPosition };
     case "bottom-right":
-      return { bottom: "1.5rem", right: "1.5rem", position: cssPosition };
+      return { bottom: "2rem", right: "1.5rem", position: cssPosition };
     default:
       return { position: cssPosition };
   }
@@ -283,30 +284,34 @@ export default function FlooprFloatingFeedbackButton({
 
   // Extract configuration from configData or use default props
   const finalConfig = {
-    isModal: configData?.componentData?.isModal ?? isModal,
-    primaryColor: configData?.componentData?.primaryColor ?? primaryColor,
-    backgroundColor:
-      configData?.componentData?.backgroundColor ?? backgroundColor,
-    textColor: configData?.componentData?.textColor ?? textColor,
-    overlayColor: configData?.componentData?.overlayColor ?? overlayColor,
-    accentColor: configData?.componentData?.accentColor ?? accentColor,
-    borderColor: configData?.componentData?.borderColor ?? borderColor,
-    padding: (configData?.componentData?.padding as PaddingSize) ?? padding,
+    isModal: configData?.isModal ?? isModal,
+    primaryColor: configData?.primaryColor ?? primaryColor,
+    backgroundColor: configData?.backgroundColor ?? backgroundColor,
+    textColor: configData?.textColor ?? textColor,
+    overlayColor: configData?.overlayColor ?? overlayColor,
+    accentColor: configData?.accentColor ?? accentColor,
+    borderColor: configData?.borderColor ?? borderColor,
+    padding: (configData?.padding as PaddingSize) ?? padding,
     borderRadius:
-      (configData?.componentData?.borderRadius as BorderRadiusSize) ??
-      borderRadius,
-    feedbackTypeColors:
-      configData?.componentData?.feedbackTypeColors ?? feedbackTypeColors,
+      (configData?.borderRadius as BorderRadiusSize) ?? borderRadius,
+    feedbackTypeColors: configData?.feedbackTypeColors ?? feedbackTypeColors,
     isSecondSectionColorLikeFeatureType:
-      configData?.componentData?.isSecondSectionColorLikeFeatureType ??
+      configData?.isSecondSectionColorLikeFeatureType ??
       isSecondSectionColorLikeFeatureType,
-    buttonPosition:
-      (configData?.componentData?.position as ButtonPosition) ?? buttonPosition,
+    buttonPosition: (configData?.position as ButtonPosition)
+      ? configData?.position
+      : buttonPosition,
     // isFixed is a direct prop, not from configData
     // MetaData can also be used if needed, e.g., for a title or description within the component
     // componentName: configData?.metaData?.name,
     // componentDescription: configData?.metaData?.description,
   };
+  console.log(`Float Button Final confi:`, finalConfig);
+  console.log(
+    `Float Button Final confi button position:`,
+    finalConfig.buttonPosition
+  );
+  console.log(`Float Button db positoin:`, configData?.componentData?.position);
 
   const defaultColors = {
     feature: {
@@ -596,8 +601,8 @@ export default function FlooprFloatingFeedbackButton({
             )}
             style={{
               backgroundColor: finalConfig.backgroundColor,
-              borderColor: finalConfig.borderColor,
-              borderWidth: "1px",
+              borderColor: finalConfig.primaryColor || finalConfig.borderColor,
+              borderWidth: ".7px",
               color: finalConfig.textColor,
               padding: paddingSizes[finalConfig.padding as PaddingSize],
               borderRadius:
@@ -835,7 +840,7 @@ export default function FlooprFloatingFeedbackButton({
               >
                 {isColorDark(finalConfig.backgroundColor) ? (
                   <img
-                    src="./ima/floopr-logo-no-bg-white-svg.svg"
+                    src={`https://floopr.vercel.app/images/floopr-logo-no-bg-white-svg.svg`}
                     alt="Floopr logo"
                     width={42}
                     height={12}
@@ -843,7 +848,7 @@ export default function FlooprFloatingFeedbackButton({
                   />
                 ) : (
                   <img
-                    src="./ima/floopr-logo-no-bg-svg.svg"
+                    src={`https://floopr.vercel.app/images/floopr-logo-no-bg-svg.svg`}
                     alt="Floopr logo"
                     width={42}
                     height={12}

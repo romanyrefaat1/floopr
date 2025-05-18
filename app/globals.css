@@ -6,7 +6,7 @@
 .changelog-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
@@ -42,7 +42,7 @@
   max-width: 800px;
   max-height: 90vh;
   border-radius: 12px;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
   transform: scale(0.95);
   opacity: 0;
@@ -63,14 +63,15 @@
 }
 
 .changelog-modal-content::-webkit-scrollbar-thumb {
-  background-color: rgba(0,0,0,0.2);
+  background-color: rgba(0, 0, 0, 0.2);
   border-radius: 20px;
   border: 2px solid white;
 }
 
 /* Version number style */
 .version-tag {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    Liberation Mono, Courier New, monospace;
   font-size: 0.875rem;
   font-weight: 500;
   color: #666;
@@ -99,7 +100,7 @@
   .changelog-modal {
     padding: 1rem;
   }
-  
+
   .changelog-modal .changelog-modal-content {
     max-height: 100vh;
     border-radius: 8px;
@@ -123,7 +124,7 @@
   --input: 210, 16%, 77%; /* #f3f4f6 */
   --ring: 250, 89%, 68%; /* matches primary */
   --muted: 210, 16%, 87%; /* #f5f5f5 */
-  --muted-foreground: 210, 10%, 40%; /* #6b7280 */
+  --muted-foreground: 210, 10%, 20%; /* #6b7280 */
   --muted-background: 210, 16%, 90%; /* #e5e7eb */
 
   /* Additional variables from docs, adapted to your palette */
@@ -158,6 +159,7 @@
   --background: 0, 0%, 7%; /* dark background */
   --secondary-background: 0, 0%, 14%;
   --muted-background: 0, 0%, 16%;
+  --muted-foreground: 210, 0%, 60%;
 
   --foreground: 0, 0%, 100%; /* light text */
   --secondary-foreground: 0, 0%, 50%;
