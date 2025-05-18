@@ -104,7 +104,7 @@ const Step1NewProduct = () => {
           <CardTitle>Product Details</CardTitle>
         </CardHeader>
         <CardContent> */}
-      <Form {...form}>
+      <Form {...form} data-onboarding-target="new-product-form">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             name="name"
@@ -198,7 +198,7 @@ const Step1NewProduct = () => {
           />
 
           <div className="flex justify-end pt-4">
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" disabled={loading} data-onboarding-target="save-product-button">
               {loading ? <LoaderSpinner /> : `Next`}
             </Button>
           </div>

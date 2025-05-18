@@ -52,7 +52,7 @@ const WelcomeSection = () => {
                 </Button>
               </Link>
               <Link href="/new" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto" data-onboarding-target="new-product-btn">
                   <Plus className="mr-2 h-4 w-4" />
                   New Product
                 </Button>
