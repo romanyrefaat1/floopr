@@ -8,8 +8,8 @@ import Header from "../src/components/Header";
 import Hero from "../src/components/Hero";
 import FloatingFeedbackButton from "@/components/floopr-integration/float-button-circle/floating-feedback-button";
 import Demo from "@/src/Demo";
-import { useEffect, useRef } from "react";
 import { ChangelogModalProvider } from "@/src/components/ChangelogModalContext";
+import { useEffect, useRef } from "react";
 
 export default function Home() {
   // Wrap everything in ChangelogModalProvider
@@ -56,7 +56,7 @@ function HomeContent() {
         `}
       </style>
       <Header />
-      <FloatingFeedbackButton
+      {/* <FloatingFeedbackButton
         isModal={false}
         backgroundColor="#ffffff"
         padding="lg"
@@ -64,7 +64,7 @@ function HomeContent() {
         isSecondSectionColorLikeFeatureType={false}
         componentId={`not_yet_implemented`}
         productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
-      />
+      /> */}
       <main className="relative pt-20 custom-selection">
         {/* Gradient background */}
         {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-floopr-purple-bg via-white to-white -z-10" /> */}

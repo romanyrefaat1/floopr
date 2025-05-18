@@ -40,10 +40,16 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <ClerkProvider>
-      <AuthProvider>
-        {children}
-      </AuthProvider>
+      <AuthProvider>{children}</AuthProvider>
       <Toaster />
+      <script
+        src="https://floopr.vercel.app/embeds/float-button-bundle_floopr_feedback_embed.js"
+        data-api-key="07af9f61-c31b-45a0-a27f-de1213f2523d"
+        data-product-id="31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
+        data-component-id="6e5b7f46-0488-4a85-8564-3f323338471f"
+        data-user-info='{"userId": "user_123", "userName": "User Name", "userImage": "https://example.com/avatar.jpg"}' // Optional
+        defer
+      ></script>
       {process.env.NEXT_PUBLIC_IS_PRODUCTION && <Analytics />}
     </ClerkProvider>
   );

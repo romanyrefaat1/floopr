@@ -835,7 +835,7 @@ export default function FlooprFloatingFeedbackButton({
               >
                 {isColorDark(finalConfig.backgroundColor) ? (
                   <img
-                    src="/floopr-logo-no-bg-white-svg.svg"
+                    src="./ima/floopr-logo-no-bg-white-svg.svg"
                     alt="Floopr logo"
                     width={42}
                     height={12}
@@ -843,7 +843,7 @@ export default function FlooprFloatingFeedbackButton({
                   />
                 ) : (
                   <img
-                    src="/floopr-logo-no-bg-svg.svg"
+                    src="./ima/floopr-logo-no-bg-svg.svg"
                     alt="Floopr logo"
                     width={42}
                     height={12}
