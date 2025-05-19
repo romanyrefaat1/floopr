@@ -3,6 +3,7 @@ import { ProductData } from "../../page";
 import ShowFeedbacks from "../show-feedbacks";
 import TopFeedbacks from "./top-feedbacks";
 import LoaderSpinner from "@/components/loader-spinner";
+import FeedbackItemSkeleton from "@/components/skeletons/feedback-item-skeleton";
 import { Suspense } from "react";
 
 export default function Feedbacks({

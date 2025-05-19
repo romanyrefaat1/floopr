@@ -4,6 +4,7 @@ import ShareButton from "./_components/pa-drop-down";
 import { updatePageView } from "@/actions/basic-analytics/pageViews";
 import getProductData from "@/actions/get-product-data";
 import LoaderSpinner from "@/components/loader-spinner";
+import FeedbackItemSkeleton from "@/components/skeletons/feedback-item-skeleton";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
