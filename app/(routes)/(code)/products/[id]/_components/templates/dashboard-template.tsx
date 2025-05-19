@@ -1,3 +1,4 @@
+import { GroupedFeedbackProvider } from "../../group-context/groupt-context";
 import { FilterData, Product } from "../../page";
 import { ViewProvider } from "../../view-context/view-context";
 import AllProductsPreviewComboBox from "../all-products-preview-combo-box";
@@ -89,12 +90,14 @@ export default async function DashboardTemplate({
                 <ProjectOverview productData={productData} />
               </div>
               <ViewProvider>
-                <ContentTab
-                  isOwner={true}
-                  productData={productData}
-                  filterData={filterData}
-                  isOwnerPa={true}
-                />
+                <GroupedFeedbackProvider productId={productData.docId}>
+                  <ContentTab
+                    isOwner={true}
+                    productData={productData}
+                    filterData={filterData}
+                    isOwnerPa={true}
+                  />
+                </GroupedFeedbackProvider>
               </ViewProvider>
             </TabsContent>
 

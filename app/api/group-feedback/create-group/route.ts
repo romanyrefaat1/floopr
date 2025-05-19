@@ -52,6 +52,10 @@ Please make sure to group feedback properly for example, if you expect get more 
 Feedback list:
 ${feedbackListText}
 
+
+ALWAYS MAKE SURE IT IS PARSABLE. I will take your response and will parse it directly so only return
+{} json, never return random text. Only return te json data. Make sure to group based on topic.
+
 Desired format:
 [
   {

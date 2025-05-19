@@ -1,6 +1,8 @@
 "use client";
 
 import { ProductData } from "../../../[productId]/page";
+import { useGroupedFeedback } from "../group-context/groupt-context";
+import ShowGroupsFeedback from "../group-context/show-groups-feedback";
 import { FilterData } from "../page";
 import { useView, VIEW_MODES } from "../view-context/view-context";
 import FeedbackContentItems from "./feedback-content-items";
@@ -28,7 +30,7 @@ export default function FeedbackContentWrapper({
           productId={productId}
         />
       ) : (
-        `Jroup`
+        <ShowGroupsFeedback productData={productData}/>
       )}
     </div>
   );
