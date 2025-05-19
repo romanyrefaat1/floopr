@@ -72,7 +72,17 @@ export default function GroupFeedbackButton({
       });
 
       await batch.commit();
-      setGroupedFeedback(groupedFeedback);
+      setGroupedFeedback(
+        groupedFeedback.forEach((group: any) => {
+          return {
+            title: group.groupTitle,
+            description: group.groupDescription,
+            feedback: group.feedback,
+            feedbackData: group.feedbackData || [],
+            updatedAt: serverTimestamp(),
+          };
+        })
+      );
 
       // update toast to success
       toast.success("Groups replaced successfully!", { id: toastId });

@@ -6,6 +6,7 @@ import ShowGroupsFeedback from "../group-context/show-groups-feedback";
 import { FilterData } from "../page";
 import { useView, VIEW_MODES } from "../view-context/view-context";
 import FeedbackContentItems from "./feedback-content-items";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function FeedbackContentWrapper({
   productData,
@@ -30,7 +31,12 @@ export default function FeedbackContentWrapper({
           productId={productId}
         />
       ) : (
-        <ShowGroupsFeedback productData={productData}/>
+        <div className="flex items-center justify-center">
+          <Skeleton className="text-center mt-4 w-fit bg-transparent">
+            In Development...
+          </Skeleton>
+        </div>
+        // <ShowGroupsFeedback productData={productData}/>
       )}
     </div>
   );

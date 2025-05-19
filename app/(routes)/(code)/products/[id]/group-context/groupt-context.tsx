@@ -35,7 +35,7 @@ export function GroupedFeedbackProvider({
 }) {
   const [groupedFeedback, setGroupedFeedback] = useState<GroupMap>({});
 
-  // Load existing feedback groups from Firestore
+  // Load existing feedback groups and their embedded feedback arrays from Firestore
   useEffect(() => {
     if (!productId) {
       setGroupedFeedback({});
@@ -44,23 +44,29 @@ export function GroupedFeedbackProvider({
 
     const fetchGroups = async () => {
       try {
-        const colRef = collection(db, "products", productId, "feedback-groups");
-        const snapshot = await getDocs(colRef);
-
-        if (snapshot.empty) {
+        const groupsCol = collection(
+          db,
+          "products",
+          productId,
+          "feedback-groups"
+        );
+        const groupsSnap = await getDocs(groupsCol);
+        if (groupsSnap.empty) {
           setGroupedFeedback({});
           return;
         }
 
-        const data: GroupMap = {};
-        snapshot.forEach((docSnap) => {
-          const { feedback } = docSnap.data() as {
-            feedback?: FeedbackItemInDB[];
-          };
-          data[docSnap.id] = Array.isArray(feedback) ? feedback : [];
+        // Build map from each group document's feedback field
+        const map: GroupMap = {};
+        groupsSnap.docs.forEach((groupDoc) => {
+          const data = groupDoc.data();
+          const feedbackArray = Array.isArray(data.feedback)
+            ? (data.feedback as FeedbackItemInDB[])
+            : [];
+          map[groupDoc.id] = feedbackArray;
         });
 
-        setGroupedFeedback(data);
+        setGroupedFeedback(map);
       } catch (err) {
         console.error("Error fetching feedback groups:", err);
         setGroupedFeedback({});
@@ -70,7 +76,7 @@ export function GroupedFeedbackProvider({
     fetchGroups();
   }, [productId]);
 
-  // Add a feedback item into a named group
+  // Add a feedback item into a named group (local state only)
   const addFeedback = (groupId: string, feedback: FeedbackItemInDB) => {
     setGroupedFeedback((prev) => ({
       ...prev,
@@ -78,7 +84,7 @@ export function GroupedFeedbackProvider({
     }));
   };
 
-  // Remove a specific feedback item by its id
+  // Remove a specific feedback item by its id (local state only)
   const removeFeedback = (groupId: string, feedbackId: string) => {
     setGroupedFeedback((prev) => ({
       ...prev,
@@ -86,7 +92,7 @@ export function GroupedFeedbackProvider({
     }));
   };
 
-  // Clear all items from a group
+  // Clear all items from a group (local state only)
   const clearGroup = (groupId: string) => {
     setGroupedFeedback((prev) => ({
       ...prev,

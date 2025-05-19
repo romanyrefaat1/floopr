@@ -70,7 +70,9 @@ export default function FeedbackItem({
                 {feedbackData.title}
               </CardTitle>
             </Link>
-            <CardDescription>{feedbackData.username}</CardDescription>
+            <CardDescription>
+              {feedbackData.username || `Anonymous user`}
+            </CardDescription>
           </>
         )}
         {isSimple && (

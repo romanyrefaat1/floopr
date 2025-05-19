@@ -7,6 +7,7 @@ import {
 } from "../../view-context/view-context";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
+import ContentTabTitle from "./content-tab-title";
 import GroupFeedbackButton from "./content-tab/group-feedback-button";
 import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import FilterButton from "@/components/filter/filter-button";
@@ -39,7 +40,7 @@ export default function ContentTab({
       {/* Feedback list section */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-medium">All Feedback</h3>
+          <ContentTabTitle />
           <div className="flex gap-2 items-center justify-center">
             {/**/}
             <GroupFeedbackButton productId={productId} />

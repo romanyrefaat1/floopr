@@ -95,7 +95,7 @@ export default function ShowGroupsFeedback({
             {Object.entries(groupedFeedback).map(([groupId, feedbackData]) => {
               const groupInfo = getGroupInfo(groupId);
               const groupName = makeFirstLetterUppercase(
-                groupId.replace(/-/g, " ")
+                JSON.stringify(feedbackData).replace(/-/g, " ")
               );
 
               return (
