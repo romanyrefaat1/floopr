@@ -1,12 +1,17 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { RefreshCcwDotIcon } from "lucide-react";
+
 export default function GroupFeedbackButton({
   productId,
 }: {
   productId: string;
 }) {
   return (
-    <button
+    <Button
+      variant={`outline`}
+      size={`sm`}
       onClick={async () => {
         try {
           const res = await fetch("/api/group-feedback/create-group", {
@@ -27,8 +32,9 @@ export default function GroupFeedbackButton({
           console.error("API test error:", err);
         }
       }}
+      className="flex gap-1"
     >
-      Test Group‑Feedback API
-    </button>
+      <RefreshCcwDotIcon /> Reset Groups
+    </Button>
   );
 }

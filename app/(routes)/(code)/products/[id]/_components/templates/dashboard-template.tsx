@@ -1,4 +1,5 @@
 import { FilterData, Product } from "../../page";
+import { ViewProvider } from "../../view-context/view-context";
 import AllProductsPreviewComboBox from "../all-products-preview-combo-box";
 import FeedbackTabs from "../feedback-tabs";
 import ContentTab from "../tabs/content-tab";
@@ -87,12 +88,14 @@ export default async function DashboardTemplate({
               <div className="mb-[30px]">
                 <ProjectOverview productData={productData} />
               </div>
-              <ContentTab
-                isOwner={true}
-                productData={productData}
-                filterData={filterData}
-                isOwnerPa={true}
-              />
+              <ViewProvider>
+                <ContentTab
+                  isOwner={true}
+                  productData={productData}
+                  filterData={filterData}
+                  isOwnerPa={true}
+                />
+              </ViewProvider>
             </TabsContent>
 
             {/* Analytics Tab Content */}

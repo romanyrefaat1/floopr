@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
 
     // Build prompt for grouping by topic
     const groupingPrompt = `
-Group the following feedback entries by topic. Return a JSON array of objects with properties: groupId (string), groupTitle (string), feedback (array of feedback IDs).\n
+Group the following feedback entries by topic. Return an array as JSON(dont add 'json' before the array and make sure I can parse your response) of objects with properties: groupId (string), groupTitle (string),groupDescription(string) feedback (array of feedback IDs).\n
+Please make sure to group feedback properly for example, if you expect get more feedback like this feedback give it its own group, if not group it with other feedback. Also make sure to always include these groups: Spam, Important\n
 Feedback list:
 ${feedbackListText}
 

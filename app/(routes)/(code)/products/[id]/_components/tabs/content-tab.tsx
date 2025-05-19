@@ -1,4 +1,10 @@
 import { FilterData } from "../../page";
+import DifferViewButton from "../../view-context/differ-view-button";
+import {
+  useView,
+  VIEW_MODES,
+  ViewProvider,
+} from "../../view-context/view-context";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
 import GroupFeedbackButton from "./content-tab/group-feedback-button";
@@ -7,9 +13,10 @@ import FilterButton from "@/components/filter/filter-button";
 import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
 import TypeFilterButton from "@/components/filter/type-filter-button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
-import { Search, SlidersHorizontal, Plus } from "lucide-react";
+import { Search, SlidersHorizontal, Plus, Eye, Group } from "lucide-react";
 
 export default function ContentTab({
   productData,
@@ -33,6 +40,11 @@ export default function ContentTab({
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-medium">All Feedback</h3>
+          <div className="flex gap-2 items-center justify-center">
+            {/**/}
+            <GroupFeedbackButton productId={productId} />
+            <DifferViewButton />
+          </div>
         </div>
 
         {/* Search and filters */}
@@ -46,9 +58,6 @@ export default function ContentTab({
             <SentimentFilterButton productId={productId} />
             <FilterButton isOwnerPa={isOwnerPa} label="Filter" />
           </div>
-        </div>
-        <div>
-          <GroupFeedbackButton productId={productId} />
         </div>
 
         {/* Active filters display */}

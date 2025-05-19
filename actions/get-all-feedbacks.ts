@@ -10,7 +10,6 @@ export async function getAllFeedbacks(
     orderBy("socialData.likes.count", "desc")
   );
   const data = await getDocs(response);
-  console.log(`Fetched all feedbacks`, data.docs);
   return data.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
