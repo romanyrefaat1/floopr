@@ -225,6 +225,12 @@ export default function FlooprFloatingFeedbackButton({
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!configData) {
+      return;
+    }
+  }, []);
+
   // Handle initial mount animation
   useEffect(() => {
     if (isOpen) {
@@ -311,7 +317,7 @@ export default function FlooprFloatingFeedbackButton({
     `Float Button Final confi button position:`,
     finalConfig.buttonPosition
   );
-  console.log(`Float Button db positoin:`, configData?.componentData?.position);
+  console.log(`Float Button db positoin:`, configData?.position);
 
   const defaultColors = {
     feature: {
