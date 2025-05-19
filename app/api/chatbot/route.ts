@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       const feedbacks = await getAllFeedbacks(productId);
       console.log("Feedbacks fetced:", feedbacks);
       if (feedbacks.length === 0) {
-        feedbacksText = "Feedbacks are empty.";
+        feedbacksText = "Feedback are empty.";
       } else {
         feedbacksText = feedbacks
           .map((f: any) => {
@@ -76,6 +76,7 @@ export async function POST(request: NextRequest) {
     commentsCount: ${f.socialData?.comments?.count}
     status: ${f.status}
     type: ${f.type}
+    all data: ${JSON.stringify(f)}
     `;
           })
           .join("\n");

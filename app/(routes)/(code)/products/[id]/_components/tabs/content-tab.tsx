@@ -1,6 +1,7 @@
 import { FilterData } from "../../page";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
+import GroupFeedbackButton from "./content-tab/group-feedback-button";
 import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import FilterButton from "@/components/filter/filter-button";
 import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
@@ -45,6 +46,9 @@ export default function ContentTab({
             <SentimentFilterButton productId={productId} />
             <FilterButton isOwnerPa={isOwnerPa} label="Filter" />
           </div>
+        </div>
+        <div>
+          <GroupFeedbackButton productId={productId} />
         </div>
 
         {/* Active filters display */}
