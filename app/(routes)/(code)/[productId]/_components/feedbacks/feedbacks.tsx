@@ -21,7 +21,15 @@ export default function Feedbacks({
       <Suspense fallback={<LoaderSpinner />}>
         <TopFeedbacks isOwnerPa={isOwnerPa} productId={productId} />
       </Suspense>
-      <Suspense fallback={<LoaderSpinner />}>
+      <Suspense
+        fallback={
+          <div className="space-y-4 py-4">
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <FeedbackItemSkeleton key={idx} className="" />
+            ))}
+          </div>
+        }
+      >
         <ShowFeedbacks
           productId={productId}
           isOwnerPa={isOwnerPa}

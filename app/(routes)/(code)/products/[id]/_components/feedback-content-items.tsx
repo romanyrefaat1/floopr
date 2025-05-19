@@ -4,6 +4,7 @@ import FeedbackItem from "../../../[productId]/_components/feedback-item";
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { FilterData, Product } from "../page";
 import getFilteredFeedbacks from "@/actions/filter-feedback";
+import FeedbackItemSkeleton from "@/components/skeletons/feedback-item-skeleton";
 import { useChatbotContext } from "@/contexts/use-chatbot-context";
 import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { cn } from "@/lib/utils";
@@ -52,12 +53,12 @@ export default function FeedbackContentItems({
   }, [productId, JSON.stringify(filterData)]);
 
   if (loading) {
+    // Show 5 skeleton items (adjust count as needed)
     return (
-      <div
-        className="text-center py-8"
-        style={{ color: productData.style?.textColor }}
-      >
-        Loading feedback...
+      <div className="space-y-4 py-4">
+        {Array.from({ length: 5 }).map((_, idx) => (
+          <FeedbackItemSkeleton key={idx} className="" />
+        ))}
       </div>
     );
   }

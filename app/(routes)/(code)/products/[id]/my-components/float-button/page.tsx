@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function FloatButtonDocs() {
   const installationCode = `<script
-  src="http://localhost:3000/embeds/float-button-bundle_floopr_feedback_embed.js"
+  src="http://floopr.vercel.app/embeds/float-button-bundle_floopr_feedback_embed.js"
   data-api-key="YOUR_API_KEY"
   data-product-id="YOUR_PRODUCT_ID"
   data-component-id="YOUR_COMPONENT_ID"

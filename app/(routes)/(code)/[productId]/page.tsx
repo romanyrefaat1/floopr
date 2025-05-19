@@ -143,7 +143,15 @@ export default async function UsersProductPage({
       </header>
       <div className={``}>
         <h1 className="mb- text-4xl font-bold">Give us feedback</h1>
-        <Suspense fallback={<LoaderSpinner />}>
+        <Suspense
+          fallback={
+            <div className="space-y-4 py-4">
+              {Array.from({ length: 5 }).map((_, idx) => (
+                <FeedbackItemSkeleton key={idx} className="" />
+              ))}
+            </div>
+          }
+        >
           <Feedbacks
             isOwnerPa={false}
             productId={productData.productId}
