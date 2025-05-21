@@ -101,6 +101,13 @@ export default function ComponentCard({
               productData={productDataFromFirestore}
             />
           )}
+          {metaData.componentName === `float-button` && (
+            <p className="text-destructive">
+              This component ran into an issue, you can embed it into your site
+              and it will appear when the bug is fixed. Thanks for your
+              patience.
+            </p>
+          )}
           {!componentData.isCreating && (
             <Link
               className="w-full"
