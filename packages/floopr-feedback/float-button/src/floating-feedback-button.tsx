@@ -8,7 +8,7 @@ import {
   Stars,
   X,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 type PaddingSize = "sm" | "md" | "lg" | "xl";
@@ -215,6 +215,9 @@ export default function FlooprFloatingFeedbackButton({
   const [configLoading, setConfigLoading] = useState(true);
   const [configError, setConfigError] = useState<string | null>(null);
   const [configData, setConfigData] = useState<any>(null);
+  const [isSubmittin, setIsSubmittin] = useState(false);
+  const inputRef = useRef(null);
+  const textareaRef = useRef(null);
 
   // Handle button mount animation
   useEffect(() => {
@@ -231,20 +234,9 @@ export default function FlooprFloatingFeedbackButton({
     }
   }, []);
 
-  // Handle initial mount animation
-  useEffect(() => {
-    if (isOpen) {
-      setIsMounted(false);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsMounted(true);
-        });
-      });
-    }
-  }, [isOpen]);
-
   // Validate API key, productId, and componentId, then fetch config
   useEffect(() => {
+    console.log(`fetc confi starts`);
     async function fetchConfig() {
       setConfigLoading(true);
       setConfigError(null);
@@ -264,6 +256,18 @@ export default function FlooprFloatingFeedbackButton({
     }
     fetchConfig();
   }, [apiKey, productId, componentId]);
+
+  // Handle initial mount animation
+  useEffect(() => {
+    if (isOpen) {
+      setIsMounted(false);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsMounted(true);
+        });
+      });
+    }
+  }, [isOpen]);
 
   // // Show loading or error state
   // if (configLoading) {
@@ -424,8 +428,10 @@ export default function FlooprFloatingFeedbackButton({
   };
 
   const handleSubmit = async () => {
+    setIsSubmittin(true);
     if (!title || !description || !selectedType) {
       toast.error("Please fill in all fields");
+      setIsSubmittin(false);
       return;
     }
 
@@ -458,8 +464,12 @@ export default function FlooprFloatingFeedbackButton({
         }
       );
       const result = await res.json();
+
       if (result.success) {
         setIsSubmitted(true);
+        setIsSubmittin(false);
+        textareaRef.current.value = ``;
+        inputRef.current.value = ``;
         setTitle("");
         setDescription("");
         toast.success("Thanks for your feedback!", {
@@ -472,12 +482,14 @@ export default function FlooprFloatingFeedbackButton({
         }, 500);
         return;
       } else {
+        setIsSubmittin(false);
         toast.error("Failed to submit feedback", {
           description: result.error || "Please try again later.",
           duration: 3000,
         });
       }
     } catch (error) {
+      setIsSubmittin(false);
       toast.error("Failed to submit feedback", {
         description: "An unexpected error occurred. Please try again later.",
         duration: 3000,
@@ -696,10 +708,12 @@ export default function FlooprFloatingFeedbackButton({
                         style={{
                           borderColor: type.color,
                           color: finalConfig.textColor,
-                          backgroundColor: type.color || "transparent",
                         }}
                       >
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                        <div
+                          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+                          style={{ backgroundColor: type.color }}
+                        />
                         <div
                           className="relative p-2 rounded-md transition-all duration-300 group-hover:scale-110"
                           style={{
@@ -716,9 +730,10 @@ export default function FlooprFloatingFeedbackButton({
                   </div>
                 ) : (
                   <div className="space-y-1 rounded-lg p-4">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-1 mb-4">
                       <input
                         type="text"
+                        ref={inputRef}
                         placeholder="Title"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
@@ -739,6 +754,7 @@ export default function FlooprFloatingFeedbackButton({
                     <textarea
                       placeholder="Description"
                       value={description}
+                      ref={textareaRef}
                       onChange={(e) => setDescription(e.target.value)}
                       className={cn(
                         ...flattenClasses(
@@ -753,77 +769,103 @@ export default function FlooprFloatingFeedbackButton({
                           ],
                       }}
                     />
-                    <Button
-                      onClick={handleSubmit}
-                      className={cn(
-                        ...flattenClasses(
-                          "w-full transition-all duration-300",
-                          "hover:scale-[1.02] hover:shadow-lg hover:brightness-110",
-                          "active:scale-[0.98]",
-                          "group relative overflow-hidden"
-                        )
-                      )}
-                      style={{
-                        borderRadius:
-                          borderRadiusSizes[
-                            finalConfig.borderRadius as BorderRadiusSize
-                          ],
-                        backgroundColor: selectedType
-                          ? getSecondSectionStyles()["--button-bg"]
-                          : finalConfig.primaryColor,
-                        color: selectedType
-                          ? getSecondSectionStyles()["--button-text-color"]
-                          : isColorDark(finalConfig.primaryColor)
-                          ? "#FFF"
-                          : "#000",
-                        boxShadow: selectedType
-                          ? `0 0 12px ${
-                              getSecondSectionStyles()["--button-glow"]
-                            }`
-                          : "none",
-                      }}
-                      disabled={isSubmitted}
-                    >
-                      <div
-                        className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
+                    <div className="flex justify-center items-center mt-2">
+                      <Button
+                        disabled={isSubmittin}
+                        onClick={handleSubmit}
                         style={{
+                          width: `fit-content`,
+
+                          borderRadius:
+                            borderRadiusSizes[
+                              finalConfig.borderRadius as BorderRadiusSize
+                            ],
                           backgroundColor: selectedType
-                            ? getSecondSectionStyles()["--button-bg"]
+                            ? feedbackTypes.find(
+                                (t) => t.value === selectedType
+                              )?.color
                             : finalConfig.primaryColor,
+                          color: selectedType
+                            ? getSecondSectionStyles()["--button-text-color"]
+                            : isColorDark(finalConfig.primaryColor)
+                            ? "#FFF"
+                            : "#000",
+                          boxShadow: selectedType
+                            ? `0 0 12px ${
+                                getSecondSectionStyles()["--button-glow"]
+                              }`
+                            : "none",
                         }}
-                      />
-                      {isSubmitted ? (
-                        <span
-                          className={cn(
-                            ...flattenClasses(
-                              "flex items-center justify-center w-full relative z-10"
-                            )
-                          )}
-                        >
-                          <Stars className="mr-2 h-5 w-5" />
-                          Thanks for your feedback
-                        </span>
-                      ) : (
-                        <>
-                          {selectedType && (
-                            <span
-                              className="mr-2 flex items-center justify-center relative z-10"
-                              style={{
-                                color: finalConfig.textColor,
-                                backgroundColor: finalConfig.primaryColor,
-                              }}
-                            >
-                              {
-                                feedbackTypes.find(
+                        className={cn(
+                          ...flattenClasses(
+                            "w-full transition-all duration-300",
+                            "hover:scale-[1.02] hover:shadow-lg hover:brightness-110",
+                            "active:scale-[0.98] disabled:scale-[1]",
+                            "group relative overflow-hidden"
+                          )
+                          // isSubmittin && `opacity-40 bg-green-500`
+                        )}
+                      >
+                        <div
+                          style={{
+                            backgroundColor: selectedType
+                              ? feedbackTypes.find(
                                   (t) => t.value === selectedType
-                                )?.icon
-                              }
-                            </span>
+                                )?.color
+                              : finalConfig.primaryColor,
+                          }}
+                          className={cn(
+                            "absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 w-fit"
+                            // isSubmittin && `opacity-40 bg-blue-500`
                           )}
-                          <span className="relative z-10">Send feedback</span>
-                        </>
-                      )}
-                    </Button>
+                        />
+                        {isSubmitted ? (
+                          <span
+                            className={cn(
+                              ...flattenClasses(
+                                "flex items-center justify-center w-full relative z-10"
+                              )
+                            )}
+                          >
+                            <Stars className="mr-2 h-5 w-5" />
+                            Thanks for your feedback
+                          </span>
+                        ) : (
+                          <div
+                            className={cn(
+                              "flex gap-2 justify-center py-1 w-fit"
+                              // isSubmittin && `opacity-40 bg-red-500`
+                            )}
+                          >
+                            {selectedType && (
+                              <span
+                                className="mr-2 flex items-center justify-center relative z-10"
+                                style={{
+                                  color: finalConfig.textColor,
+                                  // backgroundColor: finalConfig.primaryColor,
+                                }}
+                              >
+                                {
+                                  feedbackTypes.find(
+                                    (t) => t.value === selectedType
+                                  )?.icon
+                                }
+                              </span>
+                            )}
+                            <span className="relative z-10">
+                              {!isSubmittin ? `Send` : `Sending`}{" "}
+                              {feedbackTypes.find(
+                                (t) => t.value === selectedType
+                              )?.label !== `Other`
+                                ? feedbackTypes.find(
+                                    (t) => t.value === selectedType
+                                  )?.label
+                                : `Feedback`}
+                            </span>
+                          </div>
+                        )}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </div>
@@ -834,11 +876,14 @@ export default function FlooprFloatingFeedbackButton({
               className="mt-6 flex justify-end items-center text-sm text-muted-foreground"
               style={{ scale: 0.9 }}
             >
-              <span className="mr-2" style={{ color: finalConfig.textColor }}>
-                Made by
+              <span
+                className="mr-2 leading-tight"
+                style={{ color: finalConfig.textColor }}
+              >
+                We run on
               </span>
               <a
-                href="https://floopr.vercel.app"
+                href="https://www.floopr.app?ref=${current-pa}"
                 target="_blank"
                 rel="noopener noreferrer"
               >

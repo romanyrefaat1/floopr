@@ -34,7 +34,7 @@ export default async function PageLayout({ children, modal }) {
       <FlooprFloatingFeedbackButton
         apiKey={process.env.PA_FLOAT_BUTTON_FLOOPR_API_KEY}
         productId={`31a4fd3d-615a-409c-97ee-bda48bbbb8e2`}
-        componentId={`6e5b7f46-0488-4a85-8564-3f323338471f`}
+        componentId={`286d1027-49d8-4c95-93db-5593fc2368fd`}
       /> */}
     </ThemeProvider>
   );
