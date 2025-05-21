@@ -12,7 +12,10 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Skeleton } from "@/components/ui/skeleton";
+import { db } from "@/lib/firebase";
 import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
+import { doc, getDoc } from "firebase/firestore";
 import {
   MessageSquare,
   Users,
@@ -20,56 +23,75 @@ import {
   AlertCircle,
   Lightbulb,
 } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-// Import your existing FeedbackItem component
-
-// Group descriptions mapping
-const groupDescriptions: Record<
-  string,
-  { description: string; icon: React.ReactNode }
-> = {
-  "user-interface": {
-    description:
-      "Feedback related to UI/UX, design, and user experience improvements",
-    icon: <Users className="h-4 w-4" />,
-  },
-  performance: {
-    description: "Reports about speed, loading times, and system performance",
-    icon: <TrendingUp className="h-4 w-4" />,
-  },
-  bugs: {
-    description:
-      "Bug reports, errors, and technical issues encountered by users",
-    icon: <AlertCircle className="h-4 w-4" />,
-  },
-  "feature-requests": {
-    description: "Suggestions for new features and functionality enhancements",
-    icon: <Lightbulb className="h-4 w-4" />,
-  },
-  general: {
-    description:
-      "General feedback and comments that don't fit other categories",
-    icon: <MessageSquare className="h-4 w-4" />,
-  },
+// Static icon mapping per group ID
+const groupIcons = {
+  "user-interface": <Users className="h-4 w-4" />,
+  performance: <TrendingUp className="h-4 w-4" />,
+  bugs: <AlertCircle className="h-4 w-4" />,
+  "feature-requests": <Lightbulb className="h-4 w-4" />,
+  general: <MessageSquare className="h-4 w-4" />,
 };
 
-// Helper function to get group info
-function getGroupInfo(groupId: string) {
-  const defaultInfo = {
-    description: "Feedback items grouped together",
-    icon: <MessageSquare className="h-4 w-4" />,
-  };
-
-  return groupDescriptions[groupId] || defaultInfo;
-}
-
-export default function ShowGroupsFeedback({
-  productData,
-}: {
-  productData: ProductData;
-}) {
+export default function ShowGroupsFeedback({ productData }) {
   const { groupedFeedback } = useGroupedFeedback();
+  const [groupMeta, setGroupMeta] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchGroupMeta() {
+      setLoading(true);
+      const metaState = {};
+
+      for (const groupId of Object.keys(groupedFeedback || {})) {
+        try {
+          const groupRef = doc(
+            db,
+            "products",
+            productData.docId,
+            "feedback-groups",
+            groupId
+          );
+          const groupSnap = await getDoc(groupRef);
+          if (groupSnap.exists()) {
+            const data = groupSnap.data();
+            metaState[groupId] = {
+              title: data.title || groupId,
+              description: data.description || "",
+              icon: groupIcons[groupId] || (
+                <MessageSquare className="h-4 w-4" />
+              ),
+              feedbackData: data.feedbackData || [],
+            };
+          } else {
+            metaState[groupId] = {
+              title: groupId,
+              description: "",
+              icon: groupIcons[groupId] || (
+                <MessageSquare className="h-4 w-4" />
+              ),
+              feedbackData: [],
+            };
+          }
+        } catch {
+          metaState[groupId] = {
+            title: groupId,
+            description: "",
+            icon: <MessageSquare className="h-4 w-4" />,
+            feedbackData: [],
+          };
+        }
+      }
+
+      setGroupMeta(metaState);
+      setLoading(false);
+    }
+
+    if (groupedFeedback && Object.keys(groupedFeedback).length > 0) {
+      fetchGroupMeta();
+    }
+  }, [groupedFeedback, productData.docId]);
 
   if (!groupedFeedback || Object.keys(groupedFeedback).length === 0) {
     return (
@@ -92,11 +114,17 @@ export default function ShowGroupsFeedback({
       <ScrollArea className="h-[700px] w-full">
         <div className="p-6">
           <Accordion type="single" collapsible className="w-full space-y-4">
-            {Object.entries(groupedFeedback).map(([groupId, feedbackData]) => {
-              const groupInfo = getGroupInfo(groupId);
+            {Object.entries(groupedFeedback).map(([groupId, feedbackIds]) => {
+              const meta = groupMeta[groupId] || {
+                title: groupId,
+                description: "",
+                icon: <MessageSquare className="h-4 w-4" />,
+                feedbackData: [],
+              };
               const groupName = makeFirstLetterUppercase(
-                JSON.stringify(feedbackData).replace(/-/g, " ")
+                meta.title.replace(/-/g, " ")
               );
+              const items = meta.feedbackData;
 
               return (
                 <AccordionItem
@@ -104,37 +132,58 @@ export default function ShowGroupsFeedback({
                   value={groupId}
                   className="border bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200"
                 >
-                  <AccordionTrigger className="flex items-center justify-between px-6 py-4 bg-background hover:bg-mutedBackground transition-colors duration-200 [&[data-state=open]]:bg-muted/80">
-                    <div className="flex items-center gap-3">
+                  <AccordionTrigger className="flex flex-col items-start px-6 py-4 bg-background hover:bg-mutedBackground transition-colors duration-200 [&[data-state=open]]:bg-muted/80">
+                    <div className="flex items-center gap-3 w-full justify-between">
                       <div className="flex items-center gap-2 text-foreground">
-                        {groupInfo.icon}
-                        <span className="font-semibold text-lg">
-                          {groupName}
-                        </span>
+                        {loading ? <Skeleton className="h-4 w-4" /> : meta.icon}
+                        {loading ? (
+                          <Skeleton className="h-6 w-32 ml-2" />
+                        ) : (
+                          <span className="font-semibold text-lg">
+                            {groupName}
+                          </span>
+                        )}
                       </div>
-                    </div>
-                    <div className="flex items-center gap-3">
                       <Badge
                         variant="secondary"
                         className="bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
                       >
-                        {feedbackData.length}{" "}
-                        {feedbackData.length === 1 ? "item" : "items"}
+                        {loading ? (
+                          <Skeleton className="h-5 w-12" />
+                        ) : (
+                          `${items.length} ${
+                            items.length === 1 ? "item" : "items"
+                          }`
+                        )}
                       </Badge>
                     </div>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {loading ? (
+                        <Skeleton className="h-4 w-full" />
+                      ) : (
+                        meta.description
+                      )}
+                    </p>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pt-2 pb-6 bg-background">
-                    <div className="mb-4 p-3 bg-accent/10 rounded-lg border border-accent/20">
-                      <p className="text-sm text-accent-foreground leading-relaxed">
-                        {groupInfo.description}
-                      </p>
-                    </div>
-                    {feedbackData.length === 0 ? (
+                    {loading ? (
+                      Array(3)
+                        .fill(0)
+                        .map((_, idx) => (
+                          <div
+                            key={idx}
+                            className="mb-4 p-4 bg-muted rounded-lg"
+                          >
+                            <Skeleton className="h-4 w-full mb-2" />
+                            <Skeleton className="h-4 w-3/4" />
+                          </div>
+                        ))
+                    ) : items.length === 0 ? (
                       <div className="flex items-center justify-center py-8">
                         <div className="text-center">
                           <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
                             <div className="text-muted-foreground">
-                              {groupInfo.icon}
+                              {meta.icon}
                             </div>
                           </div>
                           <p className="text-muted-foreground text-sm">
@@ -144,10 +193,17 @@ export default function ShowGroupsFeedback({
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        {feedbackData.map((fb: FeedbackItemInDB, index) => (
+                        {items.map((fb: FeedbackItemInDB, idx) => (
                           <FeedbackItem
-                            key={fb.id || index}
-                            feedbackData={fb}
+                            key={fb.id || idx}
+                            feedbackData={{
+                              title: fb.feedback.title,
+                              content: !fb.feedback.isRich
+                                ? fb.feedback.content
+                                : JSON.stringify(
+                                    fb.feedback.content.blocks?.[0].text
+                                  ),
+                            }}
                             productData={productData}
                           />
                         ))}

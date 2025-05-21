@@ -93,8 +93,8 @@ interface FloatingFeedbackButtonProps {
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_IS_PRODUCTION
-  ? `https://floopr.vercel.app`
-  : `https://floopr.vercel.app`;
+  ? `https://www.floopr.app`
+  : `https://www.floopr.app`;
 // const baseUrl = `http://localhost:3000`;
 
 // Utility to check if a color is dark
@@ -202,7 +202,7 @@ export default function FlooprFloatingFeedbackButton({
   buttonPosition = "bottom-right",
   componentId,
   productId,
-  apiKey,
+  apiKey = `Unkown`,
   isFixed = true,
 }: FloatingFeedbackButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -251,6 +251,7 @@ export default function FlooprFloatingFeedbackButton({
       setConfigLoading(true);
       setConfigError(null);
       try {
+        console.log(`API_KEY`, apiKey);
         const res = await fetch(
           `${baseUrl}/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
         );
@@ -697,13 +698,10 @@ export default function FlooprFloatingFeedbackButton({
                         style={{
                           borderColor: type.color,
                           color: finalConfig.textColor,
-                          backgroundColor: "transparent",
+                          backgroundColor: type.color || "transparent",
                         }}
                       >
-                        <div
-                          className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
-                          style={{ backgroundColor: type.color }}
-                        />
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                         <div
                           className="relative p-2 rounded-md transition-all duration-300 group-hover:scale-110"
                           style={{

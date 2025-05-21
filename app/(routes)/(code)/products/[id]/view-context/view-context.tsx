@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 export const VIEW_MODES = {
   NORMAL: "normal",
@@ -9,11 +9,24 @@ export const VIEW_MODES = {
 
 const ViewContext = createContext({
   mode: VIEW_MODES.NORMAL,
-  setMode: (parameter) => {},
+  setMode: () => {},
 });
 
 export const ViewProvider = ({ children }) => {
-  const [mode, setMode] = useState(VIEW_MODES.NORMAL);
+  // Initialize state from localStorage (fallback to NORMAL)
+  const [mode, setMode] = useState(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("view_mode") || VIEW_MODES.NORMAL;
+    }
+    return VIEW_MODES.NORMAL;
+  });
+
+  // Persist mode changes to localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("view_mode", mode);
+    }
+  }, [mode]);
 
   return (
     <ViewContext.Provider value={{ mode, setMode }}>

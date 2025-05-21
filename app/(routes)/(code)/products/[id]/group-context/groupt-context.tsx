@@ -11,15 +11,24 @@ import React, {
   ReactNode,
 } from "react";
 
-// A mapping from Firestore group IDs to arrays of feedback items
+export type GroupMeta = {
+  title: string;
+  description: string;
+  icon?: React.ReactNode;
+  feedbackData?: any[];
+};
+
 export type GroupMap = Record<string, FeedbackItemInDB[]>;
+export type GroupMetaMap = Record<string, GroupMeta>;
 
 type ContextType = {
   groupedFeedback: GroupMap;
+  groupMeta: GroupMetaMap;
   addFeedback: (groupId: string, feedback: FeedbackItemInDB) => void;
   removeFeedback: (groupId: string, feedbackId: string) => void;
   clearGroup: (groupId: string) => void;
   setGroupedFeedback: React.Dispatch<React.SetStateAction<GroupMap>>;
+  setGroupMeta: React.Dispatch<React.SetStateAction<GroupMetaMap>>;
 };
 
 const GroupedFeedbackContext = createContext<ContextType | undefined>(
@@ -34,11 +43,12 @@ export function GroupedFeedbackProvider({
   productId: string;
 }) {
   const [groupedFeedback, setGroupedFeedback] = useState<GroupMap>({});
+  const [groupMeta, setGroupMeta] = useState<GroupMetaMap>({});
 
-  // Load existing feedback groups and their embedded feedback arrays from Firestore
   useEffect(() => {
     if (!productId) {
       setGroupedFeedback({});
+      setGroupMeta({});
       return;
     }
 
@@ -53,30 +63,35 @@ export function GroupedFeedbackProvider({
         const groupsSnap = await getDocs(groupsCol);
         if (groupsSnap.empty) {
           setGroupedFeedback({});
+          setGroupMeta({});
           return;
         }
-
-        // Build map from each group document's feedback field
         const map: GroupMap = {};
+        const metaMap: GroupMetaMap = {};
         groupsSnap.docs.forEach((groupDoc) => {
           const data = groupDoc.data();
           const feedbackArray = Array.isArray(data.feedback)
             ? (data.feedback as FeedbackItemInDB[])
             : [];
           map[groupDoc.id] = feedbackArray;
+          metaMap[groupDoc.id] = {
+            title: data.title || groupDoc.id,
+            description: data.description || "",
+            icon: undefined, // Icon will be handled in the component
+            feedbackData: data.feedbackData || [],
+          };
         });
-
         setGroupedFeedback(map);
+        setGroupMeta(metaMap);
       } catch (err) {
         console.error("Error fetching feedback groups:", err);
         setGroupedFeedback({});
+        setGroupMeta({});
       }
     };
-
     fetchGroups();
   }, [productId]);
 
-  // Add a feedback item into a named group (local state only)
   const addFeedback = (groupId: string, feedback: FeedbackItemInDB) => {
     setGroupedFeedback((prev) => ({
       ...prev,
@@ -84,7 +99,6 @@ export function GroupedFeedbackProvider({
     }));
   };
 
-  // Remove a specific feedback item by its id (local state only)
   const removeFeedback = (groupId: string, feedbackId: string) => {
     setGroupedFeedback((prev) => ({
       ...prev,
@@ -92,7 +106,6 @@ export function GroupedFeedbackProvider({
     }));
   };
 
-  // Clear all items from a group (local state only)
   const clearGroup = (groupId: string) => {
     setGroupedFeedback((prev) => ({
       ...prev,
@@ -104,10 +117,12 @@ export function GroupedFeedbackProvider({
     <GroupedFeedbackContext.Provider
       value={{
         groupedFeedback,
+        groupMeta,
         addFeedback,
         removeFeedback,
         clearGroup,
         setGroupedFeedback,
+        setGroupMeta,
       }}
     >
       {children}
