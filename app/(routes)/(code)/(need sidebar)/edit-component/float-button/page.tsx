@@ -68,7 +68,7 @@ export default function FloatButtonEditPage({ searchParams }) {
       description:
         decodeURIComponent(userDescription) ||
         "A customizable floating feedback button that appears on your website. Users can click it to leave feedback.",
-      imageUrl: "/images/online/components/float-button.PNG",
+      imageUrl: "/images/online/components/float-button.png",
     },
     primaryColor: "#7D65F6",
     backgroundColor: "#ffffff",
