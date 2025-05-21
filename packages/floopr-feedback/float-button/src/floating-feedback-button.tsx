@@ -92,9 +92,7 @@ interface FloatingFeedbackButtonProps {
   isFixed?: boolean;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_IS_PRODUCTION
-  ? `https://www.floopr.app`
-  : `https://www.floopr.app`;
+const baseUrl = `https://www.floopr.app`;
 // const baseUrl = `http://localhost:3000`;
 
 // Utility to check if a color is dark
