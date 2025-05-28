@@ -35,7 +35,8 @@ export default function FeedbackContentItems({
 
     const fetchFeedbacks = async () => {
       try {
-        const data = await getFilteredFeedbacks(productId, filterData);
+        const data = await getFilteredFeedbacks(productId, filterData, true);
+        console.log(`filtered feedback data from feedback-content-items`, data);
         const list = Array.isArray(data) ? data : [];
         const serialized: FeedbackItemInDB[] = list.map(
           (f) => serializeFirestoreData(f) as FeedbackItemInDB
@@ -53,7 +54,7 @@ export default function FeedbackContentItems({
   }, [productId, JSON.stringify(filterData)]);
 
   if (loading) {
-    // Show 5 skeleton items (adjust count as needed)
+    // Show 5 skeleton items
     return (
       <div className="space-y-4 py-4">
         {Array.from({ length: 5 }).map((_, idx) => (
