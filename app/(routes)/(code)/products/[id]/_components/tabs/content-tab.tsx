@@ -86,20 +86,6 @@ export default function ContentTab({
           </div>
         )}
 
-        {/* Prioritized Feedback */}
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>Prioritized Feedback</CardTitle>
-            <CardDescription>
-              AI-powered feedback prioritization based on importance and urgency
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PrioritizedFeedback productId={productId} />
-            {/* Codin tis.
-          </CardContent>
-        </Card> */}
-
         {/* Feedback items */}
         <FeedbackContentWrapper
           filterData={filterData}

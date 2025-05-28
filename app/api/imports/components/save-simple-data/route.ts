@@ -10,8 +10,15 @@ const corsHeaders = {
 
 export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
-    // Validation
+    const reqData = await req.json();
+    const data = {
+      ...data,
+      feedback: {
+        title: reqData.title || "Untitled",
+        content: reqData.content || null,
+        isRich: reqData.isRich || false,
+      },
+    };
 
     const result = await addSimpleFeedback(data);
     return NextResponse.json(result, { headers: corsHeaders });

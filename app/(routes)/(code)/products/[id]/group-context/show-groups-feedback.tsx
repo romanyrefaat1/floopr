@@ -193,20 +193,42 @@ export default function ShowGroupsFeedback({ productData }) {
                       </div>
                     ) : (
                       <div className="space-y-3">
-                        {items.map((fb: FeedbackItemInDB, idx) => (
-                          <FeedbackItem
-                            key={fb.id || idx}
-                            feedbackData={{
-                              title: fb.feedback.title,
-                              content: !fb.feedback.isRich
-                                ? fb.feedback.content
-                                : JSON.stringify(
-                                    fb.feedback.content.blocks?.[0].text
-                                  ),
-                            }}
-                            productData={productData}
-                          />
-                        ))}
+                        {items.map((fb: FeedbackItemInDB, idx) => {
+                          let content = fb.feedback?.content || `Unkown Title`;
+
+                          if (!fb.feedback?.isRich) {
+                            content = fb.feedback?.content;
+                          } else if (
+                            Array.isArray(fb.feedback.content?.blocks) &&
+                            fb.feedback.content.blocks.length > 0
+                          ) {
+                            content = fb.feedback.content.blocks
+                              .map((block) => block.text)
+                              .join("\n");
+                          } else if (
+                            Array.isArray(fb.feedback?.inputs) &&
+                            fb.feedback.inputs?.length > 0
+                          ) {
+                            content = fb.feedback.inputs
+                              .map((input) => `${input.label}: ${input.value}`)
+                              .join("\n");
+                          }
+
+                          return (
+                            <FeedbackItem
+                              key={fb.id || idx}
+                              feedbackData={{
+                                title:
+                                  fb.feedback?.title || "Untitled Feedback",
+                                content,
+                                isRic: fb.feedback?.isRich,
+                                username: fb.userInfo?.username,
+                              }}
+                              productData={productData}
+                              feedbackId={fb.feedbackId}
+                            />
+                          );
+                        })}
                       </div>
                     )}
                   </AccordionContent>

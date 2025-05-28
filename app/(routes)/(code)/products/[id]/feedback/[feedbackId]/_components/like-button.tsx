@@ -14,9 +14,17 @@ import { toast } from "sonner";
 export default function LikeButton({
   feedbackId,
   productId,
+  variant = `outline`,
 }: {
   feedbackId: string;
   productId: string;
+  variant:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
 }) {
   const { user } = useUser();
   const router = useRouter();
@@ -58,7 +66,7 @@ export default function LikeButton({
   return (
     <Button
       onClick={(e) => handleFeedbackLike(e)}
-      variant="outline"
+      variant={variant}
       className={cn(
         "p-2 border-none flex items-center justify-center skeleton",
         isLiked && "text-primary font-bold",

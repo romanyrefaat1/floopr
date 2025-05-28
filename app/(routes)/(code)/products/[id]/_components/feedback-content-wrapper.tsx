@@ -31,12 +31,12 @@ export default function FeedbackContentWrapper({
           productId={productId}
         />
       ) : (
-        <div className="flex items-center justify-center">
-          <Skeleton className="text-center mt-8 w-fit bg-transparent">
-            In Development...
-          </Skeleton>
-        </div>
-        // <ShowGroupsFeedback productData={productData} />
+        // <div className="flex items-center justify-center">
+        //   <Skeleton className="text-center mt-8 w-fit bg-transparent">
+        //     In Development...
+        //   </Skeleton>
+        // </div>
+        <ShowGroupsFeedback productData={productData} />
       )}
     </div>
   );
