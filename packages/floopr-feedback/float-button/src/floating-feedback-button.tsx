@@ -88,7 +88,7 @@ interface FloatingFeedbackButtonProps {
   buttonPosition?: ButtonPosition;
   componentId: string;
   productId: string;
-  apiKey: string;
+  apiKey: string | null;
   isFixed?: boolean;
 }
 
@@ -203,6 +203,12 @@ export default function FlooprFloatingFeedbackButton({
   apiKey = null,
   isFixed = true,
 }: FloatingFeedbackButtonProps) {
+  if (!componentId || !apiKey || !productId) {
+    console.warn("Missing required Floopr props—won't render");
+    toast.error(`Error: Component Id, Product Id, or API KEY is Invalid`);
+    return null;
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [isModalAnimating, setIsModalAnimating] = useState(false);
