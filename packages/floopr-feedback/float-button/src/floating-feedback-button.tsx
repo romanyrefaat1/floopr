@@ -185,7 +185,6 @@ export default function FlooprFloatingFeedbackButton({
   isModal = false,
   primaryColor = "#7D65F6",
   backgroundColor = "#ffffff",
-  // textColor = "hsl(var(--foreground))",
   textColor = "#000",
   overlayColor = "rgb(0 0 0 / 0.5)",
   accentColor = "hsl(var(--accent))",
@@ -222,46 +221,45 @@ export default function FlooprFloatingFeedbackButton({
   const [configError, setConfigError] = useState<string | null>(null);
   const [configData, setConfigData] = useState<any>(null);
   const [isSubmittin, setIsSubmittin] = useState(false);
+  const [componentReady, setComponentReady] = useState(false); // New state to control component mounting
   const inputRef = useRef(null);
   const textareaRef = useRef(null);
 
-  // Handle button mount animation
-  useEffect(() => {
-    // Small delay to ensure the animation is visible
-    const timer = setTimeout(() => {
-      setIsButtonMounted(true);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (!configData) {
-      return;
-    }
-  }, []);
-
   // Validate API key, productId, and componentId, then fetch config
   useEffect(() => {
-    console.log(`fetc confi starts`);
+    console.log(`fetch config starts`);
     async function fetchConfig() {
       setConfigLoading(true);
       setConfigError(null);
       try {
-        // console.log(`API_KEY`, apiKey);
         const res = await fetch(
           `${baseUrl}/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
         );
         if (!res.ok) throw new Error("Invalid API key or component info");
         const data = await res.json();
         setConfigData(data);
+        // Only set component as ready after successful data fetch
+        setComponentReady(true);
       } catch (err: any) {
         setConfigError(err.message || "Failed to load config");
+        // Don't set componentReady to true on error
       } finally {
         setConfigLoading(false);
       }
     }
     fetchConfig();
   }, [apiKey, productId, componentId]);
+
+  // Handle button mount animation - only after config is loaded
+  useEffect(() => {
+    if (componentReady && configData) {
+      // Small delay to ensure the animation is visible
+      const timer = setTimeout(() => {
+        setIsButtonMounted(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [componentReady, configData]);
 
   // Handle initial mount animation
   useEffect(() => {
@@ -275,29 +273,39 @@ export default function FlooprFloatingFeedbackButton({
     }
   }, [isOpen]);
 
-  // // Show loading or error state
-  // if (configLoading) {
-  //   return (
-  //     <div
-  //       className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
-  //       style={getPositionStyles(buttonPosition, isFixed)}
-  //     >
-  //       <div className="p-4 bg-white rounded shadow">Loading...</div>
-  //     </div>
-  //   );
-  // }
-  // if (configError) {
-  //   return (
-  //     <div
-  //       className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
-  //       style={getPositionStyles(buttonPosition, isFixed)}
-  //     >
-  //       <div className="p-4 bg-red-100 text-red-700 rounded shadow">
-  //         {configError}
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  // Show loading state
+  if (configLoading || !componentReady) {
+    return (
+      <div
+        className={cn("absolute z-50 min-h-fit opacity-0", isFixed && `fixed`)}
+        style={getPositionStyles(buttonPosition, isFixed)}
+      >
+        {/* Optional: Show a subtle loading indicator */}
+        <div className="p-2 bg-gray-100 rounded-full shadow animate-pulse">
+          <div className="w-6 h-6 bg-gray-300 rounded-full"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (configError) {
+    return (
+      <div
+        className={cn("absolute z-50 min-h-fit", isFixed && `fixed`)}
+        style={getPositionStyles(buttonPosition, isFixed)}
+      >
+        <div className="p-4 bg-red-100 text-red-700 rounded shadow text-sm max-w-xs">
+          Failed to load component: {configError}
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the main component until config is ready
+  if (!configData) {
+    return null;
+  }
 
   // Extract configuration from configData or use default props
   const finalConfig = {
@@ -318,17 +326,14 @@ export default function FlooprFloatingFeedbackButton({
     buttonPosition: (configData?.position as ButtonPosition)
       ? configData?.position
       : buttonPosition,
-    // isFixed is a direct prop, not from configData
-    // MetaData can also be used if needed, e.g., for a title or description within the component
-    // componentName: configData?.metaData?.name,
-    // componentDescription: configData?.metaData?.description,
   };
-  console.log(`Float Button Final confi:`, finalConfig);
+
+  console.log(`Float Button Final config:`, finalConfig);
   console.log(
-    `Float Button Final confi button position:`,
+    `Float Button Final config button position:`,
     finalConfig.buttonPosition
   );
-  console.log(`Float Button db positoin:`, configData?.position);
+  console.log(`Float Button db position:`, configData?.position);
 
   const defaultColors = {
     feature: {
