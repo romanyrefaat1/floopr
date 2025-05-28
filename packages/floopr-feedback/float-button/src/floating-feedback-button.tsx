@@ -200,7 +200,7 @@ export default function FlooprFloatingFeedbackButton({
   buttonPosition = "bottom-right",
   componentId,
   productId,
-  apiKey = `Unkown`,
+  apiKey = null,
   isFixed = true,
 }: FloatingFeedbackButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -241,7 +241,7 @@ export default function FlooprFloatingFeedbackButton({
       setConfigLoading(true);
       setConfigError(null);
       try {
-        console.log(`API_KEY`, apiKey);
+        // console.log(`API_KEY`, apiKey);
         const res = await fetch(
           `${baseUrl}/api/imports/components/load-component?apiKey=${apiKey}&productId=${productId}&componentId=${componentId}`
         );

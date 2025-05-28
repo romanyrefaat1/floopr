@@ -1,7 +1,6 @@
 import { Product } from "../../page";
 import AllComponents from "../tabs/feedback-integrations-tab/all-components";
 import YourComponents from "../tabs/feedback-integrations-tab/your-components";
-import LoaderSpinner from "@/components/loader-spinner";
 import { SkeletonCard } from "@/components/skeletons/skeleton-card";
 import { Button } from "@/components/ui/button";
 import {
