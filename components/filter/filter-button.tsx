@@ -90,7 +90,7 @@ export default function FilterButton({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="rounded-modal w-full max-w-md mx-auto bg-background border-border">
+      <DialogContent className="rounded-md w-full max-w-md mx-auto bg-background border-border">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-foreground">
             {label || `Filter by ${currentTab}`}

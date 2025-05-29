@@ -1,10 +1,8 @@
 import DashboardTemplate from "./_components/templates/dashboard-template";
 import { lightenColor } from "./_utils/lighten-color";
 import getProductData from "@/actions/get-product-data";
-import BasicSendEmailButton from "@/components/basic-send-email-button";
 import { ChatbotProvider } from "@/contexts/chatbot-context";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
-import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 
@@ -28,6 +26,7 @@ export type FilterData = {
   sentiment: "positive" | "neutral" | "negative" | null;
   type: "feature" | "idea" | "issue" | "other" | null;
   specifiedDate: string | null;
+  group: string | null;
 };
 
 const ProductPage = async ({

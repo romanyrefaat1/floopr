@@ -37,21 +37,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Keep raw feedback data JSON-stringified
     const rawFeedbacksJSON = JSON.stringify(feedbacks);
 
-    // Prepare plain-text list of feedback IDs and content for AI
     const feedbackListText = feedbacks
       .map((f) => `ID: ${f.feedbackId}\nContent: ${JSON.stringify(f)}`)
       .join("\n---\n");
 
-    // Build prompt for grouping by topic
     const groupingPrompt = `
-Group the following feedback entries by topic. Return an array as JSON(dont add 'json' before the array and make sure I can parse your response) of objects with properties: groupId (string), groupTitle (string),groupDescription(string) feedback (array of feedback IDs).\n
-Please make sure to group feedback properly for example, if you expect get more feedback like this feedback give it its own group, if not group it with other feedback. Also make sure to always include these groups: Spam, Important\n
+Group the following feedback entries by topic, maximum 6 groups. Return an array as JSON(dont add 'json' before the array and make sure I can parse your response) of objects with properties: groupId (string), groupTitle (string),groupDescription(string) feedback (array of feedback IDs).
+
+Please make sure to group feedback properly for example, if you expect get more feedback like this feedback give it its own group, if not group it with other feedback. Also make sure to always include these groups: Spam, Important
+
 Feedback list:
 ${feedbackListText}
-
 
 ALWAYS MAKE SURE IT IS PARSABLE. I will take your response and will parse it directly so only return
 {} json, never return random text. Only return te json data. Make sure to group based on topic.
@@ -78,7 +76,7 @@ Desired format:
     }
 
     const responseText = aiResponse.candidates[0].content.parts[0].text;
-    console.log(`jroupText ai:`, responseText);
+    console.log(`groupText ai:`, responseText);
 
     let groups;
     try {
@@ -91,25 +89,28 @@ Desired format:
       );
     }
 
-    // Add Firestore server timestamp and full feedback data to each group
     const timestamp = serverTimestamp();
     const timestampedGroups = groups.map((group) => {
-      const feedbackData = group.feedback.map(
-        (id) =>
-          feedbacks.find((f) => f.feedbackId === id) || {
+      const feedbackData = group.feedback.map((id) => {
+        const match = feedbacks.find((f) => f.feedbackId === id);
+        if (!match) {
+          console.warn(`Missing feedback with ID: ${id}`);
+        }
+        return (
+          match || {
             feedbackId: id,
             missing: true,
           }
-      );
+        );
+      });
       return {
         ...group,
         feedbackData,
         fireTimestamp: timestamp,
       };
     });
-    console.log(`jroup`, groups);
+    console.log(`group`, groups);
 
-    // Return grouped feedback with full data and raw JSON
     return NextResponse.json({
       groupedFeedback: timestampedGroups,
       allFeedbacks: rawFeedbacksJSON,

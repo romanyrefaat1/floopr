@@ -3,6 +3,7 @@
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { ProductData } from "../../../[productId]/page";
 import FeedbackItem from "../_components/feedback-item";
+import FilterFeedbackByGroup from "./filtered-feedback-by-group";
 import { useGroupedFeedback } from "./groupt-context";
 import {
   Accordion,
@@ -23,9 +24,9 @@ import {
   AlertCircle,
   Lightbulb,
 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-// Static icon mapping per group ID
 const groupIcons = {
   "user-interface": <Users className="h-4 w-4" />,
   performance: <TrendingUp className="h-4 w-4" />,
@@ -34,10 +35,18 @@ const groupIcons = {
   general: <MessageSquare className="h-4 w-4" />,
 };
 
-export default function ShowGroupsFeedback({ productData }) {
+export default function ShowGroupsFeedback({
+  productData,
+  isOwner,
+}: {
+  productData: ProductData;
+  isOwner: boolean;
+}) {
   const { groupedFeedback } = useGroupedFeedback();
   const [groupMeta, setGroupMeta] = useState({});
   const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const selectedGroup = searchParams.get("group");
 
   useEffect(() => {
     async function fetchGroupMeta() {
@@ -92,6 +101,12 @@ export default function ShowGroupsFeedback({ productData }) {
       fetchGroupMeta();
     }
   }, [groupedFeedback, productData.docId]);
+
+  if (selectedGroup) {
+    return (
+      <FilterFeedbackByGroup productId={productData.docId} isOwner={isOwner} />
+    );
+  }
 
   if (!groupedFeedback || Object.keys(groupedFeedback).length === 0) {
     return (

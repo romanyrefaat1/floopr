@@ -33,7 +33,7 @@ function parseFeedbackContent(feedback: any) {
   }
 
   // Plain text
-  return typeof feedback.content === "string" ? feedback.content : "";
+  return typeof feedback.content === "string" ? feedback.content : " Unkown";
 }
 
 export default function FeedbackItem({

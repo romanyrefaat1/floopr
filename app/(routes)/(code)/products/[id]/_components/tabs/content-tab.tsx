@@ -1,11 +1,7 @@
 import { FilterData } from "../../page";
 import DifferViewButton from "../../view-context/differ-view-button";
-import {
-  useView,
-  VIEW_MODES,
-  ViewProvider,
-} from "../../view-context/view-context";
 import FeedbackContentWrapper from "../feedback-content-wrapper";
+import TopFeedbackButtons from "../top-feedback-buttons";
 import { formatDateDataFromShadcn } from "./_utility/formatDateData";
 import ContentTabTitle from "./content-tab-title";
 import GroupFeedbackButton from "./content-tab/group-feedback-button";
@@ -49,17 +45,7 @@ export default function ContentTab({
         </div>
 
         {/* Search and filters */}
-        <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Search feedback..." className="pl-8 w-full" />
-          </div>
-          <div className="flex gap-2">
-            <TypeFilterButton productId={productId} />
-            <SentimentFilterButton productId={productId} />
-            <FilterButton isOwnerPa={isOwnerPa} label="Filter" />
-          </div>
-        </div>
+        <TopFeedbackButtons productId={productId} isOwnerPa={true} />
 
         {/* Active filters display */}
         {filterData.filter && (
