@@ -12,6 +12,7 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/lib/firebase";
@@ -23,8 +24,9 @@ import {
   TrendingUp,
   AlertCircle,
   Lightbulb,
+  Filter,
 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const groupIcons = {
@@ -46,6 +48,7 @@ export default function ShowGroupsFeedback({
   const [groupMeta, setGroupMeta] = useState({});
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const selectedGroup = searchParams.get("group");
 
   useEffect(() => {
@@ -101,6 +104,13 @@ export default function ShowGroupsFeedback({
       fetchGroupMeta();
     }
   }, [groupedFeedback, productData.docId]);
+
+  const handleFilterGroup = (groupId: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("group", groupId);
+    params.set("filter", "group");
+    router.push(`?${params.toString()}`);
+  };
 
   if (selectedGroup) {
     return (
@@ -159,18 +169,34 @@ export default function ShowGroupsFeedback({
                           </span>
                         )}
                       </div>
-                      <Badge
-                        variant="secondary"
-                        className="bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
-                      >
-                        {loading ? (
-                          <Skeleton className="h-5 w-12" />
-                        ) : (
-                          `${items.length} ${
-                            items.length === 1 ? "item" : "items"
-                          }`
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          variant="secondary"
+                          className="bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+                        >
+                          {loading ? (
+                            <Skeleton className="h-5 w-12" />
+                          ) : (
+                            `${items.length} ${
+                              items.length === 1 ? "item" : "items"
+                            }`
+                          )}
+                        </Badge>
+                        {!loading && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleFilterGroup(groupId);
+                            }}
+                            className="flex items-center gap-1 text-xs"
+                          >
+                            <Filter className="h-3 w-3" />
+                            Filter
+                          </Button>
                         )}
-                      </Badge>
+                      </div>
                     </div>
                     <p className="mt-1 text-sm text-muted-foreground">
                       {loading ? (
