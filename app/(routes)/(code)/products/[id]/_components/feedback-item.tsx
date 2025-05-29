@@ -67,7 +67,7 @@ export default function FeedbackItem({
               className="hover:underline"
               href={`/products/${productId}/feedback/${feedbackId}`}
             >
-              <CardTitle className="break-words max-w-full text-wrap">
+              <CardTitle className="break-words max-w-full">
                 {feedbackData.title}
               </CardTitle>
             </Link>
