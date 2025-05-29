@@ -216,7 +216,7 @@ export default function AddFeedbackToGroup({
 
   return (
     <div className="relative">
-      <div className="fixed bottom-10 right-14 z-50">
+      <div className="fixed bottom-[5rem] right-8 md:bottom-10 md:right-14 z-50">
         <Button
           size="icon"
           className="rounded-full p-4 shadow-lg hover:shadow-xl transition bg-primary hover:bg-primary-muted"

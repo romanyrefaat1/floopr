@@ -12,6 +12,7 @@ import TabsClient from "./tabs-client";
 import ChatbotIndex from "@/components/chatbot/chatbot-index";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
@@ -26,25 +27,21 @@ export default async function DashboardTemplate({
   filterData: FilterData;
 }) {
   return (
-    <main className=" max-w-screen flex">
-      <div className="px-4 py-[3rem] flex- w-full ">
+    <main className="max-w-screen flex">
+      <div className="px-4 py-[3rem] w-full">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
           <div className="md:hidden">
             <SidebarTrigger />
           </div>
           <div>
-            <div className="mb-4 ">
+            <div className="mb-4">
               <AllProductsPreviewComboBox productId={productData.docId} />
             </div>
             <h1 className="text-2xl font-bold">{productData.name}</h1>
             <p className="text-mutedForeground">{productData.description}</p>
           </div>
           <div className="flex items-center self-start gap-2 mt-4 md:mt-0">
-            {/* <Button variant="outline" size="sm" className="gap-2">
-            <CalendarIcon size={16} />
-            Last 7 Days
-          </Button> */}
             <ThemeToggle />
             <Link href={`/${productData.docId}`} className="group">
               <Button
@@ -68,20 +65,37 @@ export default async function DashboardTemplate({
         {/* Main Dashboard Tabs */}
         <Tabs defaultValue="feedback" className="space-y-4">
           <TabsClient>
-            {/* Tabs List - Scrollable on Small Screens */}
-            <div className="overflow-x-auto sticky top-0 z-[2] shadow-md w-fit">
-              <TabsList className="flex gap-2 bg-mutedBackground text-foreground w-fit min-w-max md:grid md:grid-cols-4 md:max-w-md scrollbar-hide hover:scrollbar-default [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
-                <TabsTrigger
-                  value="feedback"
-                  className="flex items-center gap-2"
-                >
-                  <LayoutDashboard size={16} />
-                  Feedback
-                </TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="integrations">Integrations</TabsTrigger>
-                <TabsTrigger value="feedback-settings">Settings</TabsTrigger>
-              </TabsList>
+            <div className="sticky top-0 z-[2] shadow-md">
+              <ScrollArea className="w-full">
+                <TabsList className="flex gap-2 bg-mutedBackground text-foreground w-max">
+                  <TabsTrigger
+                    value="feedback"
+                    className="flex items-center gap-2 whitespace-nowrap flex-shrink-0"
+                  >
+                    <LayoutDashboard size={16} />
+                    Feedback
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="analytics"
+                    className="whitespace-nowrap flex-shrink-0"
+                  >
+                    Analytics
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="integrations"
+                    className="whitespace-nowrap flex-shrink-0"
+                  >
+                    Integrations
+                  </TabsTrigger>
+                  <TabsTrigger
+                    value="feedback-settings"
+                    className="whitespace-nowrap flex-shrink-0"
+                  >
+                    Settings
+                  </TabsTrigger>
+                </TabsList>
+                <ScrollBar orientation="horizontal" />
+              </ScrollArea>
             </div>
 
             {/* Feedback Tab Content */}
