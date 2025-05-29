@@ -3,6 +3,7 @@
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { ProductData } from "../../../[productId]/page";
 import FeedbackItem from "../_components/feedback-item";
+import EditGroupModal from "./edit-group-modal";
 import FilterFeedbackByGroup from "./filtered-feedback-by-group";
 import { useGroupedFeedback } from "./groupt-context";
 import {
@@ -13,11 +14,17 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { db } from "@/lib/firebase";
 import makeFirstLetterUppercase from "@/lib/make-first-letter-uppercase";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import {
   MessageSquare,
   Users,
@@ -25,9 +32,13 @@ import {
   AlertCircle,
   Lightbulb,
   Filter,
+  MoreVertical,
+  Edit,
+  Trash2,
 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const groupIcons = {
   "user-interface": <Users className="h-4 w-4" />,
@@ -44,9 +55,11 @@ export default function ShowGroupsFeedback({
   productData: ProductData;
   isOwner: boolean;
 }) {
-  const { groupedFeedback } = useGroupedFeedback();
+  const { groupedFeedback, setGroupedFeedback } = useGroupedFeedback();
   const [groupMeta, setGroupMeta] = useState({});
   const [loading, setLoading] = useState(true);
+  const [editingGroup, setEditingGroup] = useState(null);
+  const [deletingGroup, setDeletingGroup] = useState(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedGroup = searchParams.get("group");
@@ -110,6 +123,64 @@ export default function ShowGroupsFeedback({
     params.set("group", groupId);
     params.set("filter", "group");
     router.push(`?${params.toString()}`);
+  };
+
+  const handleDeleteGroup = async (groupId: string) => {
+    if (deletingGroup === groupId) return;
+
+    setDeletingGroup(groupId);
+
+    try {
+      // Delete from Firestore
+      const groupRef = doc(
+        db,
+        "products",
+        productData.docId,
+        "feedback-groups",
+        groupId
+      );
+      await deleteDoc(groupRef);
+
+      // Update local state
+      const updatedGroupedFeedback = { ...groupedFeedback };
+      delete updatedGroupedFeedback[groupId];
+      setGroupedFeedback(updatedGroupedFeedback);
+
+      // Update group meta
+      const updatedGroupMeta = { ...groupMeta };
+      delete updatedGroupMeta[groupId];
+      setGroupMeta(updatedGroupMeta);
+
+      toast.success("Group deleted successfully");
+    } catch (error) {
+      console.error("Error deleting group:", error);
+      toast.error("Failed to delete group");
+    } finally {
+      setDeletingGroup(null);
+    }
+  };
+
+  const handleEditGroup = (groupId: string) => {
+    setEditingGroup({
+      id: groupId,
+      title: groupMeta[groupId]?.title || groupId,
+      description: groupMeta[groupId]?.description || "",
+    });
+  };
+
+  const handleGroupUpdated = (
+    groupId: string,
+    updatedData: { title: string; description: string }
+  ) => {
+    setGroupMeta((prev) => ({
+      ...prev,
+      [groupId]: {
+        ...prev[groupId],
+        title: updatedData.title,
+        description: updatedData.description,
+      },
+    }));
+    setEditingGroup(null);
   };
 
   if (selectedGroup) {
@@ -183,18 +254,57 @@ export default function ShowGroupsFeedback({
                           )}
                         </Badge>
                         {!loading && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleFilterGroup(groupId);
-                            }}
-                            className="flex items-center gap-1 text-xs"
-                          >
-                            <Filter className="h-3 w-3" />
-                            Filter
-                          </Button>
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleFilterGroup(groupId);
+                              }}
+                              className="flex items-center gap-1 text-xs"
+                            >
+                              <Filter className="h-3 w-3" />
+                              Filter
+                            </Button>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end" className="w-48">
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditGroup(groupId);
+                                  }}
+                                  className="flex items-center gap-2"
+                                >
+                                  <Edit className="h-4 w-4" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteGroup(groupId);
+                                  }}
+                                  className="flex items-center gap-2 text-destructive focus:text-destructive"
+                                  disabled={deletingGroup === groupId}
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  {deletingGroup === groupId
+                                    ? "Deleting..."
+                                    : "Delete"}
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </>
                         )}
                       </div>
                     </div>
@@ -279,6 +389,16 @@ export default function ShowGroupsFeedback({
           </Accordion>
         </div>
       </ScrollArea>
+
+      {/* Edit Group Modal */}
+      {editingGroup && (
+        <EditGroupModal
+          group={editingGroup}
+          productId={productData.docId}
+          onClose={() => setEditingGroup(null)}
+          onGroupUpdated={handleGroupUpdated}
+        />
+      )}
     </div>
   );
 }
