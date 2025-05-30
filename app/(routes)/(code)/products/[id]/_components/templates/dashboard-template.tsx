@@ -66,9 +66,9 @@ export default async function DashboardTemplate({
         {/* Main Dashboard Tabs */}
         <Tabs defaultValue="feedback" className="space-y-4">
           <TabsClient>
-            <div className="sticky top-0 z-[2] shadow-md">
+            <div className="sticky top-0 z-[2]">
               <ScrollArea className="w-full">
-                <TabsList className="flex gap-2 bg-mutedBackground text-foreground w-max">
+                <TabsList className="flex gap-2 shadow-md bg-mutedBackground text-foreground w-max">
                   <TabsTrigger
                     value="feedback"
                     className="flex items-center gap-2 whitespace-nowrap flex-shrink-0"
@@ -124,7 +124,6 @@ export default async function DashboardTemplate({
 
             {/* Changelog */}
             <TabsContent value="changelog">
-              <div className="mb-[30px]">Changelog</div>
               <ChangelogTab productId={productData.docId} />
             </TabsContent>
 

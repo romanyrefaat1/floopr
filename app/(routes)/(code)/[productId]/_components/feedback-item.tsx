@@ -58,7 +58,7 @@ export default function FeedbackItem({
     isComponent,
     componentRefId,
   } = feedback;
-  const { title, content, inputs } = feedbackData || {};
+  const { title, content } = feedbackData || {};
   const [componentName, setComponentName] = useState(``);
   const [isComponentNameLoading, setIsComponentNameLoading] = useState(true);
   const { userId, isLoaded, isSignedIn } = useAuth();
@@ -210,6 +210,8 @@ export default function FeedbackItem({
                   isOwner={isOwner}
                   productId={productId}
                   feedbackId={feedback.id}
+                  feedbackTitle={myData.title}
+                  feedbackUsername={myData.userName}
                 />
                 <div className="text-xs bg-background px-2 py-1 rounded">
                   {myData.type}
