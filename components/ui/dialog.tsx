@@ -36,7 +36,7 @@ const DialogContent = React.forwardRef<
     <DialogOverlay className={overlayClassName} />
     <DialogPrimitive.Content
       className={cn(
-        "fixed left-1/2 top-1/2 z-50 max-w-lg w-full p-6 bg-background border shadow-lg",
+        "fixed left-1/2 top-1/2 z-50 max-w-lg w-full p-6 bg-background border shadow-lg rounded-3xl",
         "animate-dialog-in",
         className
       )}

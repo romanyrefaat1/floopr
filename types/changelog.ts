@@ -6,12 +6,16 @@ export interface ChangelogItem {
   imageUrl?: string;
   feedbackLink?: string;
   feedbackTitle?: string;
+  feedbackRef?: {
+    feedbackId: string;
+    name: string;
+  };
   changes: Array<{
     type: "improvement" | "bugfix" | "feature";
     content: string;
   }>;
 }
 
-export interface ChangelogListProps {
+export interface ChangelogList {
   items: ChangelogItem[];
 }

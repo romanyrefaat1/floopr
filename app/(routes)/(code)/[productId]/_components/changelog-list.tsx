@@ -5,7 +5,7 @@ import { formatDistance } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ChangelogList() {
+export default function ChangelogList({ productId }: { productId?: string }) {
   const items = [
     {
       version: "1.0.0",
@@ -13,9 +13,16 @@ export default function ChangelogList() {
       title: "Initial Release",
       description: "Our first release with basic features.",
       changes: [
-        { type: "feature", content: "Added user authentication" },
-        { type: "improvement", content: "Improved UI responsiveness" },
+        { type: "feature" as const, content: "Added user authentication" },
+        { type: "improvement" as const, content: "Improved UI responsiveness" },
       ],
+      feedbackRef: {
+        feedbackId: "abc123",
+        name: "Login Feedback",
+      },
+      imageUrl: `/public/images/land/dashboard-preview-dark.png`,
+      // feedbackLink: `undefined`,
+      // feedbackTitle: `Login Feedback`,
     },
   ];
 
@@ -81,6 +88,17 @@ export default function ChangelogList() {
                     </div>
                   ))}
                 </div>
+                {/* Optional feedback reference */}
+                {item.feedbackRef && productId && (
+                  <div className="mt-2 text-xs">
+                    <Link
+                      href={`/${productId}/${item.feedbackRef.feedbackId}`}
+                      className="text-primary underline hover:opacity-80"
+                    >
+                      See feedback: {item.feedbackRef.name}
+                    </Link>
+                  </div>
+                )}
                 {item.imageUrl && (
                   <div className="mt-4 relative rounded-lg overflow-hidden">
                     <Image
@@ -92,7 +110,7 @@ export default function ChangelogList() {
                     />
                   </div>
                 )}
-                {item.feedbackLink && (
+                {/* {item.feedbackLink && (
                   <div className="mt-4">
                     <Button variant="outline" asChild>
                       <Link href={item.feedbackLink}>
@@ -100,7 +118,7 @@ export default function ChangelogList() {
                       </Link>
                     </Button>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           ))}

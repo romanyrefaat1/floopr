@@ -167,7 +167,7 @@ export default function ClientPageShell({
                           </div>
                         }
                       >
-                        <ChangelogList />
+                        <ChangelogList productId={productId} />
                       </Suspense>
                     </div>
                   </TabsContent>

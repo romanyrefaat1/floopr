@@ -3,6 +3,7 @@ import { FilterData, Product } from "../../page";
 import { ViewProvider } from "../../view-context/view-context";
 import AllProductsPreviewComboBox from "../all-products-preview-combo-box";
 import FeedbackTabs from "../feedback-tabs";
+import ChangelogTab from "../tabs/changelog-tab/changelog";
 import ContentTab from "../tabs/content-tab";
 import AnalyticsDashboard from "./analytics-dashboard";
 import IntegrationsPanel from "./integrations-panel";
@@ -124,6 +125,7 @@ export default async function DashboardTemplate({
             {/* Changelog */}
             <TabsContent value="changelog">
               <div className="mb-[30px]">Changelog</div>
+              <ChangelogTab productId={productData.docId} />
             </TabsContent>
 
             {/* Analytics Tab Content */}
