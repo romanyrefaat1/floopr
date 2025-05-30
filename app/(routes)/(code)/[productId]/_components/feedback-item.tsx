@@ -102,14 +102,14 @@ export default function FeedbackItem({
   myData.userName = userInfo?.username || "Anonymous User";
   myData.profilePicture = userInfo?.profilePicture || null;
   myData.timeAgo = "Unknown date";
-  if (createdAt) {
-    // Firestore timestamp => convert to JS Date
-    // const date = createdAt.toDate();
-    myData.timeAgo = formatDistanceToNow(createdAt, { addSuffix: true });
-    myData.timeAgo =
-      myData.timeAgo.charAt(0).toUpperCase() + myData.timeAgo.slice(1);
-    // e.g. "3 days ago"
-  }
+  // if (createdAt) {
+  //   // Firestore timestamp => convert to JS Date
+  //   // const date = createdAt.toDate();
+  //   myData.timeAgo = formatDistanceToNow(createdAt, { addSuffix: true });
+  //   myData.timeAgo =
+  //     myData.timeAgo.charAt(0).toUpperCase() + myData.timeAgo.slice(1);
+  //   // e.g. "3 days ago"
+  // }
   myData.type = feedback.type
     ? makeFirstLetterUppercase(feedback.type)
     : "Other";

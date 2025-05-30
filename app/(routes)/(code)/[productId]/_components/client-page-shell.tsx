@@ -15,6 +15,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageSquare } from "lucide-react";
 import React, { useState, Suspense } from "react";
+import { AllFeedbackProvider } from "@/contexts/all-feedback-context";
 
 export default function ClientPageShell({
   productId,
@@ -75,129 +76,130 @@ export default function ClientPageShell({
       </div>
 
       {/* Main Content: 3-column grid */}
-      {/* <AllFeedbackProvider> */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Sidebar: Filters */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="rounded-lg border bg-card p-4">
-              <h3 className="font-semibold mb-4">Filter Feedback</h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Type</label>
-                  <FeedbackTypeSelect
-                    value={selectedType}
-                    onChange={setSelectedType}
-                  />
+      <AllFeedbackProvider productId={productId} filterData={filterData}>
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {/* Left Sidebar: Filters */}
+            <div className="lg:col-span-3 space-y-6">
+              <div className="rounded-lg border bg-card p-4">
+                <h3 className="font-semibold mb-4">Filter Feedback</h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Type</label>
+                    <FeedbackTypeSelect
+                      value={selectedType}
+                      onChange={setSelectedType}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">
+                      Status
+                    </label>
+                    <StatusFilter
+                      value={selectedStatus}
+                      onChange={setSelectedStatus}
+                    />
+                  </div>
+                  {/* Add more filter controls here as needed */}
                 </div>
-                <div>
-                  <label className="text-sm font-medium mb-2 block">
-                    Status
-                  </label>
-                  <StatusFilter
-                    value={selectedStatus}
-                    onChange={setSelectedStatus}
-                  />
-                </div>
-                {/* Add more filter controls here as needed */}
               </div>
             </div>
-          </div>
 
-          {/* Center: Tabs and Feedback */}
-          <div className="lg:col-span-6">
-            <Tabs value={tab} onValueChange={setTab} className="w-full">
-              <TabsList className="w-full justify-start mb-6">
-                <TabsTrigger value="all" className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4" />
-                  All Posts
-                </TabsTrigger>
-                <TabsTrigger value="roadmap">Roadmap</TabsTrigger>
-                <TabsTrigger value="changelog">Changelog</TabsTrigger>
-              </TabsList>
-              {tab === "all" && (
-                <TabsContent value="all" forceMount>
-                  <div className="fade-in">
-                    <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-xl font-semibold">All Feedback</h2>
-                      <Dialog
-                        open={feedbackDialogOpen}
-                        onOpenChange={setFeedbackDialogOpen}
-                      >
-                        <DialogTrigger asChild>
-                          <Button
-                            className="flex items-center gap-2 rounded-full"
-                            variant="default"
-                          >
-                            <MessageSquare className="h-4 w-4" /> Submit
-                            Feedback
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-lg w-full">
-                          <AddFeedbackForm
-                            productId={productId}
-                            productName={productName}
-                            primaryColor="#7c64f6"
-                            className="w-full"
-                          />
-                        </DialogContent>
-                      </Dialog>
+            {/* Center: Tabs and Feedback */}
+            <div className="lg:col-span-6">
+              <Tabs value={tab} onValueChange={setTab} className="w-full">
+                <TabsList className="w-full justify-start mb-6">
+                  <TabsTrigger value="all" className="flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4" />
+                    All Posts
+                  </TabsTrigger>
+                  <TabsTrigger value="roadmap">Roadmap</TabsTrigger>
+                  <TabsTrigger value="changelog">Changelog</TabsTrigger>
+                </TabsList>
+                {tab === "all" && (
+                  <TabsContent value="all" forceMount>
+                    <div className="fade-in">
+                      <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-semibold">All Feedback</h2>
+                        <Dialog
+                          open={feedbackDialogOpen}
+                          onOpenChange={setFeedbackDialogOpen}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              className="flex items-center gap-2 rounded-full"
+                              variant="default"
+                            >
+                              <MessageSquare className="h-4 w-4" /> Submit
+                              Feedback
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-lg w-full">
+                            <AddFeedbackForm
+                              productId={productId}
+                              productName={productName}
+                              primaryColor="#7c64f6"
+                              className="w-full"
+                            />
+                          </DialogContent>
+                        </Dialog>
+                      </div>
+                      {/* <Suspense
+                        fallback={
+                          <div className="animate-pulse text-center py-8">
+                            Loading feedback...
+                          </div>
+                        }
+                      > */}
+                      <FeedbackList
+                        productId={productId}
+                        filterData={filterData}
+                        isOwner={false}
+                      />
+                      {/* </Suspense> */}
                     </div>
-                    {/* <Suspense
-                      fallback={
-                        <div className="animate-pulse text-center py-8">
-                          Loading feedback...
-                        </div>
-                      }
-                    > */}
-                    <FeedbackList
-                      productId={productId}
-                      filterData={filterData}
-                      isOwner={false}
-                    />
-                    {/* </Suspense> */}
-                  </div>
-                </TabsContent>
-              )}
-              {tab === "roadmap" && (
-                <TabsContent value="roadmap" forceMount>
-                  <div className="fade-in">
-                    <Suspense
-                      fallback={
-                        <div className="animate-pulse text-center py-8">
-                          Loading roadmap...
-                        </div>
-                      }
-                    >
-                      <RoadmapView productId={productId} />
-                    </Suspense>
-                  </div>
-                </TabsContent>
-              )}
-              {tab === "changelog" && (
-                <TabsContent value="changelog" forceMount>
-                  <div className="fade-in">
-                    <Suspense
-                      fallback={
-                        <div className="animate-pulse text-center py-8">
-                          Loading changelog...
-                        </div>
-                      }
-                    >
-                      <ChangelogList items={[]} />
-                    </Suspense>
-                  </div>
-                </TabsContent>
-              )}
-            </Tabs>
-          </div>
+                  </TabsContent>
+                )}
+                {tab === "roadmap" && (
+                  <TabsContent value="roadmap" forceMount>
+                    <div className="fade-in">
+                      <Suspense
+                        fallback={
+                          <div className="animate-pulse text-center py-8">
+                            Loading roadmap...
+                          </div>
+                        }
+                      >
+                        <RoadmapView productId={productId} />
+                      </Suspense>
+                    </div>
+                  </TabsContent>
+                )}
+                {tab === "changelog" && (
+                  <TabsContent value="changelog" forceMount>
+                    <div className="fade-in">
+                      <Suspense
+                        fallback={
+                          <div className="animate-pulse text-center py-8">
+                            Loading changelog...
+                          </div>
+                        }
+                      >
+                        <ChangelogList items={[]} />
+                      </Suspense>
+                    </div>
+                  </TabsContent>
+                )}
+              </Tabs>
+            </div>
 
-          {/* Right Sidebar: (empty or for future widgets) */}
-          <div className="lg:col-span-3 space-y-6">
-            {/* Add widgets or keep empty for now */}
+            {/* Right Sidebar: (empty or for future widgets) */}
+            <div className="lg:col-span-3 space-y-6">
+              {/* Add widgets or keep empty for now */}
+            </div>
           </div>
         </div>
-      </div>
+      </AllFeedbackProvider>
     </>
   );
 }
