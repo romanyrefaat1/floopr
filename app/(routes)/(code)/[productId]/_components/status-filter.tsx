@@ -7,26 +7,26 @@ export type StatusType = "planned" | "in-progress" | "completed" | "archived";
 
 const statusTypes = [
   {
-    value: "planned",
-    label: "Planned",
+    value: "done",
+    label: "Done",
     color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   },
   {
-    value: "in-progress",
+    value: "in progress",
     label: "In Progress",
     color:
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
   },
   {
-    value: "completed",
+    value: "done",
     label: "Completed",
     color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
   },
-  {
-    value: "archived",
-    label: "Archived",
-    color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
-  },
+  // {
+  //   value: "archived",
+  //   label: "Archived",
+  //   color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+  // },
 ] as const;
 
 interface StatusFilterProps {
@@ -46,22 +46,24 @@ export default function StatusFilter({ value, onChange }: StatusFilterProps) {
         >
           All
         </Button>
-        {statusTypes.map((type) => (
-          <Button
-            key={type.value}
-            variant="ghost"
-            size="sm"
-            onClick={() => onChange(type.value)}
-            className={cn(
-              "min-w-[80px] whitespace-nowrap",
-              value === type.value && "bg-muted"
-            )}
-          >
-            <Badge variant="outline" className={cn("mr-1", type.color)}>
-              {type.label}
-            </Badge>
-          </Button>
-        ))}
+        <div className="flex gap-0">
+          {statusTypes.map((type) => (
+            <Button
+              key={type.value}
+              variant="ghost"
+              size="sm"
+              onClick={() => onChange(type.value)}
+              className={cn(
+                "min-w-[80px] whitespace-nowrap",
+                value === type.value && "bg-muted"
+              )}
+            >
+              <Badge variant="outline" className={cn("", type.color)}>
+                {type.label}
+              </Badge>
+            </Button>
+          ))}
+        </div>
       </div>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>

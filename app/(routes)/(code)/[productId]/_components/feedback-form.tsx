@@ -87,25 +87,28 @@ export default function FeedbackForm() {
   }
 
   return (
-    <ScrollArea className="h-[calc(100vh-40px)] rounded-md border w-full">
-      <div className="rounded-modal w-full min-w-[full] mx-auto p-4 text-card-foreground font-sans text-base">
-        <CardTitle>
-          <h2 className="text-2xl font-bold mb-6 text-center">Add Feedback</h2>
-        </CardTitle>
+    <div className="h-full">
+      <ScrollArea className="rounded-lg border w-full overflow-hidden">
+        <div className="rounded-modal h-fit w-full min-w-[full] mx-auto p-4 text-card-foreground font-sans text-base">
+          <CardTitle>
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              Add Feedback
+            </h2>
+          </CardTitle>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Radio Button Options */}
-            <FormField
-              control={form.control}
-              name="type"
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <div className="flex space-x-2">
-                    {["Feature", "Idea", "Issue", "Other"].map((type) => (
-                      <label
-                        key={type}
-                        className={`
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              {/* Radio Button Options */}
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <div className="flex space-x-2">
+                      {["Feature", "Idea", "Issue", "Other"].map((type) => (
+                        <label
+                          key={type}
+                          className={`
                         px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors border
                         ${
                           field.value === type.toLowerCase()
@@ -113,71 +116,72 @@ export default function FeedbackForm() {
                             : "bg-secondaryBackground text-foreground border-secondary"
                         }
                       `}
-                      >
-                        <Input
-                          type="radio"
-                          className="hidden"
-                          value={type.toLowerCase()}
-                          checked={field.value === type.toLowerCase()}
-                          onChange={() => field.onChange(type.toLowerCase())}
-                        />
-                        {type}
-                      </label>
-                    ))}
-                  </div>
-                </FormItem>
-              )}
-            />
+                        >
+                          <Input
+                            type="radio"
+                            className="hidden"
+                            value={type.toLowerCase()}
+                            checked={field.value === type.toLowerCase()}
+                            onChange={() => field.onChange(type.toLowerCase())}
+                          />
+                          {type}
+                        </label>
+                      ))}
+                    </div>
+                  </FormItem>
+                )}
+              />
 
-            {/* Title Field */}
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Short title"
-                      className="rounded-full text-foreground border border-secondary focus:border-primary focus:ring-primary"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-destructive text-xs" />
-                </FormItem>
-              )}
-            />
+              {/* Title Field */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Short title"
+                        className="rounded-full text-foreground border border-secondary focus:border-primary focus:ring-primary"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-destructive text-xs" />
+                  </FormItem>
+                )}
+              />
 
-            {/* Description Field */}
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <RichTextEditor
-                      onChange={(content) => {
-                        field.onChange(content);
-                      }}
-                      placeholder="Enter your description (optional)"
-                      className="rounded-md bg-background min-h-full text-foreground border border-secondary"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              {/* Description Field */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="h-full">
+                    <FormControl>
+                      <RichTextEditor
+                        onChange={(content) => {
+                          field.onChange(content);
+                        }}
+                        placeholder="Enter your description (optional)"
+                        className="rounded-md bg-background h-full text-foreground border border-secondary"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              className="w-full rounded-lg py-2 bg-primary text-white font-sans disabled:bg-gray-400"
-              disabled={isSubmitting || !form.formState.isValid}
-            >
-              {isSubmitting ? "Sending..." : "Send"}
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </ScrollArea>
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                className="w-full rounded-lg py-2 bg-primary text-white font-sans disabled:bg-gray-400"
+                disabled={isSubmitting || !form.formState.isValid}
+              >
+                {isSubmitting ? "Sending..." : "Send"}
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </ScrollArea>
+    </div>
   );
 }

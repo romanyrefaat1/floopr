@@ -1,12 +1,24 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ChangelogItem, ChangelogListProps } from "@/types/changelog";
 import { formatDistance } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ChangelogList({ items }: ChangelogListProps) {
+export default function ChangelogList() {
+  const items = [
+    {
+      version: "1.0.0",
+      date: new Date("2023-10-01"),
+      title: "Initial Release",
+      description: "Our first release with basic features.",
+      changes: [
+        { type: "feature", content: "Added user authentication" },
+        { type: "improvement", content: "Improved UI responsiveness" },
+      ],
+    },
+  ];
+
   const getBadgeColor = (type: "improvement" | "bugfix" | "feature") => {
     switch (type) {
       case "improvement":

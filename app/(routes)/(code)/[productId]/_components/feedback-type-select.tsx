@@ -25,6 +25,11 @@ export type FeedbackType = "feature" | "idea" | "issue" | "other";
 
 const feedbackTypes = [
   {
+    value: "",
+    label: "All Feedback",
+    icon: ChevronDownIcon, // Using ChevronDownIcon for "All Feedback"
+  },
+  {
     value: "feature",
     label: "Feature Request",
     icon: Sparkles,

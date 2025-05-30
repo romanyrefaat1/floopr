@@ -12,10 +12,11 @@ import StatusFilter from "./status-filter";
 import ButtonAddFeedback from "@/components/button-add-feedback";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageSquare } from "lucide-react";
-import React, { useState, Suspense } from "react";
 import { AllFeedbackProvider } from "@/contexts/all-feedback-context";
+import { Lamp, MessageSquare } from "lucide-react";
+import React, { useState, Suspense } from "react";
 
 export default function ClientPageShell({
   productId,
@@ -24,11 +25,9 @@ export default function ClientPageShell({
   productId: string;
   productName: string;
 }) {
-  const [feedbackDialogOpen, setFeedbackDialogOpen] = useState(false);
-  const [selectedType, setSelectedType] =
-    useState<FilterData["type"]>("feature");
+  const [selectedType, setSelectedType] = useState<FilterData["type"]>("");
   const [selectedStatus, setSelectedStatus] = useState<
-    "planned" | "in-progress" | "completed" | "archived" | null
+    "rejeted" | "in progress" | "done" | "in review" | null
   >(null);
   const [tab, setTab] = useState("all");
 
@@ -44,7 +43,7 @@ export default function ClientPageShell({
   return (
     <>
       {/* Hero Section (navbar is handled by parent) */}
-      <div className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5">
+      <div className="bg-gradient-to-r from-primary via-primary-muted to-sidebar-primary bg--">
         <div className="max-w- mx- px-4 py-8 md:py-12">
           <div className="max-w- mx-">
             <h1 className="text-4xl font-bold text-center">Product Feedback</h1>
@@ -52,40 +51,31 @@ export default function ClientPageShell({
               Browse and submit feedback for our product
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Dialog
-                open={feedbackDialogOpen}
-                onOpenChange={setFeedbackDialogOpen}
-              >
-                <DialogTrigger asChild>
-                  <Button className="flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" /> Submit Feedback
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-lg w-full">
-                  <ButtonAddFeedback
-                  // productId={productId}
-                  // productName={productName}
-                  // primaryColor="#7c64f6"
-                  // className="w-full"
-                  />
-                </DialogContent>
-              </Dialog>
+              <ButtonAddFeedback
+                value={
+                  <div className="flex items-center justify-center gap-2">
+                    <MessageSquare /> Submit Feedback
+                  </div>
+                }
+              />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content: 3-column grid */}
+      {/* Main Content: 2-column grid */}
       <AllFeedbackProvider productId={productId} filterData={filterData}>
         <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="flex flex-col md:flex-row gap-8">
             {/* Left Sidebar: Filters */}
-            <div className="lg:col-span-3 space-y-6">
-              <div className="rounded-lg border bg-card p-4">
+            <div className="lg:col-span-4 space-y-6 md:w-[250px]">
+              <div className="rounded-lg border md:sticky top-2 bg-card p-4">
                 <h3 className="font-semibold mb-4">Filter Feedback</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Type</label>
+                    <label className="text-sm font-medium mb-2 block">
+                      Type
+                    </label>
                     <FeedbackTypeSelect
                       value={selectedType}
                       onChange={setSelectedType}
@@ -106,7 +96,7 @@ export default function ClientPageShell({
             </div>
 
             {/* Center: Tabs and Feedback */}
-            <div className="lg:col-span-6">
+            <div className="lg:col-span-8 w-full">
               <Tabs value={tab} onValueChange={setTab} className="w-full">
                 <TabsList className="w-full justify-start mb-6">
                   <TabsTrigger value="all" className="flex items-center gap-2">
@@ -118,31 +108,17 @@ export default function ClientPageShell({
                 </TabsList>
                 {tab === "all" && (
                   <TabsContent value="all" forceMount>
-                    <div className="fade-in">
+                    <div className="fade-in w-full">
                       <div className="flex justify-between items-center mb-6">
                         <h2 className="text-xl font-semibold">All Feedback</h2>
-                        <Dialog
-                          open={feedbackDialogOpen}
-                          onOpenChange={setFeedbackDialogOpen}
-                        >
-                          <DialogTrigger asChild>
-                            <Button
-                              className="flex items-center gap-2 rounded-full"
-                              variant="default"
-                            >
+                        <ButtonAddFeedback
+                          value={
+                            <div className="flex items-center justify-center gap-2">
                               <MessageSquare className="h-4 w-4" /> Submit
                               Feedback
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="max-w-lg w-full">
-                            <AddFeedbackForm
-                              productId={productId}
-                              productName={productName}
-                              primaryColor="#7c64f6"
-                              className="w-full"
-                            />
-                          </DialogContent>
-                        </Dialog>
+                            </div>
+                          }
+                        />
                       </div>
                       {/* <Suspense
                         fallback={
@@ -151,11 +127,14 @@ export default function ClientPageShell({
                           </div>
                         }
                       > */}
-                      <FeedbackList
-                        productId={productId}
-                        filterData={filterData}
-                        isOwner={false}
-                      />
+                      <div className="w-full">
+                        <FeedbackList
+                          productId={productId}
+                          filterData={filterData}
+                          isOwner={false}
+                          status={selectedStatus}
+                        />
+                      </div>
                       {/* </Suspense> */}
                     </div>
                   </TabsContent>
@@ -170,7 +149,10 @@ export default function ClientPageShell({
                           </div>
                         }
                       >
-                        <RoadmapView productId={productId} />
+                        <Skeleton className="flex items-center justify-center w-full h-[200px] bg-transparent">
+                          In Development
+                        </Skeleton>
+                        {/* <RoadmapView productId={productId} /> */}
                       </Suspense>
                     </div>
                   </TabsContent>
@@ -185,17 +167,12 @@ export default function ClientPageShell({
                           </div>
                         }
                       >
-                        <ChangelogList items={[]} />
+                        <ChangelogList />
                       </Suspense>
                     </div>
                   </TabsContent>
                 )}
               </Tabs>
-            </div>
-
-            {/* Right Sidebar: (empty or for future widgets) */}
-            <div className="lg:col-span-3 space-y-6">
-              {/* Add widgets or keep empty for now */}
             </div>
           </div>
         </div>

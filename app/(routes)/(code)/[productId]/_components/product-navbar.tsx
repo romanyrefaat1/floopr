@@ -1,6 +1,9 @@
 "use client";
 
+import ButtonAddFeedback from "@/components/button-add-feedback";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,15 +17,16 @@ export default function ProductNavbar({
   productName,
 }: ProductNavbarProps) {
   const pathname = usePathname();
+  const { isSignedIn, isLoaded } = useAuth();
 
   const isActive = (path: string) => {
     return pathname === path ? "text-foreground" : "text-muted-foreground";
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/75 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex h-16 items-center justify-between gap-4">
+    <nav className="md:sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto ">
+        <div className="flex h-8 items-center justify-between gap-[5rem] ">
           <div className="flex items-center gap-8">
             <Link
               href={`/${productId}`}
@@ -30,7 +34,8 @@ export default function ProductNavbar({
             >
               {productName}
             </Link>
-            <div className="hidden md:flex items-center gap-6">
+            {/* Links */}
+            {/* <div className="hidden md:flex items-center gap-6">
               <Link
                 href={`/${productId}`}
                 className={`text-sm font-medium hover:text-foreground transition-colors ${isActive(
@@ -55,13 +60,17 @@ export default function ProductNavbar({
               >
                 Changelog
               </Link>
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center gap-4">
-            <Button variant="outline" size={`sm`}>
-              Sign In
-            </Button>
-            <Button>Submit Feedback</Button>
+            {isLoaded && !isSignedIn ? (
+              <Button variant="outline" size={`sm`}>
+                Sign In
+              </Button>
+            ) : !isLoaded ? (
+              <Skeleton className="h-8 w-24" />
+            ) : null}
+            <ButtonAddFeedback rounded={`full`} />
           </div>
         </div>
       </div>
