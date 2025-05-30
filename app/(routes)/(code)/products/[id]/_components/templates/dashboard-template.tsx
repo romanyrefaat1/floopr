@@ -76,6 +76,12 @@ export default async function DashboardTemplate({
                     Feedback
                   </TabsTrigger>
                   <TabsTrigger
+                    value="changelog"
+                    className="whitespace-nowrap flex-shrink-0"
+                  >
+                    Changelog
+                  </TabsTrigger>
+                  <TabsTrigger
                     value="analytics"
                     className="whitespace-nowrap flex-shrink-0"
                   >
@@ -85,7 +91,7 @@ export default async function DashboardTemplate({
                     value="integrations"
                     className="whitespace-nowrap flex-shrink-0"
                   >
-                    Integrations
+                    Widgets
                   </TabsTrigger>
                   <TabsTrigger
                     value="feedback-settings"
@@ -113,6 +119,11 @@ export default async function DashboardTemplate({
                   />
                 </GroupedFeedbackProvider>
               </ViewProvider>
+            </TabsContent>
+
+            {/* Changelog */}
+            <TabsContent value="changelog">
+              <div className="mb-[30px]">Changelog</div>
             </TabsContent>
 
             {/* Analytics Tab Content */}
