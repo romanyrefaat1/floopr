@@ -1,129 +1,46 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { formatDistance } from "date-fns";
-import Image from "next/image";
-import Link from "next/link";
+import ChangelogList from "../../products/[id]/_components/tabs/changelog-tab/changelog-list";
+import { useEffect, useState } from "react";
 
-export default function ChangelogList({ productId }: { productId?: string }) {
-  const items = [
-    {
-      version: "1.0.0",
-      date: new Date("2023-10-01"),
-      title: "Initial Release",
-      description: "Our first release with basic features.",
-      changes: [
-        { type: "feature" as const, content: "Added user authentication" },
-        { type: "improvement" as const, content: "Improved UI responsiveness" },
-      ],
-      feedbackRef: {
-        feedbackId: "abc123",
-        name: "Login Feedback",
-      },
-      imageUrl: `/public/images/land/dashboard-preview-dark.png`,
-      // feedbackLink: `undefined`,
-      // feedbackTitle: `Login Feedback`,
-    },
-  ];
+export default function ChangelogListContainer({
+  productId,
+}: {
+  productId: string;
+}) {
+  const [items, setItems] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const getBadgeColor = (type: "improvement" | "bugfix" | "feature") => {
-    switch (type) {
-      case "improvement":
-        return "bg-blue-500/10 text-blue-500";
-      case "bugfix":
-        return "bg-red-500/10 text-red-500";
-      case "feature":
-        return "bg-green-500/10 text-green-500";
-      default:
-        return "bg-gray-500/10 text-gray-500";
-    }
-  };
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setError(null);
+    import(
+      "../../products/[id]/_components/tabs/changelog-tab/changelog-server"
+    ).then((mod) => {
+      mod
+        .getChangelogItems(productId)
+        .then((data) => {
+          if (mounted) {
+            setItems(data);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {
+          if (mounted) {
+            setError("Failed to load changelog.");
+            setLoading(false);
+          }
+        });
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [productId]);
 
-  if (!items.length) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12">
-        <p className="text-lg text-muted-foreground">
-          No changelog entries yet
-        </p>
-      </div>
-    );
+  if (loading || error) {
+    return <ChangelogList items={[]} productId={productId} loading={loading} />;
   }
-
-  return (
-    <div className="max-w-5xl mx-auto mb-8">
-      <div className="relative">
-        <div className="absolute left-4 h-full w-px bg-border" />
-        <div className="space-y-8">
-          {items.map((item, index) => (
-            <div key={item.version} className="relative pl-8">
-              <div className="absolute left-0 w-8 flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-primary" />
-              </div>
-              <div className="p-6 bg-card rounded-lg shadow-sm border">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-sm font-mono bg-muted px-2.5 py-0.5 rounded-full">
-                    v{item.version}
-                  </span>
-                  <time className="text-sm text-muted-foreground">
-                    {formatDistance(item.date, new Date(), { addSuffix: true })}
-                  </time>
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                {item.description && (
-                  <p className="text-muted-foreground mb-4">
-                    {item.description}
-                  </p>
-                )}
-                <div className="space-y-3">
-                  {item.changes.map((change, changeIndex) => (
-                    <div key={changeIndex} className="flex items-start gap-2">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeColor(
-                          change.type
-                        )}`}
-                      >
-                        {change.type}
-                      </span>
-                      <span className="text-sm">{change.content}</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Optional feedback reference */}
-                {item.feedbackRef && productId && (
-                  <div className="mt-2 text-xs">
-                    <Link
-                      href={`/${productId}/${item.feedbackRef.feedbackId}`}
-                      className="text-primary underline hover:opacity-80"
-                    >
-                      See feedback: {item.feedbackRef.name}
-                    </Link>
-                  </div>
-                )}
-                {item.imageUrl && (
-                  <div className="mt-4 relative rounded-lg overflow-hidden">
-                    <Image
-                      src={item.imageUrl}
-                      alt={`Preview for ${item.title}`}
-                      width={800}
-                      height={400}
-                      className="object-cover"
-                    />
-                  </div>
-                )}
-                {/* {item.feedbackLink && (
-                  <div className="mt-4">
-                    <Button variant="outline" asChild>
-                      <Link href={item.feedbackLink}>
-                        {item.feedbackTitle || "View feedback discussion"}
-                      </Link>
-                    </Button>
-                  </div>
-                )} */}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  return <ChangelogList items={items} productId={productId} />;
 }

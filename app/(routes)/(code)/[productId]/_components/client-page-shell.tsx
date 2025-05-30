@@ -160,15 +160,15 @@ export default function ClientPageShell({
                 {tab === "changelog" && (
                   <TabsContent value="changelog" forceMount>
                     <div className="fade-in">
-                      <Suspense
+                      {/* <Suspense
                         fallback={
                           <div className="animate-pulse text-center py-8">
                             Loading changelog...
                           </div>
                         }
-                      >
-                        <ChangelogList productId={productId} />
-                      </Suspense>
+                      > */}
+                      <ChangelogList productId={productId} />
+                      {/* </Suspense> */}
                     </div>
                   </TabsContent>
                 )}
