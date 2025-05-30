@@ -1,15 +1,15 @@
 "use client";
 
+import { lightenColor } from "../_utils/lighten-color";
+import { addSimpleFeedback } from "@/actions/add-feedback";
+import LoaderSpinner from "@/components/loader-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { lightenColor } from "../_utils/lighten-color";
-import { addSimpleFeedback } from "@/actions/add-feedback";
-import { useState } from "react";
-import LoaderSpinner from "@/components/loader-spinner";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function AddFeedbackForm({
   primaryColor,
@@ -26,7 +26,7 @@ export default function AddFeedbackForm({
   const [content, setContent] = useState("");
   const router = useRouter();
   const { user } = useUser();
-  
+
   const lightenedPrimaryColor = lightenColor(primaryColor, 0);
 
   const handleAddFeedback = async () => {
@@ -35,9 +35,9 @@ export default function AddFeedbackForm({
       toast.error("Feedback must be at least 10 characters long.");
       return;
     }
-    
+
     setLoading(true);
-    
+
     try {
       const result = await addSimpleFeedback({
         content,
@@ -47,7 +47,7 @@ export default function AddFeedbackForm({
         },
         productId,
       });
-      
+
       if (result.success) {
         toast.success("Your feedback was added successfully!");
         router.push(`/products/${productId}`);
@@ -64,14 +64,13 @@ export default function AddFeedbackForm({
 
   return (
     <div
-      className={cn(
-        "flex gap-2 items-center justify-center",
-        className
-      )}
-      style={{ 
-        "--primary-color": primaryColor, 
-        "--lightened-color": lightenedPrimaryColor 
-      } as React.CSSProperties}
+      className={cn("flex gap-2 items-center justify-center", className)}
+      style={
+        {
+          "--primary-color": primaryColor,
+          "--lightened-color": lightenedPrimaryColor,
+        } as React.CSSProperties
+      }
     >
       <Input
         value={content}
@@ -80,9 +79,9 @@ export default function AddFeedbackForm({
         className="w-full focus:border-[var(--lightened-color)] focus:outline-none"
         style={{ borderColor: "var(--primary-color)" }}
       />
-      <Button 
-        onClick={handleAddFeedback} 
-        disabled={loading} 
+      <Button
+        onClick={handleAddFeedback}
+        disabled={loading}
         style={{ backgroundColor: "var(--primary-color)" }}
       >
         {loading ? <LoaderSpinner text="Adding feedback..." /> : "Add Feedback"}
