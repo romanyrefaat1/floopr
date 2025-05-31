@@ -169,7 +169,7 @@ export async function POST(request: NextRequest) {
               "",
               "### Product Signals",
               "- Reference feedback statuses: *done*, *in progress*, *in review*, *rejected*. Adjust tone accordingly — strategic for ideas, celebratory for done, empathetic for rejections.",
-              "- If feedbacks are referenced, include links like: `[Feedback Title](/${productId}/feedbackId)`",
+              `- If feedbacks are referenced, include links like: [Feedback Title](/${productId}/feedbackId)`,
               "",
               "### Process",
               "- Ask smart clarifying questions if the prompt lacks context. Ask up to 3 maximum.",
