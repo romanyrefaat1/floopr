@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
               `- ${ownerName} represents the product owner's name.`,
               `- If a feedback was written by ${ownerName}, treat it as an idea the team is exploring — not a validated user signal.`,
               "- These are often early feature suggestions listed by the team to gather likes and comments from users, helping the team evaluate interest.",
-              `- Mark such feedback using `${ownerName}` in backticks to show internal origin.`,
+              `- Mark such feedback using ${ownerName} in backticks to show internal origin.`,
               "",
               "## Use of Contextual Data",
               "- *Changelog*, *Feedback Groups*, and *Product Context* are background context only. Use them **only** when strategically required:",
