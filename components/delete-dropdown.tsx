@@ -70,10 +70,14 @@ export default function DeleteDropdown({
   };
 
   return (
-    <div className=" top-4 right-4">
+    <div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 absolute top-2 right-4"
+          >
             <MoreVertical className="h-4 w-4" />
             {/* <span className="sr-only">Open menu</span> */}
           </Button>

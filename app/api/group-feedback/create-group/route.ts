@@ -51,15 +51,15 @@ Please make sure to group feedback properly for example, if you expect get more 
 Feedback list:
 ${feedbackListText}
 
-ALWAYS MAKE SURE IT IS PARSABLE. I will take your response and will parse it directly so only return
-{} json, never return random text. Only return te json data. Make sure to group based on topic.
+ALWAYS RETURN PARSABLE JSON. I will will parse your response directly so only return
+{} json, never return random text. Only return json file. Make sure to group based on topic.
 
 Desired format:
 [
   {
     \"groupId\": \"<unique topic id>\",
-    \"groupTitle\": \"<topic name>\",
-    \"groupDescription\": \"<topic description>\",
+    \"groupTitle\": \"<descriptive topic name>\",
+    \"groupDescription\": \"<descriptive topic description>\",
     \"feedback\": [\"id1\", \"id2\", ...]
   }
 ]

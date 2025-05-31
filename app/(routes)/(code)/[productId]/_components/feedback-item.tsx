@@ -1,6 +1,7 @@
 "use client";
 
 import LikeButton from "../../products/[id]/feedback/[feedbackId]/_components/like-button";
+import FeedbackItemReferenceLink from "./feedback-item-reference-link";
 import { FeedbackItemInDB } from "./feedback-list";
 import FinalStatus from "./final-status";
 import DeleteDropdown from "@/components/delete-dropdown";
@@ -143,16 +144,22 @@ export default function FeedbackItem({
   return (
     <Link href={`/${productId}/${feedback.id}`}>
       <div className={cn("", className)}>
-        <div className="border hover:bg-mutedBackground transition-all rounded-xl p-4 bg-secondaryBackground text-foreground">
+        <div className="border relative pt-11 hover:bg-mutedBackground transition-all rounded-xl p-4 bg-secondaryBackground text-foreground">
           <div>
             <div className="flex items-center justify-between">
               {isComponent ? (
                 isComponentNameLoading ? (
                   <Skeleton className="w-[40px] h-[10px] bg-mutedBackground mb-4" />
                 ) : (
-                  <Badge className="mb-4">
-                    {isComponent && componentName} Component
-                  </Badge>
+                  <>
+                    <FeedbackItemReferenceLink
+                      productId={productId}
+                      feedbackId={feedback.id}
+                    />
+                    <Badge className="mb-4">
+                      {isComponent && componentName} Component: {componentName}
+                    </Badge>
+                  </>
                 )
               ) : (
                 <></>
@@ -169,7 +176,7 @@ export default function FeedbackItem({
                   <DeleteDropdown
                     docRef={doc(
                       db,
-                      `products/${productId}/feedback/${feedbackData.docId}`
+                      `products/${productId}/feedbacks/${feedbackData.docId}`
                     )}
                     onDeleteSuccess={async () => {
                       // Update basic analytics
@@ -182,6 +189,7 @@ export default function FeedbackItem({
                 </div>
               )}
             </div>
+
             <div className="flex">
               {/* Title & description */}
               <div className="mb-2 flex-1">
