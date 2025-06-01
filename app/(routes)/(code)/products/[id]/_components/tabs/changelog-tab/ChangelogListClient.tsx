@@ -37,10 +37,11 @@ export default function ChangelogListClient({
   productId,
   loading = false,
 }: {
-  items: ChangelogItem[];
+  items?: ChangelogItem[];
   productId: string;
   loading?: boolean;
 }) {
+  const safeItems = Array.isArray(items) ? items : [];
   const [undoOpen, setUndoOpen] = useState(false);
   const [undoItems, setUndoItems] = useState<ChangelogItem[]>([]);
   const [undoType, setUndoType] = useState<"fallback" | null>(null);
@@ -49,7 +50,7 @@ export default function ChangelogListClient({
   // Delete only the selected item
   const handleDelete = async (idx: number) => {
     setLoadingIdx(idx);
-    const item = items[idx];
+    const item = safeItems[idx];
     const updatesRef = collection(db, "products", productId, "updates");
     const q = query(updatesRef, orderBy("version"));
     const snapshot = await getDocs(q);
@@ -69,7 +70,7 @@ export default function ChangelogListClient({
     const snapshot = await getDocs(q);
     // Type: ChangelogItem & { _id: string }
     const allItems = snapshot.docs.map((d) => ({ ...(d.data() as ChangelogItem), _id: d.id }));
-    const fallbackVersion = items[idx].version;
+    const fallbackVersion = safeItems[idx].version;
     // Find all items after idx (greater version)
     const toDelete = allItems.filter((it) => parseFloat(it.version as any) > parseFloat(fallbackVersion as any));
     // Save for undo (strip _id for Firestore setDoc)
@@ -106,7 +107,7 @@ export default function ChangelogListClient({
       </div>
     );
   }
-  if (!items.length) {
+  if (!safeItems.length) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <p className="text-lg text-muted-foreground">
@@ -126,7 +127,7 @@ export default function ChangelogListClient({
         undoLabel="Undo Fallback"
       />
       <div className="space-y-8">
-        {items.map((item, idx) => (
+        {safeItems.map((item, idx) => (
           <div key={item.version} className="relative pl-8">
             <div className="absolute left-0 w-8 flex items-center justify-center">
               <div className="w-2 h-2 rounded-full bg-primary" />

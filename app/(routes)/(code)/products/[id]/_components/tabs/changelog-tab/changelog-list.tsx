@@ -1,19 +1,19 @@
 import ChangelogListClient from "./ChangelogListClient";
+import { useChangelog } from "@/contexts/changelog-context";
 
 export default function ChangelogList({
-  items,
   productId,
-  loading = false,
+  loading: loadingProp,
 }: {
-  items: ChangelogItem[];
   productId: string;
   loading?: boolean;
 }) {
+  const { changelog, loading } = useChangelog();
   return (
     <ChangelogListClient
-      items={items}
+      items={changelog}
       productId={productId}
-      loading={loading}
+      loading={typeof loadingProp === "boolean" ? loadingProp : loading}
     />
   );
 }

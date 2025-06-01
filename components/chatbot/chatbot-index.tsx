@@ -38,6 +38,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
     isDrain,
     makeMouseInsideContainer,
     removeMouseInsideContainer,
+    feedbacks,
+    changelog,
+    settings,
   } = useChatbotContext();
   const [messages, setMessages] = useState([firstMess]);
   const [input, setInput] = useState("#all-feedbacks");
@@ -57,8 +60,6 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       { position: "right", type: "text", role: `user`, text: input },
     ]);
     setLoading(true);
-    console.log(`drajedContext`, drajedContext);
-
     // API call
     try {
       const res = await fetch("/api/chatbot", {
@@ -69,6 +70,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           messContext: messages,
           productId: productId,
           drajedContext,
+          feedbacks,
+          changelog,
+          settings,
         }),
       });
       const data = await res.json();
@@ -168,7 +172,12 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                   <X />
                 </Button>
               )}
-              <Button size="icon" variant="ghost" className="hidden md:flex" onClick={makeFullScreen}>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="hidden md:flex"
+                onClick={makeFullScreen}
+              >
                 {isFullScreen ? <Minimize size={12} /> : <Maximize size={12} />}
               </Button>
               <Button
@@ -197,7 +206,9 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                   alt="Prey Icon"
                   className="rounded-full w-5 h-5 mr-2 inline-block select-none"
                 />
-                <p className="text-sm w-fit">You can drag any feedback into the chat</p>
+                <p className="text-sm w-fit">
+                  You can drag any feedback into the chat
+                </p>
               </div>
             )}
             {messages.map((msg, idx) => (

@@ -1,7 +1,12 @@
+import { getChangelogItems } from "./_components/tabs/changelog-tab/changelog-server";
 import DashboardTemplate from "./_components/templates/dashboard-template";
 import { lightenColor } from "./_utils/lighten-color";
+import getFilteredFeedbacks from "@/actions/filter-feedback";
 import getProductData from "@/actions/get-product-data";
+import { AllFeedbackProvider } from "@/contexts/all-feedback-context";
+import { ChangelogProvider } from "@/contexts/changelog-context";
 import { ChatbotProvider } from "@/contexts/chatbot-context";
+import { SettingsProvider } from "@/contexts/settings-context";
 import getFiltersFromParams from "@/lib/get-filters-from-params";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
@@ -41,17 +46,25 @@ const ProductPage = async ({
   const productDataFromServer = (await getProductData(id)) as Product;
 
   if (!productDataFromServer) notFound();
-  console.log(`productDataFromServer`, productDataFromServer.name);
-  console.log(`userId from main`, userId);
-  console.log(`productDataFromServer`, productDataFromServer.ownerId);
-
   if (productDataFromServer.ownerId !== userId) {
     return notFound();
   }
 
-  // const serializedProductData = serializeFirestoreData(productDataFromServer);
+  const filters = getFiltersFromParams(searchParams);
+  const filterData = {
+    ...filters,
+    group: (filters as any).group ?? null,
+  };
 
-  const filterData = getFiltersFromParams(searchParams);
+  // Fetch changelog, feedbacks, and settings on the server
+  const [initialChangelog, rawFeedbacks, initialSettings] = await Promise.all([
+    getChangelogItems(id),
+    getFilteredFeedbacks(id, filterData),
+    Promise.resolve({ theme: "light", notificationsEnabled: true }), // Replace with real settings fetch
+  ]);
+  console.log(`my cool initialChangelog:`, initialChangelog);
+  // Ensure feedbacks is always an array
+  const initialFeedbacks = Array.isArray(rawFeedbacks) ? rawFeedbacks : [];
 
   // Generate secondary colors based on the primary colors
   const secondaryTextColor = lightenColor(
@@ -68,15 +81,28 @@ const ProductPage = async ({
   }
 
   return (
-    <ChatbotProvider>
-      <div className="min-h-screen bg-background">
-        {/* <div>
-          <BasicSendEmailButton />
-        </div> */}
-
-        <DashboardTemplate productData={productData} filterData={filterData} />
-      </div>
-    </ChatbotProvider>
+    <SettingsProvider initialSettings={initialSettings}>
+      <ChatbotProvider
+        feedbacks={initialFeedbacks}
+        changelog={initialChangelog}
+        settings={initialSettings}
+      >
+        <ChangelogProvider productId={id} initialChangelog={initialChangelog}>
+          <AllFeedbackProvider
+            productId={id}
+            filterData={filterData}
+            initialFeedbacks={initialFeedbacks}
+          >
+            <div className="min-h-screen bg-background">
+              <DashboardTemplate
+                productData={productData}
+                filterData={filterData}
+              />
+            </div>
+          </AllFeedbackProvider>
+        </ChangelogProvider>
+      </ChatbotProvider>
+    </SettingsProvider>
   );
 };
 

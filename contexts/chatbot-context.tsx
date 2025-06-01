@@ -16,15 +16,21 @@ export interface ChatbotContextType {
   makeMouseInsideContainer: () => void;
   removeMouseInsideContainer: () => void;
   removeItemFromDrajedContext: (feedbackId) => void;
+  feedbacks?: any[];
+  changelog?: any[];
+  settings?: any;
 }
 
 export const ChatbotContext = createContext<ChatbotContextType | undefined>(
   undefined
 );
 
-export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const ChatbotProvider: React.FC<{
+  children: React.ReactNode;
+  feedbacks?: any[];
+  changelog?: any[];
+  settings?: any;
+}> = ({ children, feedbacks, changelog, settings }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -123,6 +129,9 @@ export const ChatbotProvider: React.FC<{ children: React.ReactNode }> = ({
         makeMouseInsideContainer,
         removeMouseInsideContainer,
         removeItemFromDrajedContext,
+        feedbacks,
+        changelog,
+        settings,
       }}
     >
       <div className={"relative"}>{children}</div>

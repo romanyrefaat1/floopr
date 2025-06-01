@@ -1,11 +1,18 @@
+import { db } from "@/lib/firebase";
 import { ChangelogItem } from "@/types/changelog";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
-export async function getChangelogItems(productId: string): Promise<ChangelogItem[]> {
+export async function getChangelogItems(
+  productId: string
+): Promise<ChangelogItem[]> {
   const changelogRef = collection(db, "products", productId, "updates");
   const q = query(changelogRef, orderBy("date", "desc"));
   const snapshot = await getDocs(q);
+
+  if (snapshot.empty) {
+    return [];
+  }
+
   return snapshot.docs.map((doc) => {
     const data = doc.data();
     return {

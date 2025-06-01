@@ -3,12 +3,11 @@
 import FeedbackItem from "../../../[productId]/_components/feedback-item";
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { FilterData, Product } from "../page";
-import getFilteredFeedbacks from "@/actions/filter-feedback";
 import FeedbackItemSkeleton from "@/components/skeletons/feedback-item-skeleton";
+import { useAllFeedback } from "@/contexts/all-feedback-context";
 import { useChatbotContext } from "@/contexts/use-chatbot-context";
-import serializeFirestoreData from "@/lib/serialize-firestore-data";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 interface FeedbackContentItemsProps {
   productData: Product;
@@ -23,35 +22,9 @@ export default function FeedbackContentItems({
   isOwner = false,
   filterData = {},
 }: FeedbackContentItemsProps) {
-  const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { feedbacks, loading, error } = useAllFeedback();
   const { isDrajable, startDraj, dropDraj, isDrain, drajedContext } =
     useChatbotContext();
-
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-
-    const fetchFeedbacks = async () => {
-      try {
-        const data = await getFilteredFeedbacks(productId, filterData, true);
-        console.log(`filtered feedback data from feedback-content-items`, data);
-        const list = Array.isArray(data) ? data : [];
-        const serialized: FeedbackItemInDB[] = list.map(
-          (f) => serializeFirestoreData(f) as FeedbackItemInDB
-        );
-        setFeedbacks(serialized);
-      } catch (err) {
-        console.error("Error fetching feedbacks:", err);
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeedbacks();
-  }, [productId, JSON.stringify(filterData)]);
 
   if (loading) {
     // Show 5 skeleton items
@@ -68,7 +41,7 @@ export default function FeedbackContentItems({
     return <div className="text-red-500 p-4 text-center">{error}</div>;
   }
 
-  if (feedbacks.length === 0) {
+  if (!feedbacks || feedbacks.length === 0) {
     return (
       <div
         className="text-center py-8"

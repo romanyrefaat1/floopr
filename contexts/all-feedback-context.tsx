@@ -62,13 +62,14 @@ export function useAllFeedback() {
   return ctx;
 }
 
-export function AllFeedbackProvider({ productId, filterData, children }: {
+export function AllFeedbackProvider({ productId, filterData, initialFeedbacks, children }: {
   productId: string;
   filterData: FilterData;
+  initialFeedbacks?: FeedbackItemInDB[];
   children: ReactNode;
 }) {
-  const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[] | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[] | null>(initialFeedbacks || null);
+  const [loading, setLoading] = useState(!initialFeedbacks);
   const [error, setError] = useState<string | null>(null);
 
   const fetchFeedbacks = async (pid: string, fd: FilterData) => {
@@ -76,7 +77,11 @@ export function AllFeedbackProvider({ productId, filterData, children }: {
     setError(null);
     try {
       const data = await getFilteredFeedbacks(pid, fd);
-      setFeedbacks(data || []);
+      if (Array.isArray(data)) {
+        setFeedbacks(data);
+      } else {
+        setFeedbacks([]);
+      }
     } catch (e) {
       setError("Failed to load feedback");
       setFeedbacks([]);
