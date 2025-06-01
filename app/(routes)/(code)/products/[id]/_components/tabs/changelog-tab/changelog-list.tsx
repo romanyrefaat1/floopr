@@ -11,7 +11,6 @@ export default function ChangelogList({
   const { changelog, loading } = useChangelog();
   return (
     <ChangelogListClient
-      items={changelog}
       productId={productId}
       loading={typeof loadingProp === "boolean" ? loadingProp : loading}
     />

@@ -1,7 +1,13 @@
 "use client";
 
 import { getChangelogItems } from "@/app/(routes)/(code)/products/[id]/_components/tabs/changelog-tab/changelog-server";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export interface ChangelogItem {
   version: string;
@@ -43,7 +49,6 @@ export function ChangelogProvider({
   const [changelog, setChangelog] = useState<ChangelogItem[] | null>(
     initialChangelog || null
   );
-  console.log(`my cool changelog:`, changelog);
   const [loading, setLoading] = useState(!initialChangelog);
   const [error, setError] = useState<string | null>(null);
 

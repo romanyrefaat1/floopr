@@ -6,7 +6,6 @@ import { useChangelog } from "@/contexts/changelog-context";
 
 export default function ChangelogTab({ productId }: { productId: string }) {
   const { changelog, loading } = useChangelog();
-  console.log(`my cool changelog from useChangelog:`, changelog);
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-6">
