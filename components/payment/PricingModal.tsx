@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { usePricing } from "@/context/pricing-context";
 import { cn } from "@/lib/utils";
 import { useUser, RedirectToSignIn, RedirectToSignUp } from "@clerk/nextjs";
-import { Check } from "lucide-react";
+import { Check, HelpCircle, Sparkles, XCircle, X, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -29,11 +29,11 @@ const plans = [
       "Up to 50 feedback submissions/mo",
       "1 widget (floating button only)",
       "10 AI chatbot messages/mo",
-      "Unlimited changelog items",
-      "Community support",
       "Limited sentiment & topic tagging",
       "2 product",
+      "Unlimited changelog items",
       "Floopr badge on all embeds",
+      "Community support",
     ],
     cta: "Get Started",
     highlight: false,
@@ -48,14 +48,14 @@ const plans = [
     features: [
       "All features in Free plan",
       "Up to 500 feedback submissions/mo",
-      "Full branding control over widgets",
       "2 widget instances",
       "100 AI chatbot messages/mo",
       "Unlimited sentiment & topic tagging",
-      "CSV export",
-      "Email support (In progress)",
-      "Automatic release notes in changelog (In progress)",
       "4 products",
+      "Automatic release notes in changelog (In progress)",
+      "Full branding control over widgets",
+      "Email support (In progress)",
+      "CSV export",
       "Priority feature access",
     ],
     cta: "Start 7-day free trial",
@@ -70,13 +70,17 @@ const plans = [
     priceLabel: "$150",
     description: "Save 17% with annual billing",
     features: [
+      "All features in Free plan",
       "Up to 500 feedback submissions/mo",
-      "Full branding control",
       "2 widget instances",
-      "Basic AI chatbot (100 msg/mo)",
-      "Sentiment & topic tagging",
+      "100 AI chatbot messages/mo",
+      "Unlimited sentiment & topic tagging",
+      "4 products",
+      "Automatic release notes in changelog (In progress)",
+      "Full branding control over widgets",
+      "Email support (In progress)",
       "CSV export",
-      "Priority roadmap access",
+      "Priority feature access",
     ],
     cta: "Get Started",
     highlight: true,
@@ -194,14 +198,24 @@ export default function PricingModal() {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={closeModal}>
-      <DialogContent className="max-w-4xl w-full p-0 bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
-        <ScrollArea className="md:h-[90vh] md:w-0vw] h-[80vh] w-full">
+      <div className="relative w-full h-full">
+ 
+</div>
+
+      <DialogContent className="max-w-4xl overflow-hidden w-full p-0 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
+      
+        <ScrollArea className="md:h-[90vh] relative md:w-0vw] h-[80vh] w-full">
+
+        <div 
+    className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white via-purple-300 to-transparent z-[-1]" 
+  />
+          
           <div className="flex flex-col md:flex-row md:items-center md:justify-between px-8 pt-8 pb-2">
-            <div>
-              <DialogTitle className="text-4xl md:text-5xl font-bold text-floopr- mb-2">
-                Turn messy feedback into business plans
+            <div className="relative">
+              <DialogTitle className="text-4xl md:text-6xl font-bold text-foreground mb-2">
+                We remove the noise. You focus on what matters.
               </DialogTitle>
-              <DialogDescription className="text-lg text-gray-600">
+              <DialogDescription className="text-lg text-muted-foreground">
                 Choose the plan that best fits your needs
               </DialogDescription>
             </div>
@@ -226,57 +240,97 @@ export default function PricingModal() {
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto px-8 py-12">
             {/* Free Plan */}
-            <div className="glass-card p-8 rounded-xl border border-gray-200 flex flex-col">
+            <div className="glass-card p-8 rounded-3xl border border flex flex-col">
               <div className="mb-8">
                 <h3 className="text-2xl font-bold mb-2">Free</h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   Perfect for getting started
                 </p>
                 <div className="text-4xl font-bold">$0</div>
               </div>
-              <div className="space-y-4 mb-8">
-                {plans[0].features.map((feature, i) => (
-                  <div className="flex items-start gap-3" key={i}>
-                    <Check className="h-5 w-5 text-floopr-purple mt-1" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
-              </div>
+              <ul className="space-y-3">
+                {plans[0].features.map((feature, fIndex) => {
+                  const isInProgress = feature.includes("(In progress)");
+                  const isBuilderPlan = plans[0].key.startsWith("builder");
+                  const isFreePlan = plans[0].key === "free";
+
+                  let icon = <Check className="h-5 w-5 text-primary shrink-0" />;
+                  let textStyle = "text-sm text-muted-foreground";
+
+                  if (isInProgress) {
+                    icon = (
+                      <Loader2 className="h-5 w-5 text-warn-foreground animate-spin shrink-0" />
+                    );
+                    textStyle = "text-sm text-warn-foreground italic";
+                  } else if (isBuilderPlan) { // This branch is effectively unused for the Free plan
+                    icon = <Check className="h-5 w-5 text-accent-foreground shrink-0" />;
+                  } else if (isFreePlan) {
+                    const freePlanRedXFeatures = [
+                      "10 AI chatbot messages/mo",
+                      "Community support",
+                      "Limited sentiment & topic tagging",
+                      "2 product",
+                    ];
+                    if (freePlanRedXFeatures.includes(feature)) {
+                      icon = <X className="h-5 w-5 text-destructive shrink-0" />;
+                    }
+                    // Other free plan features keep the default primary check icon
+                  }
+
+                  return (
+                    <li key={fIndex} className="flex items-start gap-3">
+                      {icon}
+                      <span className={textStyle}>{feature}</span>
+                    </li>
+                  );
+                })}
+              </ul>
               <Button className="w-full" variant="outline" onClick={handleFree}>
                 Get Started
               </Button>
             </div>
             {/* Builder Plan */}
-            <div className="glass-card relative select-none p-8 rounded-xl border-2 border-floopr-purple flex flex-col">
+            <div className="glass-card relative select-none p-8 rounded-3xl border-2 border-floopr-purple flex flex-col">
               <div className="absolute -top-3 right-4 bg-floopr-purple text-white px-3 py-1 rounded-full text-sm">
                 Recommended
               </div>
               <div className="mb-8">
                 <h3 className="text-2xl font-bold mb-2">Builder</h3>
-                <p className="text-gray-600 mb-4">
+                <p className="text-muted-foreground mb-4">
                   For indie devs & small teams
                 </p>
                 <div className="flex items-center gap-2">
-                  <div className="text-4xl font-bold">
+                  <div className="text-4xl font-bold leading-tight tracking-tighter">
                     {builderPlan?.priceLabel}
                   </div>
                   {selectedPlan === "annual" && (
-                    <span className="ml-2 bg-muted-destructive text-white py-0.5 text-xs px-1 font-semibold rounded-full">
+                    <span className="ml-2 bg-destructive text-destructive-foreground py-0.5 text-xs px-1 font-semibold rounded-full">
                       17% off
                     </span>
                   )}
                 </div>
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-muted-foreground">
                   {selectedPlan === "annual" ? "/year" : "/month"}
                 </div>
               </div>
               <div className="space-y-4 mb-8">
-                {builderPlan?.features.map((feature, i) => (
-                  <div className="flex items-start gap-3" key={i}>
-                    <Check className="h-5 w-5 text-floopr-purple mt-1" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
+                {builderPlan?.features.map((feature, fIndex) => {
+                  const isInProgress = feature.includes("(In progress)");
+                  let icon = <Check className="h-5 w-5 text-accent-foreground shrink-0" />;
+                  let textStyle = "text-sm text-muted-foreground";
+
+                  if (isInProgress) {
+                    icon = <Loader2 className="h-5 w-5 text-warn-foreground animate-spin shrink-0" />;
+                    textStyle = "text-sm text-warn-foreground italic";
+                  }
+
+                  return (
+                    <li key={fIndex} className="flex items-start gap-3">
+                      {icon}
+                      <span className={textStyle}>{feature}</span>
+                    </li>
+                  );
+                })}
               </div>
               <Button
                 className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white"

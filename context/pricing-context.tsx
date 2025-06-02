@@ -41,7 +41,7 @@ interface PricingContextType {
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
 
 export const PricingProvider = ({ children }: { children: ReactNode }) => {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanType>("annual"); // default to annual
   const [userSubscription, setUserSubscription] = useState<UserSubscription>({
     tier: "free",

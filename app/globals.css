@@ -234,7 +234,7 @@ h1 {
   }
 
   .glass-card {
-    @apply rounded-3xl bg-white/70 backdrop-blur-lg border border-white/20 shadow-lg;
+    @apply rounded-3xl bg-white/70 backdrop-blur-lg border border-white/20 dark:bg-white/10 shadow-lg;
   }
 }
 
