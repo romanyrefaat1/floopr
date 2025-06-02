@@ -7,6 +7,7 @@ import { FilterData } from "../page";
 import { useView, VIEW_MODES } from "../view-context/view-context";
 import FeedbackContentItems from "./feedback-content-items";
 import { Skeleton } from "@/components/ui/skeleton";
+import WarnFeedbackCountLimit from "@/components/warn/warn-feedback-count-limit";
 
 export default function FeedbackContentWrapper({
   productData,

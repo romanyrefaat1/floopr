@@ -1,5 +1,6 @@
 import { FilterData } from "../../products/[id]/page";
 import FeedbackList from "./feedback-list";
+import { usePricing } from "@/context/pricing-context";
 
 export default function ShowFeedbacks({
   productId,
@@ -10,15 +11,10 @@ export default function ShowFeedbacks({
   isOwner: boolean;
   filterData: FilterData;
 }) {
-  console.log(`show productId:`, productId);
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4 mt-4">All Feedbacks</h2>
-      <FeedbackList
-        isOwner={isOwner}
-        productId={productId}
-        filterData={filterData}
-      />
+      <FeedbackList isOwner={isOwner} productId={productId} />
     </div>
   );
 }

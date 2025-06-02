@@ -8,6 +8,8 @@ import {
   updateDoc,
   addDoc,
   collection,
+  getDoc,
+  increment,
 } from "firebase/firestore";
 
 export type SimpleFeedbackItemData = {
@@ -60,6 +62,39 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
   console.log(`addFeedback`, feedbackData);
 
   try {
+    // 1. Fetch user data to check limits
+    if (!userInfo?.userId) {
+      console.error("addSimpleFeedback: User ID missing");
+      return { success: false, error: "Authentication required." };
+    }
+
+    const userRef = doc(db, "users", userInfo.userId);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      console.error(
+        `addSimpleFeedback: User document not found for ID: ${userInfo.userId}`
+      );
+      return { success: false, error: "User data not found." };
+    }
+
+    const userData = userSnap.data();
+    const subscriptionTier = userData.subscription_tier ?? "free";
+    const feedbackCountMonthly = userData.feedback_count_monthly ?? 0;
+    const FEEDBACK_LIMIT_FREE = 50;
+
+    // Check limit for free tier
+    if (
+      subscriptionTier === "free" &&
+      feedbackCountMonthly >= FEEDBACK_LIMIT_FREE
+    ) {
+      return {
+        success: false,
+        error: `Feedback limit of ${FEEDBACK_LIMIT_FREE} reached for free plan. Please upgrade.`,
+      };
+    }
+
+    // 2. Proceed with feedback submission if limit not reached
     // Example usage with default topics
     const sentimentResult = await analyzeSentiment(
       `${feedback.title}. ${feedback.content || ``}`
@@ -71,16 +106,17 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
     const topicClassification = [`No topic`, `No topic`, `No topic`];
     console.log(`topicClassification addismeple feedback`, topicClassification);
 
-    // 1. Ensure the product document exists in the "products" collection
+    // 3. Ensure the product document exists (already exists, keep for safety)
     await setDoc(
       doc(db, "products", productId),
       {
         productId,
-        updatedAt: serverTimestamp(), // Adding this helps with real-time sorting
+        updatedAt: serverTimestamp(),
       },
       { merge: true }
     );
 
+    // 4. Add feedback document
     const feedbackId = crypto.randomUUID();
     await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
       type: feedback.type || `other`,
@@ -100,7 +136,6 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
           data: [],
         },
       },
-      // In your addSimpleFeedback function
       feedback: {
         title: feedback.title || "Untitled",
         content: feedback.content || null,
@@ -110,20 +145,25 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
       productId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-      status: "Sent", // Adding status can help with filtering in real-time listeners
-      // Component
+      status: "Sent",
       componentRefId: componentRefId || null,
       isComponent: null,
       userInfo,
     });
 
+    // 5. Increment feedback count for the user
+    await updateDoc(userRef, {
+      feedback_count_monthly: increment(1),
+    });
+
+    // 6. Update product feedback count (keep existing logic)
     const productRef = doc(db, "products", productId);
     await updateDoc(productRef, {
-      feedbackCount: (await import("firebase/firestore")).increment(1),
+      feedbackCount: increment(1),
       lastFeedbackAt: serverTimestamp(),
     });
 
-    // Update basic analytics
+    // 7. Update basic analytics (keep existing logic)
     console.log(`start update basic analytics`);
     const isUpdateBasicAnalyticsSuccess =
       await updateBasicAnalyticsFromNewFeedback({
@@ -138,7 +178,10 @@ export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
     return { success: true, feedbackId };
   } catch (error) {
     console.error("Error adding feedback:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error: (error as Error).message || "Failed to add feedback.",
+    };
   }
 }
 
@@ -153,6 +196,38 @@ export async function addComponentFeedback({
   userInfo = null,
 }: AddComponentFeedbackProps) {
   try {
+    // 1. Fetch user data to check limits
+    if (!userInfo?.userId) {
+      console.error("addComponentFeedback: User ID missing");
+      return { success: false, error: "Authentication required." };
+    }
+
+    const userRef = doc(db, "users", userInfo.userId);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      console.error(
+        `addComponentFeedback: User document not found for ID: ${userInfo.userId}`
+      );
+      return { success: false, error: "User data not found." };
+    }
+
+    const userData = userSnap.data();
+    const subscriptionTier = userData.subscription_tier ?? "free";
+    const feedbackCountMonthly = userData.feedback_count_monthly ?? 0;
+    const FEEDBACK_LIMIT_FREE = 50;
+
+    // Check limit for free tier
+    if (
+      subscriptionTier === "free" &&
+      feedbackCountMonthly >= FEEDBACK_LIMIT_FREE
+    ) {
+      return {
+        success: false,
+        error: `Feedback limit of ${FEEDBACK_LIMIT_FREE} reached for free plan. Please upgrade.`,
+      };
+    }
+
     // Log the inputs for debugging
     console.log("Adding component feedback with:", {
       inputs,
@@ -162,7 +237,7 @@ export async function addComponentFeedback({
       userInfo,
     });
 
-    // Create the feedback document
+    // 2. Create the feedback document
     const feedbackData = {
       feedback: {
         inputs,
@@ -199,10 +274,18 @@ export async function addComponentFeedback({
 
     console.log("Component feedback added successfully with ID:", docRef.id);
 
+    // 3. Increment feedback count for the user
+    await updateDoc(userRef, {
+      feedback_count_monthly: increment(1),
+    });
+
     return { success: true, id: docRef.id };
   } catch (error) {
     console.error("Error adding component feedback:", error);
-    return { success: false, error: error.message };
+    return {
+      success: false,
+      error: (error as Error).message || "Failed to add feedback.",
+    };
   }
 }
 
@@ -213,10 +296,40 @@ export async function addAdvancedFeedback(
   productId: string,
   feedbackData: AdvancedFeedbackItemData
 ) {
-  const { title, description, userId, username } = feedbackData;
-
   try {
-    // 1. Ensure the product document exists in the "products" collection
+    // 1. Fetch user data to check limits
+    if (!feedbackData.userId) {
+      console.error("addAdvancedFeedback: User ID missing");
+      return { success: false, error: "Authentication required." };
+    }
+
+    const userRef = doc(db, "users", feedbackData.userId);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      console.error(
+        `addAdvancedFeedback: User document not found for ID: ${feedbackData.userId}`
+      );
+      return { success: false, error: "User data not found." };
+    }
+
+    const userData = userSnap.data();
+    const subscriptionTier = userData.subscription_tier ?? "free";
+    const feedbackCountMonthly = userData.feedback_count_monthly ?? 0;
+    const FEEDBACK_LIMIT_FREE = 50;
+
+    // Check limit for free tier
+    if (
+      subscriptionTier === "free" &&
+      feedbackCountMonthly >= FEEDBACK_LIMIT_FREE
+    ) {
+      return {
+        success: false,
+        error: `Feedback limit of ${FEEDBACK_LIMIT_FREE} reached for free plan. Please upgrade.`,
+      };
+    }
+
+    // 2. Ensure the product document exists (already exists, keep for safety)
     await setDoc(
       doc(db, "products", productId),
       {
@@ -226,35 +339,37 @@ export async function addAdvancedFeedback(
       { merge: true }
     );
 
-    // 2. Generate a unique ID and create a feedback document
+    // 3. Generate a unique ID and create a feedback document
     const feedbackId = crypto.randomUUID();
     await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
-      title,
-      description,
-      userId,
-      username,
+      title: feedbackData.title,
+      description: feedbackData.description,
+      userId: feedbackData.userId,
+      username: feedbackData.username,
       feedbackId,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       status: "Sent",
     });
 
-    // 3. Update the product document with feedback count
+    // 4. Update the product document with feedback count (keep existing logic)
     const productRef = doc(db, "products", productId);
     await updateDoc(productRef, {
-      feedbackCount: (await import("firebase/firestore")).increment(1),
+      feedbackCount: increment(1),
       lastFeedbackAt: serverTimestamp(),
     });
 
-    // Update basic feedback in product
-    await updateDoc(productRef, {
-      feedbackCount: (await import("firebase/firestore")).increment(1),
-      lastFeedbackAt: serverTimestamp(),
+    // 5. Increment feedback count for the user
+    await updateDoc(userRef, {
+      feedback_count_monthly: increment(1),
     });
 
     return { success: true, feedbackId };
   } catch (error) {
     console.error("Error adding feedback:", error);
-    return { success: false, error };
+    return {
+      success: false,
+      error: (error as Error).message || "Failed to add feedback.",
+    };
   }
 }

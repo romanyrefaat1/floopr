@@ -1,3 +1,5 @@
+"use client";
+
 import { ScrollArea } from "../ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,9 +28,12 @@ const plans = [
     features: [
       "Up to 50 feedback submissions/mo",
       "1 widget (floating button only)",
-      "Floopr badge on all embeds",
-      "Basic AI summaries",
+      "10 AI chatbot messages/mo",
+      "Unlimited changelog items",
       "Community support",
+      "Limited sentiment & topic tagging",
+      "2 product",
+      "Floopr badge on all embeds",
     ],
     cta: "Get Started",
     highlight: false,
@@ -41,13 +46,17 @@ const plans = [
     priceLabel: "$15",
     description: "For indie devs & small teams",
     features: [
+      "All features in Free plan",
       "Up to 500 feedback submissions/mo",
-      "Full branding control",
+      "Full branding control over widgets",
       "2 widget instances",
-      "Basic AI chatbot (100 msg/mo)",
-      "Sentiment & topic tagging",
+      "100 AI chatbot messages/mo",
+      "Unlimited sentiment & topic tagging",
       "CSV export",
-      "Priority roadmap access",
+      "Email support (In progress)",
+      "Automatic release notes in changelog (In progress)",
+      "4 products",
+      "Priority feature access",
     ],
     cta: "Start 7-day free trial",
     highlight: true,

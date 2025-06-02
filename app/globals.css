@@ -115,6 +115,15 @@
   --primary-muted: 257, 36%, 65%; /* #b4a7d6 */
   --primary-muted-foreground: 255, 69%, 91%; /* #e0d8f8 */
 
+  /* Warn colors */
+  --warn-background: 35, 100%, 87%; /* Light orange background */
+  --warn-background-accent: 35, 100%, 52%; /* Light orange background */
+  --warn-background-accent-l: 35, 100%, 57%; /* Light orange background */
+  --warn-foreground: 35, 100%, 30%; /* Dark orange text */
+  --warn-foreground-secondary: 35, 100%, 35%; /* Secondary orange text */
+  --warn-foreground-accent: 35, 100%, 95%; /* Secondary orange text */
+  --warn-border: 35, 100%, 50%; /* Orange border */
+
   /* Base colors */
   --background: 0, 0%, 97%; /* #ffffff */
   --secondary-background: 0, 0%, 90%; /* light grey */
@@ -160,6 +169,15 @@
   --secondary-background: 0, 0%, 14%;
   --muted-background: 0, 0%, 16%;
   --muted-foreground: 210, 0%, 60%;
+
+  /* Warn colors for dark mode */
+  --warn-background: 35, 100%, 15%; /* Dark orange background */
+  --warn-background-accent: 35, 100%, 25%; /* Darker orange background */
+  --warn-background-accent-l: 35, 100%, 30%; /* Slightly lighter orange background */
+  --warn-foreground: 35, 100%, 80%; /* Light orange text */
+  --warn-foreground-secondary: 35, 100%, 75%; /* Secondary light orange text */
+  --warn-foreground-accent: 35, 100%, 95%; /* Very light orange text */
+  --warn-border: 35, 100%, 50%; /* Orange border */
 
   --foreground: 0, 0%, 100%; /* light text */
   --secondary-foreground: 0, 0%, 50%;

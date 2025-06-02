@@ -1,5 +1,13 @@
+"use client";
+
 import PricingModal from "@/components/payment/PricingModal";
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 
 // Types for subscription and plan
 export type SubscriptionTier =
@@ -14,6 +22,8 @@ export interface UserSubscription {
   trialActive: boolean;
   trialEndsAt?: string; // ISO date string
   currentPeriodEnd?: string; // ISO date string
+  feedback_count_monthly: number;
+  feedback_last_reset_date?: string;
   // Add more fields as needed for future plans
 }
 
@@ -25,20 +35,76 @@ interface PricingContextType {
   setSelectedPlan: (plan: PlanType) => void;
   userSubscription: UserSubscription;
   setUserSubscription: (sub: UserSubscription) => void;
+  isExceededFeedbackLimit: boolean;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
 
 export const PricingProvider = ({ children }: { children: ReactNode }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState<PlanType>("annual"); // default to annual
   const [userSubscription, setUserSubscription] = useState<UserSubscription>({
     tier: "free",
     trialActive: false,
+    feedback_count_monthly: 0,
+    feedback_last_reset_date: new Date().toISOString(),
   });
+
+  // Check and reset feedback count monthly
+  // useEffect(() => {
+  //   const checkAndResetFeedbackCount = () => {
+  //     // Ensure we have a feedback_last_reset_date to work with
+  //     // PricingInitializer should provide a default if it's missing from DB
+  //     if (!userSubscription.feedback_last_reset_date) {
+  //       // This case should be rare if PricingInitializer sets a default.
+  //       // If it occurs, set a baseline to prevent errors with new Date(null).
+  //       console.warn('[PricingProvider] feedback_last_reset_date is missing. Initializing count and date.');
+  //       setUserSubscription((prev) => ({
+  //         ...prev,
+  //         feedback_count_monthly: prev.feedback_count_monthly ?? 0, // Keep existing count or default to 0
+  //         feedback_last_reset_date: new Date().toISOString(),
+  //       }));
+  //       return;
+  //     }
+
+  //     const lastResetDate = new Date(userSubscription.feedback_last_reset_date);
+  //     const currentDate = new Date();
+
+  //     // Reset if the year or month has changed.
+  //     if (
+  //       lastResetDate.getFullYear() !== currentDate.getFullYear() ||
+  //       lastResetDate.getMonth() !== currentDate.getMonth()
+  //     ) {
+  //       console.log('[PricingProvider] Month/Year changed. Resetting feedback count.');
+  //       setUserSubscription((prev) => ({
+  //         ...prev,
+  //         feedback_count_monthly: 0,
+  //         feedback_last_reset_date: currentDate.toISOString(),
+  //       }));
+  //     }
+  //   };
+
+  //   checkAndResetFeedbackCount();
+  //   const interval = setInterval(checkAndResetFeedbackCount, 3600000); // 1 hour
+
+  //   return () => clearInterval(interval);
+  // }, [userSubscription.feedback_last_reset_date, setUserSubscription]);
+
+  // Calculate feedback limit status
+  const isExceededFeedbackLimit =
+    userSubscription.tier === "free"
+      ? userSubscription.feedback_count_monthly >= 50
+      : userSubscription.feedback_count_monthly >= 350;
+  // const isExceededFeedbackLimit = true;
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  console.log(`user subscription context:`, userSubscription);
+  console.log(
+    `user subscription isExceededFeedbackLimit:`,
+    isExceededFeedbackLimit
+  );
 
   return (
     <PricingContext.Provider
@@ -50,6 +116,7 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
         setSelectedPlan,
         userSubscription,
         setUserSubscription,
+        isExceededFeedbackLimit,
       }}
     >
       {children}

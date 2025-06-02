@@ -1,9 +1,9 @@
 "use client";
 
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
+import PricingInitializer from "./PricingInitializer";
 import { PricingProvider } from "@/context/pricing-context";
 import { AuthProvider } from "@/contexts/auth-context";
-import FlooprFloatingFeedbackButton from "@/packages/floopr-feedback/float-button/src/floating-feedback-button";
 import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
@@ -46,6 +46,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider>
       <PricingProvider>
+        <PricingInitializer />
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
         <FlooprFloatButtonScript />

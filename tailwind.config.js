@@ -35,6 +35,21 @@ module.exports = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        warn: {
+          foreground: {
+            DEFAULT: "hsl(var(--warn-foreground))",
+            secondary: "hsl(var(--warn-foreground-secondary))",
+            accent: "hsl(var(--warn-foreground-accent))",
+          },
+          background: {
+            DEFAULT: "hsl(var(--warn-background))",
+            accent: {
+              DEFAULT: "hsl(var(--warn-background-accent))",
+              l: "hsl(var(--warn-background-accent-l))",
+            },
+          },
+          border: "hsl(var(--warn-border))",
+        },
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",

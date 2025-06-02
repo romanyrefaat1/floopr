@@ -6,14 +6,9 @@ import { formatDateDataFromShadcn } from "./_utility/formatDateData";
 import ContentTabTitle from "./content-tab-title";
 import GroupFeedbackButton from "./content-tab/group-feedback-button";
 import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
-import FilterButton from "@/components/filter/filter-button";
-import SentimentFilterButton from "@/components/filter/sentiment-filter-button";
-import TypeFilterButton from "@/components/filter/type-filter-button";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import serializeFirestoreData from "@/lib/serialize-firestore-data";
-import { Search, SlidersHorizontal, Plus, Eye, Group } from "lucide-react";
+import FeedbackCountIndicator from "@/components/warn/feedback-count-indicator";
+import WarnFeedbackCountLimit from "@/components/warn/warn-feedback-count-limit";
 
 export default function ContentTab({
   productData,
@@ -41,6 +36,7 @@ export default function ContentTab({
             {/**/}
             <GroupFeedbackButton productId={productId} />
             <DifferViewButton />
+            <FeedbackCountIndicator />
           </div>
         </div>
 
@@ -73,6 +69,8 @@ export default function ContentTab({
         )}
 
         {/* Feedback items */}
+        <WarnFeedbackCountLimit isOwner={isOwner} />
+
         <FeedbackContentWrapper
           filterData={filterData}
           isOwner={isOwner}
