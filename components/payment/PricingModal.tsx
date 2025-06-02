@@ -138,8 +138,9 @@ export default function PricingModal() {
   const handleFree = () => {
     if (!isLoaded) return;
     if (!isSignedIn) {
-      // Redirect to sign-in, then to /home
-      return router.push("/sign-in?redirectUrl=/home");
+      RedirectToSignUp({
+        redirectUrl: `/home`,
+      });
     }
     router.push("/home");
   };
@@ -148,8 +149,9 @@ export default function PricingModal() {
   const handleBuilder = async () => {
     if (!isLoaded) return;
     if (!isSignedIn) {
-      // Redirect to sign-up, then after sign-up, start subscription
-      return router.push("/sign-up?redirectUrl=/subscription");
+      RedirectToSignUp({
+        redirectUrl: `/?isPaymentModalOpen=true`,
+      });
     }
     // Start subscription flow
     setLoading(true);
@@ -164,7 +166,7 @@ export default function PricingModal() {
           userId,
           email,
           userName,
-          plan: selectedPlan, // pass plan type
+          plan: selectedPlan, // pass plan type from state
         }),
       });
       const { checkoutUrl } = await response.json();

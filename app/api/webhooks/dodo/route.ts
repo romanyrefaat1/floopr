@@ -30,14 +30,44 @@ export async function POST(request: Request) {
       );
     }
 
-    // Helper: extract plan type from product name or metadata if available
+    // Robust plan and product mapping
+    const monthlyId = process.env.DODO_BUILDER_MONTHLY_PRODUCT_ID;
+    const annualId = process.env.DODO_BUILDER_ANNUAL_PRODUCT_ID;
+    const productId = data.product_id || data.metadata?.product_id;
     let planType: string | undefined = undefined;
-    if (data.product && data.product.name) {
-      if (data.product.name.toLowerCase().includes("annual"))
+    let productName: string | undefined = undefined;
+    if (productId === monthlyId) {
+      planType = "builder_monthly";
+      productName = "Floopr Builder Monthly";
+    } else if (productId === annualId) {
+      planType = "builder_annual";
+      productName = "Floopr Builder Annual";
+    } else if (data.metadata?.payment_frequency_interval) {
+      if (data.metadata.payment_frequency_interval.toLowerCase() === "year")
         planType = "builder_annual";
-      else if (data.product.name.toLowerCase().includes("month"))
+      if (data.metadata.payment_frequency_interval.toLowerCase() === "month")
         planType = "builder_monthly";
     }
+
+    const totalAmount =
+      data.total_amount ??
+      data.recurring_pre_tax_amount ??
+      data.metadata?.recurring_pre_tax_amount ??
+      null;
+
+    const renewalDate =
+      data.renewal_date ||
+      data.next_billing_date ||
+      data.metadata?.next_billing_date ||
+      null;
+
+    const trialEnd =
+      data.trial_end ??
+      (data.metadata?.trial_period_days
+        ? parseInt(data.metadata.trial_period_days) > 0
+          ? data.metadata.trial_period_days
+          : null
+        : null);
 
     switch (type) {
       case "customer.created":
@@ -52,30 +82,34 @@ export async function POST(request: Request) {
       case "subscription.updated":
       case "subscription.renewed":
       case "subscription.cancelled":
-        // Save all relevant payment/subscription info
-        if (data.customer && data.customer.email && data.subscription_id) {
+        if (
+          data.customer &&
+          data.customer.email &&
+          (data.subscription_id || data.metadata?.subscription_id)
+        ) {
           await updateFirebaseUserData(data.customer.email, {
-            subscription_tier: planType || data.plan || null,
-            subscription_status: data.status || null,
-            subscription_id: data.subscription_id,
-            subscription_renewal:
-              data.renewal_date || data.next_billing_date || null,
-            trial_end: data.trial_end || null,
+            subscription_tier: planType,
+            subscription_status: data.status || data.metadata?.status || null,
+            subscription_id:
+              data.subscription_id || data.metadata?.subscription_id,
+            subscription_renewal: renewalDate,
+            trial_end: trialEnd,
             updatedAt: new Date().toISOString(),
             payment: {
-              status: data.status || null,
-              subscriptionId: data.subscription_id,
+              status: data.status || data.metadata?.status || null,
+              subscriptionId:
+                data.subscription_id || data.metadata?.subscription_id,
               dodoCustomerId: data.customer.customer_id,
               lastUpdatedAt: data.updated_at || data.created_at || null,
               paymentId: data.payment_id || null,
-              totalAmount: data.total_amount || null,
-              currency: data.currency || null,
-              productId: data.product_id || null,
-              productName: data.product?.name || null,
-              plan: planType || data.plan || null,
-              renewalDate: data.renewal_date || data.next_billing_date || null,
-              trialEnd: data.trial_end || null,
-              raw: data, // Save the full payload for debugging
+              totalAmount,
+              currency: data.currency || data.metadata?.currency || null,
+              productId,
+              productName,
+              plan: planType,
+              renewalDate,
+              trialEnd,
+              raw: data,
             },
           });
         }
