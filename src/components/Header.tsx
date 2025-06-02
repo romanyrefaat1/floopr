@@ -2,6 +2,7 @@
 
 import { Skeleton } from "./ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { usePricing } from "@/context/pricing-context";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +11,7 @@ import { useState, useEffect } from "react";
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isLoaded, isSignedIn } = useUser();
+  const { openModal } = usePricing();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,20 +74,27 @@ const Header = () => {
               </Link> */}
             </nav>
 
+            <Button variant="outline" size="sm" onClick={openModal}>
+              Pricing
+            </Button>
+
             {!isLoaded ? (
               <Skeleton className="h-8 w-24 bg-gray-200 rounded-md" />
             ) : (
               <Link href={isSignedIn ? "/home" : `#cta`}>
-                {isSignedIn ? (<Button
-                  variant="default"
-                  className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
-                >
-                  Get Feedback Now
-                </Button>) : (<Button>
-                <Link href="#cta">Join Beta</Link>
-              </Button>)}
+                {isSignedIn ? (
+                  <Button
+                    variant="default"
+                    className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
+                  >
+                    Get Feedback Now
+                  </Button>
+                ) : (
+                  <Button>
+                    <Link href="#cta">Join Beta</Link>
+                  </Button>
+                )}
               </Link>
-              
             )}
           </div>
         </div>

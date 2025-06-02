@@ -21,27 +21,37 @@ async function ensureCustomer(email: string, name: string, reference: string) {
 
 export async function POST(request: Request) {
   try {
-    const { userId, userName = "User", email } = await request.json();
+    const { userId, userName = "User", email, plan } = await request.json();
 
     // 1) ensure customer exists
     const customer = await ensureCustomer(email, userName, userId);
     const custId = customer.customer_id;
 
-    // 2) create subscription
+    // 2) select product ID based on plan
+    let productId = process.env.DODO_BUILDER_MONTHLY_PRODUCT_ID!;
+    let trialDays: number | undefined = undefined;
+    if (plan === "annual") {
+      productId = process.env.DODO_BUILDER_ANNUAL_PRODUCT_ID!;
+    } else {
+      // monthly is default
+      trialDays = 7;
+    }
+
+    // 3) create subscription
     const subscription = await client.subscriptions.create({
       billing: {
-        // required billing block :contentReference[oaicite:12]{index=12}
         city: "Cairo",
         country: "EG",
         state: "Cairo Governorate",
         street: "123 Nile St",
         zipcode: "11511",
       },
-      customer: { customer_id: custId }, // existing or newly created ID :contentReference[oaicite:13]{index=13}
-      product_id: process.env.DODO_STARTER_PRODUCT_ID!, // your product ID :contentReference[oaicite:14]{index=14}
-      quantity: 1, // ≥1 :contentReference[oaicite:15]{index=15}
-      payment_link: true, // return hosted checkout URL :contentReference[oaicite:16]{index=16}
+      customer: { customer_id: custId },
+      product_id: productId,
+      quantity: 1,
+      payment_link: true,
       return_url: process.env.NEXT_PUBLIC_DODO_RETURN_URL,
+      ...(trialDays ? { trial_period_days: trialDays } : {}),
     });
 
     return NextResponse.json({ checkoutUrl: subscription.payment_link });

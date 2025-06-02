@@ -1,6 +1,7 @@
 "use client";
 
 import { useScrollAnimation } from "../hooks/use-scroll-animation";
+import { PricingProvider } from "@/context/pricing-context";
 import { AuthProvider } from "@/contexts/auth-context";
 import FlooprFloatingFeedbackButton from "@/packages/floopr-feedback/float-button/src/floating-feedback-button";
 import { ClerkProvider, useUser } from "@clerk/nextjs";
@@ -44,11 +45,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <ClerkProvider>
-      <AuthProvider>{children}</AuthProvider>
-      <Toaster />
-      <FlooprFloatButtonScript />
+      <PricingProvider>
+        <AuthProvider>{children}</AuthProvider>
+        <Toaster />
+        <FlooprFloatButtonScript />
 
-      {/* <FlooprFloatingFeedbackButton
+        {/* <FlooprFloatingFeedbackButton
         isModal={false}
         primaryColor="#7D65F6"
         backgroundColor="#ffffff"
@@ -67,7 +69,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
         isFixed={true}
       /> */}
 
-      {process.env.NEXT_PUBLIC_IS_PRODUCTION && <Analytics />}
+        {process.env.NEXT_PUBLIC_IS_PRODUCTION && <Analytics />}
+      </PricingProvider>
     </ClerkProvider>
   );
 }
