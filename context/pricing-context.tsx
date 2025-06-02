@@ -24,6 +24,8 @@ export interface UserSubscription {
   currentPeriodEnd?: string; // ISO date string
   feedback_count_monthly: number;
   feedback_last_reset_date?: string;
+  chatbot_messages_monthly?: number;
+  limit_chatbot_messages_monthly?: number;
   // Add more fields as needed for future plans
 }
 
@@ -36,6 +38,7 @@ interface PricingContextType {
   userSubscription: UserSubscription;
   setUserSubscription: (sub: UserSubscription) => void;
   isExceededFeedbackLimit: boolean;
+  isExceededChatbotLimit: boolean;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -48,6 +51,8 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
     trialActive: false,
     feedback_count_monthly: 0,
     feedback_last_reset_date: new Date().toISOString(),
+    chatbot_messages_monthly: 0,
+    limit_chatbot_messages_monthly: 10,
   });
 
   // Check and reset feedback count monthly
@@ -95,7 +100,37 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
     userSubscription.tier === "free"
       ? userSubscription.feedback_count_monthly >= 50
       : userSubscription.feedback_count_monthly >= 350;
-  // const isExceededFeedbackLimit = true;
+
+  const isExceededChatbotLimit = userSubscription.chatbot_messages_monthly >= userSubscription.limit_chatbot_messages_monthly;
+  // const isExceededChatbotLimit = true;
+      
+  // Set limits
+  useEffect(()=>{
+    if(userSubscription.tier === "free"){
+      setUserSubscription((prev)=>({
+        ...prev,
+        limit_chatbot_messages_monthly: 10,
+      }))
+    } else {
+      setUserSubscription((prev)=>({
+        ...prev,
+        limit_chatbot_messages_monthly: 100,
+      }))
+    }
+  },[userSubscription.chatbot_messages_monthly, userSubscription.tier])
+  useEffect(()=>{
+    if(userSubscription.tier === "free"){
+      setUserSubscription((prev)=>({
+        ...prev,
+        limit_feedback_count_monthly: 50,
+      }))
+    } else {
+      setUserSubscription((prev)=>({
+        ...prev,
+        limit_feedback_count_monthly: 350,
+      }))
+    }
+  },[userSubscription.tier, userSubscription.feedback_count_monthly])
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -117,6 +152,7 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
         userSubscription,
         setUserSubscription,
         isExceededFeedbackLimit,
+        isExceededChatbotLimit,
       }}
     >
       {children}

@@ -13,6 +13,7 @@ import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
+import { usePricing } from "@/context/pricing-context";
 
 const firstMess = {
   position: "left",
@@ -47,6 +48,8 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const {userSubscription, isExceededChatbotLimit} = usePricing();
+  const {chatbot_messages_monthly, limit_chatbot_messages_monthly} = userSubscription
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -54,6 +57,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   }, []);
 
   const handleSend = async () => {
+    if (isExceededChatbotLimit) return;
     if (!input.trim()) return;
     setMessages((prev) => [
       ...prev,
@@ -198,17 +202,21 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             )}
           >
             {messages.length < 2 && (
-              <div className="absolute hidden md:flex w-fit top-1/2 left-1/2 bg-mutedBackground p-2 rounded-xl transform -translate-x-1/2 -translate-y-1/2 text-mutedForeground flex items-center gap-2">
+              <div className="absolute hidden md:flex w-fit top-1/2 left-1/2 bg-mutedBackground p-2 rounded-xl transform -translate-x-1/2 -translate-y-1/2 text-mutedForeground flex flex-col">
+              <div className="flex items-center gap-2">
                 <Image
                   src={`/images/assistant-avatar/prey.png`}
                   width={200}
                   height={200}
                   alt="Prey Icon"
-                  className="rounded-full w-5 h-5 mr-2 inline-block select-none"
+                  className={cn("rounded-full w-5 h-5 mr-2 inline-block select-none", 
+                    isExceededChatbotLimit&& "animate-pulse" )}
                 />
                 <p className="text-sm w-fit">
-                  You can drag any feedback into the chat
+                 {isExceededChatbotLimit ? `You exceeded your ${limit_chatbot_messages_monthly} qouta in your plan. Please upgrade your plan to continue.`: `You can drag any feedback into the chat`}
                 </p>
+              </div>
+                <p className="text-xs text-destructive mt-4 animate-pulse">{chatbot_messages_monthly}/{limit_chatbot_messages_monthly}</p>
               </div>
             )}
             {messages.map((msg, idx) => (
@@ -418,7 +426,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               />
               <Button
                 onClick={handleSend}
-                disabled={loading || !input.trim()}
+                disabled={loading || !input.trim() || isExceededChatbotLimit}
                 size="sm"
                 className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
               >

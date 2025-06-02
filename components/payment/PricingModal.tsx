@@ -15,6 +15,7 @@ import { usePricing } from "@/context/pricing-context";
 import { cn } from "@/lib/utils";
 import { useUser, RedirectToSignIn, RedirectToSignUp } from "@clerk/nextjs";
 import { Check, HelpCircle, Sparkles, XCircle, X, Loader2 } from "lucide-react";
+import { Work_Sans } from "next/font/google";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -129,6 +130,8 @@ const planFeatures = {
   ],
 };
 
+const font = Work_Sans({ subsets: ["latin"] });
+
 export default function PricingModal() {
   const { isModalOpen, closeModal, selectedPlan, setSelectedPlan } =
     usePricing();
@@ -202,24 +205,26 @@ export default function PricingModal() {
  
 </div>
 
-      <DialogContent className="max-w-4xl overflow-hidden w-full p-0 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
+      <DialogContent className="max-w-4xl overflow-hidden w-full p-2 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
       
         <ScrollArea className="md:h-[90vh] relative md:w-0vw] h-[80vh] w-full">
 
         <div 
-    className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white via-purple-300 to-transparent z-[-1]" 
+    className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white via-purple-200 to-transparent z-[-1]" 
   />
           
           <div className="flex flex-col md:flex-row md:items-center md:justify-between px-8 pt-8 pb-2">
             <div className="relative">
-              <DialogTitle className="text-4xl md:text-6xl font-bold text-foreground mb-2">
-                We remove the noise. You focus on what matters.
+              <DialogTitle className={`text-5xl {font.className} md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-2`}
+              style={{lineHeight: `1em`}}
+              >
+                We remove the noise. <br className="hidden md:block" /> You focus on what matters.
               </DialogTitle>
               <DialogDescription className="text-lg text-muted-foreground">
                 Choose the plan that best fits your needs
               </DialogDescription>
             </div>
-            <div className="flex items-center gap-2 mt-4 md:mt-0">
+            {/* <div className="flex items-center gap-2 mt-4 md:mt-0">
               <Switch
                 id="annual-switch"
                 checked={selectedPlan === "annual"}
@@ -236,7 +241,7 @@ export default function PricingModal() {
               >
                 Annually
               </Label>
-            </div>
+            </div> */}
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto px-8 py-12">
             {/* Free Plan */}

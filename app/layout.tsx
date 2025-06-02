@@ -1,10 +1,11 @@
 import { Providers } from "@/src/components/providers";
 import type { Metadata } from "next";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Inter, Work_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Inter({ subsets: ["latin"] });
+// const font = Work_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Floopr - Make Customer Feedback Actionable",
@@ -42,7 +43,7 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gradient-floopr min-h-screen`}>
+      <body className={`${font.className} bg-gradient-floopr min-h-screen`}>
         <Providers>{children}</Providers>
       </body>
     </html>

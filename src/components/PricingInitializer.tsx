@@ -29,6 +29,7 @@ export default function PricingInitializer() {
               currentPeriodEnd: userData.subscription_renewal,
               feedback_count_monthly: userData.feedback_count_monthly ?? 0,
               feedback_last_reset_date: userData.feedback_last_reset_date ?? new Date().toISOString(),
+              chatbot_messages_monthly: userData.chatbot_messages_monthly ?? 0,
             };
             console.log('[PricingInitializer] Setting userSubscription with:', subscriptionToSet);
             setUserSubscription(subscriptionToSet);
@@ -40,6 +41,7 @@ export default function PricingInitializer() {
               trialActive: false,
               feedback_count_monthly: 0,
               feedback_last_reset_date: new Date().toISOString(),
+              chatbot_messages_monthly: 0,
             });
           }
         } catch (error) {

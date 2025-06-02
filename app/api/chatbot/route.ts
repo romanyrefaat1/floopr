@@ -1,3 +1,6 @@
+import getUserData from "@/actions/getUserData";
+import getUserPricing from "@/actions/user/get-user-pricing";
+import { auth } from "@clerk/nextjs/server";
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -20,6 +23,11 @@ export async function POST(request: NextRequest) {
       changelog: providedChangelog,
       settings: providedSettings,
     } = await request.json();
+    const {userId} = await auth()
+
+    if (!userId) {
+      return NextResponse.json({error: "Unauthorized"}, {status: 401})
+    }
 
     if (!prompt || !productId || productId.length < 5) {
       return NextResponse.json(
@@ -27,6 +35,20 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const {chatbot_messages_monthly = 0, limit_chatbot_messages_monthly = 10} = await getUserPricing(productId);
+
+    console.log("chatbot_messages_monthly", chatbot_messages_monthly);
+    console.log("limit_chatbot_messages_monthly", limit_chatbot_messages_monthly);
+    
+    if (chatbot_messages_monthly >= limit_chatbot_messages_monthly) {
+      return NextResponse.json({error: `Chatbot limit exceeded, please upgrade your plan for more messages. Current limit: ${limit_chatbot_messages_monthly}`}, {status: 403})
+    }
+
+    return NextResponse.json({
+      text: `yooo`
+    })
+
 
     // Use provided data instead of fetching
     const feedbacks = Array.isArray(providedFeedbacks) ? providedFeedbacks : [];

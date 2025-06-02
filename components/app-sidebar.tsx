@@ -39,8 +39,8 @@ const items = [
 export function AppSidebar() {
   const { theme } = useTheme();
   return (
-    <Sidebar collapsible="icon" variant="sidebar" className="bg-background">
-      <SidebarContent className="bg-background">
+    <Sidebar collapsible="icon" variant="sidebar" className="bg-background overflow-hidden">
+      <SidebarContent className="bg-background relative">
         <SidebarGroup>
           <SidebarGroupLabel className="my-5">
             {theme === `dark` ? (
@@ -85,6 +85,9 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <div
+  className="absolute bottom-[2rem] left-[0rem] w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(125,101,246,0.6)_0%,rgba(125,101,246,0.2)_1%,transparent_100%)] blur-3xl z-[1] pointer-events-none"
+/>
       </SidebarContent>
     </Sidebar>
   );
