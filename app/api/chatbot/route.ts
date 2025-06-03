@@ -46,9 +46,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({error: `Chatbot limit exceeded, please upgrade your plan for more messages. Current limit: ${limit_chatbot_messages_monthly}`}, {status: 403})
     }
 
-    return NextResponse.json({
-      text: `yooo`
-    })
+    // return NextResponse.json({
+    //   text: `yooo`
+    // })
 
 
     // Use provided data instead of fetching
@@ -174,7 +174,7 @@ export async function POST(request: NextRequest) {
     );
     console.log("Response from AI:", response.candidates[0]);
 
-    await increaseChatbotMessagesCount(productId)
+    await increaseChatbotMessagesCount(userId)
 
     return NextResponse.json({
       text: response.candidates[0].content.parts[0].text,

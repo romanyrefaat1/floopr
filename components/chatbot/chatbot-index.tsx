@@ -90,6 +90,20 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
           settings,
         }),
       });
+
+      if (res.status === 403) {
+        openModal({error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
+          content: {
+            plans: {
+              free: {
+                button: "Continue without chatbot messages"
+              }
+            }
+          }
+        })
+        return;
+      }
+      
       const data = await res.json();
       setMessages((prev) => [
         ...prev,
