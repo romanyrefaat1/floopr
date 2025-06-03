@@ -8,18 +8,19 @@ import {
 } from "firebase/firestore";
 
 export default async function updateFirebaseUserData(
-  email: string,
-  data: object
+  emailOrUserId: string,
+  data: object,
+  isUserId=false,
 ) {
-  if (!email) {
-    throw new Error("Email is required to update user data.");
+  if (!emailOrUserId) {
+    throw new Error("Email or User ID is required to update user data.");
   }
   if (!data) {
     throw new Error("Data is required to update user data.");
   }
 
   const usersRef = collection(db, "users");
-  const q = query(usersRef, where("email", "==", email));
+  const q = query(usersRef, where(isUserId ? "id" : "email", "==", emailOrUserId));
   const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {

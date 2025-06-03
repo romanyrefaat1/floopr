@@ -57,133 +57,52 @@ type AddComponentFeedbackProps = {
 /**
  * Adds a simple feedback entry to a product with real-time updates
  */
-export async function addSimpleFeedback(feedbackData: SimpleFeedbackItemData) {
-  const { feedback, productId, componentRefId, userInfo } = feedbackData;
-  console.log(`addFeedback`, feedbackData);
+// Type for the data expected by the action, userInfo is handled by the API route
+export type SimpleFeedbackItemDataForAction = {
+  feedback: {
+    title: string;
+    content: string | null;
+    isRich: boolean;
+    type: `idea` | `feature` | `issue` | `other`;
+  };
+  productId: string;
+  componentRefId?: string | null;
+};
 
+/**
+ * Adds a simple feedback entry by calling the API route.
+ */
+export async function addSimpleFeedback(
+  feedbackData: SimpleFeedbackItemDataForAction
+) {
+  console.log(`addSimpleFeedback action called with:`, feedbackData);
   try {
-    // 1. Fetch user data to check limits
-    if (!userInfo?.userId) {
-      console.error("addSimpleFeedback: User ID missing");
-      return { success: false, error: "Authentication required." };
-    }
-
-    const userRef = doc(db, "users", userInfo.userId);
-    const userSnap = await getDoc(userRef);
-
-    if (!userSnap.exists()) {
-      console.error(
-        `addSimpleFeedback: User document not found for ID: ${userInfo.userId}`
-      );
-      return { success: false, error: "User data not found." };
-    }
-
-    const userData = userSnap.data();
-    const subscriptionTier = userData.subscription_tier ?? "free";
-    const feedbackCountMonthly = userData.feedback_count_monthly ?? 0;
-    const FEEDBACK_LIMIT_FREE = 50;
-
-    // Check limit for free tier
-    if (
-      subscriptionTier === "free" &&
-      feedbackCountMonthly >= FEEDBACK_LIMIT_FREE
-    ) {
-      return {
-        success: false,
-        error: `Feedback limit of ${FEEDBACK_LIMIT_FREE} reached for free plan. Please upgrade.`,
-      };
-    }
-
-    // 2. Proceed with feedback submission if limit not reached
-    // Example usage with default topics
-    const sentimentResult = await analyzeSentiment(
-      `${feedback.title}. ${feedback.content || ``}`
-    );
-    console.log(`sentimentResult`, sentimentResult);
-    // const topicClassification = await classifyTopic(
-    //   `${feedback.title}. ${feedback.content}`
-    // );
-    const topicClassification = [`No topic`, `No topic`, `No topic`];
-    console.log(`topicClassification addismeple feedback`, topicClassification);
-
-    // 3. Ensure the product document exists (already exists, keep for safety)
-    await setDoc(
-      doc(db, "products", productId),
-      {
-        productId,
-        updatedAt: serverTimestamp(),
+    const response = await fetch("/api/feedbacks/add-simple", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
-      { merge: true }
-    );
-
-    // 4. Add feedback document
-    const feedbackId = crypto.randomUUID();
-    await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
-      type: feedback.type || `other`,
-      sentiment: {
-        sentiment: sentimentResult.sentiment,
-        score: sentimentResult.score,
-        text: sentimentResult.text,
-      },
-      topic: topicClassification,
-      socialData: {
-        likes: {
-          count: 0,
-          data: [],
-        },
-        comments: {
-          count: 0,
-          data: [],
-        },
-      },
-      feedback: {
-        title: feedback.title || "Untitled",
-        content: feedback.content || null,
-        isRich: feedback.isRich || true,
-      },
-      feedbackId,
-      productId,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-      status: "Sent",
-      componentRefId: componentRefId || null,
-      isComponent: null,
-      userInfo,
+      body: JSON.stringify(feedbackData),
     });
 
-    // 5. Increment feedback count for the user
-    await updateDoc(userRef, {
-      feedback_count_monthly: increment(1),
-    });
+    const result = await response.json();
 
-    // 6. Update product feedback count (keep existing logic)
-    const productRef = doc(db, "products", productId);
-    await updateDoc(productRef, {
-      feedbackCount: increment(1),
-      lastFeedbackAt: serverTimestamp(),
-    });
-
-    // 7. Update basic analytics (keep existing logic)
-    console.log(`start update basic analytics`);
-    const isUpdateBasicAnalyticsSuccess =
-      await updateBasicAnalyticsFromNewFeedback({
-        productId,
-        sentimentResult,
-        topicClassification,
-      });
-    console.log(`end update basic analytics`);
-
-    console.log(`isUpdateBasicAnalyticsSuccess`, isUpdateBasicAnalyticsSuccess);
-
-    return { success: true, feedbackId };
-  } catch (error) {
-    console.error("Error adding feedback:", error);
+    if (!response.ok) {
+      console.error("API Error:", result.error);
+      throw new Error(result.error || `API request failed with status ${response.status}`);
+    }
+    
+    console.log("API Success:", result);
+    return result; // Should be { success: true, feedbackId: "..." } or { success: false, error: "..." }
+  } catch (error: any) {
+    console.error("Error calling addSimpleFeedback API:", error);
     return {
       success: false,
-      error: (error as Error).message || "Failed to add feedback.",
+      error: error.message || "Failed to submit feedback via API.",
     };
   }
 }
+
 
 /**
  * Adds feedback from a component (like modal)

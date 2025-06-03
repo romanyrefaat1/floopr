@@ -37,13 +37,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const {chatbot_messages_monthly = 0, limit_chatbot_messages_monthly = 10} = await getUserPricing(productId);
+    const userSubscription = await getUserPricing();
 
-    console.log("chatbot_messages_monthly", chatbot_messages_monthly);
-    console.log("limit_chatbot_messages_monthly", limit_chatbot_messages_monthly);
+    // console.log("userSubscription from getUserPricing:", userSubscription);
     
-    if (chatbot_messages_monthly >= limit_chatbot_messages_monthly) {
-      return NextResponse.json({error: `Chatbot limit exceeded, please upgrade your plan for more messages. Current limit: ${limit_chatbot_messages_monthly}`}, {status: 403})
+    if (userSubscription.isExceededChatbotMessagesLimit) {
+      return NextResponse.json(
+        {error: `Chatbot message limit exceeded for your current plan. Please upgrade or try again next month.`},
+        {status: 429} // 429 Too Many Requests or 403 Forbidden
+      );
     }
 
     // return NextResponse.json({

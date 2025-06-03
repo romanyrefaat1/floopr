@@ -216,9 +216,9 @@ export default function PricingModal({error=null, content=null}: {error: string|
           <div className="flex flex-col md:flex-row md:items-center md:justify-between px-8 pt-8 pb-2">
             <div className="relative">
 
-              <p className="text-destructive-foreground text-sm mb-4 bg-destructive p-2 rounded">
+              {error &&<p className="text-destructive-foreground text-sm mb-4 bg-destructive p-2 rounded">
                 {error}
-                </p>
+                </p>}
 
               <DialogTitle className={`text-5xl {font.className} md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-2`}
               style={{lineHeight: `1em`}}

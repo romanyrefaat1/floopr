@@ -22,10 +22,23 @@ export interface UserSubscription {
   trialActive: boolean;
   trialEndsAt?: string; // ISO date string
   currentPeriodEnd?: string; // ISO date string
+
   feedback_count_monthly: number;
-  feedback_last_reset_date?: string;
-  chatbot_messages_monthly?: number;
-  limit_chatbot_messages_monthly?: number;
+  limit_feedback_count_monthly: number;
+  feedback_last_reset_date?: string; // ISO date string
+  isExceededFeedbackCountLimit: boolean;
+
+  chatbot_messages_monthly: number; // Renamed from optional
+  limit_chatbot_messages_monthly: number; // Renamed from optional
+  chatbot_last_reset_date?: string; // ISO date string - NEW
+  isExceededChatbotMessagesLimit: boolean;
+
+  group_feedback_count_daily_number: number; // NEW - was in state but not interface
+  limit_group_feedback_count_daily: number; // NEW - was in getUserPricing but not interface
+  group_feedback_last_reset_date?: string | null; // ISO date string or null - TYPO CORRECTED
+  limit_last_group_feedback_count_dailytimeout?: number; // in hours
+  isExceededGroupFeedbackLimit: boolean;
+  
   // Add more fields as needed for future plans
 }
 
@@ -47,6 +60,7 @@ interface PricingContextType {
   setUserSubscription: (sub: UserSubscription) => void;
   isExceededFeedbackLimit: boolean;
   isExceededChatbotLimit: boolean;
+  isExceededGroupFeedbackLimit: boolean;
 }
 
 const PricingContext = createContext<PricingContextType | undefined>(undefined);
@@ -57,90 +71,43 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
   const [userSubscription, setUserSubscription] = useState<UserSubscription>({
     tier: "free",
     trialActive: false,
+    trialEndsAt: undefined,
+    currentPeriodEnd: undefined,
+
     feedback_count_monthly: 0,
+    limit_feedback_count_monthly: 50, // Default for free tier from getUserPricing
     feedback_last_reset_date: new Date().toISOString(),
+    isExceededFeedbackCountLimit: false,
+
     chatbot_messages_monthly: 0,
-    limit_chatbot_messages_monthly: 10,
+    limit_chatbot_messages_monthly: 10, // Default for free tier from getUserPricing
+    chatbot_last_reset_date: new Date().toISOString(),
+    isExceededChatbotMessagesLimit: false,
+
+    group_feedback_count_daily_number: 0,
+    limit_group_feedback_count_daily: 5, // Default for free tier from getUserPricing
+    group_feedback_last_reset_date: new Date().toISOString(), // TYPO CORRECTED
+    limit_last_group_feedback_count_dailytimeout: 24, // Default from getUserPricing
+    isExceededGroupFeedbackLimit: false,
   });
 
   const [error, setError] = useState<string | null>(null);
   const [content, setContent] = useState<ContentOfPricingModal | null>(null);
 
-  // Check and reset feedback count monthly
-  // useEffect(() => {
-  //   const checkAndResetFeedbackCount = () => {
-  //     // Ensure we have a feedback_last_reset_date to work with
-  //     // PricingInitializer should provide a default if it's missing from DB
-  //     if (!userSubscription.feedback_last_reset_date) {
-  //       // This case should be rare if PricingInitializer sets a default.
-  //       // If it occurs, set a baseline to prevent errors with new Date(null).
-  //       console.warn('[PricingProvider] feedback_last_reset_date is missing. Initializing count and date.');
-  //       setUserSubscription((prev) => ({
-  //         ...prev,
-  //         feedback_count_monthly: prev.feedback_count_monthly ?? 0, // Keep existing count or default to 0
-  //         feedback_last_reset_date: new Date().toISOString(),
-  //       }));
-  //       return;
-  //     }
+  // Server-side getUserPricing now handles resets and limit calculations.
+  // The boolean flags from userSubscription are the source of truth.
+  const isExceededFeedbackLimit = userSubscription.isExceededFeedbackCountLimit;
+  const isExceededChatbotLimit = userSubscription.isExceededChatbotMessagesLimit;
+  const isExceededGroupFeedbackLimit = userSubscription.isExceededGroupFeedbackLimit;
 
-  //     const lastResetDate = new Date(userSubscription.feedback_last_reset_date);
-  //     const currentDate = new Date();
+  // useEffect for tier change (kept for potential UI reactions, limit setting removed)
+  useEffect(()=>{ 
+    // console.log('User subscription tier changed on client:', userSubscription.tier);
+  },[userSubscription.tier])
 
-  //     // Reset if the year or month has changed.
-  //     if (
-  //       lastResetDate.getFullYear() !== currentDate.getFullYear() ||
-  //       lastResetDate.getMonth() !== currentDate.getMonth()
-  //     ) {
-  //       console.log('[PricingProvider] Month/Year changed. Resetting feedback count.');
-  //       setUserSubscription((prev) => ({
-  //         ...prev,
-  //         feedback_count_monthly: 0,
-  //         feedback_last_reset_date: currentDate.toISOString(),
-  //       }));
-  //     }
-  //   };
-
-  //   checkAndResetFeedbackCount();
-  //   const interval = setInterval(checkAndResetFeedbackCount, 3600000); // 1 hour
-
-  //   return () => clearInterval(interval);
-  // }, [userSubscription.feedback_last_reset_date, setUserSubscription]);
-
-  // Calculate feedback limit status
-  const isExceededFeedbackLimit =
-    userSubscription.tier === "free"
-      ? userSubscription.feedback_count_monthly >= 50
-      : userSubscription.feedback_count_monthly >= 350;
-
-  const isExceededChatbotLimit = userSubscription.chatbot_messages_monthly >= userSubscription.limit_chatbot_messages_monthly;
-  // const isExceededChatbotLimit = true;
-      
-  // Set limits
-  useEffect(()=>{
-    if(userSubscription.tier === "free"){
-      setUserSubscription((prev)=>({
-        ...prev,
-        limit_chatbot_messages_monthly: 10,
-      }))
-    } else {
-      setUserSubscription((prev)=>({
-        ...prev,
-        limit_chatbot_messages_monthly: 100,
-      }))
-    }
-  },[userSubscription.chatbot_messages_monthly, userSubscription.tier])
-  useEffect(()=>{
-    if(userSubscription.tier === "free"){
-      setUserSubscription((prev)=>({
-        ...prev,
-        limit_feedback_count_monthly: 50,
-      }))
-    } else {
-      setUserSubscription((prev)=>({
-        ...prev,
-        limit_feedback_count_monthly: 350,
-      }))
-    }
+  // useEffect for feedback count change (kept for potential UI reactions, limit setting removed)
+  useEffect(()=>{ 
+    // console.log('User subscription feedback count changed on client:', userSubscription.feedback_count_monthly);
   },[userSubscription.tier, userSubscription.feedback_count_monthly])
 
   const openModal = ({error, content}: {error?: string, content?: ContentOfPricingModal}) => {
@@ -171,6 +138,7 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
         setUserSubscription,
         isExceededFeedbackLimit,
         isExceededChatbotLimit,
+        isExceededGroupFeedbackLimit,
         error,
         content,
       }}

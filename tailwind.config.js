@@ -97,6 +97,7 @@ module.exports = {
         "float-slower": "float 30s ease-in-out infinite",
         "spinner-leaf-fade": "spinner-leaf-fade 800ms linear infinite",
         "spinner-leaf-fade-slow": "spinner-leaf-fade 1.2s linear infinite",
+        wiggle: "wiggle 0.3s ease-in-out infinite",
       },
       keyframes: {
         float: {
@@ -110,6 +111,10 @@ module.exports = {
         "spinner-leaf-fade": {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
+        },
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' },
         },
       },
     },

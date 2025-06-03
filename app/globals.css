@@ -388,3 +388,27 @@ html {
     animation: dialogOut 0.2s ease-in forwards;
   }
 }
+
+
+.wiggle-fast {
+  animation: wiggle-fast 0.5s ease-in-out infinite;
+  background: linear-gradient(45deg, #ff9a9e, #fecfef);
+}
+
+  @keyframes wiggle-fast {
+            0%, 100% { 
+                transform: rotate(-12deg) translateX(-3px) scale(1); 
+            }
+            20% { 
+                transform: rotate(8deg) translateX(2px) scale(1.05); 
+            }
+            40% { 
+                transform: rotate(-6deg) translateX(3px) scale(0.98); 
+            }
+            60% { 
+                transform: rotate(10deg) translateX(-2px) scale(1.02); 
+            }
+            80% { 
+                transform: rotate(-4deg) translateX(1px) scale(0.99); 
+            }
+        }

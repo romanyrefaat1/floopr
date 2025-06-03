@@ -1,6 +1,6 @@
 "use client";
 
-import { addSimpleFeedback } from "@/actions/add-feedback";
+import { addSimpleFeedback, SimpleFeedbackItemDataForAction } from "@/actions/add-feedback";
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
 import {
@@ -58,15 +58,37 @@ export default function FeedbackForm() {
       console.log("Form values:", values);
 
       // Create a feedback object with the form values
-      const feedbackData = {
-        feedback: {
-          title: values.title || "Untitled",
-          content: values.description || "",
-          type: values.type || "other",
-        },
-        productId: String(productId),
-        userInfo,
+      let finalContent: string | null = null;
+      let finalIsRich: boolean = false;
+
+      if (values.description && 
+          typeof values.description === 'object' && 
+          Object.keys(values.description).length > 0) {
+        // If description is a non-empty object (from RichTextEditor)
+        finalContent = JSON.stringify(values.description);
+        finalIsRich = true;
+      } else if (typeof values.description === 'string' && values.description.trim() !== '') {
+        // If description is a non-empty string
+        finalContent = values.description;
+        finalIsRich = true; // Assuming string content in this context is also considered rich
+      }
+      // If values.description is the initial empty object {}, an empty string, null, or undefined,
+      // finalContent remains null and finalIsRich remains false.
+
+      const feedbackObject: SimpleFeedbackItemDataForAction['feedback'] = {
+        title: values.title || "Untitled",
+        content: finalContent,
+        isRich: finalIsRich,
+        type: values.type || "other",
       };
+
+      const feedbackData: SimpleFeedbackItemDataForAction = {
+        feedback: feedbackObject,
+        productId: String(productId),
+        // componentRefId is optional and not used in this form
+      };
+
+      // Note: userInfo is removed as it's handled by the API route and not part of SimpleFeedbackItemDataForAction
 
       console.log("Submitting feedback:", feedbackData);
 

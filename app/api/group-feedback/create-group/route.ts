@@ -2,8 +2,11 @@ import { getAllFeedbacks } from "@/actions/get-all-feedbacks";
 import getProductData from "@/actions/get-product-data";
 import { db } from "@/lib/firebase";
 import { GoogleGenAI } from "@google/genai";
-import { serverTimestamp } from "firebase/firestore";
+import { serverTimestamp, doc, updateDoc, increment } from "firebase/firestore";
 import { NextRequest, NextResponse } from "next/server";
+import getUserPricing from "@/actions/user/get-user-pricing";
+import { auth } from "@clerk/nextjs/server";
+import updateFirebaseUserData from "@/actions/user/update-firebase-user-data";
 
 const ai = new GoogleGenAI({
   vertexai: false,
@@ -12,6 +15,32 @@ const ai = new GoogleGenAI({
 
 export async function POST(request: NextRequest) {
   try {
+    const { userId: clerkId } = await auth();
+    if (!clerkId) {
+      return NextResponse.json({ error: "Authentication required." }, { status: 401 });
+    }
+
+    // Get user subscription details and check limits for AI grouping
+    const userSubscription = await getUserPricing();
+    console.log('[create-group] User Subscription:', userSubscription);
+
+    if (userSubscription.isExceededGroupFeedbackLimit) {
+      return NextResponse.json(
+        { error: "Daily AI-powered feedback grouping limit reached. Please upgrade your plan or try again tomorrow." },
+        { status: 429 } // Or 403 Forbidden
+      );
+    }
+
+    await updateFirebaseUserData(clerkId, {
+      group_feedback_count_daily_number: increment(1) ?? 0,
+      group_feedback_last_reset_date: serverTimestamp(),
+    }, true);
+
+    return NextResponse.json(
+      { error: "Romany stopped route to continue for testing." },
+      { status: 500 }
+    );
+
     const { productId } = await request.json();
 
     if (!productId || productId.length < 5) {
@@ -75,6 +104,11 @@ Desired format:
       return NextResponse.json({ error: aiResponse.error }, { status: 500 });
     }
 
+    // updateFirebaseUserData(clerkId, {
+    //   group_feedback_count_daily_number: increment(1),
+    //   group_feedback_last_reset_date: serverTimestamp(),
+    // });
+
     const responseText = aiResponse.candidates[0].content.parts[0].text;
     console.log(`groupText ai:`, responseText);
 
@@ -110,6 +144,12 @@ Desired format:
       };
     });
     console.log(`group`, groups);
+
+    // Increment AI-powered group generation count for the user
+    const userDocRef = doc(db, "users", clerkId);
+    await updateDoc(userDocRef, {
+      group_feedback_count_daily_number: increment(1),
+    });
 
     return NextResponse.json({
       groupedFeedback: timestampedGroups,

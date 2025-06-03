@@ -2,7 +2,9 @@
 
 import { useGroupedFeedback } from "../../../group-context/groupt-context";
 import { Button } from "@/components/ui/button";
+import { usePricing } from "@/context/pricing-context";
 import { db } from "@/lib/firebase";
+import { cn } from "@/lib/utils";
 import {
   writeBatch,
   collection,
@@ -11,7 +13,7 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { RefreshCcwDotIcon, Loader2, X } from "lucide-react";
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
 
 export default function GroupFeedbackButton({
@@ -24,27 +26,61 @@ export default function GroupFeedbackButton({
   const [isCommitting, setIsCommitting] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  const { isExceededGroupFeedbackLimit, openModal } = usePricing();
+  const [isAnimated, setIsAnimated] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+
+  useEffect(() => {
+    if (clickCount > 0) {
+      setTimeout(() => {
+        setIsAnimated(true);
+        setIsAnimating(false);
+        setClickCount(0);
+      },2000);
+    }
+  }, [clickCount]);
+
   const handleCreateNewGroup = async () => {
+    if (isExceededGroupFeedbackLimit) {
+      if (clickCount === 0) {
+        setIsAnimating(true);
+        setTimeout(() => {
+          setIsAnimated(true);
+          setIsAnimating(false);
+          setClickCount(1);
+        }, 1000);
+        return;
+      } else {
+        openModal({
+          error:
+            "You have exceeded the group feedback limit. Please upgrade your plan to continue.",
+          content: {
+            plans: {
+              free: {
+                button: "Continue without grouping feedback",
+              },
+            },
+          },
+        });
+        return;
+      }
+    }
+
     setIsLoading(true);
     setIsCommitting(false);
-
-    // Create abort controller for cancellation
     abortControllerRef.current = new AbortController();
     const signal = abortControllerRef.current.signal;
-
-    // show loading toast (returns toast id)
     const toastId = toast.loading("Replacing groups...");
 
     try {
-      // fetch grouped feedback
       const res = await fetch("/api/group-feedback/create-group", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productId }),
-        signal, // Add signal for cancellation
+        signal,
       });
 
-      // Check if request was aborted
       if (signal.aborted) {
         toast.dismiss(toastId);
         toast.info("Group replacement cancelled");
@@ -58,24 +94,15 @@ export default function GroupFeedbackButton({
 
       const { groupedFeedback } = await res.json();
 
-      // Check if cancelled before proceeding with database operations
       if (signal.aborted) {
         toast.dismiss(toastId);
         toast.info("Group replacement cancelled");
         return;
       }
 
-      // Set committing state - no more cancellation after this point
       setIsCommitting(true);
-
-      // batch delete existing docs and write new ones
       const batch = writeBatch(db);
-      const groupsRef = collection(
-        db,
-        "products",
-        productId,
-        "feedback-groups"
-      );
+      const groupsRef = collection(db, "products", productId, "feedback-groups");
       const existing = await getDocs(groupsRef);
       existing.forEach((snapshot) => batch.delete(snapshot.ref));
 
@@ -100,35 +127,27 @@ export default function GroupFeedbackButton({
       await batch.commit();
 
       setGroupedFeedback(
-        groupedFeedback.map((group: any) => {
-          return {
-            title: group.groupTitle,
-            description: group.groupDescription,
-            feedback: group.feedback,
-            feedbackData: group.feedbackData || [],
-            updatedAt: serverTimestamp(),
-          };
-        })
+        groupedFeedback.map((group: any) => ({
+          title: group.groupTitle,
+          description: group.groupDescription,
+          feedback: group.feedback,
+          feedbackData: group.feedbackData || [],
+          updatedAt: serverTimestamp(),
+        }))
       );
 
-      // update toast to success
       toast.success("Groups replaced successfully!", { id: toastId });
     } catch (err: any) {
-      // Don't show error if it was cancelled
-      if (
-        err.name === "AbortError" ||
-        abortControllerRef.current?.signal.aborted
-      ) {
+      if (err.name === "AbortError" || abortControllerRef.current?.signal.aborted) {
         toast.dismiss(toastId);
         toast.info("Group replacement cancelled");
         return;
       }
 
       console.error("Error replacing feedback groups:", err);
-      toast.error(
-        err?.message || "Failed to replace groups. Please try again.",
-        { id: toastId }
-      );
+      toast.error(err?.message || "Failed to replace groups. Please try again.", {
+        id: toastId,
+      });
     } finally {
       setIsLoading(false);
       setIsCommitting(false);
@@ -149,13 +168,14 @@ export default function GroupFeedbackButton({
         size="sm"
         onClick={handleCreateNewGroup}
         disabled={isLoading}
-        className="flex items-center gap-1"
-      >
-        {isLoading ? (
-          <Loader2 className="animate-spin" />
-        ) : (
-          <RefreshCcwDotIcon />
+        className={cn(
+          "flex items-center gap-1",
+          // isAnimating && "animate-wiggle",
+          isAnimating && "wiggle-fast",
+          // isAnimated && "animate-none border-4 border-red-500"
         )}
+      >
+        {isLoading ? <Loader2 className="animate-spin" /> : <RefreshCcwDotIcon />}
         {isLoading ? "Replacing..." : "Replace All Groups"}
       </Button>
 

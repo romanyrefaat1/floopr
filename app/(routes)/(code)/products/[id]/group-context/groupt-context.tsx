@@ -1,5 +1,6 @@
 "use client";
 
+import { usePricing } from "@/context/pricing-context";
 import { FeedbackItemInDB } from "../../../[productId]/_components/feedback-list";
 import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
