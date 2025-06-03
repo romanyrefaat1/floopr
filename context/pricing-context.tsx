@@ -29,9 +29,17 @@ export interface UserSubscription {
   // Add more fields as needed for future plans
 }
 
+export type ContentOfPricingModal ={
+  plans: {
+    free: {
+      button: string
+    }
+  }
+}
+
 interface PricingContextType {
   isModalOpen: boolean;
-  openModal: () => void;
+  openModal: ({error, content}: {error?: string, content?: ContentOfPricingModal}) => void;
   closeModal: () => void;
   selectedPlan: PlanType;
   setSelectedPlan: (plan: PlanType) => void;
@@ -54,6 +62,9 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
     chatbot_messages_monthly: 0,
     limit_chatbot_messages_monthly: 10,
   });
+
+  const [error, setError] = useState<string | null>(null);
+  const [content, setContent] = useState<ContentOfPricingModal | null>(null);
 
   // Check and reset feedback count monthly
   // useEffect(() => {
@@ -132,8 +143,15 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
     }
   },[userSubscription.tier, userSubscription.feedback_count_monthly])
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = ({error, content}: {error?: string, content?: ContentOfPricingModal}) => {
+    setIsModalOpen(true);
+    setError(error);
+    setContent(content);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setError(null);
+  };
 
   console.log(`user subscription context:`, userSubscription);
   console.log(
@@ -153,10 +171,12 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
         setUserSubscription,
         isExceededFeedbackLimit,
         isExceededChatbotLimit,
+        error,
+        content,
       }}
     >
       {children}
-      {isModalOpen && <PricingModal />}
+      {isModalOpen && <PricingModal error={error} content={content}/>}
     </PricingContext.Provider>
   );
 };

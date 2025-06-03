@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { usePricing } from "@/context/pricing-context";
+import WarnChatbotLimit from "../warn/warn-chatbot-limit";
 
 const firstMess = {
   position: "left",
@@ -48,7 +49,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const {userSubscription, isExceededChatbotLimit} = usePricing();
+  const {userSubscription, isExceededChatbotLimit, openModal} = usePricing();
   const {chatbot_messages_monthly, limit_chatbot_messages_monthly} = userSubscription
 
   useEffect(() => {
@@ -57,7 +58,17 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   }, []);
 
   const handleSend = async () => {
-    if (isExceededChatbotLimit) return;
+    if (isExceededChatbotLimit) {
+      openModal({error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
+        content: {
+          plans: {
+            free: {
+              button: "Continue without chatbot messages"
+            }
+          }
+        }
+      })
+      return};
     if (!input.trim()) return;
     setMessages((prev) => [
       ...prev,
@@ -194,14 +205,14 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             </div>
           </div>
 
-          {/* Messajes */}
+          {/* Messages */}
           <div
             className={cn(
               "relative flex-1 flex flex-col p-2 overflow-x-hidden z-[2] scrollbar-thin scrollbar-thumb-mutedScrollbar scrollbar-track-transparent scrollbar-hide",
               isFullScreen && `h-full`
             )}
           >
-            {messages.length < 2 && (
+            {(messages.length < 2 && !isExceededChatbotLimit) && (
               <div className="absolute hidden md:flex w-fit top-1/2 left-1/2 bg-mutedBackground p-2 rounded-xl transform -translate-x-1/2 -translate-y-1/2 text-mutedForeground flex flex-col">
               <div className="flex items-center gap-2">
                 <Image
@@ -342,6 +353,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                 Prey is reasoning
               </Skeleton>
             )}
+            <WarnChatbotLimit />
 
             <div ref={chatEndRef} className="mb-52" />
           </div>
@@ -426,7 +438,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               />
               <Button
                 onClick={handleSend}
-                disabled={loading || !input.trim() || isExceededChatbotLimit}
+                disabled={loading || !input.trim()}
                 size="sm"
                 className="ml-2 rounded-full transition-all absolute top-[calc(50%- 5px)] right-[56px]"
               >

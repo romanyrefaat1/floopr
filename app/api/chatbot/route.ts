@@ -1,4 +1,5 @@
 import getUserData from "@/actions/getUserData";
+import increaseChatbotMessagesCount from "@/actions/qouta/increase/increase-chatbot-messages-count";
 import getUserPricing from "@/actions/user/get-user-pricing";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleGenAI } from "@google/genai";
@@ -172,6 +173,8 @@ export async function POST(request: NextRequest) {
       response.candidates[0].content.parts[0].text
     );
     console.log("Response from AI:", response.candidates[0]);
+
+    await increaseChatbotMessagesCount(productId)
 
     return NextResponse.json({
       text: response.candidates[0].content.parts[0].text,

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { usePricing } from "@/context/pricing-context";
+import { ContentOfPricingModal, usePricing } from "@/context/pricing-context";
 import { cn } from "@/lib/utils";
 import { useUser, RedirectToSignIn, RedirectToSignUp } from "@clerk/nextjs";
 import { Check, HelpCircle, Sparkles, XCircle, X, Loader2 } from "lucide-react";
@@ -132,7 +132,7 @@ const planFeatures = {
 
 const font = Work_Sans({ subsets: ["latin"] });
 
-export default function PricingModal() {
+export default function PricingModal({error=null, content=null}: {error: string|null, content: ContentOfPricingModal|null}) {
   const { isModalOpen, closeModal, selectedPlan, setSelectedPlan } =
     usePricing();
   const { user, isLoaded, isSignedIn } = useUser();
@@ -205,16 +205,21 @@ export default function PricingModal() {
  
 </div>
 
-      <DialogContent className="max-w-4xl overflow-hidden w-full p-2 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
+      <DialogContent className="max-w-4xl overflow-hidden w-full p-0 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
       
         <ScrollArea className="md:h-[90vh] relative md:w-0vw] h-[80vh] w-full">
 
         <div 
-    className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white via-purple-200 to-transparent z-[-1]" 
+    className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white dark:from-black/10 via-purple-200 dark:via-purple-600/30 to-transparent z-[-1]" 
   />
           
           <div className="flex flex-col md:flex-row md:items-center md:justify-between px-8 pt-8 pb-2">
             <div className="relative">
+
+              <p className="text-destructive-foreground text-sm mb-4 bg-destructive p-2 rounded">
+                {error}
+                </p>
+
               <DialogTitle className={`text-5xl {font.className} md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-2`}
               style={{lineHeight: `1em`}}
               >
@@ -290,12 +295,15 @@ export default function PricingModal() {
                   );
                 })}
               </ul>
-              <Button className="w-full" variant="outline" onClick={handleFree}>
-                Get Started
+              <Button className="w-full mt-6" variant="secondary" onClick={handleFree}>
+                {content?.plans.free.button ?? "Get Started"}
               </Button>
             </div>
             {/* Builder Plan */}
             <div className="glass-card relative select-none p-8 rounded-3xl border-2 border-floopr-purple flex flex-col">
+            <div className="absolute inset-0 z-[-1] top-0 left-0 w-full rounded-3xl h-full bg-foreground opacity-10" />
+
+<div className="relative z-10">
               <div className="absolute -top-3 right-4 bg-floopr-purple text-white px-3 py-1 rounded-full text-sm">
                 Recommended
               </div>
@@ -338,7 +346,7 @@ export default function PricingModal() {
                 })}
               </div>
               <Button
-                className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white"
+                className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white select-pointer cursor-pointer"
                 onClick={handleBuilder}
                 disabled={loading}
               >
@@ -349,7 +357,8 @@ export default function PricingModal() {
                   : "Get Started"}
               </Button>
             </div>
-          </div>
+            </div>
+            </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>

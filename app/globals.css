@@ -146,9 +146,9 @@
   ); /* aligning secondary with your secondary background */
   --accent: 0, 10%, 88%; /* using primary as accent */
   --accent-foreground: 0, 0%, 30%;
-  --destructive: 0, 22%, 25%; /* a red tone, adjust if needed */
-  --muted-destructive: 0, 72%, 41%; /* a lighter red tone */
-  --destructive-foreground: var(--primary-foreground);
+  --destructive: 3, 68%, 58%; /* a red tone, adjust if needed */
+  --muted-destructive: 3, 72%, 41%; /* a lighter red tone */
+  --destructive-foreground: 3, 72%, 90%;
   --chart-1: var(--primary);
   --chart-2: var(--primary-muted);
   --chart-3: var(--secondary-background);
@@ -193,9 +193,9 @@
   --secondary: var(--secondary-background);
   --accent: 0, 0%, 18%; /* assuming primary stays consistent */
   --accent-foreground: var(--primary-foreground);
-  --destructive: 0, 72%, 51%;
-  --muted-destructive: 0, 72%, 31%;
-  --destructive-foreground: var(--primary-foreground);
+  --destructive: 3, 68%, 50%; /* a red tone, adjust if needed */
+  --muted-destructive: 3, 72%, 35%; /* a lighter red tone */
+  --destructive-foreground: 3, 72%, 80%;
   --chart-1: var(--primary);
   --chart-2: var(--primary-muted);
   --chart-3: var(--secondary-background);
