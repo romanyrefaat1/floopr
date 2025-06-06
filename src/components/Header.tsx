@@ -82,7 +82,13 @@ const Header = () => {
               <Skeleton className="h-8 w-24 bg-gray-200 rounded-md" />
             ) : (
               <Link href={isSignedIn ? "/home" : `#cta`}>
-                {isSignedIn ? (
+                <Button
+                  variant="default"
+                  className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
+                >
+                  Get Feedback Now
+                </Button>
+                {/* {isSignedIn ? (
                   <Button
                     variant="default"
                     className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
@@ -93,7 +99,7 @@ const Header = () => {
                   <Button>
                     <Link href="#cta">Join Beta</Link>
                   </Button>
-                )}
+                )} */}
               </Link>
             )}
           </div>

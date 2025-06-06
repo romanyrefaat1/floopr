@@ -6,7 +6,6 @@ import Features from "../src/components/Features";
 import Footer from "../src/components/Footer";
 import Header from "../src/components/Header";
 import Hero from "../src/components/Hero";
-import FloatingFeedbackButton from "@/components/floopr-integration/float-button-circle/floating-feedback-button";
 import Demo from "@/src/Demo";
 import { ChangelogModalProvider } from "@/src/components/ChangelogModalContext";
 import { useEffect, useRef } from "react";

@@ -69,26 +69,26 @@ const Hero = () => {
             className="flex justify-center lg:justify-start items-center gap-4 animate-on-scroll px-6 lg:px-0"
             style={{ animationDelay: "200ms" }}
           >
-            {userId ? (
-              <>
-                <Link href="#demo">
-                  <Button variant={`link`}>Watch Demo</Button>
-                </Link>
-                <Link href="/home">
-                  <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all">
-                    Get Feedback Now
-                  </Button>
-                </Link>
-              </>
+            <Link href="#demo">
+              <Button variant={`link`}>Watch Demo</Button>
+            </Link>
+            <Link href="/home">
+              <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all">
+                Get Feedback Now
+              </Button>
+            </Link>
+            {/* {userId ? (
+              <> 
+                
             ) : (
               <JoinBetaForm />
-            )}
+            )} */}
           </div>
         </div>
 
         <div
           className="relative mt-16 lg:mt-0 animate-on-scroll blur-on-scroll lg:w-1/2"
-          style={{ animationDelay: "400ms" }}
+          style={{ animationDelay: "0ms" }}
         >
           <span className="block text-center lg:text-right mb-2 text-gray-600 italic">
             to make it clear this is what you will get
