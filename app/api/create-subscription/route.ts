@@ -1,19 +1,18 @@
 // app/api/create-subscription/route.ts
 import DodoPayments from "dodopayments";
-// SDK import :contentReference[oaicite:8]{index=8}
 import { NextResponse } from "next/server";
 
 const client = new DodoPayments({
-  bearerToken: process.env.DODO_PAYMENTS_API_KEY!, // test key :contentReference[oaicite:9]{index=9}
-  environment: "test_mode", // ensure test endpoint
+  bearerToken: process.env.DODO_PAYMENTS_API_KEY!, // live key
+  environment: "live", // changed from "test_mode" to "live"
 });
 
 async function ensureCustomer(email: string, name: string, reference: string) {
   try {
-    return await client.customers.retrieve(reference); // try retrieve :contentReference[oaicite:10]{index=10}
+    return await client.customers.retrieve(reference);
   } catch (err: any) {
     if (err.status === 404) {
-      return await client.customers.create({ email, name }); // create on 404 :contentReference[oaicite:11]{index=11}
+      return await client.customers.create({ email, name });
     }
     throw err;
   }
@@ -27,11 +26,11 @@ export async function POST(request: Request) {
     const customer = await ensureCustomer(email, userName, userId);
     const custId = customer.customer_id;
 
-    // 2) select product ID based on plan
-    let productId = process.env.DODO_BUILDER_MONTHLY_PRODUCT_ID!;
+    // 2) select product ID based on plan - using live product IDs
+    let productId = process.env.DODO_BUILDER_MONTHLY_PRODUCT_ID_LIVE!;
     let trialDays: number | undefined = undefined;
     if (plan === "annual") {
-      productId = process.env.DODO_BUILDER_ANNUAL_PRODUCT_ID!;
+      productId = process.env.DODO_BUILDER_ANNUAL_PRODUCT_ID_LIVE!;
     } else {
       // monthly is default
       trialDays = 7;

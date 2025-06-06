@@ -12,6 +12,7 @@ export default function ChangelogList({
   return (
     <ChangelogListClient
       productId={productId}
+      items={changelog || []}
       loading={typeof loadingProp === "boolean" ? loadingProp : loading}
     />
   );
