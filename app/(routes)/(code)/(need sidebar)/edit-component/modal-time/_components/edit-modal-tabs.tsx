@@ -15,6 +15,7 @@ import ModalTimeout from '@/components/floopr-integration/modal-timout/modal-tim
 import { ReviewStep } from './review-step';
 import { PreviewStep } from './preview-step';
 import { ProductStyle } from '@/app/(routes)/(code)/[productId]/page';
+import { usePricing } from '@/context/pricing-context';
 
 // Type definitions
 type Rating = {
@@ -43,6 +44,8 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
   const searchParams = useSearchParams()
   const userTitle = searchParams.get('userTitle') || ''
   const userDescription = searchParams.get('userDescription') || ''
+
+  const {tier, openModal} = usePricing()
   
   const myComponentId = isComponentExists ? componentId : crypto.randomUUID()
   
@@ -78,6 +81,13 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
   // Save component in DB
   const handleSaveComponent = async () => {
     try {
+
+      if (tier === 'free') {
+        openModal({
+          error: 'Modal Time component is the only one allowed for Builder+ users',})
+        return;
+      }
+      
       const loadingToast = toast.loading('Saving component...');
 
       const response = await fetch('/api/save-component', {
@@ -95,6 +105,13 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
           componentType: 'modal-time'
         }),
       });
+
+      if (response.status === 403) {
+        openModal({
+          error: 'Modal Time component is the only one allowed for Builder+ users',})
+          toast.dismiss(loadingToast)
+        return;
+      }
 
       toast.dismiss(loadingToast)
 

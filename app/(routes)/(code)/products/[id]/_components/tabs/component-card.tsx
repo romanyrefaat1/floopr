@@ -59,7 +59,12 @@ export default function ComponentCard({
   return (
     <Card className="text-center lg:text-left flex flex-col-reverse lg:grid lg:grid-cols-2 items-center justify-center gap-4 p-4 lg:p-4 relative">
       <div className="absolute top-2 right-2">
-        <Badge>{makeFirstLetterUppercase(metaData.plan)}</Badge>
+        <Badge
+          className="select-none"
+          variant={metaData.plan === "free" ? "secondary" : "default"}
+        >
+          {makeFirstLetterUppercase(metaData.plan)}
+        </Badge>
       </div>
 
       {/* Delete dropdown for isYours */}

@@ -1,3 +1,4 @@
+import getUserPricing from "@/actions/user/get-user-pricing";
 import { db } from "@/lib/firebase";
 import { auth } from "@clerk/nextjs/server";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -26,6 +27,18 @@ export async function POST(request: Request) {
       );
     }
 
+    const { tier } = await getUserPricing(userId);
+
+    if (tier === "free" && componentType !== "modal-time") {
+      return NextResponse.json(
+        {
+          error:
+            "Modal Time component is the only one allowed for Builder+ users",
+          success: false,
+        },
+        { status: 403 }
+      );
+    }
     // Save component in Firestore
     const componentApiKey = crypto.randomUUID();
     const componentRef = doc(
