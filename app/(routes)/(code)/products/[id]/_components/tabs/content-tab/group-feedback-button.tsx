@@ -37,7 +37,7 @@ export default function GroupFeedbackButton({
         setIsAnimated(true);
         setIsAnimating(false);
         setClickCount(0);
-      },2000);
+      }, 2000);
     }
   }, [clickCount]);
 
@@ -84,6 +84,8 @@ export default function GroupFeedbackButton({
       if (signal.aborted) {
         toast.dismiss(toastId);
         toast.info("Group replacement cancelled");
+        setIsLoading(false);
+        setIsCommitting(false);
         return;
       }
 
@@ -99,11 +101,17 @@ export default function GroupFeedbackButton({
             },
           },
         });
+        toast.dismiss(toastId);
+        setIsLoading(false);
+        setIsCommitting(false);
         return;
       }
 
       if (!res.ok) {
         const { error } = await res.json();
+        toast.dismiss(toastId);
+        setIsLoading(false);
+        setIsCommitting(false);
         throw new Error(error || "Unknown error from grouping API");
       }
 
@@ -112,12 +120,19 @@ export default function GroupFeedbackButton({
       if (signal.aborted) {
         toast.dismiss(toastId);
         toast.info("Group replacement cancelled");
+        setIsLoading(false);
+        setIsCommitting(false);
         return;
       }
 
       setIsCommitting(true);
       const batch = writeBatch(db);
-      const groupsRef = collection(db, "products", productId, "feedback-groups");
+      const groupsRef = collection(
+        db,
+        "products",
+        productId,
+        "feedback-groups"
+      );
       const existing = await getDocs(groupsRef);
       existing.forEach((snapshot) => batch.delete(snapshot.ref));
 
@@ -153,16 +168,22 @@ export default function GroupFeedbackButton({
 
       toast.success("Groups replaced successfully!", { id: toastId });
     } catch (err: any) {
-      if (err.name === "AbortError" || abortControllerRef.current?.signal.aborted) {
+      if (
+        err.name === "AbortError" ||
+        abortControllerRef.current?.signal.aborted
+      ) {
         toast.dismiss(toastId);
         toast.info("Group replacement cancelled");
         return;
       }
 
       console.error("Error replacing feedback groups:", err);
-      toast.error(err?.message || "Failed to replace groups. Please try again.", {
-        id: toastId,
-      });
+      toast.error(
+        err?.message || "Failed to replace groups. Please try again.",
+        {
+          id: toastId,
+        }
+      );
     } finally {
       setIsLoading(false);
       setIsCommitting(false);
@@ -186,11 +207,15 @@ export default function GroupFeedbackButton({
         className={cn(
           "flex items-center gap-1",
           // isAnimating && "animate-wiggle",
-          isAnimating && "wiggle-fast",
+          isAnimating && "wiggle-fast"
           // isAnimated && "animate-none border-4 border-red-500"
         )}
       >
-        {isLoading ? <Loader2 className="animate-spin" /> : <RefreshCcwDotIcon />}
+        {isLoading ? (
+          <Loader2 className="animate-spin" />
+        ) : (
+          <RefreshCcwDotIcon />
+        )}
         {isLoading ? "Replacing..." : "Replace All Groups"}
       </Button>
 

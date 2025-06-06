@@ -1,4 +1,5 @@
 import { db } from "@/lib/firebase";
+import { auth } from "@clerk/nextjs/server";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
 
@@ -13,6 +14,15 @@ export async function POST(request: Request) {
           success: false,
         },
         { status: 400 }
+      );
+    }
+
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized: User not authenticated", success: false },
+        { status: 401 }
       );
     }
 
