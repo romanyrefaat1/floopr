@@ -49,9 +49,7 @@ export default function DeleteDropdown({
   const handleDelete = async () => {
     try {
       // Delete the document
-      console.log(docRef);
       const deleteRes = await deleteDoc(docRef);
-      console.log(`Deleted component with ID: ${docRef}`, deleteRes);
       // Callback on successful delete
       if (onDeleteSuccess) onDeleteSuccess();
 

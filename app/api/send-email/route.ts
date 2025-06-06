@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import sgMail from "@sendgrid/mail";
+import { NextResponse } from "next/server";
 
 // 1. Read and set your SendGrid API key once at module load
 sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
@@ -10,31 +10,27 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
  */
 
 type EmailParams = {
-    to: string;
-    subject: string;
-    text?: string;
-    html?: string;
-}
+  to: string;
+  subject: string;
+  text?: string;
+  html?: string;
+};
 
 export async function POST(request: Request) {
   try {
-    console.log("Received request to send email");
-    const { to, subject, text, html } = await request.json() as EmailParams;
+    const { to, subject, text, html } = (await request.json()) as EmailParams;
 
     // 2. Build the message payload
     const msg = {
       to,
-      from: "refaatromany641@gmail.com",   // your verified sender
+      from: "refaatromany641@gmail.com", // your verified sender
       subject,
-    //   text: text || undefined,
+      //   text: text || undefined,
       html: html || undefined,
     };
 
-    console.log("Sending email...", msg);
-
     // 3. Send the email
     await sgMail.send(msg);
-    console.log("Email sent successfully!");
 
     // 4. Return success response
     return NextResponse.json(

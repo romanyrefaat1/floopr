@@ -109,12 +109,11 @@ export default function FeedbackForm() {
   }
 
   return (
-    <div className="h-full">
-      <ScrollArea className="rounded-lg border w-full overflow-hidden">
-        <div className="rounded-modal h-fit w-full min-w-[full] mx-auto p-4 text-card-foreground font-sans text-base">
+    <div className="h-full scroll-auto">
+        <div className="rounded-modal scroll-auto h-full w-full min-w-[full] mx-auto p-6 text-card-foreground font-sans text-base">
           <CardTitle>
             <h2 className="text-2xl font-bold mb-6 text-center">
-              Add Feedback
+              Submit Feedback
             </h2>
           </CardTitle>
 
@@ -173,12 +172,13 @@ export default function FeedbackForm() {
               />
 
               {/* Description Field */}
+              <div className={`h-[`}>
               <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem className="h-full">
-                    <FormControl>
+                    <FormControl className="h-full">
                       <RichTextEditor
                         onChange={(content) => {
                           field.onChange(content);
@@ -191,6 +191,7 @@ export default function FeedbackForm() {
                   </FormItem>
                 )}
               />
+              </div>
 
               {/* Submit Button */}
               <Button
@@ -203,7 +204,6 @@ export default function FeedbackForm() {
             </form>
           </Form>
         </div>
-      </ScrollArea>
     </div>
   );
 }

@@ -1,7 +1,14 @@
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+
 import getFilteredFeedbacks from "@/actions/filter-feedback";
 import type { FilterData } from "@/app/(routes)/(code)/products/[id]/page";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
 export interface FeedbackItemInDB {
   componentRefId: string | null;
@@ -54,21 +61,31 @@ interface AllFeedbackContextType {
   refetch: (productId: string, filterData: FilterData) => void;
 }
 
-const AllFeedbackContext = createContext<AllFeedbackContextType | undefined>(undefined);
+const AllFeedbackContext = createContext<AllFeedbackContextType | undefined>(
+  undefined
+);
 
 export function useAllFeedback() {
   const ctx = useContext(AllFeedbackContext);
-  if (!ctx) throw new Error("useAllFeedback must be used within AllFeedbackProvider");
+  if (!ctx)
+    throw new Error("useAllFeedback must be used within AllFeedbackProvider");
   return ctx;
 }
 
-export function AllFeedbackProvider({ productId, filterData, initialFeedbacks, children }: {
+export function AllFeedbackProvider({
+  productId,
+  filterData,
+  initialFeedbacks,
+  children,
+}: {
   productId: string;
   filterData: FilterData;
   initialFeedbacks?: FeedbackItemInDB[];
   children: ReactNode;
 }) {
-  const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[] | null>(initialFeedbacks || null);
+  const [feedbacks, setFeedbacks] = useState<FeedbackItemInDB[] | null>(
+    initialFeedbacks || null
+  );
   const [loading, setLoading] = useState(!initialFeedbacks);
   const [error, setError] = useState<string | null>(null);
 

@@ -24,7 +24,6 @@ export type LikeData = {
 
 export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
   const { userId, username, productId, profilePicture } = data;
-  console.log(`feedbackId like`, feedbackId);
   const docRef = doc(db, "products", productId, "feedbacks", feedbackId);
 
   // See if user already liked
@@ -38,7 +37,6 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
         profilePicture: profilePicture || ``,
       }),
     });
-    console.log("Like removed");
     return false; // User unliked
   } else {
     // User hasn't liked - add the like
@@ -50,7 +48,6 @@ export async function addLikeToFeedbackItem(feedbackId: string, data: Data) {
         profilePicture: profilePicture || ``,
       }),
     });
-    console.log("Like added");
     return true; // User liked
   }
 }
@@ -70,6 +67,5 @@ export async function isUserLiked(
         (like: { userId: string }) => like.userId === userId
       ) || false;
   }
-  console.log(`isUserLiked:`, isUserLiked);
   return isUserLiked || false;
 }

@@ -1,7 +1,3 @@
-import getUserData from "@/actions/getUserData";
-import increaseChatbotMessagesCount from "@/actions/qouta/increase/increase-chatbot-messages-count";
-import getUserPricing from "@/actions/user/get-user-pricing";
-import { auth } from "@clerk/nextjs/server";
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -24,11 +20,6 @@ export async function POST(request: NextRequest) {
       changelog: providedChangelog,
       settings: providedSettings,
     } = await request.json();
-    const {userId} = await auth()
-
-    if (!userId) {
-      return NextResponse.json({error: "Unauthorized"}, {status: 401})
-    }
 
     if (!prompt || !productId || productId.length < 5) {
       return NextResponse.json(
@@ -37,25 +28,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const userSubscription = await getUserPricing();
-
-    // console.log("userSubscription from getUserPricing:", userSubscription);
-    
-    if (userSubscription.isExceededChatbotMessagesLimit) {
-      return NextResponse.json(
-        {error: `Chatbot message limit exceeded for your current plan. Please upgrade or try again next month.`},
-        {status: 429} // 429 Too Many Requests or 403 Forbidden
-      );
-    }
-
-    // return NextResponse.json({
-    //   text: `yooo`
-    // })
-
-
     // Use provided data instead of fetching
     const feedbacks = Array.isArray(providedFeedbacks) ? providedFeedbacks : [];
-    const changelogItems = Array.isArray(providedChangelog) ? providedChangelog : [];
+    const changelogItems = Array.isArray(providedChangelog)
+      ? providedChangelog
+      : [];
     const settings = providedSettings || {};
 
     // Compose feedbacksText and changelogText as before, but from provided data
@@ -107,14 +84,16 @@ export async function POST(request: NextRequest) {
     const contextParts = [
       `Changelog:`,
       changelogText,
-      '',
+      "",
       `Feedbacks:`,
       feedbacksText,
-      '',
+      "",
       `Settings:`,
       JSON.stringify(settings, null, 2),
-      '',
-      `User referenced feedbacks: ${JSON.stringify(drajedContext) || "No reference, read all feedback"}`,
+      "",
+      `User referenced feedbacks: ${
+        JSON.stringify(drajedContext) || "No reference, read all feedback"
+      }`,
     ];
 
     const contents = [
@@ -175,8 +154,6 @@ export async function POST(request: NextRequest) {
       response.candidates[0].content.parts[0].text
     );
     console.log("Response from AI:", response.candidates[0]);
-
-    await increaseChatbotMessagesCount(userId)
 
     return NextResponse.json({
       text: response.candidates[0].content.parts[0].text,

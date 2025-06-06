@@ -15,8 +15,6 @@ export default clerkMiddleware(async (auth, req) => {
   // Get the hostname (domain) from the request
   const { hostname, pathname } = new URL(req.url);
 
-  console.log("Middleware processing hostname:", hostname);
-
   // Check if this is a subdomain request
   const isSubdomainRequest =
     hostname.includes(".floopr.app") &&
@@ -26,14 +24,11 @@ export default clerkMiddleware(async (auth, req) => {
   if (isSubdomainRequest) {
     // Extract the subdomain (productUName)
     const subdomain = hostname.split(".")[0];
-    console.log("Detected subdomain:", subdomain);
 
     // Use query parameter approach instead of headers
     // This is more reliable across different environments
     const rewriteUrl = new URL(`/subdomain-product`, req.url);
     rewriteUrl.searchParams.set("subdomain", subdomain);
-
-    console.log("Rewriting to:", rewriteUrl.toString());
 
     return NextResponse.rewrite(rewriteUrl);
   }

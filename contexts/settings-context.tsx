@@ -3,10 +3,9 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 export interface SettingsData {
-  // Add your settings fields here
+  // Rest of the settings fields here
   theme: string;
   notificationsEnabled: boolean;
-  // ...etc
 }
 
 interface SettingsContextType {

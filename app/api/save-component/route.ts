@@ -5,7 +5,6 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const { componentData, productId, componentType } = await request.json();
-    console.log("POST /api/save-component received request:", request);
 
     if (!componentData || !productId || !componentType) {
       return NextResponse.json(
@@ -26,7 +25,6 @@ export async function POST(request: Request) {
     const docSnap = await getDoc(componentRef);
 
     if (docSnap.exists()) {
-      console.log(`Updating existing component ${componentData.componentId}`);
       await updateDoc(componentRef, {
         componentData,
         componentType,
@@ -34,7 +32,6 @@ export async function POST(request: Request) {
         productId,
       });
     } else {
-      console.log(`Creating new component ${componentData.componentId}`);
       await setDoc(componentRef, {
         componentData,
         componentType,

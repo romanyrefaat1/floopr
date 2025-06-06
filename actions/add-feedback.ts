@@ -75,7 +75,6 @@ export type SimpleFeedbackItemDataForAction = {
 export async function addSimpleFeedback(
   feedbackData: SimpleFeedbackItemDataForAction
 ) {
-  console.log(`addSimpleFeedback action called with:`, feedbackData);
   try {
     const response = await fetch("/api/feedbacks/add-simple", {
       method: "POST",
@@ -89,10 +88,11 @@ export async function addSimpleFeedback(
 
     if (!response.ok) {
       console.error("API Error:", result.error);
-      throw new Error(result.error || `API request failed with status ${response.status}`);
+      throw new Error(
+        result.error || `API request failed with status ${response.status}`
+      );
     }
-    
-    console.log("API Success:", result);
+
     return result; // Should be { success: true, feedbackId: "..." } or { success: false, error: "..." }
   } catch (error: any) {
     console.error("Error calling addSimpleFeedback API:", error);
@@ -102,7 +102,6 @@ export async function addSimpleFeedback(
     };
   }
 }
-
 
 /**
  * Adds feedback from a component (like modal)
@@ -147,15 +146,6 @@ export async function addComponentFeedback({
       };
     }
 
-    // Log the inputs for debugging
-    console.log("Adding component feedback with:", {
-      inputs,
-      productId,
-      componentRefId,
-      rating,
-      userInfo,
-    });
-
     // 2. Create the feedback document
     const feedbackData = {
       feedback: {
@@ -190,8 +180,6 @@ export async function addComponentFeedback({
 
     // Add the document
     const docRef = await addDoc(feedbacksCollectionRef, feedbackData);
-
-    console.log("Component feedback added successfully with ID:", docRef.id);
 
     // 3. Increment feedback count for the user
     await updateDoc(userRef, {

@@ -127,7 +127,6 @@ export default function FlooprFeedbackModalTimeout({
         setIsDarkMode(data.isDark);
         setButtonText(data.buttonText);
         setTimeoutDuration(data.timeoutDuration || 0);
-        console.log(`component loaded successfully`, data);
         // If styles are provided, set them
         if (data.style) setStyles(data.style);
       } catch (error) {

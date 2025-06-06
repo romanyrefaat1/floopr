@@ -1,13 +1,21 @@
 "use client";
 
 import ChangelogItemMenu from "./ChangelogItemMenu";
+import UndoToast from "@/components/undo-toast";
+import { db } from "@/lib/firebase";
 import { ChangelogItem } from "@/types/changelog";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  orderBy,
+  setDoc,
+} from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import UndoToast from "@/components/undo-toast";
-import { db } from "@/lib/firebase";
-import { collection, deleteDoc, doc, getDocs, query, orderBy, setDoc } from "firebase/firestore";
 
 function ChangelogSkeleton() {
   return (
@@ -54,7 +62,9 @@ export default function ChangelogListClient({
     const updatesRef = collection(db, "products", productId, "updates");
     const q = query(updatesRef, orderBy("version"));
     const snapshot = await getDocs(q);
-    const docId = snapshot.docs.find((d) => d.data().version === item.version)?.id;
+    const docId = snapshot.docs.find(
+      (d) => d.data().version === item.version
+    )?.id;
     if (docId) {
       await deleteDoc(doc(updatesRef, docId));
     }
@@ -69,10 +79,15 @@ export default function ChangelogListClient({
     const q = query(updatesRef, orderBy("version"));
     const snapshot = await getDocs(q);
     // Type: ChangelogItem & { _id: string }
-    const allItems = snapshot.docs.map((d) => ({ ...(d.data() as ChangelogItem), _id: d.id }));
+    const allItems = snapshot.docs.map((d) => ({
+      ...(d.data() as ChangelogItem),
+      _id: d.id,
+    }));
     const fallbackVersion = safeItems[idx].version;
     // Find all items after idx (greater version)
-    const toDelete = allItems.filter((it) => parseFloat(it.version as any) > parseFloat(fallbackVersion as any));
+    const toDelete = allItems.filter(
+      (it) => parseFloat(it.version as any) > parseFloat(fallbackVersion as any)
+    );
     // Save for undo (strip _id for Firestore setDoc)
     setUndoItems(toDelete.map(({ _id, ...rest }) => rest));
     setUndoType("fallback");
@@ -88,9 +103,7 @@ export default function ChangelogListClient({
     if (undoType === "fallback" && undoItems.length) {
       const updatesRef = collection(db, "products", productId, "updates");
       // Add with auto-generated IDs
-      await Promise.all(
-        undoItems.map((it) => setDoc(doc(updatesRef), it))
-      );
+      await Promise.all(undoItems.map((it) => setDoc(doc(updatesRef), it)));
     }
     setUndoOpen(false);
     setUndoItems([]);

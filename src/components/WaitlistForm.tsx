@@ -31,7 +31,6 @@ export default function WaitlistForm() {
         setEmail("");
       } else {
         const error = await response.text();
-        console.log(`error:`, error);
         toast.error(error || "Something went wrong");
       }
     } catch (error) {

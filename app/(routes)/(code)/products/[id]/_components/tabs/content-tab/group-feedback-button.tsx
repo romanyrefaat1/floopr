@@ -87,6 +87,21 @@ export default function GroupFeedbackButton({
         return;
       }
 
+      if (res.status === 403) {
+        openModal({
+          error:
+            "You have exceeded the group feedback limit. Please upgrade your plan to continue.",
+          content: {
+            plans: {
+              free: {
+                button: "Continue without grouping feedback",
+              },
+            },
+          },
+        });
+        return;
+      }
+
       if (!res.ok) {
         const { error } = await res.json();
         throw new Error(error || "Unknown error from grouping API");

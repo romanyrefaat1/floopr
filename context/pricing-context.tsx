@@ -38,21 +38,27 @@ export interface UserSubscription {
   group_feedback_last_reset_date?: string | null; // ISO date string or null - TYPO CORRECTED
   limit_last_group_feedback_count_dailytimeout?: number; // in hours
   isExceededGroupFeedbackLimit: boolean;
-  
+
   // Add more fields as needed for future plans
 }
 
-export type ContentOfPricingModal ={
+export type ContentOfPricingModal = {
   plans: {
     free: {
-      button: string
-    }
-  }
-}
+      button: string;
+    };
+  };
+};
 
 interface PricingContextType {
   isModalOpen: boolean;
-  openModal: ({error, content}: {error?: string, content?: ContentOfPricingModal}) => void;
+  openModal: ({
+    error,
+    content,
+  }: {
+    error?: string;
+    content?: ContentOfPricingModal;
+  }) => void;
   closeModal: () => void;
   selectedPlan: PlanType;
   setSelectedPlan: (plan: PlanType) => void;
@@ -97,20 +103,29 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
   // Server-side getUserPricing now handles resets and limit calculations.
   // The boolean flags from userSubscription are the source of truth.
   const isExceededFeedbackLimit = userSubscription.isExceededFeedbackCountLimit;
-  const isExceededChatbotLimit = userSubscription.isExceededChatbotMessagesLimit;
-  const isExceededGroupFeedbackLimit = userSubscription.isExceededGroupFeedbackLimit;
+  const isExceededChatbotLimit =
+    userSubscription.isExceededChatbotMessagesLimit;
+  const isExceededGroupFeedbackLimit =
+    userSubscription.isExceededGroupFeedbackLimit;
 
   // useEffect for tier change (kept for potential UI reactions, limit setting removed)
-  useEffect(()=>{ 
+  useEffect(() => {
     // console.log('User subscription tier changed on client:', userSubscription.tier);
-  },[userSubscription.tier])
+  }, [userSubscription.tier]);
 
   // useEffect for feedback count change (kept for potential UI reactions, limit setting removed)
-  useEffect(()=>{ 
-    // console.log('User subscription feedback count changed on client:', userSubscription.feedback_count_monthly);
-  },[userSubscription.tier, userSubscription.feedback_count_monthly])
+  useEffect(() => {}, [
+    userSubscription.tier,
+    userSubscription.feedback_count_monthly,
+  ]);
 
-  const openModal = ({error, content}: {error?: string, content?: ContentOfPricingModal}) => {
+  const openModal = ({
+    error,
+    content,
+  }: {
+    error?: string;
+    content?: ContentOfPricingModal;
+  }) => {
     setIsModalOpen(true);
     setError(error);
     setContent(content);
@@ -119,12 +134,6 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
     setIsModalOpen(false);
     setError(null);
   };
-
-  console.log(`user subscription context:`, userSubscription);
-  console.log(
-    `user subscription isExceededFeedbackLimit:`,
-    isExceededFeedbackLimit
-  );
 
   return (
     <PricingContext.Provider
@@ -144,7 +153,7 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-      {isModalOpen && <PricingModal error={error} content={content}/>}
+      {isModalOpen && <PricingModal error={error} content={content} />}
     </PricingContext.Provider>
   );
 };

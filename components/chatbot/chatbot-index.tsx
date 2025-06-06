@@ -10,11 +10,11 @@ import "react-chat-elements/dist/main.css";
 import LoaderSpinner from "../loader-spinner";
 import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
+import WarnChatbotLimit from "../warn/warn-chatbot-limit";
+import { usePricing } from "@/context/pricing-context";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
-import { usePricing } from "@/context/pricing-context";
-import WarnChatbotLimit from "../warn/warn-chatbot-limit";
 
 const firstMess = {
   position: "left",
@@ -49,26 +49,28 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const {userSubscription, isExceededChatbotLimit, openModal} = usePricing();
-  const {chatbot_messages_monthly, limit_chatbot_messages_monthly} = userSubscription
+  const { userSubscription, isExceededChatbotLimit, openModal } = usePricing();
+  const { chatbot_messages_monthly, limit_chatbot_messages_monthly } =
+    userSubscription;
 
   useEffect(() => {
     inputRef.current?.focus();
-    console.log(`drajedContext`, drajedContext);
   }, []);
 
   const handleSend = async () => {
     if (isExceededChatbotLimit) {
-      openModal({error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
+      openModal({
+        error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
         content: {
           plans: {
             free: {
-              button: "Continue without chatbot messages"
-            }
-          }
-        }
-      })
-      return};
+              button: "Continue without chatbot messages",
+            },
+          },
+        },
+      });
+      return;
+    }
     if (!input.trim()) return;
     setMessages((prev) => [
       ...prev,
@@ -92,18 +94,19 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
       });
 
       if (res.status === 403) {
-        openModal({error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
+        openModal({
+          error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
           content: {
             plans: {
               free: {
-                button: "Continue without chatbot messages"
-              }
-            }
-          }
-        })
+                button: "Continue without chatbot messages",
+              },
+            },
+          },
+        });
         return;
       }
-      
+
       const data = await res.json();
       setMessages((prev) => [
         ...prev,
@@ -226,22 +229,28 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               isFullScreen && `h-full`
             )}
           >
-            {(messages.length < 2 && !isExceededChatbotLimit) && (
+            {messages.length < 2 && !isExceededChatbotLimit && (
               <div className="absolute hidden md:flex w-fit top-1/2 left-1/2 bg-mutedBackground p-2 rounded-xl transform -translate-x-1/2 -translate-y-1/2 text-mutedForeground flex flex-col">
-              <div className="flex items-center gap-2">
-                <Image
-                  src={`/images/assistant-avatar/prey.png`}
-                  width={200}
-                  height={200}
-                  alt="Prey Icon"
-                  className={cn("rounded-full w-5 h-5 mr-2 inline-block select-none", 
-                    isExceededChatbotLimit&& "animate-pulse" )}
-                />
-                <p className="text-sm w-fit">
-                 {isExceededChatbotLimit ? `You exceeded your ${limit_chatbot_messages_monthly} qouta in your plan. Please upgrade your plan to continue.`: `You can drag any feedback into the chat`}
+                <div className="flex items-center gap-2">
+                  <Image
+                    src={`/images/assistant-avatar/prey.png`}
+                    width={200}
+                    height={200}
+                    alt="Prey Icon"
+                    className={cn(
+                      "rounded-full w-5 h-5 mr-2 inline-block select-none",
+                      isExceededChatbotLimit && "animate-pulse"
+                    )}
+                  />
+                  <p className="text-sm w-fit">
+                    {isExceededChatbotLimit
+                      ? `You exceeded your ${limit_chatbot_messages_monthly} qouta in your plan. Please upgrade your plan to continue.`
+                      : `You can drag any feedback into the chat`}
+                  </p>
+                </div>
+                <p className="text-xs text-destructive mt-4 animate-pulse">
+                  {chatbot_messages_monthly}/{limit_chatbot_messages_monthly}
                 </p>
-              </div>
-                <p className="text-xs text-destructive mt-4 animate-pulse">{chatbot_messages_monthly}/{limit_chatbot_messages_monthly}</p>
               </div>
             )}
             {messages.map((msg, idx) => (

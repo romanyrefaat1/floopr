@@ -39,10 +39,6 @@ export default function FeedbackSection({
             true,
             false
           );
-          console.log(
-            "Serialized Feedback Data from else:",
-            serializedFeedbackData
-          );
           setData(serializedFeedbackData);
         }
       } catch (error) {

@@ -96,7 +96,6 @@ export const ChatbotProvider: React.FC<{
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && (e.key === "j" || e.key === "J")) {
         e.preventDefault();
-        console.log("Ctrl + J pressed");
         if (isOpen) {
           closeChatbot();
         } else {

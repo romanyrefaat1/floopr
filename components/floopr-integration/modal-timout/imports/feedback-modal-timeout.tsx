@@ -129,14 +129,12 @@ export default function FlooprFeedbackModalTimeout({
         setRatings(data.ratings);
         setInputs(data.inputs);
         setIsDarkMode(data.isDark);
-        console.log(`style data loaded`, data.style, data);
         if (data.style) {
           setStyles(data.style);
         }
 
         setButtonText(data.buttonText);
         setTimeoutDuration(data.timeoutDuration);
-        console.log(`product feedback modal loaded:`, data);
       } catch (error) {
         console.error("Error loading component data:", error);
         return null;
@@ -164,15 +162,6 @@ export default function FlooprFeedbackModalTimeout({
     setIsSubmitting(true);
 
     try {
-      // Log what we're sending for debugging
-      console.log("Sending feedback data:", {
-        productId,
-        componentId,
-        feedback: inputs,
-        rating: selectedRating,
-        userInfo: userInfoFromProps,
-      });
-
       const response = await fetch(`/api/imports/components/save-data`, {
         method: "POST",
         headers: {

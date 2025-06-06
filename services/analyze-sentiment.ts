@@ -18,8 +18,6 @@ export async function analyzeSentiment(text) {
       body: JSON.stringify({ text }),
     });
 
-    console.log(`sintemnt client response`, response);
-
     if (!response.ok) {
       console.warn(`Sentiment analysis failed with status: ${response.status}`);
       return {

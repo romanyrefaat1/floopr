@@ -19,7 +19,7 @@ export default function ButtonAddFeedback({
           {value}
         </Button>
       </DialogTrigger>
-      <DialogContent className="rounded-3xl md:max-w-[40vw] md:min-h-[20vh] md:max-h-[40vh] lg:min-h-[80vh] p-0 overflow-hidden">
+      <DialogContent className="rounded-3xl h-[75vh] w-[90vw] md:max-w-[70vw] md:min-h-[20vh] md:max-h-[60vh] lg:min-h-[80vh] p-0 overflow-hidden">
         <FeedbackForm />
       </DialogContent>
     </Dialog>

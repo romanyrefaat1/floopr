@@ -7,10 +7,7 @@ export async function getLatestProducts(userId: string, maxProducts: number) {
     let q;
 
     if (!maxProducts) {
-      q = query(
-        productsRef,
-        where("ownerId", "==", userId)
-      );
+      q = query(productsRef, where("ownerId", "==", userId));
     } else {
       q = query(
         productsRef,
@@ -20,7 +17,6 @@ export async function getLatestProducts(userId: string, maxProducts: number) {
     }
 
     const querySnapshot = await getDocs(q);
-    console.log(querySnapshot);
 
     const products = querySnapshot.docs.map((doc) => {
       const data = doc.data();

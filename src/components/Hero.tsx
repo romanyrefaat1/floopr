@@ -1,10 +1,10 @@
 "use client";
 
+import JoinBetaForm from "./JoinBetaForm";
 import { Button } from "./ui/button";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import JoinBetaForm from "./JoinBetaForm";
 
 const Hero = () => {
   const { userId } = useAuth();
@@ -21,7 +21,6 @@ const Hero = () => {
   //       }),
   //     });
   //     const data = await res.json();
-  //     console.log(data);
   //   };
 
   //   sendEmail();
@@ -62,8 +61,8 @@ const Hero = () => {
             className="text-md md:text-lg text-gray-600 mb-8 animate-on-scroll max-w-2xl mx-auto"
             style={{ animationDelay: "100ms" }}
           >
-            Transform customer feedback into actionable business strategies. Organize,
-            analyze, and execute with precision.
+            Transform customer feedback into actionable business strategies.
+            Organize, analyze, and execute with precision.
           </p>
 
           <div
@@ -91,7 +90,9 @@ const Hero = () => {
           className="relative mt-16 lg:mt-0 animate-on-scroll blur-on-scroll lg:w-1/2"
           style={{ animationDelay: "400ms" }}
         >
-          <span className="block text-center lg:text-right mb-2 text-gray-600 italic">to make it clear this is what you will get</span>
+          <span className="block text-center lg:text-right mb-2 text-gray-600 italic">
+            to make it clear this is what you will get
+          </span>
           <div className="aspect-[16/9] max-w-5xl mx-auto lg:ml-auto group">
             <div className="w-full h-full relative rounded-2xl overflow-hidden border border-gray-200">
               <Link

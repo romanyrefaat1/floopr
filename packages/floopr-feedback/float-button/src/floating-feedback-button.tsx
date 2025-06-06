@@ -151,7 +151,6 @@ const getPositionStyles = (
   isFixed: boolean
 ) => {
   const cssPosition: "fixed" | "absolute" = isFixed ? "fixed" : "absolute";
-  console.log(`Float Button Position:`, buttonPosition, cssPosition);
   switch (buttonPosition) {
     case "top-left":
       return { top: "1rem", left: "1rem", position: cssPosition };
@@ -227,7 +226,6 @@ export default function FlooprFloatingFeedbackButton({
 
   // Validate API key, productId, and componentId, then fetch config
   useEffect(() => {
-    console.log(`fetch config starts`);
     async function fetchConfig() {
       setConfigLoading(true);
       setConfigError(null);
@@ -327,13 +325,6 @@ export default function FlooprFloatingFeedbackButton({
       ? configData?.position
       : buttonPosition,
   };
-
-  console.log(`Float Button Final config:`, finalConfig);
-  console.log(
-    `Float Button Final config button position:`,
-    finalConfig.buttonPosition
-  );
-  console.log(`Float Button db position:`, configData?.position);
 
   const defaultColors = {
     feature: {

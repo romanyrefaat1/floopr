@@ -23,7 +23,6 @@ const RichTextViewer: React.FC<DraftJsViewerProps> = ({
     try {
       const contentState = convertFromRaw(content);
       setEditorState(EditorState.createWithContent(contentState));
-      console.log(`contentState`, contentState);
     } catch (error) {
       console.error("Error converting raw content:", error);
     }

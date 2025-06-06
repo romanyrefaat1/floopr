@@ -97,7 +97,7 @@ const RichTextEditor = ({
       <div className={`rich-text-editor ${className || ""}`} style={style}>
         <div
           className={cn(
-            "editor-container border rounded-lg p-3 focus-within:ring-1 relative bg-background text-foreground font-sans border-secondary",
+            "editor-container border h-full rounded-lg p-3 focus-within:ring-1 relative bg-background text-foreground font-sans border-secondary",
             secondaryClassName
           )}
           onClick={focusEditor}
@@ -189,7 +189,7 @@ const RichTextEditor = ({
             </Button>
           </div>
 
-          <div className="editor-content ">
+          <div className="editor-content h-full">
             <Editor
               ref={editor}
               editorState={editorState}

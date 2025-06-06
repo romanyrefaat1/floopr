@@ -1,32 +1,32 @@
-import { getDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { getDoc, doc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function useProductItemData(productId: string) {
-    const [productData, setProductData] = useState()
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState<Error | null>(null)
+  const [productData, setProductData] = useState();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-    useEffect(()=> {
-        const fetchProductData = async () => {
-            const docRef = doc(db, "products", productId);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                setProductData(docSnap.data());
-                setLoading(false);
-            } else {
-                setError(new Error("Product not found"));
-                setLoading(false);
-            }
-        };
-        fetchProductData();
-    },[productId])
-    // console.log(`productData`, productData)
+  useEffect(() => {
+    const fetchProductData = async () => {
+      const docRef = doc(db, "products", productId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setProductData(docSnap.data());
+        setLoading(false);
+      } else {
+        setError(new Error("Product not found"));
+        setLoading(false);
+      }
+    };
+    fetchProductData();
+  }, [productId]);
 
-    return { productData, loading }
+  return { productData, loading };
 }
 
-{/*
+{
+  /*
     description
 : 
 ""
@@ -118,4 +118,5 @@ Object
 Object
 ﻿
 
-     */}
+     */
+}

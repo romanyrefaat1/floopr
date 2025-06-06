@@ -7,7 +7,6 @@ export async function POST(req: Request) {
   let productDocId;
   try {
     const { productData } = await req.json();
-    // console.log(`productData`, productData);
 
     if (!productData) {
       return NextResponse.json(
@@ -26,7 +25,6 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log(`firebase code will start`);
     // Firebase Code
     productDocId = randomUUID();
     const docRef = doc(db, `products`, productDocId);
@@ -68,7 +66,6 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log(`code is successfull`);
     return NextResponse.json(
       { mess: `Product created successfully.`, success: true, productDocId },
       { status: 200 }

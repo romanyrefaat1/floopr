@@ -43,7 +43,6 @@ export default function JoinBetaForm() {
       }),
     });
     const data = await res.json();
-    console.log(data);
   }
 
   const saveBetaEmail = async (e: React.FormEvent) => {

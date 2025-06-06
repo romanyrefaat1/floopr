@@ -16,7 +16,6 @@ const PlainTextViewer: React.FC<PlainTextViewerProps> = ({
   style = {},
 }) => {
   // Use useMemo to only convert when content changes.
-  console.log(`plain content before `, content);
   const plainText = useMemo(() => {
     // Check if content is null, undefined, or an empty object
     if (

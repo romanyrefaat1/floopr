@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     if (userSubscription.isExceededGroupFeedbackLimit) {
       return NextResponse.json(
         { error: "Daily AI-powered feedback grouping limit reached. Please upgrade your plan or try again tomorrow." },
-        { status: 429 } // Or 403 Forbidden
+        { status: 403 } // Or 403 Forbidden
       );
     }
 

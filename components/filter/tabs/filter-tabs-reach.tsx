@@ -9,8 +9,6 @@ export default function FilterTabsReach({
   open: boolean;
 }) {
   const router = useRouter();
-  // const searchParams = useSearchParams();
-  console.log(`all`);
   const handleFilter = (filter: string) => {
     setDialogOpen(false);
     router.push(`?filter=${filter}`);
