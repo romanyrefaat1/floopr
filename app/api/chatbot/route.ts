@@ -1,3 +1,5 @@
+import getUserPricing from "@/actions/user/get-user-pricing";
+import { auth } from "@clerk/nextjs/server";
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,7 +13,7 @@ const ai = new GoogleGenAI({
 export async function POST(request: NextRequest) {
   try {
     const {
-      prompt = `Wat is AI?`,
+      prompt = `Who are you?`,
       messContext = [],
       productId,
       thinkingBudget = 0,
@@ -25,6 +27,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Prompt and productId are required" },
         { status: 400 }
+      );
+    }
+
+    const { userId } = await auth();
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorize" }, { status: 401 });
+    }
+
+    // 2. Get user pricing/subscription info
+    const userPricing = await getUserPricing(userId);
+
+    // 3. Check chatbot usage limit
+    if (userPricing.isExceededChatbotMessagesLimit) {
+      return NextResponse.json(
+        { error: "Chatbot usage limit exceeded" },
+        { status: 403 }
       );
     }
 

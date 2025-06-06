@@ -45,7 +45,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
     settings,
   } = useChatbotContext();
   const [messages, setMessages] = useState([firstMess]);
-  const [input, setInput] = useState("#all-feedbacks");
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,19 +58,19 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
   }, []);
 
   const handleSend = async () => {
-    if (isExceededChatbotLimit) {
-      openModal({
-        error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
-        content: {
-          plans: {
-            free: {
-              button: "Continue without chatbot messages",
-            },
-          },
-        },
-      });
-      return;
-    }
+    // if (isExceededChatbotLimit) {
+    //   openModal({
+    //     error: `Sorry you exceeded your chatbot messages limit for this month. Please check the plans below to upgrade.`,
+    //     content: {
+    //       plans: {
+    //         free: {
+    //           button: "Continue without chatbot messages",
+    //         },
+    //       },
+    //     },
+    //   });
+    //   return;
+    // }
     if (!input.trim()) return;
     setMessages((prev) => [
       ...prev,
@@ -104,6 +104,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
             },
           },
         });
+        setLoading(false);
         return;
       }
 
@@ -372,7 +373,7 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
               </div>
             ))}
             {loading && (
-              <Skeleton className="block w-full h-[30px] text-base break-words whitespace-pre-line text-wrap mt-4">
+              <Skeleton className="block w-full h-[30px] text-base break-words whitespace-pre-line text-wrap mt-4 bg-transparent">
                 Prey is reasoning
               </Skeleton>
             )}
