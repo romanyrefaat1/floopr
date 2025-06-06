@@ -81,7 +81,6 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
   // Save component in DB
   const handleSaveComponent = async () => {
     try {
-
       if (tier === 'free') {
         openModal({
           error: 'Modal Time component is the only one allowed for Builder+ users',})
@@ -96,7 +95,7 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          componentData: {modalConfig, plan: "builder"},
+          componentData: {...modalConfig, plan: "builder"},
           cUserData: {
             uTitle: decodeURIComponent(userTitle),
             uDesc: decodeURIComponent(userDescription)

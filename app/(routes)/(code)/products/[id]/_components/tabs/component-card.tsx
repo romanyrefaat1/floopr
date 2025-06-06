@@ -52,7 +52,7 @@ export default function ComponentCard({
       description: componentData.componentData.metaData.description,
       imageUrl: componentData.componentData.metaData.imageUrl,
       componentName: componentData.componentData.name,
-      plan: componentData.componentData.metaData.plan || `free`,
+      plan: componentData.componentData.plan || `free`,
     };
   }
 
