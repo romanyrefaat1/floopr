@@ -139,7 +139,7 @@ export default function FloatButtonEditPage({ searchParams }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          componentData: config,
+          componentData: { ...config, plan: "free" },
           cUserData: {
             uTitle: decodeURIComponent(userTitle),
             uDesc: decodeURIComponent(userDescription),

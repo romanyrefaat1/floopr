@@ -86,7 +86,7 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          componentData: modalConfig,
+          componentData: {modalConfig, plan: "builder"},
           cUserData: {
             uTitle: decodeURIComponent(userTitle),
             uDesc: decodeURIComponent(userDescription)

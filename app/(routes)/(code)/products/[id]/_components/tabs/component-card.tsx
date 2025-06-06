@@ -1,6 +1,7 @@
 import { Product } from "../../page";
 import OpenModalButton from "./open-modal-button";
 import DeleteDropdown from "@/components/delete-dropdown";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,6 +44,7 @@ export default function ComponentCard({
       description: componentData.description,
       imageUrl: imageUrl,
       componentName: componentData.name,
+      plan: componentData.plan || `free`,
     };
   } else if (isYours) {
     metaData = {
@@ -50,11 +52,16 @@ export default function ComponentCard({
       description: componentData.componentData.metaData.description,
       imageUrl: componentData.componentData.metaData.imageUrl,
       componentName: componentData.componentData.name,
+      plan: componentData.componentData.metaData.plan || `free`,
     };
   }
 
   return (
     <Card className="text-center lg:text-left flex flex-col-reverse lg:grid lg:grid-cols-2 items-center justify-center gap-4 p-4 lg:p-4 relative">
+      <div className="absolute top-2 right-2">
+        <Badge>{makeFirstLetterUppercase(metaData.plan)}</Badge>
+      </div>
+
       {/* Delete dropdown for isYours */}
       {isYours && (
         <div className="absolute top-4 right-4">
