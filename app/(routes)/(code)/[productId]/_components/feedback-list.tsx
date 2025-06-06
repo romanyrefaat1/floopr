@@ -9,10 +9,12 @@ export default function FeedbackList({
   isOwner,
   productId,
   status = null,
+  isOwnerPa = false,
 }: {
   productId: string;
   isOwner: boolean;
   status?: StatusType | null;
+  isOwnerPa?: boolean;
 }) {
   const { feedbacks: feedbackData, loading, error } = useAllFeedback();
   const { isExceededFeedbackLimit } = usePricing();
@@ -58,7 +60,7 @@ export default function FeedbackList({
   return (
     <div className="space-y-4 flex flex-col gap-md lg:gap-lg">
       <WarnFeedbackCountLimit isOwner={isOwner} />
-      <FeedbackCountIndicator />
+      {isOwnerPa && <FeedbackCountIndicator />}
       {feedbacks.map((feedback) => (
         <FeedbackItem
           key={feedback.feedbackId}

@@ -29,9 +29,7 @@ export default async function DashboardTemplate({
 }) {
   return (
     <main className="max-w-screen flex relative">
-      <div
-  className="absolute left-[2rem] top-[2rem] md:top-[9rem] md:left-[5rem] transform -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-[radial-gradient(circle,rgba(125,101,246,0.6)_0%,rgba(125,101,246,0.2)_2%,transparent_100%)] blur-3xl z-[1] pointer-events-none"
-/>
+      <div className="absolute left-[2rem] top-[2rem] md:top-[9rem] md:left-[5rem] transform -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-[radial-gradient(circle,rgba(125,101,246,0.6)_0%,rgba(125,101,246,0.2)_2%,transparent_100%)] blur-3xl z-[1] pointer-events-none" />
 
       <div className="px-4 py-[3rem] w-full z-2">
         {/* Header */}
