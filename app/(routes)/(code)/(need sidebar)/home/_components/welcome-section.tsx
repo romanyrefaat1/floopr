@@ -29,7 +29,7 @@ const WelcomeSection = () => {
         <div className="flex flex-col md:flex-row gap-6 items-start sm:items-center justify-between">
           <div className="flex items-center w-full gap-5">
             <div className="space-y-1 w-full">
-              <h1 className="tracking-tight flex gap-1 items-center justify-between">
+              <h1 className="tracking-tight flex gap-1 items-center text-3xl justify-between">
                 Welcome back{`, ${user?.firstName}`}
               </h1>
               <p className="text-secondaryForeground text-sm">

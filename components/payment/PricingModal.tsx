@@ -8,6 +8,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { ContentOfPricingModal, usePricing } from "@/context/pricing-context";
 import { useUser, RedirectToSignUp } from "@clerk/nextjs";
 import { Check, X, Loader2 } from "lucide-react";
@@ -62,10 +64,10 @@ const plans = [
   },
   {
     key: "builder_annual",
-    name: "Builder Annual",
+    name: "Builder Yearly",
     price: 150,
     priceLabel: "$150",
-    description: "Save 17% with annual billing",
+    description: "Save 17% with yearly billing",
     features: [
       "All features in Free plan",
       "Up to 500 feedback submissions/mo",
@@ -204,7 +206,6 @@ export default function PricingModal({
   return (
     <Dialog open={isModalOpen} onOpenChange={closeModal}>
       <div className="relative w-full h-full"></div>
-
       <DialogContent className="max-w-4xl overflow-hidden w-full p-0 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
         <ScrollArea className="md:h-[90vh] relative md:w-0vw] h-[80vh] w-full">
           <div className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white dark:from-black/10 via-purple-200 dark:via-purple-600/30 to-transparent z-[-1]" />
@@ -228,28 +229,10 @@ export default function PricingModal({
                 Choose the plan that best fits your needs
               </DialogDescription>
             </div>
-            {/* <div className="flex items-center gap-2 mt-4 md:mt-0">
-              <Switch
-                id="annual-switch"
-                checked={selectedPlan === "annual"}
-                onCheckedChange={handleSwitch}
-                className="data-[state=checked]:bg-floopr-purple"
-              />
-              <Label
-                htmlFor="annual-switch"
-                className={cn(
-                  "text-floopr- opacity-80 transition font-semibold cursor-pointer",
-                  selectedPlan === "annual" &&
-                    "text-floopr-purple-dark opacity-100"
-                )}
-              >
-                Annually
-              </Label>
-            </div> */}
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto px-8 py-12">
             {/* Free Plan */}
-            <div className="glass-card p-8 rounded-3xl border border flex flex-col">
+            <div className="glass-card p-8 rounded-3xl border flex flex-col">
               <div className="mb-8">
                 <h3 className="text-2xl font-bold mb-2">Free</h3>
                 <p className="text-muted-foreground mb-4">
@@ -311,6 +294,25 @@ export default function PricingModal({
             </div>
             {/* Builder Plan */}
             <div className="glass-card relative select-none p-8 rounded-3xl border-2 border-floopr-purple flex flex-col">
+              <div className="flex items-center gap-2 mt-4 md:mt-0 absolute top-[-28px] right-2">
+                <Switch
+                  id="annual-switch"
+                  checked={selectedPlan === "annual"}
+                  onCheckedChange={handleSwitch}
+                  className="data-[state=checked]:bg-floopr-purple"
+                />
+                <Label
+                  htmlFor="annual-switch"
+                  className={
+                    selectedPlan === "annual"
+                      ? "text-floopr-purple-dark opacity-100 font-semibold cursor-pointer"
+                      : "text-floopr- opacity-80 transition font-semibold cursor-pointer"
+                  }
+                >
+                  {selectedPlan === "annual" ? "Yearly" : "Monthly"}
+                </Label>
+              </div>
+
               <div className="absolute inset-0 z-[-1] top-0 left-0 w-full rounded-3xl h-full bg-foreground opacity-10" />
 
               <div className="relative z-10">
@@ -367,8 +369,8 @@ export default function PricingModal({
                   {loading
                     ? "Processing..."
                     : selectedPlan === "monthly"
-                    ? "Start 7-day free trial"
-                    : "Get Started"}
+                    ? "Start 5-day free trial"
+                    : "Start 7-day free trial"}
                 </Button>
               </div>
             </div>

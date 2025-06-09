@@ -17,14 +17,14 @@ export default function TopFeedbackButtons({
 }) {
   const { mode } = useView();
   return (
-    <div className="flex flex-col sm:flex-row justify-between gap-4">
+    <div className="flex flex-col sm:flex-row justify-between gap-2">
       <div className="relative flex-1">
         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
         <Input placeholder="Search feedback..." className="pl-8 w-full" />
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center justify-between">
         {mode === VIEW_MODES.NORMAL ? (
-          <div>
+          <div className="flex gap-2 items-center">
             <TypeFilterButton productId={productId} />
             <SentimentFilterButton productId={productId} />
           </div>

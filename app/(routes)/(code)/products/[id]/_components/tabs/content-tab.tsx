@@ -22,7 +22,6 @@ export default function ContentTab({
   isOwnerPa: boolean;
 }) {
   const productId = productData.docId;
-  console.log(`content tab productId:`, productId);
   const primaryColor = productData.style?.primaryColor || "#7c64f6";
 
   return (
