@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { useGuidedOnboarding } from "@/contexts/onboarding/onboarding-context";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -71,9 +72,10 @@ const steps = [
 ];
 
 export default function Onboarding() {
-  const [isCanOnboardingOpen, setIsCanOnboardingOpen] = useState(false);
+  const [isCanOnboardingOpen, setIsCanOnboardingOpen] = useState(true);
   const [step, setStep] = useState(0);
   const { user } = useUser();
+  const { setActive } = useGuidedOnboarding();
 
   // Cursor-following tooltip state
   const [showTooltip, setShowTooltip] = useState(false);
@@ -86,6 +88,7 @@ export default function Onboarding() {
       setStep(step + 1);
     } else {
       setIsCanOnboardingOpen(false);
+      setActive(true);
     }
   };
 
@@ -229,7 +232,7 @@ export default function Onboarding() {
               Back
             </Button>
             <Button onClick={handleNext}>
-              {step === steps.length - 1 ? "Finish" : "Next"}
+              {step === steps.length - 1 ? "Set up my account!" : "Next"}
             </Button>
           </div>
         </div>

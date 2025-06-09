@@ -47,7 +47,7 @@ export const GuidedOnboardingProvider = ({
 }) => {
   const [steps] = useState<GuidedOnboardingStep[]>(defaultSteps);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isActive, setActive] = useState(true);
+  const [isActive, setActive] = useState(false);
 
   const goToStep = (step: number) => setCurrentStep(step);
   const nextStep = () =>
