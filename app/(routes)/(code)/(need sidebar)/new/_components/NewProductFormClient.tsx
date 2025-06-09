@@ -5,22 +5,19 @@ import ProductDescriptionField from "./product-description-field";
 import ProductNameField from "./product-name-field";
 import ProductWebsiteField from "./product-website-field";
 import { checkProductNameExists } from "@/actions/check-product-name-exists";
+import createNewProduct from "@/actions/createNewProduct";
 import { Button } from "@/components/ui/button";
-import { Form, FormField } from "@/components/ui/form";
 import { useNewProductFormContext } from "@/contexts/multistep-form-context";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useAuth } from "@clerk/nextjs";
+import React, { useState } from "react";
+import { toast } from "sonner";
 
-const newProductFormSchema = z.object({
-  name: z.string().min(1, "Product name is required"),
-  description: z.string().optional(),
-  website: z.string().url("Invalid URL").optional().or(z.literal("")),
-  context: z.string().optional(),
-});
-
-type NewProductForm = z.infer<typeof newProductFormSchema>;
+type FormData = {
+  name: string;
+  description: string;
+  website: string;
+  context: string;
+};
 
 const NewProductFormClient = () => {
   const { productForm, updateProductForm } = useNewProductFormContext();
@@ -28,55 +25,62 @@ const NewProductFormClient = () => {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(0);
 
-  const form = useForm<NewProductForm>({
-    resolver: zodResolver(newProductFormSchema),
-    mode: "onChange",
-    defaultValues: {
-      name: productForm.name || "",
-      description: productForm.description || "",
-      website: productForm.website || "https://",
-      context: productForm.context || "",
-    },
+  const { userId } = useAuth();
+
+  // Simple form state
+  const [formData, setFormData] = useState<FormData>({
+    name: productForm.name || "",
+    description: productForm.description || "",
+    website: productForm.website || "",
+    context: productForm.context || "",
   });
 
-  const watchedValues = form.watch();
+  // Handle input changes
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
 
-  useEffect(() => {
-    const hasChanged =
-      watchedValues.name !== productForm.name ||
-      watchedValues.description !== productForm.description ||
-      watchedValues.website !== productForm.website ||
-      watchedValues.context !== productForm.context;
-
-    if (hasChanged) {
-      updateProductForm({
-        name: watchedValues.name,
-        description: watchedValues.description,
-        website: watchedValues.website,
-        context: watchedValues.context,
-      });
+  // Validate URL
+  const isValidUrl = (url: string): boolean => {
+    if (!url || url === "") return true; // Empty is valid (optional)
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
     }
-  }, [
-    watchedValues,
-    productForm.name,
-    productForm.description,
-    productForm.website,
-    productForm.context,
-    updateProductForm,
-  ]);
+  };
+
+  // Form validation
+  const validateForm = (): boolean => {
+    if (!formData.name.trim()) {
+      setErrorMessage("Product name is required");
+      return false;
+    }
+    if (formData.website && !isValidUrl(formData.website)) {
+      setErrorMessage("Please enter a valid URL");
+      return false;
+    }
+    setErrorMessage(null);
+    return true;
+  };
 
   const steps = [
     {
       name: "name",
       title: "What's your product's name?",
       description: "This will be the name of your project on Floopr.",
-      render: (form: any, errorMessage?: string | null) => (
-        <FormField
-          name="name"
-          control={form.control}
-          render={({ field }) => (
-            <ProductNameField field={field} errorMessage={errorMessage} />
-          )}
+      render: () => (
+        <ProductNameField
+          field={{
+            value: formData.name,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("name", e.target.value),
+          }}
+          errorMessage={step === 0 ? errorMessage : null}
         />
       ),
     },
@@ -84,11 +88,14 @@ const NewProductFormClient = () => {
       name: "description",
       title: "Describe your product",
       description: "A brief description of what your product does.",
-      render: (form: any) => (
-        <FormField
-          name="description"
-          control={form.control}
-          render={({ field }) => <ProductDescriptionField field={field} />}
+      render: () => (
+        <ProductDescriptionField
+          field={{
+            value: formData.description,
+            onChange: (
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => handleInputChange("description", e.target.value),
+          }}
         />
       ),
     },
@@ -96,11 +103,14 @@ const NewProductFormClient = () => {
       name: "website",
       title: "Product's Website",
       description: "The official website or a relevant link for your product.",
-      render: (form: any) => (
-        <FormField
-          name="website"
-          control={form.control}
-          render={({ field }) => <ProductWebsiteField field={field} />}
+      render: () => (
+        <ProductWebsiteField
+          field={{
+            value: formData.website,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              handleInputChange("website", e.target.value),
+          }}
+          errorMessage={step === 2 ? errorMessage : null}
         />
       ),
     },
@@ -109,21 +119,40 @@ const NewProductFormClient = () => {
       title: "Provide some context",
       description:
         "Give Floopr some context on what you are building, so it can provide you with better feedback.",
-      render: (form: any) => (
-        <FormField
-          name="context"
-          control={form.control}
-          render={({ field }) => <ProductContextField field={field} />}
+      render: () => (
+        <ProductContextField
+          field={{
+            value: formData.context,
+            onChange: (
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => handleInputChange("context", e.target.value),
+          }}
         />
       ),
     },
   ];
 
-  async function onSubmit(values: NewProductForm) {
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (!isValidUrl(formData.website)) {
+      toast.error("Please enter a valid URL for the website.");
+      setStep(2);
+      return;
+    }
+
+    if (!validateForm()) {
+      setStep(0);
+      return;
+    }
+
     setLoading(true);
     setErrorMessage(null);
 
-    const productNameExists = await checkProductNameExists(values.name);
+    const productNameExists = await checkProductNameExists(
+      formData.name,
+      userId
+    );
     if (productNameExists) {
       setErrorMessage(
         "Product name already exists. Please choose a different name."
@@ -133,21 +162,57 @@ const NewProductFormClient = () => {
       return;
     }
 
+    // Update context with final values
+    updateProductForm({
+      name: formData.name,
+      description: formData.description,
+      website: formData.website,
+      context: formData.context,
+    });
+
     // ---- Add your product creation logic here ----
-    console.log("Form submitted successfully:", values);
+    createNewProduct(formData, userId);
+    console.log("Form submitted successfully:", formData);
     // ---------------------------------------------
 
     setLoading(false);
   }
 
-  function nextStep() {
+  function nextStep(e) {
     if (step < steps.length - 1) {
+      // Only validate name field when leaving the first step
+      if (step === 0 && !formData.name.trim()) {
+        setErrorMessage("Product name is required");
+        return;
+      }
+
+      if (step === 2 && !isValidUrl(formData.website)) {
+        toast.success("Please enter a valid URL for the website.");
+        setErrorMessage("Please enter a valid URL for the website.");
+        return;
+      }
+
+      // Clear any previous errors
+      setErrorMessage(null);
+
+      // Sync current values to context
+      updateProductForm({
+        name: formData.name,
+        description: formData.description,
+        website: formData.website,
+        context: formData.context,
+      });
+
       setStep(step + 1);
+      if (e && e.currentTarget) {
+        (e.currentTarget as HTMLButtonElement).blur();
+      }
     }
   }
 
   function prevStep() {
     if (step > 0) {
+      setErrorMessage(null); // Clear any previous errors
       setStep(step - 1);
     }
   }
@@ -157,7 +222,7 @@ const NewProductFormClient = () => {
 
   return (
     <div className="container mx-auto w-full max-w-xl px-4 sm:px-6 lg:px-8 py-12">
-      <div className="bg-background rounded-2xl shadow-lg border border-border overflow-hidden">
+      <div className="bg-background rounded-2xl shadow- border border-border overflow-hidden">
         {/* Progress Indicator */}
         <div className="w-full px-6 pt-6 pb-4">
           <div className="flex items-center justify-between mb-3">
@@ -187,39 +252,41 @@ const NewProductFormClient = () => {
             <p className="text-muted-foreground">{currentStep.description}</p>
           </div>
 
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="w-full space-y-8"
-              autoComplete="off"
-            >
-              {currentStep.render(form, errorMessage)}
+          <form
+            // onSubmit={onSubmit}
+            className="w-full space-y-8"
+            autoComplete="off"
+          >
+            {currentStep.render()}
 
-              <div className="flex w-full justify-between pt-6">
+            <div className="flex w-full justify-between pt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={prevStep}
+                disabled={step === 0}
+              >
+                Back
+              </Button>
+              {step < steps.length - 1 ? (
                 <Button
                   type="button"
-                  variant="outline"
-                  onClick={prevStep}
-                  disabled={step === 0}
+                  onClick={(e) => nextStep(e)}
+                  disabled={step === 0 && !formData.name.trim()}
                 >
-                  Back
+                  Next
                 </Button>
-                {step < steps.length - 1 ? (
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    disabled={!form.watch("name")}
-                  >
-                    Next
-                  </Button>
-                ) : (
-                  <Button type="submit" disabled={loading}>
-                    {loading ? "Creating..." : "Create Product"}
-                  </Button>
-                )}
-              </div>
-            </form>
-          </Form>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={onSubmit}
+                  disabled={loading || !formData.name.trim()}
+                >
+                  {loading ? "Creating..." : "Create Product"}
+                </Button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </div>

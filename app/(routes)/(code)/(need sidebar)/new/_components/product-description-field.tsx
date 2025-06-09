@@ -1,23 +1,28 @@
 import { Textarea } from "@/components/ui/textarea";
-import { FormControl, FormDescription, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 
-const ProductDescriptionField = ({ field }) => (
-  <FormItem>
-    <div className="flex items-center gap-2">
-      <FormLabel>Product Description</FormLabel>
-    </div>
-    <FormControl>
-      <Textarea
-        placeholder="Enter product description"
-        className="min-h-[120px]"
-        {...field}
-      />
-    </FormControl>
-    <FormDescription>
+interface ProductDescriptionFieldProps {
+  field: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  };
+}
+
+const ProductDescriptionField = ({ field }: ProductDescriptionFieldProps) => (
+  <div className="space-y-2">
+    <label htmlFor="product-description" className="text-sm font-medium">
+      Product Description
+    </label>
+    <Textarea
+      id="product-description"
+      placeholder="Enter product description"
+      className="min-h-[120px]"
+      value={field.value}
+      onChange={field.onChange}
+    />
+    <p className="text-sm text-muted-foreground">
       Describe your product's features and benefits
-    </FormDescription>
-    <FormMessage />
-  </FormItem>
+    </p>
+  </div>
 );
 
 export default ProductDescriptionField;

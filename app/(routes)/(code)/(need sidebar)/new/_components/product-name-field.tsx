@@ -1,26 +1,31 @@
-import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-const ProductNameField = ({ field, errorMessage }) => (
-  <FormItem>
-    <FormLabel>Product Name</FormLabel>
-    <FormControl>
-      <Input placeholder="Enter product name" {...field} />
-    </FormControl>
-    <FormDescription>
+interface ProductNameFieldProps {
+  field: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  };
+  errorMessage?: string | null;
+}
+
+const ProductNameField = ({ field, errorMessage }: ProductNameFieldProps) => (
+  <div className="space-y-2">
+    <label htmlFor="product-name" className="text-sm font-medium">
+      Product Name
+    </label>
+    <Input
+      id="product-name"
+      placeholder="Enter product name"
+      value={field.value}
+      onChange={field.onChange}
+    />
+    <p className="text-sm text-muted-foreground">
       Give your product a clear, descriptive name
-    </FormDescription>
-    <FormMessage />
+    </p>
     {errorMessage && (
       <p className="text-destructive text-sm font-medium">{errorMessage}</p>
     )}
-  </FormItem>
+  </div>
 );
 
 export default ProductNameField;
