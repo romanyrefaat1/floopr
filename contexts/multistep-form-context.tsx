@@ -1,7 +1,6 @@
 "use client";
 
 import debounce from "lodash.debounce";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import React, {
   createContext,
   ReactNode,
@@ -71,37 +70,12 @@ interface ProductFormContextProviderProps {
   children: ReactNode;
 }
 
-const serializeFormData = (data: Product) =>
-  encodeURIComponent(JSON.stringify(data));
-
-const deserializeFormData = (s: string | null): Product => {
-  if (!s) return defaultProduct;
-  try {
-    return JSON.parse(decodeURIComponent(s));
-  } catch {
-    return defaultProduct;
-  }
-};
-
 export function ProductFormContextProvider({
   children,
 }: ProductFormContextProviderProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [product, setProduct] = React.useState<Product>(defaultProduct);
 
-  const formParam = searchParams.get("formData");
-  const initialProduct = formParam
-    ? deserializeFormData(formParam)
-    : defaultProduct;
-  const [product, setProduct] = React.useState<Product>(initialProduct);
-
-  useEffect(() => {
-    const params = new URLSearchParams();
-    params.set("formData", serializeFormData(product));
-    window.history.replaceState({}, "", `${pathname}?${params}`);
-  }, [product, pathname]);
-
-  const debouncedUpdater = useRef(
+  const debouncedUpdater = React.useRef(
     debounce((values: Partial<Product>) => {
       setProduct((prev) => {
         const newProduct = { ...prev };
@@ -115,14 +89,14 @@ export function ProductFormContextProvider({
     }, 300)
   ).current;
 
-  const updateProductForm = useCallback(
+  const updateProductForm = React.useCallback(
     (values: Partial<Product>) => {
       debouncedUpdater(values);
     },
     [debouncedUpdater]
   );
 
-  useEffect(() => () => debouncedUpdater.cancel(), [debouncedUpdater]);
+  React.useEffect(() => () => debouncedUpdater.cancel(), [debouncedUpdater]);
 
   return (
     <NewProductFormContext.Provider

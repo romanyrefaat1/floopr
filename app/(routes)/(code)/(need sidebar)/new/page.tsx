@@ -1,6 +1,5 @@
-import { redirect } from "next/navigation";
+import NewProductFormClient from "./_components/NewProductFormClient";
 
-export default function New() {
-    redirect("/new/step-one");
-  return null;
+export default function NewProductPage() {
+  return <NewProductFormClient />;
 }
