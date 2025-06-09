@@ -109,7 +109,20 @@ export const GuidedOnboardingProvider = ({
 }) => {
   const [steps] = useState<GuidedOnboardingStep[]>(defaultSteps);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isActive, setActive] = useState(true);
+  const [isActive, setActive] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("onboardingActive");
+      return stored !== null ? stored === "true" : false;
+    }
+    return false;
+  });
+
+  // Keep localStorage in sync when isActive changes
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("onboardingActive", String(isActive));
+    }
+  }, [isActive]);
 
   const goToStep = (step: number) => setCurrentStep(step);
   const nextStep = () =>
