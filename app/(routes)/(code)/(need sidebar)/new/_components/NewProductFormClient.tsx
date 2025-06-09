@@ -9,6 +9,8 @@ import createNewProduct from "@/actions/createNewProduct";
 import { Button } from "@/components/ui/button";
 import { useNewProductFormContext } from "@/contexts/multistep-form-context";
 import { useAuth } from "@clerk/nextjs";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -222,6 +224,11 @@ const NewProductFormClient = () => {
 
   return (
     <div className="container mx-auto w-full max-w-xl px-4 sm:px-6 lg:px-8 py-12">
+      <Link href="/home">
+        <Button variant="ghost" className="mb-6">
+          <ArrowLeft />
+        </Button>
+      </Link>
       <div className="bg-background rounded-2xl shadow- border border-border overflow-hidden">
         {/* Progress Indicator */}
         <div className="w-full px-6 pt-6 pb-4">
