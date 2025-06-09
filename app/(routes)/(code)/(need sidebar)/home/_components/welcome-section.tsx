@@ -68,7 +68,7 @@ const WelcomeSection = () => {
               </Link>
 
               <Link
-                href="/new/step-one"
+                href="/new"
                 className="w-full sm:w-auto"
                 id="create-new-product-button"
               >

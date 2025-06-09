@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar";
+import GuidedOnboardingPopover from "@/components/onboarding/GuidedOnboardingPopover";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { GuidedOnboardingProvider } from "@/contexts/onboarding/onboarding-context";
 import { ThemeProvider } from "next-themes";
@@ -20,6 +21,9 @@ export default async function PageLayout({ children, modal }) {
                 {children}
               </main>
             </div>
+            <GuidedOnboardingPopover stepIndex={2} />
+            <GuidedOnboardingPopover stepIndex={3} />
+            <GuidedOnboardingPopover stepIndex={4} />
           </GuidedOnboardingProvider>
         </SidebarProvider>
         {modal}

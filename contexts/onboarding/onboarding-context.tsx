@@ -10,7 +10,17 @@ export type GuidedOnboardingStep = {
   title: string;
   description: string;
   placement?: "top" | "bottom" | "left" | "right";
-  // Optionally, add more fields for actions, etc.
+  desktopPlacement?: "top" | "bottom" | "left" | "right"; // desktop-specific placement
+  /**
+   * Optional translation offsets for the popover, in pixels.
+   * Example: { top: -20, left: 10 }
+   */
+  translate?: Partial<{
+    top: number;
+    left: number;
+    right: number;
+    bottom: number;
+  }>;
 };
 
 export type GuidedOnboardingContextType = {
@@ -20,6 +30,7 @@ export type GuidedOnboardingContextType = {
   nextStep: () => void;
   prevStep: () => void;
   isActive: boolean;
+  setCurrentStep: (step: number) => void;
   setActive: (active: boolean) => void;
 };
 
@@ -32,8 +43,59 @@ const defaultSteps: GuidedOnboardingStep[] = [
     description:
       "Click here to start by creating your first product. This is the first step to using Floopr.",
     placement: "bottom",
+    desktopPlacement: "bottom", // default to same as placement
   },
-  // Add more steps as needed
+  {
+    id: "create-product-form",
+    route: "/new",
+    targetId: "create-new-product-form",
+    title: "Fill in these information, please! 📝",
+    description:
+      "Please fill in these inputs so we can duplicate your product into its own board.",
+    placement: "top",
+    desktopPlacement: "right", // right on desktop
+    translate: {
+      top: 40,
+    },
+  },
+  {
+    id: "widgets-popover",
+    route: "/products/[productId]",
+    targetId: "components-tab",
+    title: "Woohoo, you created a product! 🎉",
+    description:
+      "Now let's add some widgets to your product. Click here to open the widgets tab.",
+    placement: "left",
+    desktopPlacement: "bottom", // desktop
+    // translate: {
+    //   top: 40,
+    // },
+  },
+  {
+    id: "float-button-button",
+    route: "/products/[productId]",
+    targetId: "add-float-button",
+    title: "Let's embed a floating button!",
+    description:
+      "Click here to customize the Float Button and embed it into your own website.",
+    placement: "bottom",
+    desktopPlacement: "bottom", // desktop
+    // translate: {
+    //   top: 40,
+    // },
+  },
+  {
+    id: "widgets-all-components",
+    route: "/products/[productId]",
+    targetId: "all-components-tab",
+    title: "Click here to see all components!",
+    description: "Click here to see all the widgets Floopr offers.",
+    placement: "right",
+    desktopPlacement: "bottom", // desktop
+    // translate: {
+    //   top: 40,
+    // },
+  },
 ];
 
 const GuidedOnboardingContext = createContext<
@@ -47,7 +109,7 @@ export const GuidedOnboardingProvider = ({
 }) => {
   const [steps] = useState<GuidedOnboardingStep[]>(defaultSteps);
   const [currentStep, setCurrentStep] = useState(0);
-  const [isActive, setActive] = useState(false);
+  const [isActive, setActive] = useState(true);
 
   const goToStep = (step: number) => setCurrentStep(step);
   const nextStep = () =>
@@ -62,6 +124,7 @@ export const GuidedOnboardingProvider = ({
         goToStep,
         nextStep,
         prevStep,
+        setCurrentStep,
         isActive,
         setActive,
       }}

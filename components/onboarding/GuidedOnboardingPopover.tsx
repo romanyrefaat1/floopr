@@ -8,16 +8,47 @@ interface GuidedOnboardingPopoverProps {
   waitMs?: number; // Optional timeout in ms before showing popover
 }
 
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = React.useState(false);
+  React.useEffect(() => {
+    function check() {
+      setIsDesktop(window.matchMedia("(min-width: 1024px)").matches);
+    }
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return isDesktop;
+}
+
 const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
   stepIndex,
   waitMs = 0,
 }) => {
-  const { steps, currentStep, isActive, nextStep, prevStep, setActive } =
-    useGuidedOnboarding();
+  const {
+    steps,
+    currentStep,
+    setCurrentStep,
+    isActive,
+    nextStep,
+    prevStep,
+    setActive,
+  } = useGuidedOnboarding();
   const step = steps[stepIndex];
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const [visible, setVisible] = useState(false);
   const popoverRef = useRef<HTMLDivElement>(null);
+  const isDesktop = useIsDesktop();
+
+  // Use desktopPlacement if on desktop, otherwise placement
+  const placement =
+    isDesktop && step.desktopPlacement
+      ? step.desktopPlacement
+      : step.placement || "bottom";
+
+  useEffect(() => {
+    setCurrentStep(stepIndex);
+  }, [stepIndex]);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
@@ -61,10 +92,48 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
     position: "fixed",
     zIndex: 10001, // Higher than overlay (10000) and target (10000)
     pointerEvents: "auto",
-    left: targetRect.left + targetRect.width / 2,
-    top: targetRect.bottom + spacing,
-    transform: "translate(-50%, 0)",
   };
+
+  // Set initial positioning based on placement
+  if (placement === "top") {
+    style.left = targetRect.left + targetRect.width / 2;
+    style.top = targetRect.top - spacing;
+    style.transform = "translate(-50%, -100%)";
+  } else if (placement === "left") {
+    style.left = targetRect.left - spacing;
+    style.top = targetRect.top + targetRect.height / 2;
+    style.transform = "translate(-100%, -50%)";
+  } else if (placement === "right") {
+    style.left = targetRect.right + spacing;
+    style.top = targetRect.top + targetRect.height / 2;
+    style.transform = "translate(0, -50%)";
+  } else {
+    // Default: bottom placement
+    style.left = targetRect.left + targetRect.width / 2;
+    style.top = targetRect.bottom + spacing;
+    style.transform = "translate(-50%, 0)";
+  }
+
+  // Apply translate overrides if present - FIXED VERSION
+  if (step.translate) {
+    if (typeof step.translate.top === "number") {
+      style.top =
+        (typeof style.top === "number" ? style.top : 0) + step.translate.top;
+    }
+    if (typeof step.translate.left === "number") {
+      style.left =
+        (typeof style.left === "number" ? style.left : 0) + step.translate.left;
+    }
+    if (typeof step.translate.right === "number") {
+      style.left =
+        (typeof style.left === "number" ? style.left : 0) -
+        step.translate.right;
+    }
+    if (typeof step.translate.bottom === "number") {
+      style.top =
+        (typeof style.top === "number" ? style.top : 0) - step.translate.bottom;
+    }
+  }
 
   // Arrow positioning and rotation
   let arrowStyle: React.CSSProperties = {
@@ -74,9 +143,7 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
     borderStyle: "solid",
   };
 
-  if (step.placement === "top") {
-    style.top = targetRect.top - spacing;
-    style.transform = "translate(-50%, -100%)";
+  if (placement === "top") {
     // Arrow pointing down
     arrowStyle = {
       ...arrowStyle,
@@ -86,10 +153,7 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
       borderWidth: "6px 6px 0 6px",
       borderColor: "white transparent transparent transparent",
     };
-  } else if (step.placement === "left") {
-    style.left = targetRect.left - spacing;
-    style.top = targetRect.top + targetRect.height / 2;
-    style.transform = "translate(-100%, -50%)";
+  } else if (placement === "left") {
     // Arrow pointing right
     arrowStyle = {
       ...arrowStyle,
@@ -99,10 +163,7 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
       borderWidth: "6px 0 6px 6px",
       borderColor: "transparent transparent transparent white",
     };
-  } else if (step.placement === "right") {
-    style.left = targetRect.right + spacing;
-    style.top = targetRect.top + targetRect.height / 2;
-    style.transform = "translate(0, -50%)";
+  } else if (placement === "right") {
     // Arrow pointing left
     arrowStyle = {
       ...arrowStyle,
@@ -113,8 +174,7 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
       borderColor: "transparent white transparent transparent",
     };
   } else {
-    // Default: bottom placement
-    // Arrow pointing up
+    // Default: bottom placement - Arrow pointing up
     arrowStyle = {
       ...arrowStyle,
       top: -6,
@@ -150,12 +210,12 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
     0 ${targetRect.top - 8}px
   )`,
         }}
-        onClick={(e) => e.stopPropagation()} // Prevent click-through
+        // onClick={(e) => e.stopPropagation()} // Prevent click-through
       />
 
       {/* Popover */}
       <div ref={popoverRef} className="fade-in" style={style}>
-        <div className="relative max-w-xs w-64 p-3 shadow-lg border bg-white rounded-lg transition-all duration-200 ease-out backdrop-blur-md bg-white/90">
+        <div className="relative max-w-xs w-64 p-3 shadow-lg border bg-white rounded-lg transition-all duration-200 ease-out backdrop-blur-md pt-8 bg-white/90">
           {/* Skip button at top right */}
           <button
             className="absolute top-2 right-2 px-2 py-1 text-xs rounded bg-gray-100 hover:bg-gray-200 text-gray-700"
@@ -171,18 +231,18 @@ const GuidedOnboardingPopover: React.FC<GuidedOnboardingPopoverProps> = ({
             style={{
               ...arrowStyle,
               borderColor:
-                step.placement === "top"
+                placement === "top"
                   ? "#e5e7eb transparent transparent transparent"
-                  : step.placement === "left"
+                  : placement === "left"
                   ? "transparent transparent transparent #e5e7eb"
-                  : step.placement === "right"
+                  : placement === "right"
                   ? "transparent #e5e7eb transparent transparent"
                   : "transparent transparent #e5e7eb transparent",
               zIndex: -1,
-              ...(step.placement === "top" && { bottom: -7 }),
-              ...(step.placement === "left" && { right: -7 }),
-              ...(step.placement === "right" && { left: -7 }),
-              ...(step.placement === "bottom" && { top: -7 }),
+              ...(placement === "top" && { bottom: -7 }),
+              ...(placement === "left" && { right: -7 }),
+              ...(placement === "right" && { left: -7 }),
+              ...(placement === "bottom" && { top: -7 }),
             }}
           />
           {/* Content */}

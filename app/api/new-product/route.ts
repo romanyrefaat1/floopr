@@ -1,4 +1,5 @@
 import { db } from "@/lib/firebase";
+import { auth } from "@clerk/nextjs/server";
 import { randomUUID } from "crypto";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { NextResponse } from "next/server";
@@ -7,6 +8,15 @@ export async function POST(req: Request) {
   let productDocId;
   try {
     const { productData } = await req.json();
+
+    const userId = auth();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: `User is not authenticated.`, success: false },
+        { status: 401 }
+      );
+    }
 
     if (!productData) {
       return NextResponse.json(

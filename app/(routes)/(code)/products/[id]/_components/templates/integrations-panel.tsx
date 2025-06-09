@@ -1,6 +1,7 @@
 import { Product } from "../../page";
 import AllComponents from "../tabs/feedback-integrations-tab/all-components";
 import YourComponents from "../tabs/feedback-integrations-tab/your-components";
+import AllComponentsTrigger from "./all-components-trigger";
 import { SkeletonCard } from "@/components/skeletons/skeleton-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,15 +72,7 @@ export default function IntegrationsPanel({
           >
             Your Components
           </TabsTrigger>
-          <TabsTrigger
-            value="all-components"
-            className={cn(
-              "data-[state=active]:bg-primary",
-              "data-[state=active]:text-primary-foreground"
-            )}
-          >
-            All Components
-          </TabsTrigger>
+          <AllComponentsTrigger />
         </TabsList>
 
         <TabsContent value="your-components" className="space-y-4 h-full">

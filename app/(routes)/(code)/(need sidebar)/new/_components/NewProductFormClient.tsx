@@ -11,6 +11,7 @@ import { useNewProductFormContext } from "@/contexts/multistep-form-context";
 import { useAuth } from "@clerk/nextjs";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -28,6 +29,7 @@ const NewProductFormClient = () => {
   const [step, setStep] = useState(0);
 
   const { userId } = useAuth();
+  const router = useRouter();
 
   // Simple form state
   const [formData, setFormData] = useState<FormData>({
@@ -151,18 +153,18 @@ const NewProductFormClient = () => {
     setLoading(true);
     setErrorMessage(null);
 
-    const productNameExists = await checkProductNameExists(
-      formData.name,
-      userId
-    );
-    if (productNameExists) {
-      setErrorMessage(
-        "Product name already exists. Please choose a different name."
-      );
-      setStep(0); // Go back to the name field if it exists
-      setLoading(false);
-      return;
-    }
+    // const productNameExists = await checkProductNameExists(
+    //   formData.name,
+    //   userId
+    // );
+    // if (productNameExists) {
+    //   setErrorMessage(
+    //     "Product name already exists. Please choose a different name."
+    //   );
+    //   setStep(0); // Go back to the name field if it exists
+    //   setLoading(false);
+    //   return;
+    // }
 
     // Update context with final values
     updateProductForm({
@@ -172,10 +174,17 @@ const NewProductFormClient = () => {
       context: formData.context,
     });
 
-    // ---- Add your product creation logic here ----
-    createNewProduct(formData, userId);
-    console.log("Form submitted successfully:", formData);
-    // ---------------------------------------------
+    const response = await createNewProduct(formData, userId);
+
+    const productDocId = response.productDocId;
+
+    if (!productDocId) {
+      setErrorMessage("Failed to create product. Please try again.");
+      setLoading(false);
+      return;
+    }
+
+    router.push(`/products/${productDocId}`);
 
     setLoading(false);
   }
@@ -229,7 +238,10 @@ const NewProductFormClient = () => {
           <ArrowLeft />
         </Button>
       </Link>
-      <div className="bg-background rounded-2xl shadow- border border-border overflow-hidden">
+      <div
+        className="bg-background rounded-2xl shadow- border border-border overflow-hidden"
+        id="create-new-product-form"
+      >
         {/* Progress Indicator */}
         <div className="w-full px-6 pt-6 pb-4">
           <div className="flex items-center justify-between mb-3">
