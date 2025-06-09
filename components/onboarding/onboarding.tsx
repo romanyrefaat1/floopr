@@ -64,14 +64,14 @@ const steps = [
   },
   {
     // image: "/onboarding-step4.png",
-    title: "Let's get you started! 🤟",
+    title: "Woohoo, let's get you started! 🤟",
     description:
       "Now that you understand the basics, let's set up your account and get you started with Floopr!",
   },
 ];
 
 export default function Onboarding() {
-  const [isCanOnboardingOpen, setIsCanOnboardingOpen] = useState(true);
+  const [isCanOnboardingOpen, setIsCanOnboardingOpen] = useState(false);
   const [step, setStep] = useState(0);
   const { user } = useUser();
 

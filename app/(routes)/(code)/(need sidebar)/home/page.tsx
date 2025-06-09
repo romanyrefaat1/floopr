@@ -6,6 +6,7 @@ import LoaderSpinner from "@/components/loader-spinner";
 import Onboarding from "@/components/onboarding/onboarding";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { GuidedOnboardingProvider } from "@/contexts/onboarding/onboarding-context";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -18,46 +19,47 @@ const Home = async () => {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto ml-4 md:ml-0 px-2 sm:px-4 py-6 md:py-4 space-y-8">
-      <Onboarding />
-      <div className="md:hidden">
-        <SidebarTrigger />
-      </div>
-      <SyncUser />
-      <Suspense
-        fallback={
-          <div className="flex gap-2 justify-between flex-col">
-            <Skeleton className="w-[250px] max-w-full h-[40px]" />
-            <Skeleton className="w-[320px] max-w-full h-[70px]" />
-          </div>
-        }
-      >
-        <WelcomeSection />
-      </Suspense>
-      <div className="">
-        <div className="mt-8">
-          <QuickStats userId={userId} />
+    <GuidedOnboardingProvider>
+      <div className="w-full max-w-7xl mx-auto ml-4 md:ml-0 px-2 sm:px-4 py-6 md:py-4 space-y-8">
+        <Onboarding />
+        <div className="md:hidden">
+          <SidebarTrigger />
         </div>
-
-        <div className="grid mt-[25px] grid-cols-1 lg:grid-cols-1 gap-8">
-          <div className="flex flex-col gap-5">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold tracking-tight">
-                Recent Products
-              </h2>
-              <Link
-                href={`/products`}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer"
-              >
-                View all
-              </Link>
+        <SyncUser />
+        <Suspense
+          fallback={
+            <div className="flex gap-2 justify-between flex-col">
+              <Skeleton className="w-[250px] max-w-full h-[40px]" />
+              <Skeleton className="w-[320px] max-w-full h-[70px]" />
             </div>
-            <Suspense fallback={<LoaderSpinner className="min-h-[300px]" />}>
-              <LatestProducts numOfCols={1} userId={userId} maxProducts={4} />
-            </Suspense>
+          }
+        >
+          <WelcomeSection />
+        </Suspense>
+        <div className="">
+          <div className="mt-8">
+            <QuickStats userId={userId} />
           </div>
 
-          {/* <div className="flex flex-col gap-5">
+          <div className="grid mt-[25px] grid-cols-1 lg:grid-cols-1 gap-8">
+            <div className="flex flex-col gap-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold tracking-tight">
+                  Recent Products
+                </h2>
+                <Link
+                  href={`/products`}
+                  className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+                >
+                  View all
+                </Link>
+              </div>
+              <Suspense fallback={<LoaderSpinner className="min-h-[300px]" />}>
+                <LatestProducts numOfCols={1} userId={userId} maxProducts={4} />
+              </Suspense>
+            </div>
+
+            {/* <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold tracking-tight">Analytics Overview</h2>
             <span className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
@@ -68,9 +70,9 @@ const Home = async () => {
             <AnalyticsOverview userId={userId} />
           </Suspense>
         </div> */}
-        </div>
+          </div>
 
-        {/* <div className="flex flex-col gap-5">
+          {/* <div className="flex flex-col gap-5">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold tracking-tight">Product Analysis</h2>
           <span className="text-sm text-muted-foreground hover:text-primary transition-colors cursor-pointer">
@@ -79,8 +81,9 @@ const Home = async () => {
         </div>
         <AnalyzeProducts />
       </div> */}
+        </div>
       </div>
-    </div>
+    </GuidedOnboardingProvider>
   );
 };
 

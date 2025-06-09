@@ -1,5 +1,6 @@
 "use client";
 
+import GuidedOnboardingPopover from "@/components/onboarding/GuidedOnboardingPopover";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -65,12 +66,19 @@ const WelcomeSection = () => {
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/new/step-one" className="w-full sm:w-auto">
+
+              <Link
+                href="/new/step-one"
+                className="w-full sm:w-auto"
+                id="create-new-product-button"
+              >
                 <Button className="w-full sm:w-auto">
                   <Plus className="mr-1 h-2 w-2" />
                   Create Product
                 </Button>
               </Link>
+
+              <GuidedOnboardingPopover stepIndex={0} waitMs={200} />
             </div>
           </div>
         </div>
