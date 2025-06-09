@@ -3,7 +3,9 @@ import QuickStats from "./_components/quick-stats";
 import WelcomeSection from "./_components/welcome-section";
 import SyncUser from "./sync-user";
 import LoaderSpinner from "@/components/loader-spinner";
+import Onboarding from "@/components/onboarding/onboarding";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -17,11 +19,21 @@ const Home = async () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto ml-4 md:ml-0 px-2 sm:px-4 py-6 md:py-4 space-y-8">
+      <Onboarding />
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
       <SyncUser />
-      <WelcomeSection />
+      <Suspense
+        fallback={
+          <div className="flex gap-2 justify-between flex-col">
+            <Skeleton className="w-[250px] max-w-full h-[40px]" />
+            <Skeleton className="w-[320px] max-w-full h-[70px]" />
+          </div>
+        }
+      >
+        <WelcomeSection />
+      </Suspense>
       <div className="">
         <div className="mt-8">
           <QuickStats userId={userId} />
