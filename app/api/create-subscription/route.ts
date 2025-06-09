@@ -31,20 +31,23 @@ export async function POST(request: Request) {
     let trialDays: number | undefined = undefined;
     if (plan === "annual") {
       productId = process.env.DODO_BUILDER_ANNUAL_PRODUCT_ID_LIVE!;
+      trialDays = 7;
     } else {
       // monthly is default
-      trialDays = 7;
+      trialDays = 5;
     }
 
-    // 3) create subscription
+    // 3) create subscription with fallback billing info
+    const billingInfo = {
+      city: "N/A",
+      country: "EG",
+      state: "N/A",
+      street: "N/A",
+      zipcode: "00000",
+    };
+
     const subscription = await client.subscriptions.create({
-      billing: {
-        city: "Cairo",
-        country: "EG",
-        state: "Cairo Governorate",
-        street: "123 Nile St",
-        zipcode: "11511",
-      },
+      billing: billingInfo,
       customer: { customer_id: custId },
       product_id: productId,
       quantity: 1,

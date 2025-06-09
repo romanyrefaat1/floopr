@@ -5,16 +5,12 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { ContentOfPricingModal, usePricing } from "@/context/pricing-context";
-import { cn } from "@/lib/utils";
-import { useUser, RedirectToSignIn, RedirectToSignUp } from "@clerk/nextjs";
-import { Check, HelpCircle, Sparkles, XCircle, X, Loader2 } from "lucide-react";
+import { useUser, RedirectToSignUp } from "@clerk/nextjs";
+import { Check, X, Loader2 } from "lucide-react";
 import { Work_Sans } from "next/font/google";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -132,7 +128,13 @@ const planFeatures = {
 
 const font = Work_Sans({ subsets: ["latin"] });
 
-export default function PricingModal({error=null, content=null}: {error: string|null, content: ContentOfPricingModal|null}) {
+export default function PricingModal({
+  error = null,
+  content = null,
+}: {
+  error: string | null;
+  content: ContentOfPricingModal | null;
+}) {
   const { isModalOpen, closeModal, selectedPlan, setSelectedPlan } =
     usePricing();
   const { user, isLoaded, isSignedIn } = useUser();
@@ -201,29 +203,26 @@ export default function PricingModal({error=null, content=null}: {error: string|
 
   return (
     <Dialog open={isModalOpen} onOpenChange={closeModal}>
-      <div className="relative w-full h-full">
- 
-</div>
+      <div className="relative w-full h-full"></div>
 
       <DialogContent className="max-w-4xl overflow-hidden w-full p-0 bg-popover/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-floopr-purple">
-      
         <ScrollArea className="md:h-[90vh] relative md:w-0vw] h-[80vh] w-full">
+          <div className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white dark:from-black/10 via-purple-200 dark:via-purple-600/30 to-transparent z-[-1]" />
 
-        <div 
-    className="absolute top-0 left-0 opacity-50 w-full h-full bg-gradient-to-br from-white dark:from-black/10 via-purple-200 dark:via-purple-600/30 to-transparent z-[-1]" 
-  />
-          
           <div className="flex flex-col md:flex-row md:items-center md:justify-between px-8 pt-8 pb-2">
             <div className="relative">
+              {error && (
+                <p className="text-destructive-foreground text-sm mb-4 bg-destructive p-2 rounded">
+                  {error}
+                </p>
+              )}
 
-              {error &&<p className="text-destructive-foreground text-sm mb-4 bg-destructive p-2 rounded">
-                {error}
-                </p>}
-
-              <DialogTitle className={`text-5xl {font.className} md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-2`}
-              style={{lineHeight: `1em`}}
+              <DialogTitle
+                className={`text-5xl {font.className} md:text-7xl font-bold text-foreground leading-tight tracking-tight mb-2`}
+                style={{ lineHeight: `1em` }}
               >
-                We remove the noise. <br className="hidden md:block" /> You focus on what matters.
+                We remove the noise. <br className="hidden md:block" /> You
+                focus on what matters.
               </DialogTitle>
               <DialogDescription className="text-lg text-muted-foreground">
                 Choose the plan that best fits your needs
@@ -264,7 +263,9 @@ export default function PricingModal({error=null, content=null}: {error: string|
                   const isBuilderPlan = plans[0].key.startsWith("builder");
                   const isFreePlan = plans[0].key === "free";
 
-                  let icon = <Check className="h-5 w-5 text-primary shrink-0" />;
+                  let icon = (
+                    <Check className="h-5 w-5 text-primary shrink-0" />
+                  );
                   let textStyle = "text-sm text-muted-foreground";
 
                   if (isInProgress) {
@@ -272,8 +273,11 @@ export default function PricingModal({error=null, content=null}: {error: string|
                       <Loader2 className="h-5 w-5 text-warn-foreground animate-spin shrink-0" />
                     );
                     textStyle = "text-sm text-warn-foreground italic";
-                  } else if (isBuilderPlan) { // This branch is effectively unused for the Free plan
-                    icon = <Check className="h-5 w-5 text-accent-foreground shrink-0" />;
+                  } else if (isBuilderPlan) {
+                    // This branch is effectively unused for the Free plan
+                    icon = (
+                      <Check className="h-5 w-5 text-accent-foreground shrink-0" />
+                    );
                   } else if (isFreePlan) {
                     const freePlanRedXFeatures = [
                       "10 AI chatbot messages/mo",
@@ -282,7 +286,9 @@ export default function PricingModal({error=null, content=null}: {error: string|
                       "2 product",
                     ];
                     if (freePlanRedXFeatures.includes(feature)) {
-                      icon = <X className="h-5 w-5 text-destructive shrink-0" />;
+                      icon = (
+                        <X className="h-5 w-5 text-destructive shrink-0" />
+                      );
                     }
                     // Other free plan features keep the default primary check icon
                   }
@@ -295,70 +301,78 @@ export default function PricingModal({error=null, content=null}: {error: string|
                   );
                 })}
               </ul>
-              <Button className="w-full mt-6" variant="secondary" onClick={handleFree}>
+              <Button
+                className="w-full mt-6"
+                variant="secondary"
+                onClick={handleFree}
+              >
                 {content?.plans.free.button ?? "Get Started"}
               </Button>
             </div>
             {/* Builder Plan */}
             <div className="glass-card relative select-none p-8 rounded-3xl border-2 border-floopr-purple flex flex-col">
-            <div className="absolute inset-0 z-[-1] top-0 left-0 w-full rounded-3xl h-full bg-foreground opacity-10" />
+              <div className="absolute inset-0 z-[-1] top-0 left-0 w-full rounded-3xl h-full bg-foreground opacity-10" />
 
-<div className="relative z-10">
-              <div className="absolute -top-3 right-4 bg-floopr-purple text-white px-3 py-1 rounded-full text-sm">
-                Recommended
-              </div>
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-2">Builder</h3>
-                <p className="text-muted-foreground mb-4">
-                  For indie devs & small teams
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="text-4xl font-bold leading-tight tracking-tighter">
-                    {builderPlan?.priceLabel}
+              <div className="relative z-10">
+                <div className="absolute -top-3 right-4 bg-floopr-purple text-white px-3 py-1 rounded-full text-sm">
+                  Recommended
+                </div>
+                <div className="mb-8">
+                  <h3 className="text-2xl font-bold mb-2">Builder</h3>
+                  <p className="text-muted-foreground mb-4">
+                    For indie devs & small teams
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <div className="text-4xl font-bold leading-tight tracking-tighter">
+                      {builderPlan?.priceLabel}
+                    </div>
+                    {selectedPlan === "annual" && (
+                      <span className="ml-2 bg-destructive text-destructive-foreground py-0.5 text-xs px-1 font-semibold rounded-full">
+                        17% off
+                      </span>
+                    )}
                   </div>
-                  {selectedPlan === "annual" && (
-                    <span className="ml-2 bg-destructive text-destructive-foreground py-0.5 text-xs px-1 font-semibold rounded-full">
-                      17% off
-                    </span>
-                  )}
+                  <div className="text-sm text-muted-foreground">
+                    {selectedPlan === "annual" ? "/year" : "/month"}
+                  </div>
                 </div>
-                <div className="text-sm text-muted-foreground">
-                  {selectedPlan === "annual" ? "/year" : "/month"}
+                <div className="space-y-4 mb-8">
+                  {builderPlan?.features.map((feature, fIndex) => {
+                    const isInProgress = feature.includes("(In progress)");
+                    let icon = (
+                      <Check className="h-5 w-5 text-accent-foreground shrink-0" />
+                    );
+                    let textStyle = "text-sm text-muted-foreground";
+
+                    if (isInProgress) {
+                      icon = (
+                        <Loader2 className="h-5 w-5 text-warn-foreground animate-spin shrink-0" />
+                      );
+                      textStyle = "text-sm text-warn-foreground italic";
+                    }
+
+                    return (
+                      <li key={fIndex} className="flex items-start gap-3">
+                        {icon}
+                        <span className={textStyle}>{feature}</span>
+                      </li>
+                    );
+                  })}
                 </div>
+                <Button
+                  className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white select-pointer cursor-pointer"
+                  onClick={handleBuilder}
+                  disabled={loading}
+                >
+                  {loading
+                    ? "Processing..."
+                    : selectedPlan === "monthly"
+                    ? "Start 7-day free trial"
+                    : "Get Started"}
+                </Button>
               </div>
-              <div className="space-y-4 mb-8">
-                {builderPlan?.features.map((feature, fIndex) => {
-                  const isInProgress = feature.includes("(In progress)");
-                  let icon = <Check className="h-5 w-5 text-accent-foreground shrink-0" />;
-                  let textStyle = "text-sm text-muted-foreground";
-
-                  if (isInProgress) {
-                    icon = <Loader2 className="h-5 w-5 text-warn-foreground animate-spin shrink-0" />;
-                    textStyle = "text-sm text-warn-foreground italic";
-                  }
-
-                  return (
-                    <li key={fIndex} className="flex items-start gap-3">
-                      {icon}
-                      <span className={textStyle}>{feature}</span>
-                    </li>
-                  );
-                })}
-              </div>
-              <Button
-                className="w-full bg-floopr-purple hover:bg-floopr-purple-dark text-white select-pointer cursor-pointer"
-                onClick={handleBuilder}
-                disabled={loading}
-              >
-                {loading
-                  ? "Processing..."
-                  : selectedPlan === "monthly"
-                  ? "Start 7-day free trial"
-                  : "Get Started"}
-              </Button>
             </div>
-            </div>
-            </div>
+          </div>
         </ScrollArea>
       </DialogContent>
     </Dialog>
