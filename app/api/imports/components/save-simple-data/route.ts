@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   try {
     const reqData = await req.json();
     const data = {
-      ...data,
+      ...reqData,
       feedback: {
         title: reqData.title || "Untitled",
         content: reqData.content || null,
@@ -23,10 +23,10 @@ export async function POST(req: NextRequest) {
     const result = await addSimpleFeedback(data);
     return NextResponse.json(result, { headers: corsHeaders });
   } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: error?.message || error,
-    });
+    return NextResponse.json(
+      { success: false, error: error?.message || error },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
 

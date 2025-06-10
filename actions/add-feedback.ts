@@ -11,6 +11,7 @@ import {
   getDoc,
   increment,
 } from "firebase/firestore";
+import getProductData from "./get-product-data";
 
 export type SimpleFeedbackItemData = {
   feedback: {
@@ -115,17 +116,24 @@ export async function addComponentFeedback({
 }: AddComponentFeedbackProps) {
   try {
     // 1. Fetch user data to check limits
-    if (!userInfo?.userId) {
-      console.error("addComponentFeedback: User ID missing");
-      return { success: false, error: "Authentication required." };
+    if (!productId) {
+      console.error("addComponentFeedback: Product ID missing");
+      return { success: false, error: "Product ID is required." };
     }
 
-    const userRef = doc(db, "users", userInfo.userId);
+    const ownerId = getProductData(productId)?.ownerId;
+
+    if (!ownerId) {
+      console.error("addComponentFeedback: Owner ID missing");
+      return { success: false, error: `Owner ID is required. Product ID: ${productId}, Owner ID: ${ownerId}` };
+    }
+
+    const userRef = doc(db, "users", ownerId);
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
       console.error(
-        `addComponentFeedback: User document not found for ID: ${userInfo.userId}`
+        `addComponentFeedback: User document not found for ID: ${ownerId}`
       );
       return { success: false, error: "User data not found." };
     }
