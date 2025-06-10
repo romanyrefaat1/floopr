@@ -113,14 +113,14 @@ export default function FlooprFeedbackModalTimeout({
         const response = await fetch(`${loadUrl}?${params}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          cache: "force-cache", // This will now work with GET
+          cache: "force-cache", // This only works with GET
         });
 
         const data = await response.json();
         if (!response.ok) {
           throw new Error(data.error || "Failed to load component data");
         }
-        setIsOpen(true);
+        // setIsOpen(true);
         setLoaded(true);
         setTitle(data.title);
         setRatings(data.ratings);
@@ -176,6 +176,11 @@ export default function FlooprFeedbackModalTimeout({
       const data = await response.json();
       if (!response.ok)
         throw new Error(data.error || "Failed to save feedback");
+
+      inputs.forEach((input) => {
+        input.value = "";
+      });
+      
       toast.success("Thank you for your feedback!");
       onClose();
     } catch (error) {

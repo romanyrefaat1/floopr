@@ -50,6 +50,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
         <FlooprFloatButtonScript />
+        <Script
+      // src="https://floopr.vercel.app/embeds/modal-timeout-bundle_floopr_feedback_embed.js"
+      src="http://localhost:3000/embeds/modal-timeout-bundle_floopr_feedback_embed.js"
+      defer
+      data-api-key="f6e62a27-a969-4d10-a51c-2879c6d46cc7"
+      data-product-id="cbb94f24-d36f-48ea-86a4-cb5b8ba99c77"
+      data-component-id="7573b5bd-df93-423f-a570-695a26de9721"
+      data-api-base-url="https://floopr.vercel.app"
+      strategy="lazyOnload"
+
+    ></Script>
 
         {/* <FlooprFloatingFeedbackButton
         isModal={false}

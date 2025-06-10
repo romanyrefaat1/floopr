@@ -123,7 +123,7 @@ export async function addComponentFeedback({
       return { success: false, error: "Product ID is required." };
     }
 
-    const ownerId = getProductData(productId)?.ownerId;
+    const {ownerId }=await  getProductData(productId);
 
     if (!ownerId) {
       console.error("addComponentFeedback: Owner ID missing");
