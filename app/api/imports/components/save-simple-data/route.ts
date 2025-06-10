@@ -1,5 +1,6 @@
+// app/api/imports/components/save-simple-data/route.ts
+import { NextResponse } from "next/server";
 import { addSimpleFeedback } from "@/actions/add-feedback";
-import { NextRequest, NextResponse } from "next/server";
 
 const corsHeaders = {
   "Content-Type": "application/json",
@@ -8,23 +9,45 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-export async function POST(req: NextRequest) {
+export async function POST(req: Request) {
   try {
     const reqData = await req.json();
-    const data = {
-      ...reqData,
+
+    // Destructure the nested payload
+    const {
+      feedback: { title, content, isRich, type } = {},
+      productId,
+      componentId,
+      componentRefId,
+      isComponent,
+      componentType,
+      userInfo,
+    } = reqData;
+
+    // Re-build the shape your addSimpleFeedback expects:
+    const payload = {
+      productId,
+      componentId,
+      componentRefId,
+      isComponent,
+      componentType,
+      userInfo,
       feedback: {
-        title: reqData.title || "Untitled",
-        content: reqData.content || null,
-        isRich: reqData.isRich || false,
+        title: title || "Untitled",
+        content: content ?? null,
+        isRich: isRich ?? false,
+        type,
       },
     };
 
-    const result = await addSimpleFeedback(data);
+    console.log("Saving feedback:", payload);
+    const result = await addSimpleFeedback(payload);
+
     return NextResponse.json(result, { headers: corsHeaders });
-  } catch (error) {
+  } catch (error: any) {
+    console.error("Error in save-simple-data:", error);
     return NextResponse.json(
-      { success: false, error: error?.message || error },
+      { success: false, error: error.message || error },
       { status: 500, headers: corsHeaders }
     );
   }
