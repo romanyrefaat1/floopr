@@ -22,9 +22,11 @@ export async function POST(req: Request) {
       isComponent,
       componentType,
       userInfo,
+      currPage
     } = reqData;
+    console.log("Received data:", reqData);
 
-    // Re-build the shape your addSimpleFeedback expects:
+    // Re-building the shape that addSimpleFeedback expects:
     const payload = {
       productId,
       componentId,
@@ -38,11 +40,13 @@ export async function POST(req: Request) {
         isRich: isRich ?? false,
         type,
       },
+      currPage
     };
 
     console.log("Saving feedback:", payload);
     const result = await addSimpleFeedback(payload);
 
+    console.log("Result from addSimpleFeedback:", result);
     return NextResponse.json(result, { headers: corsHeaders });
   } catch (error: any) {
     console.error("Error in save-simple-data:", error);

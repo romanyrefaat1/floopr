@@ -430,12 +430,15 @@ export default function FlooprFloatingFeedbackButton({
   };
 
   const handleSubmit = async () => {
+    console.log("Will make is submit to true")
     setIsSubmittin(true);
     if (!title || !description || !selectedType) {
+      console.log("Missing fields:", title, description, selectedType)
       toast.error("Please fill in all fields");
       setIsSubmittin(false);
       return;
     }
+    console.log("Fields occur! Will start try catch block")
 
     try {
       const feedbackData = {
@@ -455,7 +458,9 @@ export default function FlooprFloatingFeedbackButton({
           userId,
           profilePicture: userImage ?? null,
         },
+        currPage: window.location.href || null,
       };
+      console.log("Will pass this to save-simple-data:", feedbackData)
 
       const res = await fetch(
         `${baseUrl}/api/imports/components/save-simple-data`,
@@ -466,6 +471,7 @@ export default function FlooprFloatingFeedbackButton({
         }
       );
       const result = await res.json();
+      console.log("Result from save-simple-data:", result)
 
       if (result.success) {
         setIsSubmitted(true);

@@ -87,11 +87,11 @@ export default function FeedbackItem({
     type: ``,
   };
 
-  if (!isComponent) {
+  // if (!isComponent) {
     myData.title = title || "No Title";
     myData.content = content;
-  }
-  if (isComponent) {
+  // }
+  if (isComponent && componentName === "modal-time") {
     console.log(`is component true feedbackData:`, feedbackData);
     myData.title = feedbackData.inputs[0].value;
     myData.content = feedbackData.inputs[1]?.value || `No description`;

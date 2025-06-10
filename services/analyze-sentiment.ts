@@ -1,6 +1,8 @@
 // Client-side code to call the sentiment analysis endpoint
 export async function analyzeSentiment(text) {
   try {
+    // const baseUrl = "http://localhost:3000"
+    const baseUrl = "https://floopr.app"
     // Don't analyze if text is empty or too short
     if (!text || text.length < 5) {
       return {
@@ -10,7 +12,7 @@ export async function analyzeSentiment(text) {
       };
     }
 
-    const response = await fetch("/api/ml/sentiment", {
+    const response = await fetch(`${baseUrl}/api/ml/sentiment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

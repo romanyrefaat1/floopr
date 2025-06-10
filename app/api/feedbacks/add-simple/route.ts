@@ -31,14 +31,22 @@ type AddSimpleFeedbackRequestBody = {
 export async function POST(request: NextRequest) {
   try {
     const { userId: clerkId } = auth();
-    const user = await currentUser(); // Get full user details for username/profilePicture
+    let user = await currentUser(); // Get full user details for username/profilePicture
 
     // if (!clerkId || !user) {
     //   return NextResponse.json({ error: "Authentication required." }, { status: 401 });
     // }
 
     const body: AddSimpleFeedbackRequestBody = await request.json();
-    const { feedback, productId, componentRefId } = body;
+    const { feedback, productId, componentRefId, userInfo, currPage } = body;
+
+    if (userInfo && (userInfo.username || userInfo.userId || userInfo.profilePicture)) {
+      user = {
+        username: userInfo.username || "Anonymous",
+        userId: userInfo.userId || null,
+        profilePicture: userInfo.profilePicture || null,
+      };
+    }
 
     if (!feedback || !productId) {
       return NextResponse.json({ error: "Missing feedback data or productId." }, { status: 400 });
@@ -72,17 +80,23 @@ export async function POST(request: NextRequest) {
     // 4. Add feedback document
     const feedbackId = crypto.randomUUID();
     const userInfoForFeedback = {
-      userId: clerkId,
-      username: user.username || user.firstName || user.emailAddresses[0]?.emailAddress.split('@')[0] || "Anonymous",
-      profilePicture: user.imageUrl || null,
+      userId: user?.id || user?.userId || null,
+      username:
+        user?.username ??
+        user?.firstName ??
+        (user?.emailAddresses?.[0]?.emailAddress
+          ? user.emailAddresses[0].emailAddress.split('@')[0]
+          : "Anonymous"),
+      profilePicture: user?.imageUrl ?? user?.profilePicture ?? null,
     };
+    console.log(userInfoForFeedback, user, sentimentResult, feedback)
 
     await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
-      type: feedback.type || "other",
+      type: feedback?.type || "other",
       sentiment: {
-        sentiment: sentimentResult.sentiment,
-        score: sentimentResult.score,
-        text: sentimentResult.text,
+        sentiment: sentimentResult?.sentiment ?? null,
+        score: sentimentResult?.score ?? null,
+        text: sentimentResult?.text ?? "",
       },
       topic: topicClassification,
       socialData: { likes: { count: 0, data: [] }, comments: { count: 0, data: [] } },
@@ -99,12 +113,14 @@ export async function POST(request: NextRequest) {
       componentRefId: componentRefId || null,
       isComponent: !!componentRefId, // Example logic
       userInfo: userInfoForFeedback,
+      // ...(currPage && { referenceLink: currPage }),
+      referenceLink: currPage || null,
     });
 
     // 5. Increment feedback count for the user in Firebase
     // clerkId is guaranteed by the auth check at the beginning.
     // getUserPricing ensures the user document exists.
-    const userDocRef = doc(db, "users", clerkId);
+    const userDocRef = doc(db, "users", ownerId);
     await updateDoc(userDocRef, {
       feedback_count_monthly: increment(1),
     });

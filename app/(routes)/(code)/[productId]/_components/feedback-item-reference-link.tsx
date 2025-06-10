@@ -20,8 +20,9 @@ function FeedbackItemReferenceLinkInner({
     const fetchLink = async () => {
       const docRef = doc(db, "products", productId, "feedbacks", feedbackId);
       const snap = await getDoc(docRef);
-      if (snap.exists() && snap.data().referenceLink) {
-        setReferenceLink(snap.data().referenceLink);
+      const snapData = await snap.data()
+      if (snap.exists() && snapData?.referenceLink) {
+        setReferenceLink(snapData.referenceLink);
       } else {
         setReferenceLink(`No reference link found`);
       }
