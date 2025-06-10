@@ -24,8 +24,8 @@ export function FlooprFloatButtonScript() {
   return (
     <Script
       id="floopr-feedback"
-      // src="https://floopr.vercel.app/embeds/float-button-bundle_floopr_feedback_embed.js"
-      src="http://localhost:3000/embeds/float-button-bundle_floopr_feedback_embed.js"
+      src="https://floopr.vercel.app/embeds/float-button-bundle_floopr_feedback_embed.js"
+      // src="http://localhost:3000/embeds/float-button-bundle_floopr_feedback_embed.js"
       data-api-key={process.env.NEXT_PUBLIC_PA_FLOAT_BUTTON_FLOOPR_API_KEY}
       // data-api-key={`3386cd05-0436-4b4c-8549-2d97d074b562`}
       data-product-id="31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
