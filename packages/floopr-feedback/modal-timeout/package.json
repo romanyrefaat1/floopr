@@ -1,0 +1,6 @@
+{
+    "scripts": {
+      "build-webpack-component": "npx webpack --config webpack.config.js"
+    }
+  }
+  

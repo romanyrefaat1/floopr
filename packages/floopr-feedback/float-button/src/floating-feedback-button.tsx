@@ -459,7 +459,7 @@ export default function FlooprFloatingFeedbackButton({
 
       const res = await fetch(
         `${baseUrl}/api/imports/components/save-simple-data`,
-        {
+      {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(feedbackData),

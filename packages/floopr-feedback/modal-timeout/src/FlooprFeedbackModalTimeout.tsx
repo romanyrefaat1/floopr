@@ -76,7 +76,8 @@ export default function FlooprFeedbackModalTimeout({
   const [buttonText, setButtonText] = useState("Submit");
   const [isDarkMode, setIsDarkMode] = useState(true);
 
-  const apiBaseUrl = `http://localhost:3000`;
+  // const apiBaseUrl = `http://localhost:3000`;
+  const apiBaseUrl = `https://www.floopr.app`;
 
   // Construct API URLs based on apiBaseUrl
   const loadUrl = apiBaseUrl
