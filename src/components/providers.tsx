@@ -27,10 +27,8 @@ export function FlooprFloatButtonScript() {
       src="https://floopr.vercel.app/embeds/float-button-bundle_floopr_feedback_embed.js"
       // src="http://localhost:3000/embeds/float-button-bundle_floopr_feedback_embed.js"
       data-api-key={process.env.NEXT_PUBLIC_PA_FLOAT_BUTTON_FLOOPR_API_KEY}
-      // data-api-key={`3386cd05-0436-4b4c-8549-2d97d074b562`}
       data-product-id="31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
       data-component-id="6e5b7f46-0488-4a85-8564-3f323338471f"
-      // data-component-id="286d1027-49d8-4c95-93db-5593fc2368fd"
       {...(userInfo && {
         "data-user-info": JSON.stringify(userInfo),
       })}
@@ -50,17 +48,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
         <FlooprFloatButtonScript />
-        <Script
-      // src="https://floopr.vercel.app/embeds/modal-timeout-bundle_floopr_feedback_embed.js"
-      src="http://localhost:3000/embeds/modal-timeout-bundle_floopr_feedback_embed.js"
-      defer
-      data-api-key="f6e62a27-a969-4d10-a51c-2879c6d46cc7"
-      data-product-id="cbb94f24-d36f-48ea-86a4-cb5b8ba99c77"
-      data-component-id="7573b5bd-df93-423f-a570-695a26de9721"
-      data-api-base-url="https://floopr.vercel.app"
-      strategy="lazyOnload"
-
-    ></Script>
 
         {/* <FlooprFloatingFeedbackButton
         isModal={false}

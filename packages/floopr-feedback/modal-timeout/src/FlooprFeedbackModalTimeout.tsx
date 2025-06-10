@@ -35,6 +35,7 @@ export default function FlooprFeedbackModalTimeout({
   parent,
 }: FlooprFeedbackModalTimeoutProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false); // For animation control
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [animate, setAnimate] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
@@ -141,7 +142,11 @@ export default function FlooprFeedbackModalTimeout({
   // If timeoutDuration is set, open the modal after the specified time
   useEffect(() => {
     if (timeoutDuration >= 0) {
-      const timer = setTimeout(() => setIsOpen(true), timeoutDuration * 1000);
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        // Trigger animation after a brief delay
+        setTimeout(() => setShowModal(true), 10);
+      }, timeoutDuration * 1000);
       return () => clearTimeout(timer);
     }
   }, [timeoutDuration]);
@@ -194,12 +199,17 @@ export default function FlooprFeedbackModalTimeout({
   };
 
   const handleClose = () => {
-    setSelectedRating(null);
-    setAnimate(null);
-    setError(null);
-    setIsSubmitting(false);
-    setIsOpen(false);
-    onClose();
+    // Animate out
+    setShowModal(false);
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+      setSelectedRating(null);
+      setAnimate(null);
+      setError(null);
+      setIsSubmitting(false);
+      setIsOpen(false);
+      onClose();
+    }, 200);
   };
 
   // Early return if not loaded or not open
@@ -231,7 +241,12 @@ export default function FlooprFeedbackModalTimeout({
         "dark:[--muted:0,0%,15%] dark:[--muted-foreground:0,0%,65%]",
         "dark:[--border:0,0%,20%] dark:[--input:0,0%,20%]",
         "dark:[--primary:250,89%,68%] dark:[--primary-foreground:0,0%,100%]",
-        "bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
+        "bg-[hsl(var(--background))] text-[hsl(var(--foreground))]",
+        // Animation classes
+        "transition-all duration-300 ease-out",
+        showModal 
+          ? "opacity-100 scale-100 translate-y-0" 
+          : "opacity-0 scale-90 translate-y-4"
       )}
     >
       <div className="flex justify-between items-center mb-8">
@@ -240,7 +255,7 @@ export default function FlooprFeedbackModalTimeout({
         </h2>
         <button
           onClick={handleClose}
-          className="bg-floopr-purple hover:bg-floopr-purple-dark text-foreground shadow-md hover:shadow-lg transition-all"
+          className="text-foreground shadow-md hover:shadow-lg transition-all"
           aria-label="Close"
         >
           <X size={20} />
@@ -350,7 +365,12 @@ export default function FlooprFeedbackModalTimeout({
   // Render as portal if parent is provided, otherwise full-page modal
   if (parent && parent.current) {
     return createPortal(
-      <div className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+      <div 
+        className={cn(
+          "absolute inset-0 z-50 flex items-center justify-center bg-black transition-opacity duration-300",
+          showModal ? "bg-opacity-30" : "bg-opacity-0"
+        )}
+      >
         {modalContent}
       </div>,
       parent.current
@@ -358,7 +378,12 @@ export default function FlooprFeedbackModalTimeout({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+    <div 
+      className={cn(
+        "fixed inset-0 z-50 flex items-center justify-center bg-black transition-opacity duration-300",
+        showModal ? "bg-opacity-30" : "bg-opacity-0"
+      )}
+    >
       <div className="max-w-md w-full">{modalContent}</div>
     </div>
   );

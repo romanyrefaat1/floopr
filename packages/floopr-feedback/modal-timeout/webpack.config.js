@@ -9,7 +9,7 @@ export default {
   output: {
     path: __dirname + "/dist",
     filename: "modal-timeout-bundle_floopr_feedback_embed.js",
-    iife: true,                // ← corrected
+    iife: true,
   },
   mode: "production",
   module: {
