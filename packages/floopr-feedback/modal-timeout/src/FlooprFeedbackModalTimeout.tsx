@@ -176,6 +176,7 @@ export default function FlooprFeedbackModalTimeout({
           isComponent: true,
           rating: selectedRating || 0,
           userInfo: userInfoNormalized,
+          referenceLink: window.location.href || null,
         }),
       });
       const data = await response.json();

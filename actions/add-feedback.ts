@@ -111,6 +111,7 @@ export async function addSimpleFeedback(
  */
 export async function addComponentFeedback({
   inputs,
+  referenceLink,
   productId,
   componentRefId,
   rating,
@@ -178,6 +179,7 @@ export async function addComponentFeedback({
         likes: { count: 0, data: [] },
         comments: { count: 0, data: [] },
       },
+      referenceLink,
     };
 
     // Get the collection reference
