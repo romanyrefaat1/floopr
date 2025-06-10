@@ -179,7 +179,7 @@ export async function addComponentFeedback({
         likes: { count: 0, data: [] },
         comments: { count: 0, data: [] },
       },
-      referenceLink,
+      ...(referenceLink ? { referenceLink } : {}),
     };
 
     // Get the collection reference
