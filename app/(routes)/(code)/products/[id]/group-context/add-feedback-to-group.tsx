@@ -13,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import RichTextViewer from "@/components/ui/rich-text-viewer";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { db } from "@/lib/firebase";
 import {
@@ -148,7 +149,7 @@ export default function AddFeedbackToGroup({
         .map((input: any) => `${input.label}: ${input.value}`)
         .join(" ");
     }
-    return feedback.content || "";
+    return typeof feedback.content === "string" ? feedback.content : "";
   };
 
   const handleAddSelectedFeedback = async () => {
@@ -228,9 +229,10 @@ export default function AddFeedbackToGroup({
 
       <Dialog open={showAddModal} onOpenChange={setShowAddModal}>
         <DialogContent className="max-w-4xl h-[80vh] overflow-hidden flex flex-col">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Plus className="h-5 w-5" /> Add Feedback to {groupTitle}
+          <DialogHeader className="mb-4 text-left">
+            <DialogTitle className="flex items-center text-2xl gap-2">
+              <Plus className="h-5 w-5 hidden md:inline-block" /> Add Feedback
+              to group: {groupTitle}
             </DialogTitle>
           </DialogHeader>
 
@@ -291,6 +293,8 @@ export default function AddFeedbackToGroup({
                       const isSelected = selectedFeedback.has(item.feedbackId);
                       const content = formatContent(item.feedback);
 
+                      // const content = typeof myFormatedContent === "string" ? (myFormatedContent.length> 0 ? myFormatedContent: "") : typeof myFormatedContent === "object" && myFormatedContent !== null;
+
                       return (
                         <div
                           key={item.feedbackId}
@@ -323,7 +327,8 @@ export default function AddFeedbackToGroup({
                                 )}
                               </div>
                               <p className="text-xs text-muted-foreground line-clamp-2">
-                                {content}
+                                {JSON.stringify(content)}
+                                {/* <RichTextViewer content={content} /> */}
                               </p>
                               <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                 {item.userInfo?.username && (
