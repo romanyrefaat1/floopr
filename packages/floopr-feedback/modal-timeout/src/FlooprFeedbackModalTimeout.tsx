@@ -76,6 +76,8 @@ export default function FlooprFeedbackModalTimeout({
   ]);
   const [buttonText, setButtonText] = useState("Submit");
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [rounded, setRounded] = useState(12);
+  const [padding, setPadding] = useState(9);
 
   // const apiBaseUrl = `http://localhost:3000`;
   const apiBaseUrl = `https://www.floopr.app`;
@@ -99,6 +101,37 @@ export default function FlooprFeedbackModalTimeout({
     userId: userInfo.userId || "",
     username: userInfo.username || "",
     profilePicture: userInfo.profilePicture || "",
+  };
+
+  const getRoundedValue = (size: "xs" | "sm" | "md" | "lg" | "xl") => {
+    if (size === "xs") {
+      return 6;
+    } else if (size === "sm") {
+      return 10;
+    } else if (size === "md") {
+      return 16;
+    } else if (size === "lg") {
+      return 20;
+    } else if (size === "xl") {
+      return 22;
+    } else {
+      return 16;
+    }
+  };
+  const getPaddingValue = (size: "xs" | "sm" | "md" | "lg" | "xl") => {
+    if (size === "xs") {
+      return 10;
+    } else if (size === "sm") {
+      return 12;
+    } else if (size === "md") {
+      return 18;
+    } else if (size === "lg") {
+      return 22;
+    } else if (size === "xl") {
+      return 24;
+    } else {
+      return 18;
+    }
   };
 
   // Load component data
@@ -129,6 +162,8 @@ export default function FlooprFeedbackModalTimeout({
         setIsDarkMode(data.isDark);
         setButtonText(data.buttonText);
         setTimeoutDuration(data.timeoutDuration || 0);
+        setPadding(getPaddingValue(data.padding) || getPaddingValue("md"));
+        setRounded(getRoundedValue(data.rounded) || getRoundedValue("md"));
         // If styles are provided, set them
         if (data.style) setStyles(data.style);
       } catch (error) {
@@ -186,7 +221,7 @@ export default function FlooprFeedbackModalTimeout({
       inputs.forEach((input) => {
         input.value = "";
       });
-      
+
       toast.success("Thank you for your feedback!");
       onClose();
     } catch (error) {
@@ -230,36 +265,48 @@ export default function FlooprFeedbackModalTimeout({
   // Modal content
   const modalContent = (
     <div
+      style={{
+        padding: `${padding}px`,
+        borderRadius: `${rounded}px`,
+        // 6 xs
+        // 10 sm
+        // 16 md
+        // 20 lg
+        // 22 xm
+      }}
       className={cn(
         isDarkMode ? "dark" : "", // Only add 'dark' class when isDarkMode is true
-        "p-6 w-full h-full rounded-lg shadow-lg",
+        "w-full h-full shadow-lg",
+
         // Conditional CSS variables based on isDarkMode
-        isDarkMode ? [
-          // Dark mode variables
-          "[--background:0,0%,15%] [--foreground:0,0%,100%]",
-          "[--muted:0,0%,15%] [--muted-foreground:0,0%,65%]",
-          "[--border:0,0%,20%] [--input:0,0%,20%]",
-          "[--primary:250,89%,68%] [--primary-foreground:0,0%,100%]",
-          "[--primary-muted:257,36%,65%]"
-        ] : [
-          // Light mode variables
-          "[--background:0,0%,100%] [--foreground:0,0%,0%]",
-          "[--muted:0,0%,96%] [--muted-foreground:0,0%,45%]",
-          "[--border:0,0%,90%] [--input:0,0%,90%]",
-          "[--primary:250,89%,68%] [--primary-foreground:0,0%,100%]",
-          "[--primary-muted:257,36%,65%]"
-        ],
+        isDarkMode
+          ? [
+              // Dark mode variables
+              "[--background:0,0%,15%] [--foreground:0,0%,100%]",
+              "[--muted:0,0%,15%] [--muted-foreground:0,0%,65%]",
+              "[--border:0,0%,20%] [--input:0,0%,20%]",
+              "[--primary:250,89%,68%] [--primary-foreground:0,0%,100%]",
+              "[--primary-muted:257,36%,65%]",
+            ]
+          : [
+              // Light mode variables
+              "[--background:0,0%,100%] [--foreground:0,0%,0%]",
+              "[--muted:0,0%,96%] [--muted-foreground:0,0%,45%]",
+              "[--border:0,0%,90%] [--input:0,0%,90%]",
+              "[--primary:250,89%,68%] [--primary-foreground:0,0%,100%]",
+              "[--primary-muted:257,36%,65%]",
+            ],
         "bg-[hsl(var(--background))] text-[hsl(var(--foreground))]",
         // Animation classes
         "transition-all duration-300 ease-out",
-        showModal 
-          ? "opacity-100 scale-100 translate-y-0" 
+        showModal
+          ? "opacity-100 scale-100 translate-y-0"
           : "opacity-0 scale-90 translate-y-4"
       )}
     >
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-[hsl(var(--foreground))]">
-          {title}
+          {title}dd
         </h2>
         <button
           onClick={handleClose}
@@ -373,7 +420,7 @@ export default function FlooprFeedbackModalTimeout({
   // Render as portal if parent is provided, otherwise full-page modal
   if (parent && parent.current) {
     return createPortal(
-      <div 
+      <div
         className={cn(
           "absolute inset-0 z-50 flex items-center justify-center bg-black transition-opacity duration-300",
           showModal ? "bg-opacity-30" : "bg-opacity-0"
@@ -386,13 +433,21 @@ export default function FlooprFeedbackModalTimeout({
   }
 
   return (
-    <div 
+    <div
       className={cn(
         "fixed inset-0 z-50 flex items-center justify-center bg-black transition-opacity duration-300",
         showModal ? "bg-opacity-30" : "bg-opacity-0"
       )}
     >
-      <div className="max-w-md w-full">{modalContent}</div>
+      <div
+        className={cn("max-w-md w-full")}
+        style={{
+          padding: padding + "px",
+          borderRadius: rounded + "px",
+        }}
+      >
+        {modalContent}
+      </div>
     </div>
   );
 }

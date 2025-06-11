@@ -1,7 +1,9 @@
 import { AccordionSection } from "./sections/accordion-section";
 import { ButtonSection } from "./sections/button-section";
 import { InputsSection } from "./sections/inputs/inputs-section";
+import PaddingSection from "./sections/padding-section";
 import { RatingsSection } from "./sections/rating/rating-section";
+import RoundedSection from "./sections/rounded-section";
 import { TimeoutSection } from "./sections/timeoutSection";
 import { TitleSection } from "./sections/title-section";
 // Adding missing import for ModalConfig
@@ -40,13 +42,12 @@ export const ReviewStep = ({
   isDark: boolean;
 }) => (
   <Accordion type="single" collapsible className="space-y-4">
-    <AccordionSection value="timeout" title="Timeout Duration">
-      <TimeoutSection
-        timeoutDuration={config.timeoutDuration}
-        onChange={(value) => onConfigChange("timeoutDuration", value)}
+    <AccordionSection value="title" title="Modal Title">
+      <TitleSection
+        title={config.title}
+        onChange={(value) => onConfigChange("title", value)}
       />
     </AccordionSection>
-
     <AccordionSection value="ratings" title="Rating Options">
       <RatingsSection
         ratings={config.ratings}
@@ -64,6 +65,12 @@ export const ReviewStep = ({
         onRemoveInput={onRemoveInput}
       />
     </AccordionSection>
+    <AccordionSection value="timeout" title="Timeout Duration">
+      <TimeoutSection
+        timeoutDuration={config.timeoutDuration}
+        onChange={(value) => onConfigChange("timeoutDuration", value)}
+      />
+    </AccordionSection>
 
     <AccordionSection value="submit" title="Submit Button">
       <ButtonSection
@@ -71,13 +78,19 @@ export const ReviewStep = ({
         onChange={(value) => onConfigChange("buttonText", value)}
       />
     </AccordionSection>
-
-    <AccordionSection value="title" title="Modal Title">
-      <TitleSection
-        title={config.title}
-        onChange={(value) => onConfigChange("title", value)}
+    <AccordionSection value="padding" title="Padding value">
+      <PaddingSection
+        padding={config.padding}
+        onChange={(value) => onConfigChange("padding", value)}
       />
     </AccordionSection>
+    <AccordionSection value="rounded" title="Roundness value">
+      <RoundedSection
+        rounded={config.rounded}
+        onChange={(value) => onConfigChange("rounded", value)}
+      />
+    </AccordionSection>
+
     <AccordionSection value="theme" title="Theme">
       <div className="border rounded-lg p-4 mt-4">
         <h3 className="text-lg font-medium mb-2">Modal Theme</h3>

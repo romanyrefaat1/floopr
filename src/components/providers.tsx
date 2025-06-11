@@ -4,6 +4,7 @@ import { useScrollAnimation } from "../hooks/use-scroll-animation";
 import PricingInitializer from "./PricingInitializer";
 import { PricingProvider } from "@/context/pricing-context";
 import { AuthProvider } from "@/contexts/auth-context";
+import FlooprFeedbackModalTimeout from "@/packages/floopr-feedback/modal-timeout/src/FlooprFeedbackModalTimeout";
 import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
@@ -48,6 +49,22 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
         <FlooprFloatButtonScript />
+        {/* <Script
+          src="http://localhost:3000/embeds/modal-timeout-bundle_floopr_feedback_embed.js"
+          defer
+          data-api-key="f6e62a27-a969-4d10-a51c-2879c6d46cc7"
+          data-product-id="cbb94f24-d36f-48ea-86a4-cb5b8ba99c77"
+          data-component-id="7573b5bd-df93-423f-a570-695a26de9721"
+          data-api-base-url="https://floopr.vercel.app"
+        ></Script> */}
+
+        <FlooprFeedbackModalTimeout
+          apiKey="0d4ac2b0-3436-45bf-9953-4610d503be2a"
+          productId="cbb94f24-d36f-48ea-86a4-cb5b8ba99c77"
+          componentId="8839f1c0-5b5a-4bac-97b8-919f98505c1b"
+          ImageComponent="img"
+          LinkComponent="a"
+        />
 
         {/* <FlooprFloatingFeedbackButton
         isModal={false}

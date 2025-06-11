@@ -24,6 +24,8 @@ type ModalTimeoutProps = {
   onOpenChange?: (open: boolean) => void;
   timeoutDuration?: number;
   isDarkMode: boolean;
+  rounded: number;
+  padding: number;
 };
 
 // Modal component
@@ -37,6 +39,8 @@ export default function ModalTimeout({
   onOpenChange,
   timeoutDuration = 0,
   isDarkMode = false,
+  rounded,
+  padding,
 }: ModalTimeoutProps) {
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [feedback, setFeedback] = useState("");
@@ -80,10 +84,14 @@ export default function ModalTimeout({
   const modalContent = (
     <div
       className={cn(
-        "p-6 w-full h-full rounded-lg shadow-lg",
+        "p-6 w-full h-full rounded-lg shadow-lg transition",
         // Apply background and text colors
         "bg-[hsl(var(--background))] text-[hsl(var(--foreground))]"
       )}
+      style={{
+        padding: `${padding || 12}px`,
+        borderRadius: `${rounded || 10}px`,
+      }}
     >
       {/* Title and close button */}
       <div className="flex justify-between items-center mb-8">

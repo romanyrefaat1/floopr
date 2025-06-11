@@ -2,12 +2,6 @@
 
 import React, { useState, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { X } from 'lucide-react';
-import { createPortal } from 'react-dom';
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion"
 
 import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -16,19 +10,6 @@ import { ReviewStep } from './review-step';
 import { PreviewStep } from './preview-step';
 import { ProductStyle } from '@/app/(routes)/(code)/[productId]/page';
 import { usePricing } from '@/context/pricing-context';
-
-// Type definitions
-type Rating = {
-  label: string;
-  emoji: string;
-  value: number;
-};
-
-type InputField = {
-  label: string;
-  placeholder: string;
-};
-
 
 // Configuration and preview component
 export type FeedbackModalConfiguratorProps = {
@@ -201,6 +182,38 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
     }
   };
 
+  const getPaddingValue = (size: "xs" | "sm" | "md" | "lg" | "xl") => {
+    if (size === "xs") {
+      return 10;
+    } else if (size === "sm") {
+      return 12;
+    } else if (size === "md") {
+      return 18;
+    } else if (size === "lg") {
+      return 22;
+    } else if (size === "xl") {
+      return 24;
+    } else {
+      return 18;
+    }
+  };
+
+   const getRoundedValue = (size: "xs" | "sm" | "md" | "lg" | "xl") => {
+    if (size === "xs") {
+      return 6;
+    } else if (size === "sm") {
+      return 10;
+    } else if (size === "md") {
+      return 16;
+    } else if (size === "lg") {
+      return 20;
+    } else if (size === "xl") {
+      return 22;
+    } else {
+      return 16;
+    }
+  };
+
   return (
     <div>
       <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
@@ -217,6 +230,7 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
             className={currentStep === 'preview' ? 'font-bold' : ''}
           >Preview step</TabsTrigger>
         </TabsList>
+
         <TabsContent value='review'>
         <ReviewStep
         setIsDark={setIsDark}
@@ -275,6 +289,8 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
             isOpen={inContainerModalOpen}
             onOpenChange={setInContainerModalOpen}
             timeoutDuration={modalConfig.timeoutDuration}
+            padding={getPaddingValue(modalConfig.padding)}
+            rounded={getRoundedValue(modalConfig.rounded)}
           />
         </div>
       </div>
@@ -289,6 +305,8 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
         isOpen={fullPageModalOpen}
         onOpenChange={setFullPageModalOpen}
         timeoutDuration={0}
+         padding={getPaddingValue(modalConfig.padding)}
+            rounded={getRoundedValue(modalConfig.rounded)}
       />
     </div>
   );

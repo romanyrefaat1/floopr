@@ -10,16 +10,12 @@ const corsHeaders = {
 };
 
 export async function GET(request: Request) {
-  console.log("Start: GET request to load component data");
-
   try {
     // Get URL parameters
     const url = new URL(request.url);
     const apiKey = url.searchParams.get("apiKey");
     const productId = url.searchParams.get("productId");
     const componentId = url.searchParams.get("componentId");
-
-    console.log("Params:", { apiKey, productId, componentId });
 
     // Check if required data is provided
     if (!apiKey || !productId || !componentId) {
@@ -38,7 +34,6 @@ export async function GET(request: Request) {
     );
 
     const data = response.data();
-    console.log(`Data from firestore:`, data);
 
     if (!data) {
       return NextResponse.json(
