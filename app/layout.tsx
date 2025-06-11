@@ -8,9 +8,9 @@ const font = Inter({ subsets: ["latin"] });
 // const font = Work_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Floopr - Make Customer Feedback Actionable",
+  title: "Floopr - Embed Feedback Widgets | AI‑Powered Analysis & Changelog",
   description:
-    "Collect, organize, and prioritize customer feedback all in one place. Help your team build what users really want.",
+    "Transform your product feedback into actionable insights with Floopr. Embed lightweight widgets, group responses with AI, track every change with per‑page changelogs, and iterate faster—no code bloat.",
   icons: [
     {
       rel: "icon",
