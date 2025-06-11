@@ -49,10 +49,6 @@ const Hero = () => {
 
       <div className="section-container flex flex-col lg:flex-row lg:justify-between lg:items-center lg:gap-8 px-4 md:px-6 lg:px-8">
         <div className="relative z-10 text-center lg:text-left max-w-3xl mx-auto lg:mx-0 lg:w-1/2">
-          <span className="inline-block bg-floopr-purple/10 text-floopr-purple px-4 py-2 rounded-full text-sm font-medium mb-4">
-            Beta Version
-          </span>
-
           <h1 className="text-4xl md:text-5xl lg:text-5xl font-bold mb-3 mx-auto lg:mx-0 animate-on-scroll">
             Collect, Analyze, and Manage Feedback Effortlessly
           </h1>
