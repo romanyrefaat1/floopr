@@ -58,13 +58,13 @@ export function Providers({ children }: { children: React.ReactNode }) {
           data-api-base-url="https://floopr.vercel.app"
         ></Script> */}
 
-        <FlooprFeedbackModalTimeout
+{/*         <FlooprFeedbackModalTimeout
           apiKey="0d4ac2b0-3436-45bf-9953-4610d503be2a"
           productId="cbb94f24-d36f-48ea-86a4-cb5b8ba99c77"
           componentId="8839f1c0-5b5a-4bac-97b8-919f98505c1b"
           ImageComponent="img"
           LinkComponent="a"
-        />
+        /> */}
 
         {/* <FlooprFloatingFeedbackButton
         isModal={false}
