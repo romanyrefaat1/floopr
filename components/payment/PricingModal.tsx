@@ -179,6 +179,7 @@ export default function PricingModal({
       const email = user.emailAddresses[0].emailAddress;
       const userId = user.id;
       const userName = user.fullName;
+      console.log(email, userId, userName, selectedPlan)
       const response = await fetch("/api/create-subscription", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

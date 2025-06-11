@@ -4,12 +4,11 @@ import { NextResponse } from "next/server";
 
 const client = new DodoPayments({
   bearerToken: process.env.DODO_PAYMENTS_API_KEY!, // live key
-  environment: "live", // changed from "test_mode" to "live"
 });
 
 async function ensureCustomer(email: string, name: string, reference: string) {
   try {
-    return await client.customers.retrieve(reference);
+    return await client.customers.retrieve({ customer_id: reference });
   } catch (err: any) {
     if (err.status === 404) {
       return await client.customers.create({ email, name });
@@ -21,6 +20,8 @@ async function ensureCustomer(email: string, name: string, reference: string) {
 export async function POST(request: Request) {
   try {
     const { userId, userName = "User", email, plan } = await request.json();
+
+    console.log(userId, userName, email, plan);
 
     // 1) ensure customer exists
     const customer = await ensureCustomer(email, userName, userId);
