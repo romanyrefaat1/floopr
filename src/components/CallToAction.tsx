@@ -1,12 +1,12 @@
 "use client";
 
-import JoinBetaForm from "./JoinBetaForm";
 import { Button } from "./ui/button";
-import { useUser } from "@clerk/nextjs";
+import { usePricing } from "@/context/pricing-context";
 import Link from "next/link";
 
 const CallToAction = () => {
-  const { isSignedIn } = useUser();
+  const { openModal } = usePricing();
+
   return (
     <section
       id="cta"
@@ -33,11 +33,14 @@ const CallToAction = () => {
               Start Free
             </Button>
           </Link>
-          <Link href="/pricing">
-            <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white px-8 py-6 text-lg rounded-lg w-full sm:w-auto">
-              View Pricing
-            </Button>
-          </Link>
+          {/* <Link href="/pricing"> */}
+          <Button
+            className="bg-floopr-purple hover:bg-floopr-purple-dark text-white px-8 py-6 text-lg rounded-lg w-full sm:w-auto"
+            onClick={openModal}
+          >
+            View Pricing
+          </Button>
+          {/* </Link> onClick */}
 
           {/* {isSignedIn ? (
             <>
