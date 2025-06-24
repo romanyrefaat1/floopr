@@ -7,15 +7,14 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion"
 import { cn } from "@/lib/utils"
 import useFinishedSteps from "./use-finished-steps"
-import { ScrollArea } from "../ui/scroll-area"
 
 type Step = 'create-product' | 'create-feedback' | 'create-widget' | 'embed-widget' | 'create-changelog' | 'setup-product-info';
 
 export default function NotSetUpOnboarding() {
     const [isOpen, setIsOpen] = useState(false)
-    const {steps, isLoading: stepsLoading, productIds} = useFinishedSteps()
+    const {steps, isLoading: stepsLoading, productIds, isFinished} = useFinishedSteps()
     
-    if (stepsLoading) return null;
+    if (stepsLoading || isFinished) return null;
     
     // Define the step order
     const stepOrder: Step[] = [
@@ -48,6 +47,9 @@ export default function NotSetUpOnboarding() {
                 },
                 {
                     title: "Fill the form with your product data",
+                },
+                {
+                    title: "Click Submit"
                 }
             ]
         },
@@ -58,10 +60,19 @@ export default function NotSetUpOnboarding() {
             hrefs: [`/products/${productIds[0]}`, `/${productIds[0]}`],
             steps: [
                 {
-                    title: "Click on New feedback",
+                    title: "Open your product dashboard",
                 },
                 {
-                    title: "Fill the form with your feedback data",
+                    title: "Click on View Page at the top right"
+                },
+                {
+                    title: "Click on Submit feedback",
+                },
+                {
+                    title: "Fill the form with your feedback",
+                },
+                {
+                    title: "Click Send"
                 }
             ],
         },
@@ -75,10 +86,19 @@ export default function NotSetUpOnboarding() {
                     title: "Open your product dashboard",
                 },
                 {
+                    title: "Click on Widgets",
+                },
+                {
                     title: "Click on All Components",
                 },
                 {
-                    title: "Click on Create Component",
+                    title: "Click on Add Component",
+                },
+                {
+                    title: "Name and describe your component in the form"
+                },
+                {
+                    title: "Customize the component as you need"
                 },
                 {
                     title: "Fill the form with your widget data",
@@ -91,25 +111,30 @@ export default function NotSetUpOnboarding() {
             desc: "Embed your widget to get started with Floopr",
             steps: [
                 {
-                    title: "Copy your widget code",
+                    title: "Copy your widget's script",
                 },
                 {
-                    title: "Add code to your website",
+                    title: "Add the script to your website",
                 }
             ],
         },
         {
             title: "Add your first Changelog",
             done: isTaskDone(4),
-            desc: "Add your first changelog to get started with Floopr",
+            desc: "Add your first changelog to notify your users with changes",
             steps: [
                 {
-                    title: "Click on New changelog",
-                    desc: "Click on New changelog to create a changelog",
+                    title: "Open your product dashboard",
+                },
+                {
+                    title: "Click on Changelogs",
+                },
+                {
+                    title: "Click on Add changelog",
                 },
                 {
                     title: "Fill the form with your changelog data",
-                    desc: "Fill the form with your changelog data",
+                    desc: "Note: Changelogs will be created automatically when you change the of any feedback you get"
                 }
             ],
             targetId: "new-changelog-button",
@@ -121,12 +146,14 @@ export default function NotSetUpOnboarding() {
             desc: "Setup product info to get started with Floopr",
             steps: [
                 {
-                    title: "Go to product settings",
-                    desc: "Navigate to your product settings page",
+                    title: "Open your product dashboard",
+                },
+                {
+                    title: "Click on Settings",
                 },
                 {
                     title: "Add product context and description",
-                    desc: "Fill in your product context and description fields",
+                    desc: "Note: Reload the page to see the changes",
                 }
             ],
             targetId: "product-settings-button",
@@ -164,9 +191,9 @@ export default function NotSetUpOnboarding() {
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild className="fixed bottom-4 right-4">
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button variant="outline" size={"sm"} className="flex items-center gap-2">
                     <Bell className="h-5 w-5" />
-                    <span>Get started with Floopr ({completionPercentage}%)</span>
+                    <span>{completionPercentage}%</span>
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="shadow-lg rounded-lg p-4 w-96">

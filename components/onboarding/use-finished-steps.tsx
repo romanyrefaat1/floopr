@@ -15,6 +15,16 @@ export default function useFinishedSteps() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
     const [theProductIds, setTheProductIds] = useState<string[]>([]);
+    const [isFinished, setIsFinished] = useState(false);
+
+    const stepOrder: Step[] = [
+        'create-product',
+        'create-feedback', 
+        'create-widget',
+        'embed-widget',
+        'create-changelog',
+        'setup-product-info'
+    ];
 
     useEffect(() => {
         const fetchSteps = async () => {
@@ -30,7 +40,8 @@ export default function useFinishedSteps() {
                 const q = query(collRef, where("ownerId", "==", userId));
                 const thisCount = await getCountFromServer(q);
                 const productsCount = thisCount.data().count;
-                    // get products data for other steps
+                
+                // get products data for other steps
                 const products = await getUserProducts(userId);
                 console.log("useFinishedSteps products", products);
                 
@@ -42,6 +53,7 @@ export default function useFinishedSteps() {
                 } else {
                     // If no products, no other steps can be completed
                     setSteps(completedSteps);
+                    setIsLoading(false);
                     return;
                 }
 
@@ -106,7 +118,29 @@ export default function useFinishedSteps() {
         };
 
         fetchSteps();
-    }, [user?.id]);
+    }, [user?.id, isLoaded]);
 
-    return { steps, isLoading, error, productIds: theProductIds };
+    // Update isFinished and localStorage when steps change
+    useEffect(() => {
+        const newIsFinished = steps.length === stepOrder.length;
+        setIsFinished(newIsFinished);
+        
+        // Update localStorage
+        localStorage.setItem('onboarding-2-finished', JSON.stringify(newIsFinished));
+        
+        console.log("Steps updated:", steps);
+        console.log("Is finished:", newIsFinished);
+    }, [steps]);
+
+    // Initialize from localStorage on mount
+    useEffect(() => {
+        const storedFinished = localStorage.getItem('onboarding-2-finished');
+        if (storedFinished !== null) {
+            const parsed = JSON.parse(storedFinished);
+            setIsFinished(parsed);
+            console.log("Initialized isFinished from localStorage:", parsed);
+        }
+    }, []);
+
+    return { steps, isLoading, error, productIds: theProductIds, isFinished };
 }
