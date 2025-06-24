@@ -29,29 +29,6 @@ export default function IntegrationsPanel({
 }: {
   productData: Product;
 }) {
-  const integrationTabs = [
-    {
-      id: "components",
-      label: "Components",
-      content: (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {componentCards.map((card) => (
-            <ComponentCard
-              key={card.title}
-              {...card}
-              productId={productData.docId}
-            />
-          ))}
-        </div>
-      ),
-    },
-    {
-      id: "api",
-      label: "API",
-      content: <ApiIntegrationCard productId={productData.docId} />,
-    },
-  ];
-
   return (
     <div className="space-y-6">
       <div className="mb-8">
