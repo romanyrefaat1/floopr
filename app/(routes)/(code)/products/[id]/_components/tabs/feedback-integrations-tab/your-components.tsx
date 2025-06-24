@@ -1,3 +1,4 @@
+import getAllComponentsByProductId from "@/actions/get-all-components-by-product-id";
 import ComponentCard from "../component-card";
 import { Product } from "@/contexts/multistep-form-context";
 import { db } from "@/lib/firebase";
@@ -11,10 +12,7 @@ export default async function YourComponents({
   productData: Product;
 }) {
   // fetch components
-  const response = collection(db, `products`, productId, `components`);
-  const componentsDocs = await getDocs(response);
-  const components = componentsDocs.docs || [];
-  console.log(`components docs`, components.docs);
+  const components = await getAllComponentsByProductId(productId);
 
   if (!components || components.length === 0) {
     return (

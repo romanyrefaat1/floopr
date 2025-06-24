@@ -74,7 +74,7 @@ const Hero = () => {
             </Link>
             <Link href="/home">
               <Button className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all">
-                Get Feedback Now
+                Collect Feedback Now
               </Button>
             </Link>
             {/* {userId ? (

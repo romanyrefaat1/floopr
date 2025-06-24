@@ -1,6 +1,11 @@
-import { redirect } from "next/navigation";
+import NewProductFormClient from "./_components/NewProductFormClient";
+import GuidedOnboardingPopover from "@/components/onboarding/GuidedOnboardingPopover";
 
-export default function New() {
-    redirect("/new/step-one");
-  return null;
+export default function NewProductPage() {
+  return (
+    <div>
+      <NewProductFormClient />
+      {/* <GuidedOnboardingPopover stepIndex={1} /> */}
+    </div>
+  );
 }

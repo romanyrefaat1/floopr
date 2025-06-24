@@ -1,5 +1,6 @@
 "use client";
 
+import GuidedOnboardingPopover from "@/components/onboarding/GuidedOnboardingPopover";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserButton, useUser } from "@clerk/nextjs";
@@ -9,13 +10,27 @@ import { Suspense } from "react";
 
 const WelcomeSection = () => {
   const { user, isLoaded } = useUser();
+  if (!user && !isLoaded) {
+    return (
+      <div className="flex gap-2 justify-between flex-col">
+        <Skeleton className="w-[220px] max-w-full h-[50px]" />
+        <Skeleton className="w-[270px] max-w-full h-[20px]" />
+      </div>
+    );
+  }
   if (!user) {
-    return null; // Handle the case where userId is not available
+    return null;
   }
 
   if (!isLoaded) {
     return (
-      <Suspense fallback={<Skeleton className="w-full h-[50px]" />}></Suspense>
+      // <Suspense
+      //   fallback={}
+      // ></Suspense>
+      <div className="flex gap-2 justify-between flex-col">
+        <Skeleton className="w-[250px] max-w-full h-[40px]" />
+        <Skeleton className="w-[320px] max-w-full h-[70px]" />
+      </div>
     );
   }
 
@@ -51,12 +66,19 @@ const WelcomeSection = () => {
                   <ChevronRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/new" className="w-full sm:w-auto">
+
+              <Link
+                href="/new"
+                className="w-full sm:w-auto"
+                id="create-new-product-button"
+              >
                 <Button className="w-full sm:w-auto">
-                  <Plus className="mr-2 h-4 w-4" />
-                  New Product
+                  <Plus className="mr-1 h-2 w-2" />
+                  Create Product
                 </Button>
               </Link>
+
+              {/* <GuidedOnboardingPopover stepIndex={0} waitMs={200} /> */}
             </div>
           </div>
         </div>

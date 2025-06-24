@@ -121,6 +121,7 @@ export default function ComponentCard({
                   ? `/products/${productDataFromFirestore.docId}/my-components/${componentData.componentType}/${componentData.componentData.componentId}`
                   : `/edit-component?componentTypeName=${componentData.name}&ref=${productDataFromFirestore.docId}`
               }
+              id={isYours ? "add-float-button" : ""}
             >
               <Button
                 className="w-full"

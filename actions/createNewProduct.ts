@@ -13,7 +13,9 @@ export default async function createNewProduct(
       body: JSON.stringify({ productData: data }),
     });
 
-    return response;
+    const responseData = await response.json();
+
+    return responseData;
   } catch (error) {
     console.error(error);
   }

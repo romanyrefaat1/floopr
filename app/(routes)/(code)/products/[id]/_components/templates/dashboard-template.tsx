@@ -2,7 +2,6 @@ import { GroupedFeedbackProvider } from "../../group-context/groupt-context";
 import { FilterData, Product } from "../../page";
 import { ViewProvider } from "../../view-context/view-context";
 import AllProductsPreviewComboBox from "../all-products-preview-combo-box";
-import FeedbackTabs from "../feedback-tabs";
 import ChangelogTab from "../tabs/changelog-tab/changelog";
 import ContentTab from "../tabs/content-tab";
 import AnalyticsDashboard from "./analytics-dashboard";
@@ -10,6 +9,7 @@ import IntegrationsPanel from "./integrations-panel";
 import ProjectOverview from "./project-overview";
 import SettingsPanel from "./settings-panel";
 import TabsClient from "./tabs-client";
+import WidgetsTab from "./widgets-tab";
 import ChatbotIndex from "@/components/chatbot/chatbot-index";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
@@ -90,12 +90,7 @@ export default async function DashboardTemplate({
                   >
                     Analytics
                   </TabsTrigger>
-                  <TabsTrigger
-                    value="integrations"
-                    className="whitespace-nowrap flex-shrink-0"
-                  >
-                    Widgets
-                  </TabsTrigger>
+                  <WidgetsTab />
                   <TabsTrigger
                     value="feedback-settings"
                     className="whitespace-nowrap flex-shrink-0"
