@@ -9,6 +9,6 @@ export default async function getUserProducts(userId: string) {
     docId: doc.id,
     ...doc.data(),
   }));
-  console.log("User Products:", products);
+  
   return products as ProductData[];
 }

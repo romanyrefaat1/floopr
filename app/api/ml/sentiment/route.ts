@@ -8,13 +8,13 @@ let sentimentPipeline = null;
 // Initialize the pipeline if it hasn't been initialized yet
 async function getSentimentPipeline() {
   if (!sentimentPipeline) {
-    console.log("Loading sentiment analysis model...");
+    
     try {
       sentimentPipeline = await pipeline(
         "sentiment-analysis",
         "Xenova/distilbert-base-uncased-finetuned-sst-2-english"
       );
-      console.log("Sentiment analysis model loaded");
+      
     } catch (error) {
       console.error("Error loading sentiment model:", error);
       throw error;
@@ -42,7 +42,7 @@ export async function POST(request) {
 
     // Perform sentiment analysis
     const result = await classifier(text);
-    console.log(`Sentiment result:`, result);
+    
 
     // Return the result
     return NextResponse.json({

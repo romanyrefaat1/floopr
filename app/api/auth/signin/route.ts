@@ -35,11 +35,11 @@ export async function POST(req: Request) {
       );
 
       const user = userCredential.user;
-      console.log(user)
+      
 
       // Generate ID token
       const token = await getIdToken(user);
-      console.log(`created token:`, token)
+      
 
       // Create response with token as HTTP-only cookie
       const response = NextResponse.json(
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
         maxAge: 60 * 60 * 24 * 7, // 7 days
         path: '/'
       });
-      console.log(`created cookie`)
+      
 
       return response;
     } catch (authError: any) {

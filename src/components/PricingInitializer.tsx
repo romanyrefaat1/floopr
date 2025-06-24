@@ -19,7 +19,7 @@ export default function PricingInitializer() {
           const userSnap = await getDoc(userRef);
           if (userSnap.exists()) {
             const userData = userSnap.data();
-            console.log('[PricingInitializer] Fetched userData from Firestore:', userData);
+            
             const userTier = userData.subscription_tier ?? "free";
             // Determine limits based on fetched tier, defaulting to free tier limits for safety
             // This is a simplified client-side limit setting. getUserPricing is authoritative.
@@ -57,11 +57,11 @@ export default function PricingInitializer() {
               limit_last_group_feedback_count_dailytimeout: userData.limit_last_group_feedback_count_dailytimeout ?? 24,
               isExceededGroupFeedbackLimit: groupFeedbackCount >= limits.group,
             };
-            console.log('[PricingInitializer] Setting userSubscription with:', subscriptionToSet);
+            
             setUserSubscription(subscriptionToSet);
           } else {
             // If user doc doesn't exist yet, default to free
-            console.log('[PricingInitializer] User doc does not exist in Firestore. Setting default free subscription.');
+            
             setUserSubscription({
               tier: "free",
               trialActive: false,

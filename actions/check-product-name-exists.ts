@@ -15,6 +15,6 @@ export async function checkProductNameExists(productName, ownerId) {
     }
     return true;
   } catch (error) {
-    console.log(error);
+    
   }
 }

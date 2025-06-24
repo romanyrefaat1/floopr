@@ -48,7 +48,7 @@ export default function SignInForm() {
   
 
   const onSubmit = async (data: SignInFormValues) => {
-    console.log("Sign In Data:", data);
+    
     setError(null);
     const response = await fetch(
       `/api/auth/signin`,
@@ -71,7 +71,7 @@ export default function SignInForm() {
       return;
     }
 
-    console.log("Successfully signed in:", result);
+    
     toast.success("Successfully signed in!")
     router.push(`/home`);
   };

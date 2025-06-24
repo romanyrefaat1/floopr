@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 export default async function CreateModalTimePage({ searchParams }) {
   const { ref: productRef } = await searchParams;
-  console.log(`productRef`, productRef);
+  
   if (!productRef) notFound();
   return (
     <main className="p-4">

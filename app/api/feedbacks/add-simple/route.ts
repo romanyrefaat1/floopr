@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
           : "Anonymous"),
       profilePicture: user?.imageUrl ?? user?.profilePicture ?? null,
     };
-    console.log(userInfoForFeedback, user, sentimentResult, feedback)
+    
 
     await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
       type: feedback?.type || "other",

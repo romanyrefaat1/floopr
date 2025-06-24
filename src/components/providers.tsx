@@ -57,7 +57,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         </AuthProvider>
         <Toaster />
         <FlooprFloatButtonScript />
-        {process.env.NEXT_PUBLIC_IS_PRODUCTION && <Analytics />}
+        {process.env.NEXT_PUBLIC_IS_PRODUCTION === "true" && <Analytics />}
       </PricingProvider>
       </ProgressProvider>
     </ClerkProvider>

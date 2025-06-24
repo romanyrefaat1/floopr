@@ -3,7 +3,7 @@
 import emailjs from "@emailjs/nodejs";
 
 export default async function sendEmail() {
-  console.log("Sending email...");
+  
   const email = "refaatromany641@gmail.com";
   const firstName = "Romany";
 
@@ -22,7 +22,7 @@ export default async function sendEmail() {
     };
 
     // Send the email using EmailJS
-    console.log("Sending email using EmailJS...");
+    
     await emailjs.send(
       process.env.EMAILJS_SERVICE_ID as string,
       process.env.EMAILJS_TEMPLATE_ID as string,
@@ -30,7 +30,7 @@ export default async function sendEmail() {
       process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY as string
     );
 
-    console.log("Email sent successfully!");
+    
   } catch (error) {
     // Log the error for debugging
     console.error("Error:", error);

@@ -7,7 +7,7 @@ export default async function EditModalTimePage({ searchParams, params }) {
   const { componentId } = params;
   const { ref } = searchParams;
 
-  console.log(`ref, componentId`, ref, componentId);
+  
   if (!ref) notFound();
 
   const response = doc(db, `products`, ref);
@@ -16,7 +16,7 @@ export default async function EditModalTimePage({ searchParams, params }) {
   if (!productData.exists()) notFound();
 
   const styles = productData.data().style || {};
-  console.log(`styles`, styles);
+  
 
   // Create CSS variables from the product styles
   const mainStyle = {

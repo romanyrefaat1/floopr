@@ -59,7 +59,7 @@ export default function CreateFeedbackDialog({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // Add feedback submission logic here
-      console.log("Submitting feedback:", values);
+      
       toast.success("Feedback submitted successfully!");
       setIsOpen(false);
       form.reset();

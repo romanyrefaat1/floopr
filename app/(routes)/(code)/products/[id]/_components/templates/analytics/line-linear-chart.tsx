@@ -151,7 +151,7 @@ export function LineLinearChart({ productId }: { productId: string }) {
 
         // Get the feedbacks
         const feedbacks = await getFeedbacks(productId);
-        console.log("Raw feedbacks:", feedbacks);
+        
 
         // Process the feedbacks and add to the timeline
         feedbacks.forEach((feedback) => {
@@ -196,7 +196,7 @@ export function LineLinearChart({ productId }: { productId: string }) {
           }
         });
 
-        console.log("Processed timeline data:", timelinePoints);
+        
         setChartData(timelinePoints);
       } catch (error) {
         console.error("Error processing feedback data:", error);

@@ -40,7 +40,7 @@ const corsHeaders = {
 };
 
 export async function POST(req: Request) {
-  console.log(`Enter save-data`);
+  
   try {
     const { productId, componentId, inputs, rating, userInfo, referenceLink }: SaveDataProps =
       await req.json();

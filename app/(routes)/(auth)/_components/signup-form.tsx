@@ -62,7 +62,7 @@ export function SignUpForm() {
   }, [error]);
 
   const onSubmit = async (data: SignUpFormValues) => {
-    console.log("Sign Up Data:", data);
+    
     setError(null);
     const response = await fetch(
       `/api/auth/signup`,
@@ -85,7 +85,7 @@ export function SignUpForm() {
       return;
     }
 
-    console.log("Successfully signed up:", result);
+    
     router.push(`/home`);
   };
 

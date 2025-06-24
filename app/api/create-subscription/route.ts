@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     const { userId, userName = "User", email, plan } = await request.json();
 
-    console.log(userId, userName, email, plan);
+    
 
     // 1) ensure customer exists
     const customer = await ensureCustomer(email, userName, userId);

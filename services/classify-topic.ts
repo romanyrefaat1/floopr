@@ -64,4 +64,4 @@ export default async function classifyTopic(
 //     "The new smartphone features a revolutionary camera system.",
 //     ["Mobile Devices", "Photography", "Software", "Hardware"]
 //   );
-//   console.log(customResult);
+//   

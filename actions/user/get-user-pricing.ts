@@ -66,7 +66,7 @@ export default async function getUserPricing(ownerId?: string): Promise<UserSubs
       return defaultFreeSubscription;
     }
 
-    console.log(`user exists, id:`, userId)
+    
     const userRef = doc(db, "users", userId);
     const userSnap = await getDoc(userRef);
 
@@ -104,17 +104,17 @@ export default async function getUserPricing(ownerId?: string): Promise<UserSubs
       const groupFeedbackTimeoutHours = userData.limit_last_group_feedback_count_dailytimeout ?? 24;
       const hoursSinceLastGroupReset = (now.getTime() - groupFeedbackLastReset.getTime()) / (1000 * 60 * 60);
 
-      console.log('[getUserPricing] Group Feedback - Raw Count from DB:', rawGroupFeedbackCount);
-      console.log('[getUserPricing] Group Feedback - Initial Count:', groupFeedbackCount);
-      console.log('[getUserPricing] Group Feedback - Raw Last Reset Date from DB:', rawGroupFeedbackLastResetDate);
-      console.log('[getUserPricing] Group Feedback - Last Reset Date (Date Obj):', groupFeedbackLastReset);
-      console.log('[getUserPricing] Group Feedback - Timeout Hours:', groupFeedbackTimeoutHours);
-      console.log('[getUserPricing] Group Feedback - Hours Since Last Reset:', hoursSinceLastGroupReset);
+      
+      
+      
+      :', groupFeedbackLastReset);
+      
+      
       const needsReset = hoursSinceLastGroupReset >= groupFeedbackTimeoutHours;
-      console.log('[getUserPricing] Group Feedback - Needs Reset?:', needsReset);
+      
 
       if (needsReset) { // Typo corrected in condition variable
-        console.log('[getUserPricing] Group Feedback - Resetting count to 0.');
+        
         groupFeedbackCount = 0;
         firestoreUpdates.group_feedback_count_daily_number = 0;
         firestoreUpdates.group_feedback_last_reset_date = currentISODate; // Typo corrected
@@ -124,7 +124,7 @@ export default async function getUserPricing(ownerId?: string): Promise<UserSubs
       // Persist updates to Firestore if any resets occurred
       if (Object.keys(firestoreUpdates).length > 0) {
         await updateDoc(userRef, firestoreUpdates);
-        console.log('[getUserPricing] Persisted usage resets to Firestore:', firestoreUpdates);
+        
       }
       
       const subscription: UserSubscription = {
@@ -150,15 +150,15 @@ export default async function getUserPricing(ownerId?: string): Promise<UserSubs
         isExceededGroupFeedbackLimit: groupFeedbackCount >= tierLimits.group_feedback_count_daily,
       };
       
-      console.log('[getUserPricing] Group Feedback - Final Count for Limit Check:', groupFeedbackCount);
-      console.log('[getUserPricing] Group Feedback - Tier Limit:', tierLimits.group_feedback_count_daily);
-      console.log('[getUserPricing] Group Feedback - Is Exceeded?:', groupFeedbackCount >= tierLimits.group_feedback_count_daily);
-      console.log('[getUserPricing] Returning subscription data:', subscription);
+      
+      
+      
+      
       return subscription;
     } else {
       // If user doc doesn't exist yet, return default free subscription
       // The API route calling this should handle creating the initial user doc.
-      console.log('[getUserPricing] User doc does not exist in Firestore. Returning default free subscription.');
+      
       return defaultFreeSubscription;
     }
   } catch (error) {

@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       userInfo,
       currPage
     } = reqData;
-    console.log("Received data:", reqData);
+    
 
     // Re-building the shape that addSimpleFeedback expects:
     const payload = {
@@ -43,10 +43,10 @@ export async function POST(req: Request) {
       currPage
     };
 
-    console.log("Saving feedback:", payload);
+    
     const result = await addSimpleFeedback(payload);
 
-    console.log("Result from addSimpleFeedback:", result);
+    
     return NextResponse.json(result, { headers: corsHeaders });
   } catch (error: any) {
     console.error("Error in save-simple-data:", error);

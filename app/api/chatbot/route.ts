@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
       config: { thinkingConfig: { thinkingBudget } },
     });
 
-    console.log("Response from AI:", response);
+    
 
     // Handle Gemini API response safely
     if (
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
       "Response from AI:",
       response.candidates[0].content.parts[0].text
     );
-    console.log("Response from AI:", response.candidates[0]);
+    
 
     return NextResponse.json({
       text: response.candidates[0].content.parts[0].text,

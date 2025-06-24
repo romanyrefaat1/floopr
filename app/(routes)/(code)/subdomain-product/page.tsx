@@ -16,7 +16,7 @@ export default function SubdomainProductPage() {
       try {
         // Get the subdomain from search params (set by middleware)
         const subdomain = searchParams.get("subdomain");
-        console.log("Found subdomain from search params:", subdomain);
+        
 
         if (!subdomain) {
           setError("Product name not found: No subdomain parameter found");
@@ -25,17 +25,17 @@ export default function SubdomainProductPage() {
         }
 
         // Query Firestore directly for the product
-        console.log("Querying Firestore for productUName:", subdomain);
+        
         const queryRef = query(
           collection(db, "products"),
           where("productUName", "==", subdomain)
         );
 
         const querySnapshot = await getDocs(queryRef);
-        console.log("Query returned docs:", querySnapshot.docs.length);
+        
 
         if (querySnapshot.empty) {
-          console.log("No matching products found");
+          
           setError(`Product not found: No product with name "${subdomain}"`);
           setLoading(false);
           return;
@@ -45,11 +45,11 @@ export default function SubdomainProductPage() {
         const productDoc = querySnapshot.docs[0];
         const productId = productDoc.id;
 
-        console.log("Found product with ID:", productId);
+        
 
         // Navigate to the user's product page
         if (productId) {
-          console.log("Navigating to:", `/${productId}`);
+          
           router.replace(`/${productId}`);
         } else {
           setError("Product not found: Product document has no ID");

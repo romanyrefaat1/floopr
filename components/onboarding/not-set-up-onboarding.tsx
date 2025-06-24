@@ -30,8 +30,8 @@ export default function NotSetUpOnboarding() {
     const isTaskDone = (taskIndex: number): boolean => {
         if (taskIndex < 0 || taskIndex >= stepOrder.length) return false; // Substract 1 for the index and 1 for the BOOM task
         const stepName = stepOrder[taskIndex];
-        console.log("stepName", stepName);
-        console.log("steps", steps);
+        
+        
         return steps.includes(stepName);
     };
 
@@ -184,9 +184,9 @@ export default function NotSetUpOnboarding() {
     const completedTasks = tasks.filter(task => task.done).length; // Subtract 1 for the "BOOM" task
     const totalTasks = tasks.length; // Subtract 1 for the "BOOM" task
     const completionPercentage = Math.round((completedTasks / totalTasks) * 100);
-    console.log("completedTasks", completedTasks);
-    console.log("totalTasks", totalTasks);
-    console.log("completionPercentage", completionPercentage);
+    
+    
+    
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>

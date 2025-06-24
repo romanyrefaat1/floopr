@@ -26,7 +26,7 @@ export default function CommentInput({productId, feedbackId, btnLabel=`Send`}: C
         if (!isSignedIn) return;
 
         setLoading(true)
-        console.log(`productId: ${productId}, feedbackId: ${feedbackId}, userId: ${userId}`)
+        
         await sendReply(commentVal, feedbackId, userId, productId)
         setLoading(false)
         setCommentVal("")

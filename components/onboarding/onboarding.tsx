@@ -64,7 +64,7 @@ export default function Onboarding() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const isOnboardingFinished = localStorage.getItem("onboarding-1-finished");
-      console.log("✅ Fetched from localStorage:", isOnboardingFinished);
+      
       setIsCanOnboardingOpen(isOnboardingFinished !== "true");
     }
   }, []);

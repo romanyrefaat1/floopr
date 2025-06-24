@@ -51,13 +51,13 @@ const DEFAULT_TOPICS = [
 // Initialize the pipeline if it hasn't been initialized yet
 async function getClassificationPipeline() {
   if (!classificationPipeline) {
-    console.log("Loading zero-shot classification model...");
+    
     try {
       classificationPipeline = await pipeline(
         "zero-shot-classification",
         "Xenova/bart-large-mnli"
       );
-      console.log("Zero-shot classification model loaded");
+      
     } catch (error) {
       console.error("Error loading classification model:", error);
       throw error;

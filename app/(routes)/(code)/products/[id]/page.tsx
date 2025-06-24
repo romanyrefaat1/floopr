@@ -62,7 +62,7 @@ const ProductPage = async ({
     getFilteredFeedbacks(id, filterData),
     Promise.resolve({ theme: "light", notificationsEnabled: true }), // Replace with real settings fetch
   ]);
-  console.log(`my cool initialChangelog:`, initialChangelog);
+  
   // Ensure feedbacks is always an array
   const initialFeedbacks = Array.isArray(rawFeedbacks) ? rawFeedbacks : [];
 

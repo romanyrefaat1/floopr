@@ -19,14 +19,14 @@ type UpdateBasicAnalyticsFromNewFeedbackParams = {
 }
 
 export default async function updateBasicAnalyticsFromNewFeedback({productId, sentimentResult, topicClassification}: UpdateBasicAnalyticsFromNewFeedbackParams) {
-  console.log("updateBasicAnalyticsFromNewFeedback called");
+  
   await runTransaction(db, async (transaction) => {
-    console.log("runTransaction called");
+    
     const productRef = doc(db, 'products', productId)
     
     // Read current document data.
     const productDoc = await transaction.get(productRef);
-    console.log("productDoc:", productDoc);
+    
     if (!productDoc.exists()) throw new Error("Document does not exist!");
 
     // Initialize current analytics data.
@@ -39,8 +39,8 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
       negative: sentimentData.negative, 
       neutral: sentimentData.neutral 
     };
-    console.log(`sentiment result`, sentimentResult)
-    console.log(`sentiment data before increment`, sentimentUpdate)
+    
+    
     
     if (sentimentResult.sentiment === "POSITIVE") {
       sentimentUpdate.positive += 1;
@@ -51,7 +51,7 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
     } else {
       throw new Error("Unexpected sentiment value");
     }
-    console.log(`sentiment data after increment`, sentimentUpdate)
+    
 
     // Calculate total feedback count for sentiment.
     const totalSentiments = sentimentUpdate.positive + sentimentUpdate.negative + sentimentUpdate.neutral;
@@ -73,25 +73,25 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
 
     // Find all feedback
     const allFeedbacks = await getFeedbacks(productId);
-    console.log(`allFeedbacks from update`, allFeedbacks)
+    
     const allTopics = allFeedbacks.map(f => {
       const currFeedback = f
-      console.log(`currentFeedback`, currFeedback)
+      
       const currTopic = currFeedback.topic
-      console.log(`currentTopic`, currTopic)
+      
       if (!currTopic) return "Uncategorized"
       return currTopic?.topTopic || "Uncategorized"
     });
-    console.log(`allTopics`, allTopics)
+    
 
     const topicCounts = allTopics.reduce((acc, topic) => {
       acc[topic] = (acc[topic] || 0) + 1;
       return acc;
     }, {});
-    console.log(`topic counts`, topicCounts)
+    
     const topTopic = Object.entries(topicCounts).sort((a, b) => b[1] - a[1])[0][0];
     const topTopicPercent = (topicCounts[topTopic] / allTopics.length || 0) * 100;
-    console.log(`topTopic`, topTopic)
+    
 
     // Map topic classification results to analytics.topic structure.
     const topicUpdate = {
@@ -100,8 +100,8 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
       topTopicPercent: topTopicPercent || 0,
     };
 
-    console.log(`topTopic`, topTopic)
-    console.log(`topicUpdate`, topicUpdate)
+    
+    
     // Build the update object.
     const updateObj = {
       feedbackCount: increment(1),
@@ -116,13 +116,13 @@ export default async function updateBasicAnalyticsFromNewFeedback({productId, se
       },
     };
 
-    console.log("updateObj:", updateObj);
+    
 
     // Update the document within the transaction.
-    console.log("Start update product document:", productRef);
+    
     transaction.update(productRef, updateObj);
-    console.log("End update product document");
+    
   });
-  console.log("runTransaction finished");
+  
   return {success: true}
 }

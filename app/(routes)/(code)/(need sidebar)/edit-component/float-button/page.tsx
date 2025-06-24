@@ -85,7 +85,7 @@ export default function FloatButtonEditPage({ searchParams }) {
     productId: productRef,
     isModal: false,
   });
-  console.log(config.metaData.name, config.metaData.description);
+  
 
   const debounceTimer = useRef<NodeJS.Timeout | null>(null);
 

@@ -13,7 +13,7 @@ export default function FeedbackTabs({
   isOwnerPa?: boolean;
   filter: FilterData;
 }) {
-  console.log(`feedbacktab productid`, productData.productId);
+  
   return (
     <div className="">
       <FeedbackTabsClient

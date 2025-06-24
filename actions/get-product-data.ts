@@ -24,7 +24,7 @@ export default async function getProductData(
     });
     return product[0];
   } catch (error) {
-    console.log(error);
+    
     return null;
   }
 }

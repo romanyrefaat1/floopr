@@ -192,7 +192,7 @@ const Step2StyleProduct = () => {
       event.preventDefault();
     }
     try {
-      console.log(`onsubmit start`)
+      
       toast.success("Updating product...");
 
       setSubmitLoadin(true);
@@ -206,7 +206,7 @@ const Step2StyleProduct = () => {
       
       setSubmitLoadin(false);
       
-      console.log(`onsubmit end`)
+      
       toast.success("Product updated successfully");
       router.push("/new/step-three");
     } catch (error) {

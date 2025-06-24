@@ -24,7 +24,7 @@ export default async function ProjectDataSummary({
   productId: string;
 }) {
   const basicAnalytics = await getBasicAnalytics(productId);
-  console.log(`basicAnalytics`, basicAnalytics);
+  
   let topSentiment = basicAnalytics.sentiment.topSentiment;
   // let topSentiment = `Negative`;
   return (

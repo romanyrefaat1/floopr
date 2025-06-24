@@ -36,7 +36,7 @@ export default async function MyComponentsPage({ params }) {
   const user = auth();
   if (!user) {
     // redirectToSignIn();
-    console.log(`!user`);
+    
     notFound();
   }
 

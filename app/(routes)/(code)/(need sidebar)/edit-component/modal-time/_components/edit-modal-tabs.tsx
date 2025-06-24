@@ -53,7 +53,7 @@ export default function FeedbackModalConfigurator({productId, isComponentExists=
     timeoutDuration: 0,
     isDark: isDark,
   });
-  console.log(`modalConfig`, modalConfig)
+  
   
   const [inContainerModalOpen, setInContainerModalOpen] = useState(true);
   const [fullPageModalOpen, setFullPageModalOpen] = useState(false);

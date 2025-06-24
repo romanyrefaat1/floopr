@@ -28,7 +28,7 @@ export default function LikeButton({
 }) {
   const { user } = useUser();
   const router = useRouter();
-  console.log(`feedbackId button`, feedbackId);
+  
 
   // Use real-time hooks instead of local state
   const { feedback, loading: feedbackLoading } = useFeedbackItem(

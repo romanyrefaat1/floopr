@@ -43,7 +43,7 @@ export default function useFinishedSteps() {
                 
                 // get products data for other steps
                 const products = await getUserProducts(userId);
-                console.log("useFinishedSteps products", products);
+                
                 
                 const completedSteps: Step[] = [];
 
@@ -64,7 +64,7 @@ export default function useFinishedSteps() {
                     
                     // Step 3: Check for widgets (only if feedback exists)
                     const productsIds = products.map(product => product.docId);
-                    console.log("useFinishedSteps productsIds", productsIds)
+                    
                     setTheProductIds(productsIds);
                     const hasWidgets = (
                         await Promise.all(
@@ -88,9 +88,9 @@ export default function useFinishedSteps() {
                                 changelogsCount += count.data().count;
                             })
                         )
-                        console.log("useFinishedSteps changelogsCount", changelogsCount)
+                        
                         const hasChangelogs = changelogsCount > 0;
-                        console.log("useFinishedSteps hasChangelogs", hasChangelogs)
+                        
 
                         if (hasChangelogs) {
                             completedSteps.push('create-changelog');
@@ -128,8 +128,8 @@ export default function useFinishedSteps() {
         // Update localStorage
         localStorage.setItem('onboarding-2-finished', JSON.stringify(newIsFinished));
         
-        console.log("Steps updated:", steps);
-        console.log("Is finished:", newIsFinished);
+        
+        
     }, [steps]);
 
     // Initialize from localStorage on mount
@@ -138,7 +138,7 @@ export default function useFinishedSteps() {
         if (storedFinished !== null) {
             const parsed = JSON.parse(storedFinished);
             setIsFinished(parsed);
-            console.log("Initialized isFinished from localStorage:", parsed);
+            
         }
     }, []);
 

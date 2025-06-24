@@ -9,9 +9,9 @@ import React from "react";
 async function getUserData(userId: string) {
   const usersCol = collection(db, "users");
   const userSnapshot = await getDocs(usersCol);
-  console.log(userSnapshot.docs);
+  
   const userDoc = userSnapshot.docs.find((doc) => doc.id === userId);
-  console.log(userDoc);
+  
   if (!userDoc) return null;
   return { id: userDoc.id, ...userDoc.data() };
 }
@@ -29,7 +29,7 @@ export default async function AdminPage() {
   }
 
   const userData = await getUserData(userId);
-  console.log(userData);
+  
   if (!userData || !userData.isAdmin) {
     return NotFound();
   }

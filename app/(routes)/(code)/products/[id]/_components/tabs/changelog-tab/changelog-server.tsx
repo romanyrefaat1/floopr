@@ -15,7 +15,7 @@ export async function getChangelogItems(
 
   return snapshot.docs.map((doc) => {
     const data = doc.data();
-    console.log("getChangelogItems data", data)
+    
     return {
       version: data.version,
       date: data.date?.toDate ? data.date.toDate() : new Date(data.date),

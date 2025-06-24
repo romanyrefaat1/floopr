@@ -6,7 +6,7 @@ import { useEffect } from "react";
 
 export default function SyncUser() {
   const { user } = useUser();
-  console.log(`user`, user);
+  
 
   useEffect(() => {
     if (user) {
@@ -19,7 +19,7 @@ export default function SyncUser() {
         hasImage: user.hasImage,
         profilePicture: user.imageUrl,
       });
-      console.log(`user synced`);
+      
     }
   }, [user]);
 

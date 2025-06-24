@@ -28,7 +28,7 @@ export default function ComponentCard({
   isYours: boolean;
   imageUrl: string;
 }) {
-  //   console.log(`my-componentData`, componentData);
+  //   
   const productDataFromFirestore = serializeFirestoreData(productData);
   let metaData = {
     title: null,
@@ -36,7 +36,7 @@ export default function ComponentCard({
     imageUrl: null,
     componentName: null,
   };
-  console.log(`componentData ${isYours}`, componentData);
+  
 
   if (!isYours) {
     metaData = {

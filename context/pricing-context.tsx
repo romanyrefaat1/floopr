@@ -110,7 +110,7 @@ export const PricingProvider = ({ children }: { children: ReactNode }) => {
 
   // useEffect for tier change (kept for potential UI reactions, limit setting removed)
   useEffect(() => {
-    // console.log('User subscription tier changed on client:', userSubscription.tier);
+    // 
   }, [userSubscription.tier]);
 
   // useEffect for feedback count change (kept for potential UI reactions, limit setting removed)

@@ -29,9 +29,8 @@ export default async function YourComponents({
     <div>
       <h2 className="text-3xl font-bold mb-[25px]">Your Components</h2>
       <div className="grid md:grid-cols-2 gap-4">
-        {components.map((component) => {
-          const data = component.data();
-          console.log(`component data jsx`, data);
+        {components.map((data) => {
+          
           return (
             <ComponentCard
               key={component.id}

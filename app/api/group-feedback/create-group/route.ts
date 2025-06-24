@@ -119,7 +119,7 @@ Desired format:
     // });
 
     const responseText = aiResponse.candidates[0].content.parts[0].text;
-    console.log(`groupText ai:`, responseText);
+    
 
     let groups;
     try {
@@ -152,7 +152,7 @@ Desired format:
         fireTimestamp: timestamp,
       };
     });
-    console.log(`group`, groups);
+    
 
     // Increment AI-powered group generation count for the user
     const userDocRef = doc(db, "users", clerkId);

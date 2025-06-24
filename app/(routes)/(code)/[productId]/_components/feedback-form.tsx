@@ -34,7 +34,7 @@ export default function FeedbackForm() {
   const params = useParams();
   const productId = params.productId;
   const { user } = useUser();
-  console.log(`userinfo`, user);
+  
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +55,7 @@ export default function FeedbackForm() {
       };
 
       // Debug logging
-      console.log("Form values:", values);
+      
 
       // Create a feedback object with the form values
       let finalContent: string | null = null;
@@ -90,7 +90,7 @@ export default function FeedbackForm() {
 
       // Note: userInfo is removed as it's handled by the API route and not part of SimpleFeedbackItemDataForAction
 
-      console.log("Submitting feedback:", feedbackData);
+      
 
       const result = await addSimpleFeedback(feedbackData);
       if (result.success) {

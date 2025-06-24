@@ -103,11 +103,11 @@ export async function getFeedbacksByDate(
               );
             }
           } else {
-            console.log(`- Doc ${doc.id}: No createdAt field`);
+            
           }
         });
       } else {
-        console.log("The collection is empty or doesn't exist");
+        
       }
     }
 
