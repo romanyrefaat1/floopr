@@ -40,9 +40,9 @@ const items = [
 export function AppSidebar() {
   const { theme } = useTheme();
   return (
-    <Sidebar collapsible="icon" variant="sidebar" className="bg-background overflow-hidden">
-      <SidebarContent className="bg-background relative">
-        <SidebarGroup>
+    <Sidebar collapsible="icon" variant="sidebar" className="bg-background overflow-x-hidden">
+      <SidebarContent className="bg-background relative max-w-full overflow-x-hidden">
+        <SidebarGroup className="max-w-full overflow-x-hidden">
           <SidebarGroupLabel className="my-5">
             {theme === `dark` ? (
               <Image
