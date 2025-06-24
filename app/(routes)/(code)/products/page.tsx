@@ -15,7 +15,7 @@ const ProductsPa = async () => {
     //     <SidebarTrigger />
     //     </div>
     //   </div>
-    <main className="p-4 w-full mt-[40px]">
+    <main className="p-4 w-full mt-[70px]">
       <div className="md:hidden">
             <SidebarTrigger />
           </div>
