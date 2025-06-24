@@ -104,12 +104,6 @@ export default async function getUserPricing(ownerId?: string): Promise<UserSubs
       const groupFeedbackTimeoutHours = userData.limit_last_group_feedback_count_dailytimeout ?? 24;
       const hoursSinceLastGroupReset = (now.getTime() - groupFeedbackLastReset.getTime()) / (1000 * 60 * 60);
 
-      
-      
-      
-      :', groupFeedbackLastReset);
-      
-      
       const needsReset = hoursSinceLastGroupReset >= groupFeedbackTimeoutHours;
       
 
