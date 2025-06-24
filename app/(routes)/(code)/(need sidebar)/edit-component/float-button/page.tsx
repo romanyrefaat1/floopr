@@ -11,6 +11,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useRef } from "react";
@@ -166,6 +167,9 @@ export default function FloatButtonEditPage({ searchParams }) {
   return (
     <main className="p-6">
       <div className="flex justify-between items-center mb-6">
+      <div className="md:hidden">
+            <SidebarTrigger />
+          </div>
         <h1 className="text-3xl font-bold">Edit Float Button</h1>
         <Button onClick={handleSave}>Save Changes</Button>
       </div>
