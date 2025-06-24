@@ -5,7 +5,7 @@ export default function NewProductPage() {
   return (
     <div>
       <NewProductFormClient />
-      <GuidedOnboardingPopover stepIndex={1} />
+      {/* <GuidedOnboardingPopover stepIndex={1} /> */}
     </div>
   );
 }

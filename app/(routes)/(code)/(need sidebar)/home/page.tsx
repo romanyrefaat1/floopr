@@ -1,3 +1,4 @@
+import NotSetUpOnboarding from "@/components/onboarding/not-set-up-onboarding";
 import LatestProducts from "./_components/latest-products";
 import QuickStats from "./_components/quick-stats";
 import WelcomeSection from "./_components/welcome-section";

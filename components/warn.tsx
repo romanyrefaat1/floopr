@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 type Button = {
   isMain?: boolean;
   text?: string | null;
+  content: React.ReactNode;
   onClick: () => void;
 };
 
@@ -12,6 +13,7 @@ type Buttons = Button[];
 export default function Warn({
   title = `Warning`,
   description,
+  content,
   buttons = null,
 }: {
   title: string;
@@ -26,6 +28,7 @@ export default function Warn({
       <div>
         <p className="font-bold">{title}</p>
         <div className="md:max-w-[70%]">{description ?? ``}</div>
+        {content}
       </div>
       {buttons && (
         <div className="flex justify-end mt-4 items-center w-full gap-2">

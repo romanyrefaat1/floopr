@@ -78,7 +78,7 @@ const WelcomeSection = () => {
                 </Button>
               </Link>
 
-              <GuidedOnboardingPopover stepIndex={0} waitMs={200} />
+              {/* <GuidedOnboardingPopover stepIndex={0} waitMs={200} /> */}
             </div>
           </div>
         </div>
