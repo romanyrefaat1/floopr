@@ -26,7 +26,7 @@ const items = [
   },
   {
     title: "Add",
-    url: "/new/step-one",
+    url: "/new",
     icon: Plus,
   },
   {
