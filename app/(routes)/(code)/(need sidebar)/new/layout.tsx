@@ -11,7 +11,7 @@ const NewProductLayout = ({ children }: NewProductLayoutProps) => {
   return (
     <main className="px-8 md:px-[70px] bg-background min-h-screen flex flex-col">
       <ProductFormContextProvider>
-        <div className="">{children}</div>
+        <div>{children}</div>
       </ProductFormContextProvider>
     </main>
   );
