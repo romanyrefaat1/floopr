@@ -235,7 +235,7 @@ const NewProductFormClient = () => {
     <div className="container mx-auto w-full max-w-xl px-4 sm:px-6 lg:px-8 py-12">
       <Link href="/home">
         <Button variant="ghost" className="mb-6">
-          <ArrowLeft />
+          <ArrowLeft /> Go to /Home
         </Button>
       </Link>
       <div
