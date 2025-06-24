@@ -21,10 +21,10 @@ const Home = async () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto ml-4 md:ml-0 px-2 sm:px-4 py-6 md:py-4 space-y-8">
-      <Onboarding />
       <div className="md:hidden">
         <SidebarTrigger />
       </div>
+      <Onboarding />
       <SyncUser />
       <Suspense
         fallback={

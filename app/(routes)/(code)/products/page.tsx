@@ -1,8 +1,6 @@
 import LatestProducts from "../(need sidebar)/home/_components/latest-products";
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { auth } from "@clerk/nextjs/server";
-import { cookies } from "next/headers";
 
 const ProductsPa = async () => {
   const { userId } = await auth();
@@ -18,6 +16,9 @@ const ProductsPa = async () => {
     //     </div>
     //   </div>
     <main className="p-4 w-full mt-[40px]">
+      <div className="md:hidden">
+            <SidebarTrigger />
+          </div>
       <h2 className="text-3xl mb-[25px] font-bold">Your Products</h2>
       <LatestProducts userId={userId} />
     </main>

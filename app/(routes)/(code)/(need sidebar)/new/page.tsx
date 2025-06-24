@@ -1,11 +1,13 @@
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import NewProductFormClient from "./_components/NewProductFormClient";
-import GuidedOnboardingPopover from "@/components/onboarding/GuidedOnboardingPopover";
 
 export default function NewProductPage() {
   return (
     <div>
+      <div className="md:hidden">
+        <SidebarTrigger />
+      </div>
       <NewProductFormClient />
-      {/* <GuidedOnboardingPopover stepIndex={1} /> */}
     </div>
   );
 }
