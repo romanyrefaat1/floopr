@@ -1,7 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import NotSetUpOnboarding from "@/components/onboarding/not-set-up-onboarding";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { GuidedOnboardingProvider } from "@/contexts/onboarding/onboarding-context";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "next-themes";
 import { cookies } from "next/headers";
 

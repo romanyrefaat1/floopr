@@ -29,7 +29,7 @@ export default async function YourComponents({
     <div>
       <h2 className="text-3xl font-bold mb-[25px]">Your Components</h2>
       <div className="grid md:grid-cols-2 gap-4">
-        {components.map((data) => {
+        {components.map((component) => {
           
           return (
             <ComponentCard

@@ -160,6 +160,17 @@
   --marketing-foreground: 0 0% 0%;
   --marketing-accent: 250 89% 68%;
   --marketing-accent-foreground: 0 0% 100%;
+
+  /* Shadcn Sidebar Variables (adjusted for your purple theme) */
+  --sidebar: var(--background); /* Use the general background for sidebar */
+  --sidebar-foreground: var(--foreground); /* Use general foreground for text */
+  --sidebar-primary: var(--primary); /* Use your primary purple for active states */
+  --sidebar-primary-foreground: var(--primary-foreground); /* White text on primary purple */
+  --sidebar-accent: 0 0 90%; /* A muted purple for accent */
+  --sidebar-accent-foreground: 0 0 0%; /* White text on accent */
+  --sidebar-border: 0; /* Use your general border color */
+  --sidebar-ring: var(--ring); /* Use your primary ring color */
+  --radius: 0.5rem; /* Standard border-radius for components */
 }
 
 /* Dark mode overrides */
@@ -208,6 +219,16 @@
   --marketing-foreground: 0 0% 100%;
   --marketing-accent: 250 89% 68%;
   --marketing-accent-foreground: 0 0% 100%;
+
+  /* Shadcn Sidebar Variables for Dark Mode (adjusted for your purple theme) */
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: 0 0 15%;
+  --sidebar-accent-foreground: var(--primary-foreground);
+  /* --sidebar-border: var(--border); */
+  --sidebar-ring: var(--ring);
 }
 
 /* Global styles */
