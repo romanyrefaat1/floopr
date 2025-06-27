@@ -21,11 +21,16 @@ const nextConfig = {
       drop_console: true, // Remove console logs in production
     },
   },
+  
 
   // Increase the serverless function timeout for ML model loading
   experimental: {
     serverActions: {
-      bodySizeLimit: "10mb",
+      bodySizeLimit: "104mb",
+      allowedOrigins: [
+        'localhost:3000',                                       // your local dev URL
+        'legendary-orbit-g47rrw7prq95394q7-3000.app.github.dev' // your Codespace host
+      ],
     },
   },
   serverExternalPackages: ["@xenova/transformers"],
@@ -39,6 +44,7 @@ const nextConfig = {
       "floopr.app",
       "http://localhost:3000",
       "localhost",
+      'legendary-orbit-g47rrw7prq95394q7-3000.app.github.dev'
     ],
   },
   eslint: {

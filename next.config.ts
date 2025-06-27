@@ -12,6 +12,15 @@ const nextConfig: NextConfig = {
     // Skip type checking during builds
     ignoreBuildErrors: true,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "104mb",
+      allowedOrigins: [
+        'localhost:3000',                                       // your local dev URL
+        'legendary-orbit-g47rrw7prq95394q7-3000.app.github.dev' // your Codespace host
+      ],
+    },
+  },
   output: 'standalone',
   // Configure redirects for compatibility
   // async redirects() {

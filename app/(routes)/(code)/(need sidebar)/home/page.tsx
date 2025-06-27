@@ -1,4 +1,3 @@
-import NotSetUpOnboarding from "@/components/onboarding/not-set-up-onboarding";
 import LatestProducts from "./_components/latest-products";
 import QuickStats from "./_components/quick-stats";
 import WelcomeSection from "./_components/welcome-section";
@@ -7,11 +6,11 @@ import LoaderSpinner from "@/components/loader-spinner";
 import Onboarding from "@/components/onboarding/onboarding";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { GuidedOnboardingProvider } from "@/contexts/onboarding/onboarding-context";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { Suspense } from "react";
-
+import TestGetEmbedding from "./_components/test-deduplication/test-get-embedding"
+import TestSaveIntoSupabase from "./_components/test-deduplication/test-save-into-supabase"
 const Home = async () => {
   const { userId, redirectToSignIn } = await auth();
 
@@ -26,6 +25,8 @@ const Home = async () => {
       </div>
       <Onboarding />
       <SyncUser />
+      <TestGetEmbedding />
+      <TestSaveIntoSupabase />
       <Suspense
         fallback={
           <div className="flex gap-2 justify-between flex-col">
