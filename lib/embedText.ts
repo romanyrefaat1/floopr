@@ -3,7 +3,7 @@ export async function getEmbedding(text: string): Promise<number[]> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer jina_d868f73d9fbc4380bf86527c249cf8c8yZRXoIapuHGWAojEyxrfcNCsxMmK`,
+      'Authorization': `Bearer ${process.env.NEXT_PUBLIC_JINA_API_KEY}`,
     },
     body: JSON.stringify({
       input: [text],

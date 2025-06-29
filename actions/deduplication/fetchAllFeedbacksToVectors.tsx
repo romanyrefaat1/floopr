@@ -1,4 +1,3 @@
-// app/actions/fetchAllFeedbacksToVectors.ts
 'use server';
 
 import { db } from '@/lib/firebaseAdmin';
