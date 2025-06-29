@@ -35,7 +35,7 @@ export default async function YourComponents({
             <ComponentCard
               key={component.id}
               productData={productData}
-              componentData={data}
+              componentData={components}
               isYours={true}
             />
           );
