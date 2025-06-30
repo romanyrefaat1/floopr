@@ -81,7 +81,7 @@ const Header = () => {
             {!isLoaded ? (
               <Skeleton className="h-8 w-24 bg-gray-200 rounded-md" />
             ) : (
-              <Link href={isSignedIn ? "/home" : `#cta`}>
+              <Link href={isSignedIn ? "/home" : `/home`}>
                 <Button
                   variant="default"
                   className="bg-floopr-purple hover:bg-floopr-purple-dark text-white shadow-md hover:shadow-lg transition-all"
