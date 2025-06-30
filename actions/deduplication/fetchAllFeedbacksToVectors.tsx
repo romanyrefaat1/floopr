@@ -6,8 +6,8 @@ import { getEmbedding } from '@/lib/embedText';
 
 export async function syncAllFeedbackToSupabaseVectors() {
   const productsSnapshot = await db.collection('products').get();
-//   const allProducts = productsSnapshot.docs;
-const allProducts = "31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
+  const allProducts = productsSnapshot.docs;
+// const allProducts = ["31a4fd3d-615a-409c-97ee-bda48bbbb8e2"]
   console.log("allProducts:", allProducts
   )
 
@@ -15,8 +15,8 @@ const allProducts = "31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
 //   return
 
   for (const productDoc of allProducts) {
-    // const productId = productDoc._fieldsProto.docId.stringValue;
-    const productId = "31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
+    const productId = productDoc._fieldsProto.docId.stringValue;
+    // const productId = "31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
     console.log("productId:", productId)
     const feedbacksSnapshot = await db
       .collection(`products/${productId}/feedbacks`)
@@ -31,9 +31,30 @@ const allProducts = "31a4fd3d-615a-409c-97ee-bda48bbbb8e2"
     // return;
 
     for (const feedback of feedbacks) {
-        const content = feedback.feedback.content ? (typeof feedback.feedback.content === "string" ? feedback.feedback.content : feedback.feedback.content.blocks.map((block)=> block.text).join("\n"))
-                        : feedback.feedback.inputs ? (feedback.feedback.inputs.map((input)=> `${input.label} : ${input.value}`).join("\n")) : ""
-        const title = feedback.feedback.title;
+      let content;
+
+      if (feedback.feedback.content) {
+        if (typeof feedback.feedback.content === "string") {
+          content = feedback.feedback.content;
+        } else if (
+          feedback.feedback.content.blocks &&
+          Array.isArray(feedback.feedback.content.blocks)
+        ) {
+          content = feedback.feedback.content.blocks
+            .map((block) => block.text)
+            .join("\n");
+        }
+        else {
+          content = "";
+        }
+      } else if (feedback.feedback.inputs) {
+        content = feedback.feedback.inputs
+          .map((input) => `${input.label} : ${input.value}`)
+          .join("\n");
+      } else {
+        content = "";
+      }
+              const title = feedback.feedback.title;
         console.log("title:", title);
         console.log("content:", content)
       const text = (title + content) || '';

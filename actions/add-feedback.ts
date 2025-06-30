@@ -12,6 +12,7 @@ import {
   increment,
 } from "firebase/firestore";
 import getProductData from "./get-product-data";
+import callEmbedFnForAddFeedbackForSupabase from "./add-feedback-to-supabase-with-embedding-with-supabase-functions";
 
 export type SimpleFeedbackItemData = {
   feedback: {
@@ -76,8 +77,8 @@ export type SimpleFeedbackItemDataForAction = {
 export async function addSimpleFeedback(
   feedbackData: SimpleFeedbackItemDataForAction
 ) {
-  // const baseUrl = "http://localhost:3000"
-  const baseUrl = "https://floopr.app"
+  const baseUrl = "http://localhost:3000"
+  // const baseUrl = "https://floopr.app"
   try {
     const response = await fetch(baseUrl + "/api/feedbacks/add-simple", {
       method: "POST",
@@ -124,7 +125,7 @@ export async function addComponentFeedback({
       return { success: false, error: "Product ID is required." };
     }
 
-    const {ownerId }=await  getProductData(productId);
+    const { ownerId }= await getProductData(productId);
 
     if (!ownerId) {
       console.error("addComponentFeedback: Owner ID missing");
@@ -197,6 +198,14 @@ export async function addComponentFeedback({
     await updateDoc(userRef, {
       feedback_count_monthly: increment(1),
     });
+
+    await callEmbedFnForAddFeedbackForSupabase({
+      product_id: productId,
+      metadata: feedbackData, 
+      content: feedbackData.feedback.inputs.map((input)=> `${input.label}: ${input.value}`).join("\n"),
+        created_at: feedbackData.createdAt,
+        id: docRef.id
+      })
 
     return { success: true, id: docRef.id };
   } catch (error) {

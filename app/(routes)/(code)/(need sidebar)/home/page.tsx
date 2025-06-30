@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import TestGetEmbedding from "./_components/test-deduplication/test-get-embedding"
 import TestSaveIntoSupabase from "./_components/test-deduplication/test-save-into-supabase"
+import EmbedThisWithSupabase from "./_components/test-deduplication/test-embed-this-with-supabase";
 const Home = async () => {
   const { userId, redirectToSignIn } = await auth();
 
@@ -25,8 +26,10 @@ const Home = async () => {
       </div>
       <Onboarding />
       <SyncUser />
-      <TestGetEmbedding />
-      <TestSaveIntoSupabase />
+
+      <TestGetEmbedding /> <br />
+      <TestSaveIntoSupabase /><br/>
+      <EmbedThisWithSupabase />
       <Suspense
         fallback={
           <div className="flex gap-2 justify-between flex-col">

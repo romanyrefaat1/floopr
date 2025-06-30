@@ -11,7 +11,9 @@ export default async function UsersProductPage({
 }: {
   params: { productId: string };
 }) {
-  const productData = await getProductData(params.productId);
+  const {productId} = params;
+  
+  const productData = await getProductData(productId);
   if (!productData) return notFound();
 
   const [initialChangelog, rawFeedbacks, initialSettings] = await Promise.all([
@@ -26,19 +28,19 @@ export default async function UsersProductPage({
   return (
     <ChangelogProvider
       initialChangelog={initialChangelog}
-      productId={params.productId}
+      productId={productId}
     >
       <div className="min-h-screen bg-background">
         <div className="flex justify-center py-4">
           <div className="rounded-full bg- shadow-md py-3 bg-white/90 dark:bg-white/10 px-6 flex items-center gap-6">
             <ProductNavbar
-              productId={params.productId}
+              productId={productId}
               productName={productData.name}
             />
           </div>
         </div>
         <ClientPageShell
-          productId={params.productId}
+          productId={productId}
           productName={productData.name}
         />
       </div>

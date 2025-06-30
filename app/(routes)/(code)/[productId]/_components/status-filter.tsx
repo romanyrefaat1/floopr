@@ -47,9 +47,9 @@ export default function StatusFilter({ value, onChange }: StatusFilterProps) {
           All
         </Button>
         <div className="flex gap-0">
-          {statusTypes.map((type) => (
+          {statusTypes.map((type, index) => (
             <Button
-              key={type.value}
+              key={type.value+index}
               variant="ghost"
               size="sm"
               onClick={() => onChange(type.value)}

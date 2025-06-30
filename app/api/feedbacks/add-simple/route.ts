@@ -14,6 +14,7 @@ import { analyzeSentiment } from "@/services/analyze-sentiment";
 import updateBasicAnalyticsFromNewFeedback from "@/actions/basic-analytics/update/update-basic-analytics-from-new-feedback";
 import getUserPricing from "@/actions/user/get-user-pricing";
 import getProductData from "@/actions/get-product-data";
+import callEmbedFnForAddFeedbackForSupabase from "@/actions/add-feedback-to-supabase-with-embedding-with-supabase-functions";
 
 // Re-define or import SimpleFeedbackItemData if it's not globally accessible
 // For this example, I'll define the expected request body structure.
@@ -90,8 +91,7 @@ export async function POST(request: NextRequest) {
       profilePicture: user?.imageUrl ?? user?.profilePicture ?? null,
     };
     
-
-    await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), {
+    const finalFirestoreObject = {
       type: feedback?.type || "other",
       sentiment: {
         sentiment: sentimentResult?.sentiment ?? null,
@@ -115,7 +115,9 @@ export async function POST(request: NextRequest) {
       userInfo: userInfoForFeedback,
       // ...(currPage && { referenceLink: currPage }),
       referenceLink: currPage || null,
-    });
+    }
+
+    await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), finalFirestoreObject)
 
     // 5. Increment feedback count for the user in Firebase
     // clerkId is guaranteed by the auth check at the beginning.
@@ -131,6 +133,15 @@ export async function POST(request: NextRequest) {
       feedbackCount: increment(1),
       lastFeedbackAt: serverTimestamp(),
     });
+
+    await callEmbedFnForAddFeedbackForSupabase({
+      product_id: productId,
+      id: feedbackId,
+      content: `${feedback.title}\n${feedback.content.blocks && Array.isArray(feedback.content?.blocks) ? feedback.content?.blocks?.map((block) => block.text).join("\n") : JSON.stringify(feedback.content)}`,
+      metadata: finalFirestoreObject,
+      created_at: finalFirestoreObject.createdAt
+    });
+    
 
     // 7. Update basic analytics
     await updateBasicAnalyticsFromNewFeedback({

@@ -1,8 +1,6 @@
 import getAllComponentsByProductId from "@/actions/get-all-components-by-product-id";
 import ComponentCard from "../component-card";
 import { Product } from "@/contexts/multistep-form-context";
-import { db } from "@/lib/firebase";
-import { collection, getDocs } from "firebase/firestore";
 
 export default async function YourComponents({
   productId,
