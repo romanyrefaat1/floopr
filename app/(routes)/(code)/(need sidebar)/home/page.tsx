@@ -26,10 +26,10 @@ const Home = async () => {
       </div>
       <Onboarding />
       <SyncUser />
-
+{/* 
       <TestGetEmbedding /> <br />
       <TestSaveIntoSupabase /><br/>
-      <EmbedThisWithSupabase />
+      <EmbedThisWithSupabase /> */}
       <Suspense
         fallback={
           <div className="flex gap-2 justify-between flex-col">
