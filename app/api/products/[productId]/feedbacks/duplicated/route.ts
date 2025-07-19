@@ -4,7 +4,8 @@ import { adminDb } from "@/lib/firebaseAdmin";
 // GET handler to find duplicate clusters
 export async function GET(request: Request, { params }: { params: { productId: string } }) {
   try {
-    const productId = params.productId;
+    const resolvedParams = await params;
+    const productId = resolvedParams.productId;
     const { searchParams } = new URL(request.url);
     const similarity = searchParams.get("similarity");
     
@@ -45,7 +46,8 @@ export async function GET(request: Request, { params }: { params: { productId: s
 // DELETE handler to remove duplicates with Firestore batch
 export async function DELETE(request, { params }) {
   try {
-    const productId = params.productId;
+    const resolvedParams = await params;
+    const productId = resolvedParams.productId;
     const body = await request.json();
     const { clusters } = body;
     
@@ -86,19 +88,135 @@ export async function DELETE(request, { params }) {
   }
 }
 
+// Helper function to extract text content from feedback data
+function extractTextContent(data) {
+  console.log("📝 Processing feedback data:", { 
+    hasContent: !!data.content, 
+    hasInputs: !!data.inputs,
+    hasFeedback: !!data.feedback,
+    feedbackType: typeof data.feedback,
+    inputsType: Array.isArray(data.inputs) ? 'array' : typeof data.inputs,
+    inputsLength: Array.isArray(data.inputs) ? data.inputs.length : 'N/A'
+  });
+  
+  // Check content first
+  if (data.content?.trim()) {
+    const content = data.content.trim();
+    console.log("✅ Found content:", content);
+    return content;
+  }
+  
+  // Check if feedback object has content or inputs
+  if (data.feedback && typeof data.feedback === 'object') {
+    console.log("🔍 Checking feedback object:", data.feedback);
+    
+    // Check feedback.content
+    if (data.feedback.content?.trim()) {
+      const content = data.feedback.content.trim();
+      console.log("✅ Found feedback.content:", content);
+      return content;
+    }
+    
+    // Check feedback.inputs array
+    if (data.feedback.inputs && Array.isArray(data.feedback.inputs)) {
+      console.log("🔍 Checking feedback.inputs array:", data.feedback.inputs);
+      
+      const validInputs = data.feedback.inputs.filter(input => {
+        const isValid = input && typeof input === 'object' && input.value;
+        console.log("  Input validation:", { input, isValid });
+        return isValid;
+      });
+      
+      const inputValues = validInputs
+        .map(input => {
+          const trimmed = input.value.trim();
+          console.log("  Extracted value:", trimmed);
+          return trimmed;
+        })
+        .filter(value => {
+          const hasLength = value.length > 0;
+          console.log("  Value length check:", { value, hasLength });
+          return hasLength;
+        });
+      
+      const joined = inputValues.join(' ');
+      console.log("🔗 Joined input values:", joined);
+      
+      if (joined) {
+        console.log("✅ Using feedback.inputs content:", joined);
+        return joined;
+      }
+    }
+  }
+  
+  // If no content, check inputs array at root level
+  if (data.inputs && Array.isArray(data.inputs)) {
+    console.log("🔍 Checking root inputs array:", data.inputs);
+    
+    const validInputs = data.inputs.filter(input => {
+      const isValid = input && typeof input === 'object' && input.value;
+      console.log("  Input validation:", { input, isValid });
+      return isValid;
+    });
+    
+    const inputValues = validInputs
+      .map(input => {
+        const trimmed = input.value.trim();
+        console.log("  Extracted value:", trimmed);
+        return trimmed;
+      })
+      .filter(value => {
+        const hasLength = value.length > 0;
+        console.log("  Value length check:", { value, hasLength });
+        return hasLength;
+      });
+    
+    const joined = inputValues.join(' ');
+    console.log("🔗 Joined input values:", joined);
+    
+    if (joined) {
+      console.log("✅ Using root inputs content:", joined);
+      return joined;
+    }
+  }
+  
+  console.log("❌ No text content found");
+  return null; // No text content found
+}
+
 // Helper function to find identical content clusters
 function findIdenticalClusters(snapshot) {
+  console.log("🚀 Starting findIdenticalClusters...");
+  console.log("📊 Total documents in snapshot:", snapshot.size);
+  
   const contentMap = {};
+  let processedCount = 0;
+  let skippedCount = 0;
   
   // Group documents by identical content
   snapshot.forEach(doc => {
-    const data = doc.data();
-    const content = data.content?.trim();
+    processedCount++;
+    console.log(`\n--- Processing document ${processedCount}/${snapshot.size} ---`);
+    console.log("📄 Document ID:", doc.id);
     
-    if (!content) return; // Skip empty content
+    const data = doc.data();
+    console.log("📋 Document data keys:", Object.keys(data));
+    
+    const content = extractTextContent(data);
+    
+    if (!content) {
+      skippedCount++;
+      console.log("⏭️ Skipped - no text content found");
+      return;
+    }
+    
+    console.log("🔑 Content key for mapping:", `"${content}"`);
     
     if (!contentMap[content]) {
       contentMap[content] = [];
+      console.log("🆕 Created new content group");
+    } else {
+      console.log("👥 Adding to existing group (current size:", contentMap[content].length, ")");
     }
     
     contentMap[content].push({
@@ -107,10 +225,34 @@ function findIdenticalClusters(snapshot) {
     });
   });
 
+  console.log(`\n📈 Processing summary:`);
+  console.log(`  - Total processed: ${processedCount}`);
+  console.log(`  - Skipped (no content): ${skippedCount}`);
+  console.log(`  - Unique content groups: ${Object.keys(contentMap).length}`);
+
+  // Log content groups
+  Object.entries(contentMap).forEach(([content, group], index) => {
+    console.log(`\nGroup ${index + 1}: "${content}" (${group.length} items)`);
+    group.forEach(item => console.log(`  - Document ID: ${item.id}`));
+  });
+
   // Return only groups with more than 1 item (duplicates)
-  return Object.values(contentMap)
-    .filter(group => group.length > 1)
+  const duplicateGroups = Object.values(contentMap)
+    .filter(group => {
+      const isDuplicate = group.length > 1;
+      if (isDuplicate) {
+        console.log(`🚨 Found duplicate group with ${group.length} items:`, 
+          group.map(item => item.id));
+      }
+      return isDuplicate;
+    })
     .sort((a, b) => b.length - a.length); // Sort by cluster size, largest first
+
+  console.log(`\n🎯 Final results:`);
+  console.log(`  - Duplicate groups found: ${duplicateGroups.length}`);
+  console.log(`  - Total duplicates: ${duplicateGroups.reduce((sum, group) => sum + (group.length - 1), 0)}`);
+
+  return duplicateGroups;
 }
 
 // Helper function for similarity-based clustering
@@ -119,11 +261,13 @@ async function findSimilarClusters(snapshot, similarityThreshold) {
   
   snapshot.forEach(doc => {
     const data = doc.data();
-    if (data.content?.trim()) {
+    const content = extractTextContent(data);
+    
+    if (content) {
       feedbackItems.push({
         id: doc.id,
         data: data,
-        content: data.content.trim().toLowerCase()
+        content: content.toLowerCase()
       });
     }
   });

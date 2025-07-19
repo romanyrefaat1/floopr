@@ -58,7 +58,7 @@ interface AllFeedbackContextType {
   feedbacks: FeedbackItemInDB[] | null;
   loading: boolean;
   error: string | null;
-  refetch: (productId: string, filterData: FilterData) => void;
+  refetchFeedbacks: () => void;
 }
 
 const AllFeedbackContext = createContext<AllFeedbackContextType | undefined>(
@@ -107,17 +107,17 @@ export function AllFeedbackProvider({
     }
   };
 
+  const refetchFeedbacks = async () => {
+    await fetchFeedbacks(productId, filterData);
+  }
+
   useEffect(() => {
     fetchFeedbacks(productId, filterData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId, JSON.stringify(filterData)]);
 
-  const refetch = (pid: string, fd: FilterData) => {
-    fetchFeedbacks(pid, fd);
-  };
-
   return (
-    <AllFeedbackContext.Provider value={{ feedbacks, loading, error, refetch }}>
+    <AllFeedbackContext.Provider value={{ feedbacks, loading, error, refetchFeedbacks }}>
       {children}
     </AllFeedbackContext.Provider>
   );
