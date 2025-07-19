@@ -6,79 +6,81 @@ import {
   setDoc,
   serverTimestamp,
   updateDoc,
-  getDoc,
   increment,
-  collection, // Added for consistency, though addDoc isn't used here for feedbacks
 } from "firebase/firestore";
 import { analyzeSentiment } from "@/services/analyze-sentiment";
 import updateBasicAnalyticsFromNewFeedback from "@/actions/basic-analytics/update/update-basic-analytics-from-new-feedback";
 import getUserPricing from "@/actions/user/get-user-pricing";
 import getProductData from "@/actions/get-product-data";
-import callEmbedFnForAddFeedbackForSupabase from "@/actions/add-feedback-to-supabase-with-embedding-with-supabase-functions";
 
-// Re-define or import SimpleFeedbackItemData if it's not globally accessible
-// For this example, I'll define the expected request body structure.
+// Define the expected request body structure
 type AddSimpleFeedbackRequestBody = {
   feedback: {
     title: string;
-    content: string | null;
+    content: any; // Can be string or Draft.js object
     isRich: boolean;
     type: `idea` | `feature` | `issue` | `other`;
   };
   productId: string;
-  componentRefId?: string | null; // Make optional if not always present
+  componentRefId?: string | null;
+  userInfo?: {
+    username?: string;
+    userId?: string;
+    profilePicture?: string;
+  };
+  currPage?: string;
 };
 
 export async function POST(request: NextRequest) {
   try {
     const { userId: clerkId } = auth();
-    let user = await currentUser(); // Get full user details for username/profilePicture
-
-    // if (!clerkId || !user) {
-    //   return NextResponse.json({ error: "Authentication required." }, { status: 401 });
-    // }
+    let user = await currentUser();
 
     const body: AddSimpleFeedbackRequestBody = await request.json();
     const { feedback, productId, componentRefId, userInfo, currPage } = body;
 
+    // Handle custom userInfo if provided
     if (userInfo && (userInfo.username || userInfo.userId || userInfo.profilePicture)) {
       user = {
         username: userInfo.username || "Anonymous",
         userId: userInfo.userId || null,
         profilePicture: userInfo.profilePicture || null,
-      };
+      } as any;
     }
 
     if (!feedback || !productId) {
       return NextResponse.json({ error: "Missing feedback data or productId." }, { status: 400 });
     }
 
-    const {ownerId} = await getProductData(productId);
+    const { ownerId } = await getProductData(productId);
     
-    // 1. Get user subscription details and check limits using centralized function
+    // Check user subscription limits
     const userSubscription = await getUserPricing(ownerId);
 
     if (userSubscription.isExceededFeedbackCountLimit) {
       return NextResponse.json(
         { error: "Monthly feedback submission limit reached. Please upgrade your plan or try again next month." },
-        { status: 429 } // 429 Too Many Requests or 403 Forbidden
+        { status: 429 }
       );
     }
 
-    // 2. Proceed with feedback submission
-    const sentimentResult = await analyzeSentiment(
-      `${feedback.title}. ${feedback.content || ""}`
-    );
+    // Analyze sentiment
+    const sentimentText = `${feedback.title}. ${
+      typeof feedback.content === 'string' 
+        ? feedback.content 
+        : feedback.content?.blocks?.map((block: any) => block.text).join(' ') || ''
+    }`;
+    const sentimentResult = await analyzeSentiment(sentimentText);
     const topicClassification = ["No topic", "No topic", "No topic"]; // Placeholder
 
-    // 3. Ensure the product document exists (optional, for safety)
+    // Ensure the product document exists
     await setDoc(
       doc(db, "products", productId),
       { productId, updatedAt: serverTimestamp() },
       { merge: true }
     );
 
-    // 4. Add feedback document
+    // Prepare user info for feedback
     const feedbackId = crypto.randomUUID();
     const userInfoForFeedback = {
       userId: user?.id || user?.userId || null,
@@ -91,6 +93,7 @@ export async function POST(request: NextRequest) {
       profilePicture: user?.imageUrl ?? user?.profilePicture ?? null,
     };
     
+    // Create the feedback document
     const finalFirestoreObject = {
       type: feedback?.type || "other",
       sentiment: {
@@ -99,11 +102,14 @@ export async function POST(request: NextRequest) {
         text: sentimentResult?.text ?? "",
       },
       topic: topicClassification,
-      socialData: { likes: { count: 0, data: [] }, comments: { count: 0, data: [] } },
+      socialData: { 
+        likes: { count: 0, data: [] }, 
+        comments: { count: 0, data: [] } 
+      },
       feedback: {
         title: feedback.title || "Untitled",
-        content: feedback.content || null,
-        isRich: feedback.isRich || true,
+        content: feedback.content || null, // Store as-is (object or string)
+        isRich: feedback.isRich || false,
       },
       feedbackId,
       productId,
@@ -111,39 +117,31 @@ export async function POST(request: NextRequest) {
       updatedAt: serverTimestamp(),
       status: "Sent",
       componentRefId: componentRefId || null,
-      isComponent: !!componentRefId, // Example logic
+      isComponent: !!componentRefId,
       userInfo: userInfoForFeedback,
-      // ...(currPage && { referenceLink: currPage }),
       referenceLink: currPage || null,
-    }
+    };
 
-    await setDoc(doc(db, "products", productId, "feedbacks", feedbackId), finalFirestoreObject)
+    // Save feedback to Firestore
+    await setDoc(
+      doc(db, "products", productId, "feedbacks", feedbackId), 
+      finalFirestoreObject
+    );
 
-    // 5. Increment feedback count for the user in Firebase
-    // clerkId is guaranteed by the auth check at the beginning.
-    // getUserPricing ensures the user document exists.
+    // Update user feedback count
     const userDocRef = doc(db, "users", ownerId);
     await updateDoc(userDocRef, {
       feedback_count_monthly: increment(1),
     });
 
-    // 6. Update product feedback count
+    // Update product feedback count
     const productRef = doc(db, "products", productId);
     await updateDoc(productRef, {
       feedbackCount: increment(1),
       lastFeedbackAt: serverTimestamp(),
     });
 
-    await callEmbedFnForAddFeedbackForSupabase({
-      product_id: productId,
-      id: feedbackId,
-      content: `${feedback.title}\n${feedback.content.blocks && Array.isArray(feedback.content?.blocks) ? feedback.content?.blocks?.map((block) => block.text).join("\n") : JSON.stringify(feedback.content)}`,
-      metadata: finalFirestoreObject,
-      created_at: finalFirestoreObject.createdAt
-    });
-    
-
-    // 7. Update basic analytics
+    // Update basic analytics
     await updateBasicAnalyticsFromNewFeedback({
       productId,
       sentimentResult,

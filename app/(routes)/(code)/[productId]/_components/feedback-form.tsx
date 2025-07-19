@@ -54,9 +54,6 @@ export default function FeedbackForm() {
         profilePicture: user.imageUrl || null,
       };
 
-      // Debug logging
-      
-
       // Create a feedback object with the form values
       let finalContent: string | null = null;
       let finalIsRich: boolean = false;
@@ -65,7 +62,7 @@ export default function FeedbackForm() {
           typeof values.description === 'object' && 
           Object.keys(values.description).length > 0) {
         // If description is a non-empty object (from RichTextEditor)
-        finalContent = JSON.stringify(values.description);
+        finalContent = values.description;
         finalIsRich = true;
       } else if (typeof values.description === 'string' && values.description.trim() !== '') {
         // If description is a non-empty string

@@ -88,40 +88,121 @@ export async function DELETE(request, { params }) {
   }
 }
 
-// Helper function to extract text content from feedback data
-function extractTextContent(data) {
-  console.log("📝 Processing feedback data:", { 
-    hasContent: !!data.content, 
-    hasInputs: !!data.inputs,
-    hasFeedback: !!data.feedback,
-    feedbackType: typeof data.feedback,
-    inputsType: Array.isArray(data.inputs) ? 'array' : typeof data.inputs,
-    inputsLength: Array.isArray(data.inputs) ? data.inputs.length : 'N/A'
-  });
-  
-  // Check content first
-  if (data.content?.trim()) {
-    const content = data.content.trim();
-    console.log("✅ Found content:", content);
-    return content;
+// Helper function to serialize text content for better duplicate detection
+function serializeText(text) {
+    if (!text || typeof text !== 'string') return '';
+    
+    return text
+      .toLowerCase()                    // Convert to lowercase
+      .replace(/[.,;:!?'"]/g, '')      // Remove punctuation
+      .replace(/\s+/g, ' ')            // Normalize whitespace
+      .trim();                         // Remove leading/trailing spaces
   }
   
-  // Check if feedback object has content or inputs
-  if (data.feedback && typeof data.feedback === 'object') {
-    console.log("🔍 Checking feedback object:", data.feedback);
+  // Helper function to extract text content from feedback data
+  function extractTextContent(data) {
+    console.log("📝 Processing feedback data:", { 
+      hasContent: !!data.content, 
+      contentType: typeof data.content,
+      hasInputs: !!data.inputs,
+      hasFeedback: !!data.feedback,
+      feedbackType: typeof data.feedback,
+      inputsType: Array.isArray(data.inputs) ? 'array' : typeof data.inputs,
+      inputsLength: Array.isArray(data.inputs) ? data.inputs.length : 'N/A'
+    });
     
-    // Check feedback.content
-    if (data.feedback.content?.trim()) {
-      const content = data.feedback.content.trim();
-      console.log("✅ Found feedback.content:", content);
-      return content;
+    // Check content first
+    if (data.content) {
+      // Handle object-type content with blocks
+      if (typeof data.content === 'object' && data.content.blocks && Array.isArray(data.content.blocks)) {
+        console.log("🔍 Found object content with blocks:", data.content.blocks.length);
+        
+        const blockTexts = data.content.blocks
+          .filter(block => block && block.text)
+          .map(block => block.text.trim())
+          .filter(text => text.length > 0);
+        
+        if (blockTexts.length > 0) {
+          const joinedContent = blockTexts.join(' ');
+          const serializedContent = serializeText(joinedContent);
+          console.log("✅ Found content from blocks:", serializedContent);
+          return serializedContent;
+        }
+      }
+      // Handle string content
+      else if (typeof data.content === 'string' && data.content.trim()) {
+        const serializedContent = serializeText(data.content.trim());
+        console.log("✅ Found string content:", serializedContent);
+        return serializedContent;
+      }
     }
     
-    // Check feedback.inputs array
-    if (data.feedback.inputs && Array.isArray(data.feedback.inputs)) {
-      console.log("🔍 Checking feedback.inputs array:", data.feedback.inputs);
+    // Check if feedback object has content or inputs
+    if (data.feedback && typeof data.feedback === 'object') {
+      console.log("🔍 Checking feedback object:", data.feedback);
       
-      const validInputs = data.feedback.inputs.filter(input => {
+      // Check feedback.content
+      if (data.feedback.content) {
+        // Handle object-type feedback content with blocks
+        if (typeof data.feedback.content === 'object' && data.feedback.content.blocks && Array.isArray(data.feedback.content.blocks)) {
+          console.log("🔍 Found object feedback.content with blocks:", data.feedback.content.blocks.length);
+          
+          const blockTexts = data.feedback.content.blocks
+            .filter(block => block && block.text)
+            .map(block => block.text.trim())
+            .filter(text => text.length > 0);
+          
+          if (blockTexts.length > 0) {
+            const joinedContent = blockTexts.join(' ');
+            const serializedContent = serializeText(joinedContent);
+            console.log("✅ Found feedback.content from blocks:", serializedContent);
+            return serializedContent;
+          }
+        }
+        // Handle string feedback content
+        else if (typeof data.feedback.content === 'string' && data.feedback.content.trim()) {
+          const serializedContent = serializeText(data.feedback.content.trim());
+          console.log("✅ Found feedback.content:", serializedContent);
+          return serializedContent;
+        }
+      }
+      
+      // Check feedback.inputs array
+      if (data.feedback.inputs && Array.isArray(data.feedback.inputs)) {
+        console.log("🔍 Checking feedback.inputs array:", data.feedback.inputs);
+        
+        const validInputs = data.feedback.inputs.filter(input => {
+          const isValid = input && typeof input === 'object' && input.value;
+          console.log("  Input validation:", { input, isValid });
+          return isValid;
+        });
+        
+        const inputValues = validInputs
+          .map(input => {
+            const trimmed = input.value.trim();
+            console.log("  Extracted value:", trimmed);
+            return trimmed;
+          })
+          .filter(value => {
+            const hasLength = value.length > 0;
+            console.log("  Value length check:", { value, hasLength });
+            return hasLength;
+          });
+        
+        if (inputValues.length > 0) {
+          const joinedContent = inputValues.join(' ');
+          const serializedContent = serializeText(joinedContent);
+          console.log("✅ Using feedback.inputs content:", serializedContent);
+          return serializedContent;
+        }
+      }
+    }
+    
+    // If no content, check inputs array at root level
+    if (data.inputs && Array.isArray(data.inputs)) {
+      console.log("🔍 Checking root inputs array:", data.inputs);
+      
+      const validInputs = data.inputs.filter(input => {
         const isValid = input && typeof input === 'object' && input.value;
         console.log("  Input validation:", { input, isValid });
         return isValid;
@@ -139,50 +220,17 @@ function extractTextContent(data) {
           return hasLength;
         });
       
-      const joined = inputValues.join(' ');
-      console.log("🔗 Joined input values:", joined);
-      
-      if (joined) {
-        console.log("✅ Using feedback.inputs content:", joined);
-        return joined;
+      if (inputValues.length > 0) {
+        const joinedContent = inputValues.join(' ');
+        const serializedContent = serializeText(joinedContent);
+        console.log("✅ Using root inputs content:", serializedContent);
+        return serializedContent;
       }
     }
+    
+    console.log("❌ No text content found");
+    return null; // No text content found
   }
-  
-  // If no content, check inputs array at root level
-  if (data.inputs && Array.isArray(data.inputs)) {
-    console.log("🔍 Checking root inputs array:", data.inputs);
-    
-    const validInputs = data.inputs.filter(input => {
-      const isValid = input && typeof input === 'object' && input.value;
-      console.log("  Input validation:", { input, isValid });
-      return isValid;
-    });
-    
-    const inputValues = validInputs
-      .map(input => {
-        const trimmed = input.value.trim();
-        console.log("  Extracted value:", trimmed);
-        return trimmed;
-      })
-      .filter(value => {
-        const hasLength = value.length > 0;
-        console.log("  Value length check:", { value, hasLength });
-        return hasLength;
-      });
-    
-    const joined = inputValues.join(' ');
-    console.log("🔗 Joined input values:", joined);
-    
-    if (joined) {
-      console.log("✅ Using root inputs content:", joined);
-      return joined;
-    }
-  }
-  
-  console.log("❌ No text content found");
-  return null; // No text content found
-}
 
 // Helper function to find identical content clusters
 function findIdenticalClusters(snapshot) {

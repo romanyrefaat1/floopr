@@ -241,7 +241,7 @@ export default function RemoveDuplicateFeedbackButton({ productId }) {
                 </CardHeader>
               </Card>
 
-              {/* <Card 
+              <Card 
                 className="cursor-pointer hover:border-primary hover:shadow-md transition-all duration-300 group"
                 onClick={() => handleOptionSelect("similar")}
               >
@@ -255,7 +255,7 @@ export default function RemoveDuplicateFeedbackButton({ productId }) {
                     You can set a similarity threshold to control how similar items need to be.
                   </CardDescription>
                 </CardHeader>
-              </Card> */}
+              </Card>
             </div>
             
             {isLoading && (
