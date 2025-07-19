@@ -77,8 +77,8 @@ export type SimpleFeedbackItemDataForAction = {
 export async function addSimpleFeedback(
   feedbackData: SimpleFeedbackItemDataForAction
 ) {
-  const baseUrl = "http://localhost:3000"
-  // const baseUrl = "https://floopr.app"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_LINK;
+  console.log("baseUrl", baseUrl);
   try {
     const response = await fetch(baseUrl + "/api/feedbacks/add-simple", {
       method: "POST",

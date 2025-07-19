@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { GroupedFeedbackProvider } from "../../group-context/groupt-context";
 import { FilterData, Product } from "../../page";
 import { ViewProvider } from "../../view-context/view-context";
@@ -19,6 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, LayoutDashboard, Settings } from "lucide-react";
 import Link from "next/link";
+import LoaderSpinner from "@/components/loader-spinner";
 
 export default async function DashboardTemplate({
   productData,
@@ -126,7 +128,9 @@ export default async function DashboardTemplate({
 
             {/* Analytics Tab Content */}
             <TabsContent value="analytics">
-              <AnalyticsDashboard productData={productData} />
+              <Suspense fallback={<LoaderSpinner />}>
+                <AnalyticsDashboard productData={productData} />
+              </Suspense>
             </TabsContent>
 
             {/* Integrations Tab Content */}

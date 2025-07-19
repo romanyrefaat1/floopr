@@ -17,6 +17,31 @@ import { doc } from "firebase/firestore";
 import Image from "next/image";
 import Link from "next/link";
 
+// Better type definition
+interface ComponentDataExternal {
+  name: string;
+  title: string;
+  description: string;
+  plan?: string;
+}
+
+interface ComponentDataOwned {
+  componentDisplayNeme?: string;
+  componentType?: string;
+  componentId?: string;
+  isCreating?: boolean;
+  componentData?: {
+    name?: string;
+    componentId?: string;
+    plan?: string;
+    metaData?: {
+      name?: string;
+      description?: string;
+      imageUrl?: string;
+    };
+  };
+}
+
 export default function ComponentCard({
   productData,
   componentData,
@@ -24,35 +49,38 @@ export default function ComponentCard({
   imageUrl,
 }: {
   productData: Product;
-  componentData: { name: string; title: string; description: string } | object;
+  componentData: ComponentDataExternal | ComponentDataOwned;
   isYours: boolean;
   imageUrl: string;
 }) {
-  //   
   const productDataFromFirestore = serializeFirestoreData(productData);
   let metaData = {
-    title: null,
-    description: null,
-    imageUrl: null,
-    componentName: null,
+    title: "",
+    description: "",
+    imageUrl: "",
+    componentName: "",
+    plan: "free",
   };
-  
 
   if (!isYours) {
+    // Type guard and safe property access
+    const externalData = componentData as ComponentDataExternal;
     metaData = {
-      title: componentData.title,
-      description: componentData.description,
-      imageUrl: imageUrl,
-      componentName: componentData.name,
-      plan: componentData.plan || `free`,
+      title: externalData.title || "",
+      description: externalData.description || "",
+      imageUrl: imageUrl || "",
+      componentName: externalData.name || "",
+      plan: externalData.plan || "free",
     };
   } else if (isYours) {
+    // Safe property access with optional chaining
+    const ownedData = componentData as ComponentDataOwned;
     metaData = {
-      title: componentData.componentData.metaData.name,
-      description: componentData.componentData.metaData.description,
-      imageUrl: componentData.componentData.metaData.imageUrl,
-      componentName: componentData.componentData.name,
-      plan: componentData.componentData.plan || `free`,
+      title: ownedData.componentData?.metaData?.name || "",
+      description: ownedData.componentData?.metaData?.description || "",
+      imageUrl: ownedData.componentData?.metaData?.imageUrl || "",
+      componentName: ownedData.componentData?.name || "",
+      plan: ownedData.componentData?.plan || "free",
     };
   }
 
@@ -74,11 +102,12 @@ export default function ComponentCard({
             isYours={isYours}
             docRef={doc(
               db,
-              `products/${productData.docId}/components/${componentData.componentId}`
+              `products/${productData.docId}/components/${(componentData as ComponentDataOwned).componentId}`
             )}
           /> */}
         </div>
       )}
+      
       {/* Image */}
       <div className="image w-full flex items-center justify-center rounded-lg">
         <Image
@@ -88,19 +117,19 @@ export default function ComponentCard({
           src={
             metaData.imageUrl || `/images/online/components/modal-timeout.PNG`
           }
-          // src={`/images/online/components/modal-timeout.PNG`}
         />
       </div>
 
       <div className="flex flex-col">
         <CardHeader className="flex flex-col justify-between gap-4">
           <CardTitle>
-            {componentData.componentDisplayNeme ||
+            {(componentData as ComponentDataOwned).componentDisplayNeme ||
               metaData.title ||
-              componentData.componentType ||
+              (componentData as ComponentDataOwned).componentType ||
               `Your component`}
           </CardTitle>
-          {metaData.description.length > 0 && (
+          {/* Safe length check - this was the main issue */}
+          {metaData.description && metaData.description.length > 0 && (
             <CardDescription className="text-secondary-foreground">
               {makeFirstLetterUppercase(metaData.description)}
             </CardDescription>
@@ -113,13 +142,13 @@ export default function ComponentCard({
               productData={productDataFromFirestore}
             />
           )}
-          {!componentData.isCreating && (
+          {!(componentData as ComponentDataOwned).isCreating && (
             <Link
               className="w-full"
               href={
                 isYours
-                  ? `/products/${productDataFromFirestore.docId}/my-components/${componentData.componentType}/${componentData.componentData.componentId}`
-                  : `/edit-component?componentTypeName=${componentData.name}&ref=${productDataFromFirestore.docId}`
+                  ? `/products/${productDataFromFirestore.docId}/my-components/${(componentData as ComponentDataOwned).componentType}/${(componentData as ComponentDataOwned).componentData?.componentId}`
+                  : `/edit-component?componentTypeName=${(componentData as ComponentDataExternal).name}&ref=${productDataFromFirestore.docId}`
               }
               id={isYours ? "add-float-button" : ""}
             >
@@ -132,7 +161,7 @@ export default function ComponentCard({
             </Link>
           )}
         </CardContent>
-        {componentData.isCreating && (
+        {(componentData as ComponentDataOwned).isCreating && (
           <div>
             <p className="text-sm w-full p-2 text-center bg-floopr-purple/30 mt-2 rounded">
               Component in progress...
