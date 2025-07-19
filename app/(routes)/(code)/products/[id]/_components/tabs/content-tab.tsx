@@ -9,6 +9,7 @@ import { ProductData } from "@/app/(routes)/(code)/[productId]/page";
 import { Badge } from "@/components/ui/badge";
 import FeedbackCountIndicator from "@/components/warn/feedback-count-indicator";
 import WarnFeedbackCountLimit from "@/components/warn/warn-feedback-count-limit";
+import RemoveDuplicateFeedbackButton from "./remove-duplicate-feedback-button";
 
 export default function ContentTab({
   productData,
@@ -33,6 +34,7 @@ export default function ContentTab({
           <ContentTabTitle />
           <div className="flex gap-2 items-center justify-center">
             {/**/}
+            <RemoveDuplicateFeedbackButton productId={productId} />
             <GroupFeedbackButton productId={productId} />
             <DifferViewButton />
             <FeedbackCountIndicator />

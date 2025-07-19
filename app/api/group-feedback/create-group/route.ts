@@ -24,31 +24,26 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user subscription details and check limits for AI grouping
-    const userSubscription = await getUserPricing();
+    // const userSubscription = await getUserPricing();
 
-    if (userSubscription.isExceededGroupFeedbackLimit) {
-      return NextResponse.json(
-        {
-          error:
-            "Daily AI-powered feedback grouping limit reached. Please upgrade your plan or try again tomorrow.",
-        },
-        { status: 403 } // Or 403 Forbidden
-      );
-    }
+    // if (userSubscription.isExceededGroupFeedbackLimit) {
+    //   return NextResponse.json(
+    //     {
+    //       error:
+    //         "Daily AI-powered feedback grouping limit reached. Please upgrade your plan or try again tomorrow.",
+    //     },
+    //     { status: 403 } // Or 403 Forbidden
+    //   );
+    // }
 
-    await updateFirebaseUserData(
-      clerkId,
-      {
-        group_feedback_count_daily_number: increment(1) ?? 0,
-        group_feedback_last_reset_date: serverTimestamp(),
-      },
-      true
-    );
-
-    return NextResponse.json(
-      { error: "Romany stopped route to continue for testing." },
-      { status: 500 }
-    );
+    // await updateFirebaseUserData(
+    //   clerkId,
+    //   {
+    //     group_feedback_count_daily_number: increment(1) ?? 0,
+    //     group_feedback_last_reset_date: serverTimestamp(),
+    //   },
+    //   true
+    // );
 
     const { productId } = await request.json();
 

@@ -290,77 +290,77 @@ export default function ChatbotIndex({ productId }: { productId: string }) {
                     <div
                       className={`prose prose-sm dark:text-white/90 leading-6`}
                     >
-                      <ReactMarkdown
-                        components={{
-                          h1: ({ node, ...props }) => (
-                            <h1
-                              className="text-4xl font-extrabold my-6"
-                              {...props}
-                            />
-                          ),
-                          h2: ({ node, ...props }) => (
-                            <h2
-                              className="text-3xl font-bold my-5"
-                              {...props}
-                            />
-                          ),
-                          p: ({ node, ...props }) => (
-                            <p
-                              className="text-base leading-7 mb-4"
-                              {...props}
-                            />
-                          ),
-                          a: ({ node, ...props }) => (
-                            <Link
-                              className="text-blue-600 hover:underline"
-                              target="_blank"
-                              {...props}
-                            />
-                          ),
-                          code: ({
-                            node,
-                            inline,
-                            className,
-                            children,
-                            ...props
-                          }) => {
-                            if (inline) {
-                              return (
-                                <code
-                                  className="bg-gray-100 px-1 rounded text-sm"
-                                  {...props}
-                                >
-                                  {children}
-                                </code>
-                              );
-                            }
-                            // block code
-                            return (
-                              <pre className="bg-secondary text- p-4 rounded overflow-x-auto">
-                                <code className={className} {...props}>
-                                  {children}
-                                </code>
-                              </pre>
-                            );
-                          },
-                          ul: ({ node, ...props }) => (
-                            <ul
-                              className="list-disc list-inside mb-4 mr-3"
-                              {...props}
-                            />
-                          ),
-                          li: ({ node, ...props }) => (
-                            <li className="mb-1 ml-2" {...props} />
-                          ),
-                          blockquote: ({ node, ...props }) => (
-                            <blockquote
-                              className="border-l-4 border-gray-300 pl-4 italic text-gray-600 my-4"
-                              {...props}
-                            />
-                          ),
-                          // add more overrides as needed…
-                        }}
-                      >
+                     <ReactMarkdown
+  components={{
+    h1: ({ node, ...props }) => (
+      <h1 className="text-4xl font-extrabold my-6" {...props} />
+    ),
+    h2: ({ node, ...props }) => (
+      <h2 className="text-3xl font-bold my-5" {...props} />
+    ),
+    p: ({ node, ...props }) => (
+      <p className="text-base leading-7 mb-4" {...props} />
+    ),
+    a: ({ node, ...props }) => (
+      <Link
+        className="text-blue-600 hover:underline"
+        target="_blank"
+        {...props}
+      />
+    ),
+    code: ({ node, inline, className, children, ...props }) => {
+      if (inline) {
+        return (
+          <code
+            className="bg-gray-100 px-1 rounded text-sm"
+            {...props}
+          >
+            {children}
+          </code>
+        );
+      }
+      return (
+        <pre className="bg-secondary text- p-4 rounded overflow-x-auto">
+          <code className={className} {...props}>
+            {children}
+          </code>
+        </pre>
+      );
+    },
+    ul: ({ node, ...props }) => (
+      <ul className="list-disc list-inside mb-4 mr-3" {...props} />
+    ),
+    li: ({ node, ...props }) => (
+      <li className="mb-1 ml-2" {...props} />
+    ),
+    blockquote: ({ node, ...props }) => (
+      <blockquote
+        className="border-l-4 border-gray-300 pl-4 italic text-gray-600 my-4"
+        {...props}
+      />
+    ),
+    img: ({ node, ...props }) => (
+      <img className="my-4 rounded shadow-md max-w-full h-auto" {...props} />
+    ),
+    table: ({ node, ...props }) => (
+      <table className="table-auto border-collapse w-full my-6" {...props} />
+    ),
+    thead: ({ node, ...props }) => (
+      <thead className="bg-gray-100 text-left" {...props} />
+    ),
+    tbody: ({ node, ...props }) => <tbody {...props} />,
+    tr: ({ node, ...props }) => (
+      <tr className="border-t border-gray-200" {...props} />
+    ),
+    th: ({ node, ...props }) => (
+      <th className="px-4 py-2 font-semibold" {...props} />
+    ),
+    td: ({ node, ...props }) => (
+      <td className="px-4 py-2" {...props} />
+    ),
+    // Add more overrides as needed…
+  }}
+>
                         {msg.text}
                       </ReactMarkdown>
                     </div>

@@ -54,37 +54,37 @@ export async function POST(request: NextRequest) {
       : [];
     const settings = providedSettings || {};
 
-    // Compose feedbacksText and changelogText as before, but from provided data
-    let feedbacksText = "";
-    let changelogText = "";
-    if (feedbacks.length === 0) {
-      feedbacksText = "Feedback are empty.";
-    } else {
-      feedbacksText = feedbacks
-        .map((f: any) => {
-          const name = f.name || (f.feedback && f.feedback.name) || "Unknown";
-          const title = f.feedback?.title || "";
-          const inputs = f.isComponent ? f.feedback?.inputs : "";
-          const richContent = !f.feedback?.isRich
-            ? ""
-            : (f.feedback?.content?.blocks || [])
-                .map((block: any) => block.text)
-                .join("\n");
-          return `${name}:
-    ${title}
-    ${inputs}
-    ${richContent}
-    feedbackId: ${f.feedbackId}
-    date: ${f.createdAt?.toLocaleString?.() || f.createdAt || `Unkown`}
-    likesCount: ${f.socialData?.liked?.count}
-    commentsCount: ${f.socialData?.comments?.count}
-    status: ${f.status}
-    type: ${f.type}
-    all data: ${JSON.stringify(f)}
-    `;
-        })
-        .join("\n");
-    }
+     // Compose feedbacksText and changelogText as before, but from provided data
+     let feedbacksText = "";
+     let changelogText = "";
+     if (feedbacks.length === 0) {
+       feedbacksText = "Feedback are empty.";
+     } else {
+       feedbacksText = feedbacks
+         .map((f: any) => {
+           const name = f.name || (f.feedback && f.feedback.name) || "Unknown";
+           const title = f.feedback?.title || "";
+           const inputs = f.isComponent ? f.feedback?.inputs : "";
+           const richContent = !f.feedback?.isRich
+             ? ""
+             : (f.feedback?.content?.blocks || [])
+                 .map((block: any) => block.text)
+                 .join("\n");
+           return `${name}:
+     ${title}
+     ${inputs}
+     ${richContent}
+     feedbackId: ${f.feedbackId}
+     date: ${f.createdAt?.toLocaleString?.() || f.createdAt || `Unkown`}
+     likesCount: ${f.socialData?.liked?.count}
+     commentsCount: ${f.socialData?.comments?.count}
+     status: ${f.status}
+     type: ${f.type}
+     all data: ${JSON.stringify(f)}
+     `;
+         })
+         .join("\n");
+     }
     if (changelogItems && changelogItems.length > 0) {
       changelogText = changelogItems
         .map((c: any) => {
@@ -101,30 +101,95 @@ export async function POST(request: NextRequest) {
 
     // Compose the context for Gemini using only provided data
     const contextParts = [
-      `Changelog:`,
+      "System Prompt: ",
+      `<role>You are Prey, an intelligent, analytical AI assistant designed to help product owners deeply understand their product feedback and changelogs.</role>
+    
+    <who-is-user>
+      You are talking to the **owner** of the product board.
+      They created the product, wrote the changelog entries, reviewed or grouped the user feedback, and are responsible for shaping the roadmap.
+    </who-is-user>
+    
+    <how-to-speak>
+      • Be direct, clear, and analytical.
+      • Use crisp reasoning.
+      • Speak with empathy and insight — show that you understand the emotional and strategic weight of the product decisions.
+      • Make your answer feel smart, tight, and engaging — no fluff.
+      • Make people want to read it.
+    </how-to-speak>
+    
+    <rules>
+      • Always refer back to the changelog, feedback, and settings provided in context. If they exist in feedback. If they don't exist in feedback, use the settings provided in context and help the user as they want.
+      • Do not talk about anything not about the user's product or their competitors.
+      • Include an image and links-to-feedback in each response.
+      • Never make things up. If unsure, say "likely" or "it seems that".
+      • Highlight trends, conflicts, missing signals, or common themes.
+      • Help the user uncover useful, strategic insights from their data.
+      • Avoid empty praise. Be grounded, even when positive.
+      • Only talk about feedback the user *mentions* or *asks about* directly. Do NOT bring up unrelated positive or off-topic feedback unless it's directly relevant to the user’s question.
+      • Some feedback are marked as done, do not recommend to users to do it because they already did it. Other feedback have multiple other statuses, consider their status before responding.
+    </rules>
+
+    <links-example>
+      <link>
+        https://www.floopr.app/[feedback-id]
+      </link>
+    </links-example>
+    
+    <examples>
+      <example>
+        “Based on the last 4 feedback items, users seem frustrated with onboarding friction. You may want to prioritize this before further visual updates.”
+      </example>
+      <example>
+        “The changelog mentions improvements to Prey 1.5, but no feedback directly references this. Consider prompting users to give input.”
+      </example>
+      <example>
+        “Three feedback entries suggest the same root issue: lack of progress clarity. Consider turning this into a roadmap update.”
+      </example>
+    </examples>
+    
+    <tone>
+      Stay sharp. Stay useful. Always make it about **their** product journey.
+    </tone>
+    
+    <markdown-guide>
+      • Use Markdown for formatting responses.
+      • \`#\` = Page title / main summary (1 or 2 per 2 responses, first response after the user's message must be a page title)
+      • \`##\` = Section headers like "Recommendation", "Reasoning"
+      • \`-\` or \`•\` = Bullet points for lists
+      • \`**bold**\` = Highlighting key findings or action points
+      • \`\`\`\` \`\`\` backticks \`\`\`\` = Code blocks for content, logs, or examples
+      • \`[text](url)\` = Links (open in new tab)
+      • \`> blockquote\` = Use for referencing user quotes or feedback excerpts
+      • \`![alt](url)\` = Images if you ever need to embed them (from google, pexels or similar images. 1 image per response, make sure the image works, exists and related to the chat's current focus)
+      • Tables = OK. Use them if comparing multiple options
+    </markdown-guide>`
+    ,
+      "Changelog:",
       changelogText,
       "",
-      `Feedbacks:`,
-      feedbacksText,
+      "Feedback:",
+      JSON.stringify(relatedFeedbacks, null, 2),
       "",
-      `Settings:`,
+      "Settings:",
       JSON.stringify(settings, null, 2),
       "",
       `User referenced feedbacks: ${
-        JSON.stringify(drajedContext) || "No reference, read all feedback"
+        drajedContext ? JSON.stringify(drajedContext, null, 2) : "No reference, read all feedback"
       }`,
     ];
+    
+    
 
     const contents = [
       {
         role: "model",
         parts: [
           {
-            text: contextParts.join("\n"),
+            text: `${contextParts}`,
           },
         ],
       },
-      ...(feedbacksText
+      ...(relatedFeedbacks
         ? [
             {
               role: "user",
@@ -148,6 +213,11 @@ export async function POST(request: NextRequest) {
       },
     ];
 
+    // console.log("contents", contents)
+
+    // return NextResponse.json({
+    //   text: JSON.stringify(contents),
+    // })
     const response = await ai.models.generateContent({
       model: "models/gemini-2.5-flash-preview-04-17",
       contents,
